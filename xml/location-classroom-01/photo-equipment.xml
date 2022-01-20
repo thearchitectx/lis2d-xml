@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <n id="n1">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+            
+            <wait />
+            
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m wait="0.5">A bunch of expensive photography stuff here...</m>
+                <m>So this is how a properly funded school looks like?</m>
+            </dlg>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+    </nodes>
+</xml-script>

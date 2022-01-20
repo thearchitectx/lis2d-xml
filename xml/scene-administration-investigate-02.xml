@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+
+    <include node-prefix="lockpick-">_lib/lockpick.xml</include>
+    <include node-prefix="quest-mem-card-">_lib/quest-mem-card.xml</include>
+
+    <nodes>
+        <!--###############################################
+            ### root ######################################
+            ###############################################-->
+        <n id="root">
+            <fade-to-black keep="true" speed="1000" />
+            
+            <bgm loop="loop-urban" as-music="false" volume="0.25" />
+            
+            <load-scene-object key="scene-administration-investigate-02.prefab" rename="scene" />
+            
+            <fade-to-black speed="-1" />
+
+            <autosave label="Classroom - Investigating administration office" />
+
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### investigate-loop ##########################
+            ###############################################-->
+        <n id="investigate-loop">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="true" /></message>
+            </obj>
+            <obj target="scene/interactables" active="true">
+                <outcome value="CABINETS" node="cabinets" clear="true"  />
+                <outcome value="FILE_FOLDER" node="file-folder" clear="true"  />
+                <outcome value="SHOEBOX" node="shoebox" clear="true"  />
+                <outcome value="LEAVE" node="leave" clear="true"  />
+            </obj>
+        </n>
+
+        <!--###############################################
+            ### cabinets #################################
+            ###############################################-->
+        <n id="cabinets">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="false" /></message>
+            </obj>
+            <obj target="scene/interactables" active="false" />
+
+            <wait time="0.5" />
+            <anim target="scene"><bool name="cab-open" value="true" /></anim>
+            <dlg char="PLAYER">
+                <m wait="0.5">There's a collection of shady items here... It's probably where they store shit confiscated from students...</m>
+            </dlg>
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:MEM_CARD" bit-set="5" />
+                    <check-flag flag="QUEST:MEM_CARD" bit-unset="11" />
+                </check-group>
+                <then>
+                    <dlg char="PLAYER">
+                        <m>A drone would not fit in these cabinets, though... So the principal chose another place to store it...</m>
+                    </dlg>
+                </then>
+            </if>
+            
+            <dlg char="PLAYER">
+                <m>Some of this stuff seems dangerous... I should avoid touching anything...</m>
+            </dlg>
+
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### file-folder ###############################
+            ###############################################-->
+        <n id="file-folder">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="false" /></message>
+            </obj>
+            <obj target="scene/interactables" active="false" />
+            <dlg char="PLAYER">
+                <m>Another set of file folders...</m>
+            </dlg>
+            <load-scene-object key="image-viewer.prefab">
+                <message name="SetImage"><string value="scene-administration-investigate-01-file-folder.png" /></message>
+                <message name="SetImageScale"><float value="0.8" /></message>
+            </load-scene-object>
+
+            <dlg char="PLAYER">
+                <m wait="1">Lots of accounting and fiscal reports here... The mere sight of all theses numbers is boring to death...</m>
+                <m>But also... Here it says that a huge chunk of school expenses and investments are paid with the generous donations from one the student's family...</m>
+                <m>Prescott... There's even a dorm here named after him...</m>
+                <m>...and the principal probably licks this man's boots...</m>
+            </dlg>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:MEM_CARD" bit-set="5" />
+                    <check-flag flag="QUEST:MEM_CARD" bit-unset="8" />
+                </check-group>
+                <then>
+                    <flag name="QUEST:MEM_CARD" bit-on="8" />
+                    <inject node="quest-mem-card-progress" />
+                </then>
+                <else>
+                    <dlg char="PLAYER">
+                        <m>Nothing i didn't already know ...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <obj target="image-viewer.prefab">
+                <message name="FadeAndDestroy" />
+            </obj>
+            
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### shoebox #################################
+            ###############################################-->
+        <n id="shoebox">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="false" /></message>
+            </obj>
+            <obj target="scene/interactables" active="false" />
+            <dlg char="PLAYER">
+                <m>Someone left a shoe box here...</m>
+                <m>Goddammit, ${CHAR:JUS:NAME}... Not even my room is messy like this place...</m>
+            </dlg>
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### leave #####################################
+            ###############################################-->
+        <n id="leave">
+            <bgm volume="0"/>
+            <fade-to-black speed="3" keep="true" />
+            <bootstrap script="location-administration-01/location" spawn="drawers" />
+        </n>
+
+    </nodes>
+</xml-script>

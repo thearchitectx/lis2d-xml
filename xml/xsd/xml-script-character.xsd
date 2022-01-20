@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="character">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PLAYER" />
+            <xs:enumeration value="BRK" />
+            <xs:enumeration value="JEF" />
+            <xs:enumeration value="VIC" />
+            <xs:enumeration value="KATE" />
+            <xs:enumeration value="TAY" />
+            <xs:enumeration value="COU" />
+            <xs:enumeration value="JUL" />
+            <xs:enumeration value="JUS" />
+            <xs:enumeration value="MAX" />
+            <xs:enumeration value="PRI" />
+            <xs:enumeration value="SAM" />
+            <xs:enumeration value="ZAC" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

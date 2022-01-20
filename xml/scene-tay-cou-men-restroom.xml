@@ -1,0 +1,465 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+    <!--###############################################
+        ### root ######################################
+        ###############################################-->
+        <n id="root">
+            <flag name="MISC:ENVIRONMENT" bit-on="3" />
+
+            <fade-to-black keep="true" speed="10000" />
+            
+            <load-scene-object key="shot-mainhall-02.prefab" rename="shot" />
+            <bgm loop="loop-tay" volume="0.25" />
+
+            <fade-to-black speed="-1" />
+
+            <autosave label="Getting into the men's restroom" />
+
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <dlg char="PLAYER" track="shot/player">
+                <m wait="0.5">School restrooms... This is where most teenage dramas start...</m>
+                <m>Let's check what is-</m>
+            </dlg>
+            <sfx clip="swoosh" />
+            <dlg char="PLAYER" track="shot/player">
+                <m>Huh? I think someone is coming out...</m>
+            </dlg>
+
+            <fade-to-black keep="true" speed="3" />
+            <sfx clip="door-transition" async="true" />
+            <load-scene-object key="shot-char-tay-01.prefab" rename="TAY">
+                <message name="StartCenter" />
+                <message name="EndSideLeft" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+                <message name="SetParallaxSpeed"><float value="0.4" /></message>
+            </load-scene-object>
+            <load-scene-object key="shot-char-cou-01.prefab" rename="COU">
+                <message name="StartCenter" />
+                <message name="EndSideRight" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+                <message name="SetParallaxSpeed"><float value="0.4" /></message>
+            </load-scene-object>
+            <wait time="0.5" />
+            <fade-to-black keep="true" speed="-2" />
+
+            <dlg char="PLAYER" track="shot/player">
+                <m>Uhh... Hello...</m>
+            </dlg>
+
+            <anim target="COU" look="LEFT" />
+            <dlg char="COU" track="COU">
+                <m>Hey, ${CHAR:TAY:NAME}... Who is this, now!?</m>
+            </dlg>
+
+            <anim target="TAY" face="DISAPPROVE" />
+            <dlg char="TAY" track="TAY">
+                <m>Urgh... We try so hard to get this school free of creeps... But it seems their numbers just keep increasing...</m>
+                <m>This is the janitor apprentice ${CHAR:VIC:NAME} warned us about...</m>
+            </dlg>
+            
+            <anim target="COU" trigger="say-01" />
+            <dlg char="COU" track="COU">
+                <m>Oh... I remember... </m>
+            </dlg>
+
+            <anim target="COU" look="NEUTRAL" />
+            <if>
+                <check-flag flag="CHAR:VIC:INTERACTIONS" bit-set="9" />
+                <then>
+                    <dlg char="COU" track="COU">
+                        <m>She said he's one those weirdos that pretends to be 'nice' with you...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="CHAR:VIC:INTERACTIONS" bit-set="10" />
+                <then>
+                    <dlg char="COU" track="COU">
+                        <m>${CHAR:VIC:NAME} looked kinda distressed when talking about him, though...</m>
+                        <m>I think I've never saw her blushing before...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="CHAR:VIC:INTERACTIONS" bit-set="5" />
+                <then>
+                    <dlg char="COU" track="COU">
+                        <m>So this is the she caught trying to look under her skirt? Jeez...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <anim target="COU" look="NEUTRAL" />
+            <dlg char="PLAYER" track="shot/player">
+                <m>Yep... That's me... The one and only...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="say-01" />
+            <dlg char="TAY" track="TAY">
+                <m>Yeah... Don't think I didn't noticed you spying me when I was 'talking' to that loser ${CHAR:KATE:NAME}...</m>
+            </dlg>
+
+            <if> <!-- (3): made paragon interrupt during scene-hallway-kate-bullied -->
+                <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="3" />
+                <then>
+                    <dlg char="TAY" track="TAY">
+                        <m>Now I know you fooled me when you said ${CHAR:JEF:NAME} was coming just to stop me from teaching that bitch a lesson...</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="shot/player">
+                        <m>Oh... Don't be mad about that...</m>
+                        <m>It was just the first trick that came into my mind...</m>
+                    </dlg>
+                    <anim target="TAY" trigger="shrug" />
+                    <dlg char="TAY" track="TAY">
+                        <m>Hum... You're not one of those types that like to play the white knight, are you? It's just pathetic...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <if> <!-- (4): missed paragon interrupt during scene-hallway-kate-bullied -->
+                <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="4" />
+                <then>
+                    <dlg char="TAY" track="TAY">
+                        <m wait="0.5">Did you enjoy watching how I taught that bitch a lesson?</m>
+                        <m>Or maybe you were too afraid to help your pathetic friend?</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="shot/player">
+                        <m>Nah... I just didn't feel like interfering... Not my business...</m>
+                    </dlg>
+                    <anim target="TAY" trigger="shrug" face="NEUTRAL" />
+                    <dlg char="TAY" track="TAY">
+                        <m>Hum... You'd better keep following that attitude... It will make your life easier here...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <dlg char="TAY" track="TAY">
+                <m>Just leave us and ${CHAR:VIC:NAME} alone, boy...</m>
+                <m>You don't belong here... Do you even know where you are?</m>
+            </dlg>
+
+            <choice>
+                <c pos="NW" out="choice-movie">
+                    <text>In a teen movie?</text>
+                </c>
+                <c pos="SW" out="choice-restroom">
+                    <text>In the men's restroom?</text>
+                </c>
+            </choice>
+        </n>
+
+        <!--###########################################
+        ### choice-movie ######################################
+        ###############################################-->
+        <n id="choice-movie">
+            <dlg char="PLAYER" track="shot/player">
+                <m>It feels like I'm watching a double feature...</m>
+                <m>'Mean Girls' and 'Minions'...</m>
+            </dlg>
+
+            <anim target="COU" trigger="giggle" face="CUTE" />
+            <dlg char="COU" track="COU">
+                <m>Ha! I love Mean Girls! It's so inspirational...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="surprised" look="RIGHT" face="DISAPPROVE" />
+            <dlg char="TAY" track="TAY">
+                <m wait="0.5">${CHAR:COU:NAME}!! What the hell...</m>
+                <m>What did I tell you about showing sympathy to geeky bullshit!?</m>
+                <m>The Vortex doesn't take kindly to this kind of people!</m>
+            </dlg>
+            
+            <anim target="COU" face="SIGH" />
+            <dlg char="COU" track="COU">
+                <m>Oh... I... I'm sorry...</m>
+                <m>I... just-</m>
+            </dlg>
+
+            <anim target="TAY" trigger="say-02" />
+            <dlg char="TAY" track="TAY">
+                <m>And didn't you noticed him calling us ${CHAR:VIC:NAME}'s minions!?!</m>
+            </dlg>
+
+            <anim target="COU" trigger="giggle" face="CUTE" />
+            <dlg char="COU" track="COU">
+                <m>Yeah!! But Minions are so cute!! BANANAS!!</m>
+            </dlg>
+
+            <anim target="TAY" trigger="surprised" look="RIGHT" face="DISAPPROVE" />
+            <dlg char="TAY" track="TAY">
+                <m wait="0.5">Fuck's sake, ${CHAR:COU:NAME}!! Cut it out!!</m>
+            </dlg>
+
+            <anim target="TAY" trigger="say-01" />
+            <dlg char="TAY" track="TAY">
+                <m>Let me tell something important...</m>
+            </dlg>
+
+            <obj target="TAY">
+                <message name="StartSideLeft" />
+                <message name="EndSideRight" />
+                <message name="TriggerEnter" />
+            </obj>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="2" />
+            <bootstrap node="choice-movie-2" />
+        </n>
+
+        <!--###########################################
+        ### choice-movie-2 ###########################
+        ###############################################-->
+        <n id="choice-movie-2" >
+            <fade-to-black keep="true" speed="10000" />
+            <bgm loop="loop-tay" volume="0.25" />
+            <load-scene-object key="scene-tay-cou-restroom-door.prefab" rename="scene" />
+            <proxy target="scene/track-tay" name="TAY" />
+            <proxy target="scene/track-cou" name="COU" />
+            <fade-to-black speed="-3" />
+
+            <dlg char="TAY" track="TAY">
+                <m>${CHAR:COU:NAME}...</m>
+                <m>Listen... I need you... in the Vortex... with me...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <dlg char="COU" track="COU">
+                <m>Uuuh!?!?</m>
+            </dlg>
+
+            <dlg char="TAY" track="TAY">
+                <m wait="1">But they are strict... And may even kick you out of the club if they notice you encouraging those morons...</m>
+                <m>And if they do that... I won't be able to see this cute little face every day...</m>
+            </dlg>
+
+            <wait time="1" />
+            <dlg char="COU" track="COU">
+                <m wait="1.5">Uuuh... Oh... Okay ?</m>
+                <m>I just thought the movie was-</m>
+            </dlg>
+
+            <anim target="scene" trigger="next">
+                <bool name="close" value="true" />
+            </anim>
+
+            <dlg char="TAY" track="TAY">
+                <m wait="1">Please... When we're finally away from here you can be just the perfect way you are...</m>
+                <m>But for now we need to stay in the Vortex together... I just can't stand that place without feeling this sweet smell of yours every day...</m>
+                <m>...and thinking about getting closer... and closer...</m>
+            </dlg>
+
+            <wait time="2" />
+
+            <anim target="scene" trigger="next">
+                <bool name="close" value="false" />
+            </anim>
+            <dlg char="COU" track="COU">
+                <m>Uuuuhhh.... ${CHAR:TAY:NAME}...</m>
+                <m>What... What are you doing!?</m>
+            </dlg>
+
+            <dlg char="TAY" track="TAY">
+                <m>what... am... I...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="3" keep="true" />
+            <bootstrap node="end" />
+        </n>
+
+        <!--###########################################
+        ### choice-restroom ###########################
+        ###############################################-->
+        <n id="choice-restroom">
+            <dlg char="PLAYER" track="shot/player">
+                <m>I thought I was at the door to the men's restroom...</m>
+                <m>But now I'm confused about the reason two respectable girls just came from inside it...</m>
+                <m>I'll have to ask the principal what are the restroom rules around here...</m>
+            </dlg>
+
+            <anim target="COU" trigger="surprised" face="UPSET" />
+            <dlg char="COU" track="COU">
+                <m>What!?! No... Please...</m>
+                <m>Please... Don't tell the principal... We were just trying to...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="surprised" look="RIGHT" face="DISAPPROVE" />
+            <dlg char="TAY" track="TAY">
+                <m>${CHAR:COU:NAME}... Shut up!! We owe no explanation to him...</m>
+                <m>And he won't do anything!</m>
+            </dlg>
+
+            <anim target="COU" trigger="shrug" face="UPSET" />
+            <dlg char="COU" track="COU">
+                <m>But... I... I can't get into any trouble... My parents... if they find out... I...</m>
+            </dlg>
+            <anim target="TAY" trigger="say-01" />
+            <dlg char="TAY" track="TAY">
+                <m>Hey! Listen to me!</m>
+            </dlg>
+
+            <obj target="TAY">
+                <message name="StartSideLeft" />
+                <message name="EndSideRight" />
+                <message name="TriggerEnter" />
+            </obj>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="2" />
+            <bootstrap node="choice-restroom-2" />
+        </n>
+
+        <!--###########################################
+        ### choice-restroom-2 ###########################
+        ###############################################-->
+        <n id="choice-restroom-2" >
+            <fade-to-black keep="true" speed="10000" />
+            <bgm loop="loop-tay" volume="0.25" />
+            <load-scene-object key="scene-tay-cou-restroom-door.prefab" rename="scene" />
+            <proxy target="scene/track-tay" name="TAY" />
+            <proxy target="scene/track-cou" name="COU" />
+            <fade-to-black speed="-3" />
+
+            <dlg char="TAY" track="TAY">
+                <m>${CHAR:COU:NAME}...</m>
+                <m>Pay attention... This is important...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <dlg char="COU" track="COU">
+                <m>Uuuh!?!?</m>
+            </dlg>
+
+            <dlg char="TAY" track="TAY">
+                <m wait="1">You see... You don't need to worry about anything...</m>
+                <m>I'll never... ever allow anyone do any harm to you...</m>
+            </dlg>
+
+            <wait time="1" />
+            <dlg char="COU" track="COU">
+                <m wait="1.5">Uuuh... Th... Thank you ?</m>
+                <m>I was... just worried that my-</m>
+            </dlg>
+
+            <anim target="scene" trigger="next">
+                <bool name="close" value="true" />
+            </anim>
+
+            <dlg char="TAY" track="TAY">
+                <m wait="1">Don't you understand?</m>
+                <m wait="1">I'm here to protect you...</m>
+                <m>I won't let anyone hurt this cute little face... These beautiful lips...</m>
+                <m>these... these...</m>
+            </dlg>
+
+            <wait time="2" />
+
+            <anim target="scene" trigger="next">
+                <bool name="close" value="false" />
+            </anim>
+            <dlg char="COU" track="COU">
+                <m>Uuuuhhh.... ${CHAR:TAY:NAME}...</m>
+                <m>What... What are you doing!?</m>
+            </dlg>
+
+            <dlg char="TAY" track="TAY">
+                <m>what... am... I...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="3" keep="true" />
+            <bootstrap node="end" />
+        </n>
+
+        <!--###########################################
+        ### end #######################################
+        ###############################################-->
+        <n id="end">
+            <fade-to-black keep="true" speed="10000" />
+            <bgm loop="loop-tay" volume="0.25" />
+            <load-scene-object key="shot-mainhall-02.prefab" rename="shot" />
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+            <load-scene-object key="shot-char-tay-01.prefab" rename="TAY">
+                <message name="StartCenter" />
+                <message name="EndSideLeft" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+                <message name="SetParallaxSpeed"><float value="0.4" /></message>
+            </load-scene-object>
+            <load-scene-object key="shot-char-cou-01.prefab" rename="COU">
+                <message name="StartCenter" />
+                <message name="EndSideRight" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+                <message name="SetParallaxSpeed"><float value="0.4" /></message>
+            </load-scene-object>
+            <wait time="0.5" />
+            <fade-to-black keep="true" speed="-2" />
+
+            <anim target="TAY" face="UPSET" />
+            <anim target="COU" look="LEFT" />
+
+            <dlg char="TAY" track="TAY">
+                <m>Nothing!!!</m>
+                <m>I... I was...</m>
+            </dlg>
+
+            <dlg char="COU" track="COU">
+                <m wait="1">Oh... Okay...</m>
+                <m>It's just... You were acting kinda weird...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="surprised" face="DISAPPROVE" />
+            <anim target="COU" trigger="surprised" look="LEFT" />
+            <dlg char="TAY" track="TAY">
+                <m>NO!!</m>
+            </dlg>
+            <anim target="TAY" face="UPSET" />
+            <dlg char="TAY" track="TAY">
+                <m>I... I mean...</m>
+                <m>Let's get away from here... We shouldn't be seen talking to this boy...</m>
+            </dlg>
+
+            <dlg char="COU" track="COU">
+                <m>Yeah... Uuuhh... Of course...</m>
+            </dlg>
+
+            <obj target="TAY">
+                <message name="StartSideLeft" />
+                <message name="EndFarRight" />
+                <message name="TriggerEnter" />
+            </obj>
+            <obj target="COU">
+                <message name="StartSideRight" />
+                <message name="EndFarRight" />
+                <message name="TriggerEnter" />
+            </obj>
+
+            <wait time="1" />
+
+            <dlg char="PLAYER"  track="shot/player">
+                <m wait="0.5">Whoa... That was hot...</m>
+                <m>One can't hold herself... and the other is totally clueless...</m>
+                <m>I wonder if I can 'help' them in some way...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+
+            <bootstrap script="location-mainhall-02/location" spawn="spawn/men-restroom" />
+        </n>
+
+    </nodes>
+</xml-script>

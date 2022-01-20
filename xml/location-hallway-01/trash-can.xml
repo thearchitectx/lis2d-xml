@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <switch-text string="ARG:0" output="TMP:0">
+                <case eq="1">A trashcan... Apparently an invisible object for most students in this school...</case>
+                <case eq="2">Yet another trashcan...</case>
+                <case eq="3">There are lots of trash cans around here... If only people used them...</case>
+            </switch-text>
+
+            <dlg char="PLAYER">
+                <m>${TMP:0}</m>
+            </dlg>
+            
+            <choice>
+                <c pos="E">
+                    <text>[Rummage]</text>
+                    <then>
+                        <flag name="QUEST:KATE_LOCKER" bit-on="${ARG:0}" />
+                        <fade-to-black keep="true"/>
+                        <sfx clip="rummage" />
+                        <fade-to-black speed="-1"/>
+                        <if>
+                            <check-group op="AND">
+                                <check-flag flag="QUEST:KATE_LOCKER" bit-set="1" />
+                                <check-flag flag="QUEST:KATE_LOCKER" bit-set="2" />
+                                <check-flag flag="QUEST:KATE_LOCKER" bit-set="3" />
+                                <check-flag flag="QUEST:KATE_LOCKER" bit-unset="4" />
+                            </check-group>
+                            <then>
+                                <dlg char="PLAYER">
+                                    <m>Hey... There's something here...</m>
+                                    <m>This must the lockers key ${CHAR:KATE:NAME} is looking for...</m>
+                                </dlg>
+                    
+                                <sfx clip="item" async="true" />
+                                <flag name="QUEST:KATE_LOCKER" bit-on="4" />
+                                <flag name="ITEM:LOCKERS_KEY" set="1" icon="KEY">Lockers key found!</flag>
+                                <string name="QUEST:KATE_LOCKER:OBJECTIVE" set="Bring the locker key to ${CHAR:KATE:NAME}"/>
+                                <log icon="QUEST">Objectives updated!</log>
+                                <obj target="#Player">
+                                    <message name="SetInputActive"><bool value="true" /></message>
+                                </obj>
+                            </then>
+                            <else>
+                                <dlg char="PLAYER">
+                                    <m>Nothing useful here...</m>
+                                </dlg>
+                            </else>
+                        </if>
+                    </then>
+                </c>
+
+                <c pos="W">
+                    <text>[Leave]</text>
+                </c>
+            </choice>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+
+    </nodes>
+</xml-script>

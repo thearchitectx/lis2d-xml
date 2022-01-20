@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="n1">
+            <fade-to-black keep="true" speed="1000" />
+            <bgm loop="loop-urban" as-music="false" volume="0.25" fade-speed="0.5" />
+
+            <if>
+                <check-text text="CHAR:SAM:NAME" eq="#EMPTY" />
+                <then>
+                    <string name="CHAR:SAM:NAME" set="Janitor" />
+                </then>
+            </if>
+            
+            <load-scene-object key="location-restroom-men-01.prefab" rename="location"/>
+
+            <load-scene-object key="location-restroom-men-01-sam.prefab" parent="location" />
+
+            <fade-to-black speed="-1" />
+
+            <autosave label="Men's Restroom - Exploring" />
+
+            <inject node="lib-post-start" />
+        </n>
+    </nodes>
+</xml-script>

@@ -1,0 +1,565 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+    <!--###############################################
+        ### root ######################################
+        ###############################################-->
+        <n id="root">
+            <fade-to-black keep="true" speed="10000" />
+            
+            <load-scene-object key="shot-mainhall-03.prefab" rename="shot" />
+            <load-scene-object key="shot-char-tay-01.prefab" rename="TAY" />
+
+            <bgm loop="loop-tay" volume="0.25" />
+
+            <obj target="TAY">
+                <message name="StartLeft" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+                <message name="SetParallaxSpeed"><float value="0.4" /></message>
+            </obj>
+            
+            <fade-to-black speed="-1" />
+            
+            <autosave label="At Women's Restroom Door - ${CHAR:TAY:NAME}" />
+            
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <proxy target="shot/player" name="PLAYER" />
+
+            <dlg char="TAY" track="TAY">
+                <m>It's you again... What do you want?</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+        
+    <!--###############################################
+        ### dialog-root ###############################
+        ###############################################-->
+        <n id="dialog-root">
+            <inject node="rift-check" />
+            
+            <choice id="tay-women-restroom-dialog">
+                <c pos="NW" out="first-dialog">
+                    <check-flag flag="QUEST:PRINCIPAL1" bit-unset="4" />
+                    <text>Another restroom door</text>
+                </c>
+                <c pos="NW" out="check-restroom">
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="4" />
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-unset="5" />
+                    </check-group>
+                    <text>I need to check the restroom</text>
+                </c>
+
+                <c pos="NW" out="victoria-is-protesting">
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="5" />
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-unset="6" />
+                    </check-group>
+                    <text>A protest?</text>
+                </c>
+                
+                <c pos="SW" out="about-courtney">
+                    <check-flag flag="QUEST:PRINCIPAL1" bit-unset="7" />
+                    <text>About ${CHAR:COU:NAME}...</text>
+                </c>
+                
+                <c pos="SW" out="found-bracelet">
+                    <check-group op="AND">
+                        <check-flag flag="ITEM:BRACELET" gte="1" />
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="7" />
+                    </check-group>
+                    <text>I found this bracelet</text>
+                </c>
+
+                <c pos="W" style="RIFT" out="rift-talk">
+                    <check-group op="AND">
+                        <check-flag flag="PLAYER:STAT:RIFT" gte="1" />
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="6" />
+                    </check-group>
+                    <text>[Influence her to leave]</text>
+                </c> 
+
+                <c pos="E">
+                    <text>See you later</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>See you later...</m>
+                        </dlg>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" />
+                        <bootstrap script="location-mainhall-02/location" spawn="spawn/women-restroom" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!-- 
+        ############################################################ 
+        ## first-dialog ############################################
+        ############################################################ -->
+        <n id="first-dialog">
+            <flag name="QUEST:PRINCIPAL1" bit-on="4" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>It's funny how we keep meeting at restroom doors...</m>
+            </dlg>
+            
+            <anim target="TAY" trigger="surprised" face="DISAPPROVE"/>
+            <dlg char="TAY" track="TAY">
+                <m>Hey!!</m>
+                <m>We don't 'keep meeting'... You're the one who keeps bothering me...</m>
+                <m>And you can't say shit like that... What would ${CHAR:COU:NAME} think of me...</m>
+            </dlg>
+            <node-output node="dialog-root"/>
+        </n>
+        
+        <!-- 
+        ############################################################ 
+        ## check-restroom ##########################################
+        ############################################################ -->
+        <n id="check-restroom">
+            <flag name="QUEST:PRINCIPAL1" bit-on="5" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey... There is a certain, uuh... Extracurricular activity I need to perform in the ladies room...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="say-01" />
+            <dlg char="TAY" track="TAY">
+                <m>Yeah... I know about the janitor's schedule... Which became your schedule now, it appears...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Not my choice, but... whatever...</m>
+                <m>Can I check if the restroom is empty now? It won't take long...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="shrug" />
+            <dlg char="TAY" track="TAY">
+                <m>Well... You should know ${CHAR:VIC:NAME} is protesting against creepy men being allowed in our restroom every day at this time...</m>
+                <m>Even if the place is empty, she says you weirdos do all kinds of pervert shit while alone in there... And the school should hire a female for the job...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I kind of agree with your cause, but... At the moment there is no other-</m>
+            </dlg>
+
+            <anim target="TAY" trigger="shrug" />
+            <dlg char="TAY" track="TAY">
+                <m>I don't really care about your opinion...</m>
+                <m>I will stay put here 'using' the restroom as it's my right...</m>
+                <m>Which means you can't come in!! So beat it!!</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!-- 
+        ############################################################ 
+        ## victoria-is-protesting ##################################
+        ############################################################ -->
+        <n id="victoria-is-protesting">
+            <flag name="QUEST:PRINCIPAL1" bit-on="6" icon="QUEST">Objectives updated!</flag>
+            <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Find a way to make ${CHAR:TAY:NAME} leave the women's restroom door" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="0.5">So... You said that ${CHAR:VIC:NAME} is the head of this "protest"...</m>
+                <m>If this is the case, then why she's not here?</m>
+            </dlg>
+            
+            <anim target="TAY" trigger="surprised" face="NEUTRAL" look="RIGHT" />
+            <dlg char="TAY" track="TAY">
+                <m wait="1">Oh... well... ${CHAR:VIC:NAME} is...</m>
+            </dlg>
+
+            <anim target="TAY" face="UPSET" look="NEUTRAL" />
+            <dlg char="TAY" track="TAY">
+                <m>I mean... She must be busy with... other important matters... because she...</m>
+                <m>She just told me to stay here...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="0.5">She "told" you... Or she "asked" you?</m>
+            </dlg>
+
+            <anim target="TAY" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="TAY" track="TAY">
+                <m wait="1">Yeah... I know what you're trying to say, okay?</m>
+            </dlg>
+            <anim target="TAY" face="UPSET" />
+            <dlg char="TAY" track="TAY">
+                <m>The truth is... I don't click with most people around here and... ${CHAR:VIC:NAME}...</m>
+                <m>She is... my friend...</m>
+            </dlg>
+            <wait />
+            <anim target="TAY" face="SIGH" />
+            <dlg char="TAY" track="TAY">
+                <m>So I always do as she says...</m>
+            </dlg>
+            
+            <choice id="victoria-loyalty-1">
+                <c pos="NW">
+                    <text>Making friends isn't easy</text>
+                    <then>
+                        <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                        <flag name="CHAR:TAY:INTERACTIONS" bit-on="1" icon="BUTTERFLY">This choice may influence future events</flag>
+                        
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Hey... I know it's not easy to make friends...</m>
+                            <m>I just hope she doesn't push you around like she does with everyone else...</m>
+                        </dlg>
+
+                        <anim target="TAY" trigger="shrug" face="CUTE" />
+                        <dlg char="TAY" track="TAY">
+                            <m>Oh... Thank you... I guess...</m>
+                            <m>That was kind of... sweet...</m>
+                        </dlg>
+                        <wait time="1.5" />
+                        <anim target="TAY" face="DISAPPROVE" />
+                        <dlg char="TAY" track="TAY">
+                            <m>But... Don't you think that will make me leave my post... I still stand for Victoria...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>She made you her lapdog</text>
+                    <then>
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <flag name="CHAR:TAY:INTERACTIONS" bit-on="1" icon="BUTTERFLY">This choice may influence future events</flag>
+
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Look... Can't you see ${CHAR:VIC:NAME} just treating you like her lapdog?</m>
+                            <m>Do you really need of a friend like that?</m>
+                        </dlg>
+                        
+                        <anim target="TAY" trigger="shrug" face="UPSET" look="RIGHT" />
+                        <dlg char="TAY" track="TAY">
+                            <m wait="0.5">Well... She is really bossy sometimes...</m>
+                            <m>and mean... and selfish... and greedy... and ...</m>
+                        </dlg>
+                        <anim target="TAY" face="SIGH" />
+                        <dlg char="TAY" track="TAY">
+                            <m>I shouldn't accept the way she treats me... and ${CHAR:COU:NAME}...</m>
+                        </dlg>
+                        <wait />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Don't you think it's time to show her some payback?</m>
+                        </dlg>
+                        
+                        <anim target="TAY" trigger="say-01" face="NEUTRAL" look="NEUTRAL" />
+                        <dlg char="TAY" track="TAY">
+                            <m>But... I owe her... She accepted me in the Vortex Club... And I...</m>
+                        </dlg>      
+                        <anim target="TAY" face="DISAPPROVE"  />
+                        <dlg char="TAY" track="TAY">
+                            <m>I must be loyal and stand my ground here...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+            
+            <node-output node="dialog-root"/>
+        </n>
+        
+        <!-- 
+        ############################################################ 
+        ## about-courtney ##########################################
+        ############################################################ -->
+        <n id="about-courtney">
+            <flag name="QUEST:PRINCIPAL1" bit-on="7" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey... Now that your buddy ${CHAR:COU:NAME} is not around... I gotta say...</m>
+                <m>You show some quite peculiar behaviour when she's next to you...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="surprised" face="UPSET"/>
+            <dlg char="TAY" track="TAY">
+                <m>What!?</m>
+                <m>I... I don't know what are you talking about...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Come on... You clearly have the hots for her...</m>
+            </dlg>
+            
+            <wait time="1" />
+
+            <anim target="TAY" face="SIGH"/>
+            <dlg char="TAY" track="TAY">
+                <m>Oh my God... Is it so easy to notice!?</m>
+            </dlg>
+
+            <anim target="TAY" trigger="surprised" face="UPSET"/>
+            <dlg char="TAY" track="TAY">
+                <m>I mean... NO!!</m>
+                <m>It's not anything like that... it is... it is...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>What's wrong in you trying to score some other girl?</m>
+                <m>Aren't we supposed to be in a progressive Arts community?</m>
+            </dlg>
+            
+            <anim target="TAY" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="TAY" track="TAY">
+                <m>Hey! Can't you just keep quiet about this?</m>
+            </dlg>
+            
+            <anim target="TAY" trigger="say-01" look="RIGHT" />
+            <dlg char="TAY" track="TAY">
+                <m>I don't want to be target of gossip...</m>
+                <m>Vortex members are supposed to be discrete...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Okay... It's just funny to notice how ${CHAR:COU:NAME} seems completely clueless even during those moments when you completely lose control...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="shrug" look="NEUTRAL" face="SIGH" />
+            <dlg char="TAY" track="TAY">
+                <m>Please... Just... stop...</m>
+            </dlg>
+            
+            <anim target="TAY" look="NEUTRAL" face="UPSET" />
+            <dlg char="TAY" track="TAY">
+                <m>I... I don't know what's happening to me... I've always kept my cool around her... and never let these "feelings" show...</m>
+                <m>But it's not just me... Something weird is happening in this school... It's affecting everyone, including me...</m>
+            </dlg>
+            <anim target="TAY" face="NEUTRAL" />
+            <dlg char="TAY" track="TAY">
+                <m>Like... Everybody is still the same... But at the same time, their attitude are a little off...</m>
+                <m>The most strange is... It all started when you arrived here...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Whoa... I'm used to being blamed for every sort of trouble, but this is a whole new level...</m>
+            </dlg>
+
+            <wait />
+
+            <anim target="TAY" trigger="shrug" face="SIGH" />
+            <dlg char="TAY" track="TAY">
+                <m>I... I just wish ${CHAR:COU:NAME} were here now... But she is trying to find the lucky bracelet she lost when we left class...</m>
+                <m>I told her she probably dropped it somewhere here the in main hall, but she insists in trying to find it in the second floor...</m>
+            </dlg>
+
+            <anim target="TAY" face="UPSET" look="RIGHT" />
+            <dlg char="TAY" track="TAY">
+                <m>I wish I could be the one who finds it... I'd run to show her how she needs me...</m>
+            </dlg>
+
+            <wait />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Maybe I can help with that...</m>
+            </dlg>
+
+            <anim target="TAY" face="NEUTRAL" look="NEUTRAL" trigger="say-01" />
+            <dlg char="TAY" track="TAY">
+                <m>Oh... That would be cool...</m>
+            </dlg>
+            
+            <anim target="TAY" face="DISAPPROVE" />
+            <dlg char="TAY" track="TAY">
+                <m>But... For now... I'm on guard duty...</m>
+                <m>So... Please, don't tell anyone about me and ${CHAR:COU:NAME}...</m>
+                <m>And just leave me alone...</m>
+            </dlg>
+
+            <string name="QUEST:PRINCIPAL1:OPT1:OBJECTIVE" set="Find ${CHAR:COU:NAME}'s lost bracelet and give it to ${CHAR:TAY:NAME}" />
+
+            <node-output node="dialog-root"/>
+        </n>
+
+        <!-- 
+        ############################################################ 
+        ## rift-check ##########################################
+        ############################################################ -->
+        <n id="rift-check">
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="PLAYER:STAT:RIFT" gte="1" />
+                    <check-flag flag="QUEST:PRINCIPAL1" bit-set="6" />
+                    <check-flag flag="MISC:ENVIRONMENT" bit-unset="4" />
+                </check-group>
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-on="4" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m instant="true">|Hey... That Rift Energy thingy... Maybe I could use it to convince her to leave the door...|</m>
+                    </dlg>
+                    <wait time="0.5" />
+                    <sys>
+                        RIFT ENERGY\n\n
+                        *Pink* choices are opportunities to spend *Rift Energy* point to influence a person or perform a special action\n\n
+                        Sometimes there will be *other ways* to reach a specific goal without spending Rift Energy points\n\n
+                        Sometimes, not spending them will make you lose an interesting opportunity\n\n
+                        Use your power wisely!
+                    </sys>
+                </then>
+            </if>
+        </n>
+
+        <!-- 
+        ############################################################ 
+        ## rift-talk ##########################################
+        ############################################################ -->
+        <n id="rift-talk">
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey... I have something to say...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <bgm name="rift-bgm" loop="loop-rumble" as-music="false" volume="0.5" />
+            <load-scene-object key="vfx-rift.prefab" />
+            <wait />
+
+            <anim target="TAY" face="UPSET" trigger="surprised" />
+            <dlg char="TAY" track="TAY">
+                <m>Huh!?! What the hell is going on!?!</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">Listen... </m>
+                <m>It's very important that I have access to this restroom...</m>
+                <m>So why don't you go take a walk? I'm sure ${CHAR:COU:NAME} is looking for you somewhere...</m>
+            </dlg>
+
+            <anim target="TAY" face="UPSET" trigger="surprised" />
+            <dlg char="TAY" track="TAY">
+                <m>What!?! What are you trying to...</m>
+            </dlg>
+            <wait />
+            <anim target="TAY" face="SIGH" />
+            <dlg char="TAY" track="TAY">
+                <m>............</m>
+            </dlg>
+            <anim target="TAY" face="NEUTRAL" />
+            <dlg char="TAY" track="TAY">
+                <m>Well... Okay...</m>
+                <m>If it's important... Then I'd better not be in the way...</m>
+            </dlg>
+
+            <obj target="TAY">
+                <message name="StartCenter" />
+                <message name="EndRight" />
+                <message name="TriggerEnter" />
+            </obj>
+
+            <dlg char="TAY" track="TAY">
+                <m>Bye...</m>
+            </dlg>
+
+            <wait time="1" />
+            <bgm name="rift-bgm" volume="0" />
+            <anim target="vfx-rift.prefab">
+                <bool name="active" value="false" />
+            </anim>
+            <wait time="1" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey... That bullshit actually works!</m>
+                <m>Man... Talk about a strange a day...</m>
+            </dlg>
+
+            <flag name="QUEST:PRINCIPAL1" bit-on="3" /> <!-- (3): TAY left women restroom  -->
+            <flag name="QUEST:PRINCIPAL1" bit-on="8" /> <!-- (8): Used Rift Energy option to make TAY leave -->
+
+            <fade-to-black keep="true" />
+            <bootstrap script="location-mainhall-02/location" spawn="spawn/women-restroom" />
+        </n>
+
+        <!-- 
+        ############################################################ 
+        ## found-bracelet ###############################################
+        ############################################################ -->
+        <n id="found-bracelet">
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I found this bracelet...</m>
+                <m>I wonder if it's the one you're looking for...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="surprised" face="SURPRISED"></anim>
+            <dlg char="TAY" track="TAY">
+                <m>Really!? Please, show me!!</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Here... Check it out...</m>
+            </dlg>
+            
+            <fade-to-black speed="2" keep="true" />
+            <sfx clip="item" async="true" />
+            <flag name="ITEM:BRACELET" set="0" icon="QUEST">You gave ${ITEM:BRACELET:LABEL} to ${CHAR:TAY:NAME}</flag>
+            <fade-to-black speed="-2" />
+
+            <anim target="TAY" trigger="surprised" face="CUTE" />
+            <dlg char="TAY" track="TAY">
+                <m wait="0.5">Yes!! This is the one!! You found it!!</m>
+                <m>Oh my God... Thank so you much!!</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey... You're kind of... smiling... That's a rare sight...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="say-01" face="SIGH" />
+            <dlg char="TAY" track="TAY">
+                <m>I... I'm just not used to people doing nice things for me...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="say-01" face="CUTE" />
+            <dlg char="TAY" track="TAY">
+                <m>But now I have to run and give the bracelet back to ${CHAR:COU:NAME}...</m>
+                <m>I can already hear her cute giggles when I show it to her...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>So what are you waiting for? Go find her!</m>
+            </dlg>
+
+            <anim target="TAY" trigger="shrug" face="SIGH" />
+            <dlg char="TAY" track="TAY">
+                <m>Yeah... I know you want me to leave so you can enter the restroom...</m>
+                <m>But since you helped me finding this, I'll give you break...</m>
+            </dlg>
+            <anim target="TAY" face="UPSET" />
+            <dlg char="TAY" track="TAY">
+                <m>And... if you can... you know...</m>
+                <m>help me more later with... getting near ${CHAR:COU:NAME}...</m>
+            </dlg>
+            <anim target="TAY" face="SIGH" />
+            <dlg char="TAY" track="TAY">
+                <m>I... I should go see her now...</m>
+            </dlg>
+
+            <obj target="TAY">
+                <message name="StartCenter" />
+                <message name="EndRight" />
+                <message name="TriggerEnter" />
+            </obj>
+
+            <wait time="1" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Now that's an interesting request...</m>
+                <m>Working as cupid to form a hot couple of girls... Or maybe take advantage of the situation myself...</m>
+            </dlg>
+
+            <flag name="QUEST:PRINCIPAL1" bit-on="3" /> <!-- (3): TAY left women restroom  -->
+            <flag name="QUEST:PRINCIPAL1" bit-on="10" /> <!-- (10): Delivered bracelet to TAY -->
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap script="location-mainhall-02/location" spawn="spawn/women-restroom" />
+        </n>
+    </nodes>
+</xml-script>

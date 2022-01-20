@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <wait />
+
+            <switch-text string="ARG:0" output="TMP:0">
+                <case eq="GUN_FREE_ZONE">Phew... I fell much safer knowing that the eventual gun wielding psycho will read this sign and promptly give up his mass murder plan...</case>
+            </switch-text>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>${TMP:0}</m>
+            </dlg>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+
+    </nodes>
+</xml-script>

@@ -1,0 +1,449 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <n id="root">
+            <fade-to-black speed="1000" keep="true" />
+            
+            <bgm loop="loop-urban" as-music="false" volume="0.25"/>
+           
+            <load-scene-object key="shot-classroom-01.prefab"  />
+            
+            <load-scene-object key="shot-char-jef-01.prefab" proxy="JEF">
+                <message name="StartLeft" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot-classroom-01.prefab" /></message>
+            </load-scene-object>
+            <obj target="shot-classroom-01.prefab">
+                <message name="Recenter" broadcast="true" />
+            </obj>
+            <obj target="shot-classroom-01.prefab/player">
+                <message name="AnimateWeightToCoroutine"><float value="1" /></message>
+            </obj>
+
+            <fade-to-black speed="-1" />
+            <autosave label="Classroom - Chat with Mister ${CHAR:JEF:NAME}" />
+
+            <flag name="QUEST:INTRO" bit-on="6" />
+            <string name="QUEST:INTRO:OBJECTIVE" unset="true" />
+            <log icon="QUEST">Objective completed!</log>
+
+            <dlg char="JEF" track="JEF">
+                <m>So... Mister ${CHAR:PLAYER:NAME}...</m>
+                <m wait="0.5">This has been a very long day... Sometimes I feel like the clock ran backwards today...</m>
+                <m>But now we finally have the opportunity to chat...</m>
+            </dlg>
+
+            <sys>DIALOG WHEEL\n\n
+                Options at the right side of the dialog wheel usually advance a conversation, while options in the left side extends the conversation.\n\n
+                If you want to check out all the paths a scene can offer, first try options on the left side.
+            </sys>
+            <sys>DIALOG WHEEL\n\n
+                Responses at the *upper side* tend to be more kindheartedly (paragon rep.) while responses at the *lower side* tend to be more malicious (renegade rep.)\n\n
+                Reputation stats (*Paragon*/*Renegade*) are not mutually exclusive, and might unlock some options later in the game...\n\n
+                |If this is all new to you, it means you're a bosh'tet !|
+            </sys>
+            
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################
+            ##  dialog-root ##############################
+            ##############################################
+        -->
+        <n id="dialog-root">
+            <choice id="root">
+                <c out="dialog-vic" pos="NW">
+                    <text>${CHAR:VIC:NAME} is really into you</text>
+                    <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="0" />
+                </c>
+
+                <c out="dialog-kate" pos="SW">
+                    <text>What's up with ${CHAR:KATE:NAME}?</text>
+                    <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="3" />
+                </c>
+
+                <c out="dialog-talk" pos="E">
+                    <text>You wanted to talk with me?</text>
+                    <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="4" />
+                </c>
+
+                <c pos="NW">
+                    <text>${CHAR:VIC:NAME} is too young for you</text>
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:JEF:INTERACTIONS" bit-set="0" />
+                        <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="1" />
+                        <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="2" />
+                    </check-group>
+                    <then>
+                        <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">+1 Paragon</flag>
+                        <flag name="CHAR:JEF:INTERACTIONS" bit-on="2" />
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Well... Victoria is too young for you anyways...</m>
+                            <m>Even if there were no school rules, a dude on his 40s hooking up with a girl still on her teens is kinda creepy...</m>
+                        </dlg>
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF" track="JEF">
+                            <m>Ha... Don't be fooled by the Zeitgeist, ${CHAR:PLAYER:NAME}...</m>
+                            <m>A few hundred years ago, the standard would be she going to bed at a much younger age with someone older than me... </m>
+                            <m>But this is not about principles or moral systems...</m>
+                        </dlg>
+                        <node-output node="dialog-vic-2" />
+                    </then>
+                </c>
+
+                <c pos="SW">
+                    <text>Just do ${CHAR:VIC:NAME} and keep quiet about it</text>
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:JEF:INTERACTIONS" bit-set="0" />
+                        <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="1" />
+                        <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="2" />
+                    </check-group>
+                    <then>
+                        <flag name="CHAR:JEF:INTERACTIONS" bit-on="2" />
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Why don't you simply take ${CHAR:VIC:NAME} some place away for here, screw her, and never talk about it anymore?</m>
+                            <m>There's no crime if anyone never knows about it...</m>
+                        </dlg>
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF" track="JEF">
+                            <m>That line was unexpectedly wise...</m>
+                            <m>However... The issue is not about me, or about places...</m>
+                        </dlg>
+                        <node-output node="dialog-vic-2" />
+                    </then>
+                </c>
+                
+            </choice>
+        </n>
+
+        <!--
+            ##############################################
+            ##  dialog-vic  ##############################
+            ##############################################
+        -->
+        <n id="dialog-vic">
+            <flag name="CHAR:JEF:INTERACTIONS" bit-on="0" />
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>I noticed ${CHAR:VIC:NAME} is really into you...</m>
+                <m>She is throwing herself into you... like... literally...</m>
+            </dlg>
+
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF" track="JEF">
+                <m>Sigh... She is becoming extremely annoying...</m>
+                <m>I mean... Don't take me wrong... I certainly appreciate being touched by a beautiful barely legal girl...</m>
+                <m>But the code of behaviour in most school strictly prohibits any kind of intimate relationships between teacher and students...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Jeez... Taking that kind of heat from her everyday and not being allowed to go forward feels like torture...</m>
+                <m>Guess I'm crossing off 'teacher' of my future career options list...</m>
+            </dlg>
+            
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF" track="JEF">
+                <m>Yeah... It's the kind of situation that could make one's mind go to dark places...</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################
+            ##  dialog-vic-2  ############################
+            ##############################################
+        -->
+        <n id="dialog-vic-2">
+            <anim target="JEF" trigger="shrug" />
+            <dlg char="JEF" track="JEF">
+                <m>${CHAR:VIC:NAME} is obsessed with games of power...</m>
+                <m>Her attempts to 'seduce' me, is nothing but she trying to display her dominance over the other girls...</m>
+                <m>Which means if I ever give up to the temptation and give her what she want, then the whole school will know about it in the next day...</m>
+            </dlg>
+
+            <node-output node="dialog-root"/>
+        </n>
+
+        <!--
+            ##############################################
+            ##  dialog-kate  ############################
+            ##############################################
+        -->
+        <n id="dialog-kate">
+            <flag name="CHAR:JEF:INTERACTIONS" bit-on="3" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>I met ${CHAR:KATE:NAME} when I woke... I mean... when the class ended...</m>
+                <m>What can you say about her?</m>
+            </dlg>
+
+            <anim target="JEF" trigger="shrug" />
+            <dlg char="JEF" track="JEF">
+                <m>${CHAR:KATE:NAME}? Oh boy...</m>
+                <m>She is a square in a school full of hipster spoiled girls...</m>
+                <m>So, naturally... She's picked on every single day...</m>
+                <m>${CHAR:KATE:NAME} usually acts like she's strong... But the truth is... she's just a naive and gullible little girl ...</m>
+                <m>I fear that any malicious person who gives her a little attention can easily manipulate her into nasty stuff....</m>
+            </dlg>
+
+            <node-output node="dialog-root"/>
+        </n>
+
+        <!--
+            ##############################################
+            ##  dialog-talk   ############################
+            ##############################################
+        -->
+        <n id="dialog-talk">
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>You said you wanted to talk to me? Am I in trouble or something?</m>
+            </dlg>
+
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF" track="JEF">
+                <m>Nah... I'm just curious about you...</m>
+                <m>The principal came a little earlier to talk about you... He seemed a little bit lost about how you managed to enroll as a student here, but he had a file with your school history...</m>
+                <m>Poor grades... Records of conduct violation... Repeated truancy...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>I blame the education system for not being adapted to my set of skills...</m>
+            </dlg>
+
+            <anim target="JEF" trigger="shrug" />
+            <dlg char="JEF" track="JEF">
+                <m>Yeah... I know exactly what you're talking about... That's why I wanted to talk...</m>
+                <m>I have an idea that might help you... An assignment that will make use and develop those skills of yours...</m>
+            </dlg>
+            
+            <choice>
+                <c pos="NE">
+                    <text>That would be a first</text>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Whoa... That would be first...</m>
+                            <m>This school might not be so bad after all...</m>
+                        </dlg>
+                        <anim target="JEF" trigger="shrug" />
+                        <dlg char="JEF" track="JEF">
+                            <m>Well... Don't count on the rest of the staff being as friendly as me...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>More homework? Seriously?</text>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Like more homework? Seriously? What kind of "help" is that!?</m>
+                        </dlg>
+                        <anim target="JEF" trigger="shrug" />
+                        <dlg char="JEF" track="JEF">
+                            <m>Don't worry... It will be much more fun than usual homework...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF" track="JEF">
+                <m>I'm an artist, ${CHAR:PLAYER:NAME}... And I want your help in a very special Art project I have in mind...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Oh boy... Here it comes...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="JEF" track="JEF">
+                <m>This school... is full of young beauty...</m>
+                <m wait="1">I want to catalog this beauty... in it's raw state... showing its primal instincts...</m>
+                <m>Do you understand what I'm trying to say?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m wait="0.5">Sure... Raw state... Primal instincts... It's a nice euphemism for 'naked girls doing nasty stuff' and-</m>
+                <m wait="0.5">Wait... You want me to take pervy pictures of the girls for you!?!</m>
+            </dlg>
+
+            <anim target="JEF" trigger="startled" />
+            <dlg char="JEF" track="JEF">
+                <m wait="1">Hey... Don't say that out loud, for God's sake...</m>
+                <m>You see... At first my project was focused on innocence and helplessness themes... It was based on "chemical persuasion"...</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Uuh... Do you realize how shady that sounds?</m>
+            </dlg>
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF" track="JEF">
+                <m>Art can't be bounded by moral judgement, ${CHAR:PLAYER:NAME}... But my original plan doesn't matter anymore...</m>
+                <m>When you showed up in my class, I suddenly thought about a 'safer' way to carry on the project...</m>
+                <m wait="0.5">Forget about sedatives and helplessness... But the innocence...</m>
+                <m>I know these girl's innocence is nothing but a fragile mask covering their true selves... And using photography to expose this fact is the new focus of my project...</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>In plain english: you want me to take pervy pictures of the girls for you...</m>
+            </dlg>
+            <anim target="JEF" trigger="shrug" />
+            <dlg char="JEF" track="JEF">
+                <m>Sigh... Yeah... If you prefer to use those blunt words...</m>
+                <m>Do you think you can do that?</m>
+            </dlg>
+
+            <choice>
+                <c pos="E">
+                    <text>You mean pics like this one?</text>
+                    <check-flag flag="CHAR:VIC:INTERACTIONS" bit-set="6" />
+                    <lock-reason>[Missed picture opportunity]</lock-reason>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m wait="0.5">You mean pictures like this one?</m>
+                        </dlg>
+
+                        <load-scene-object key="user-picture-viewer.prefab">
+                            <message name="SetCanvasSortOrder"><int value="-1" /></message>
+                            <message name="FixedScreenWidth" />
+                            <message name="SetImageForwardVisible"><bool value="false" /></message>
+                            <message name="LoadPicture"><string value="${PICS:VIC:BOOTY}" /></message>
+                        </load-scene-object>
+
+                        <wait time="2" />
+
+                        <dlg char="JEF" track="none">
+                            <m wait="1">Whoa... Is this... ${CHAR:VIC:NAME}?</m>
+                            <m wait="1">You took this without she even noticing?! That's an excelent start...</m>
+                            <m>This is what I'm talking about... Nice composition... Good lightning...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m wait="0.5">Won't you say anything about those hot panties in your face!?</m>
+                        </dlg>
+                        <dlg char="JEF" track="none">
+                            <m>Uuh... Yeah... Just details...</m>
+                            <m>What matters is that you just proved that you have what it's needed to make this project happen...</m>
+                        </dlg>
+                        
+                        <obj target="user-picture-viewer.prefab">
+                            <message name="Leave" />
+                        </obj>
+
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m wait="0.5">If you say so...</m>
+                        </dlg>
+
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>I can try</text>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>I think I can do that... Sounds a lot of fun, at least...</m>
+                        </dlg>
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF" track="JEF">
+                            <m wait="1">I believe you can... Just work on your observation skill...</m>
+                        </dlg>
+                        <if>
+                            <check-flag flag="CHAR:VIC:INTERACTIONS" bit-unset="6" />
+                            <then>
+                                <dlg char="JEF" track="JEF">
+                                    <m>Like when ${CHAR:VIC:NAME} was distracted with a few minutes ago... You could have seized that opportunity to capture her... backside attributes...</m>
+                                </dlg>
+                                <dlg char="PLAYER" track="#PlayerTrack">
+                                    <m>Shit... You're right... I wish I could back in time so I could try that...</m>
+                                </dlg>
+                                <anim target="JEF" trigger="shrug" />
+                                <dlg char="JEF" track="JEF">
+                                    <m>Going back in time is a illusion that only exists in poorly written fiction, ${CHAR:PLAYER:NAME}...</m>
+                                    <m>That's why you should always pay attention to you surroundings in order to no lose any opportunities...</m>
+                                </dlg>
+                                <dlg char="PLAYER" track="#PlayerTrack">
+                                    <m wait="0.5">I'll try...</m>
+                                </dlg>
+                            </then>
+                        </if>
+                    </then>
+                </c>
+            </choice>
+
+            <wait />
+            <anim target="JEF" trigger="shrug" />
+            <dlg char="JEF" track="JEF">
+                <m wait="1">Well... You should go explore the school now... and... start scouting our subjects...</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Nice... Finally some freedom</m>
+            </dlg>
+
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF" track="JEF">
+                <m>Oh... I almost forgot...</m>
+                <m>You must pay a visit to the principal's office before leaving the building today... as he asked...</m>
+            </dlg>
+
+            <flag name="QUEST:PRINCIPAL1" bit-on="0" />
+            <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Have a chat with the principal" />
+            <log icon="QUEST">Objectives updated!</log>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Oh, come on... I didn't do anything wrong... yet...</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="The name of the principal is:" /></message>
+                <message name="LoadGenerateList"><string value="male-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Wells" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:PRI:NAME" destroy="true" />
+            </obj>
+
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF" track="JEF">
+                <m>Look... Mister ${CHAR:PRI:NAME} is a hypocritical jobsworth of the worst type...</m>
+                <m>And the 'cleaning' job he assigned you for is a sign that he doesn't appreciate your presence in his precious school...</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Well... Checking my fuzzy memories, I can say a principal liking me would be totally a first...</m>
+            </dlg>
+            <anim target="JEF" trigger="shrug" />
+            <dlg char="JEF" track="JEF">
+                <m>Go talk to him... But I suggest you to avoid any unnecessary confrontation with him...</m>
+                <m>He's highly strict when it comes to school rules... But that will not stop him from finding ways to make your life miserable here...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Charming...</m>
+            </dlg>
+            
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF" track="JEF">
+                <m>Well... That's it... You should go now...</m>
+                <m>I'll be here until later... Remember to bring me more 'material' to our project as soon as acquire some...</m>
+                <m>Good luck and...</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Choose the school name" /></message>
+                <message name="LoadGenerateList"><string value="school-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Blackwell" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="MISC:SCHOOL:NAME" destroy="true" />
+            </obj>
+
+            <dlg char="JEF" track="JEF">
+                <m>Welcome to ${MISC:SCHOOL:NAME} Academy...</m>
+            </dlg>
+
+            <fade-to-black  keep="true" />
+
+            <bootstrap script="location-classroom-01/location" />
+        </n>
+        
+    </nodes>
+</xml-script>

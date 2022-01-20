@@ -1,0 +1,267 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--
+        ###############################################
+        ### booty-start ###############################
+        ###############################################
+        -->
+        <n id="booty-start">
+            <fade-to-black keep="true" speed="1000" />
+            
+            <bgm loop="loop-vic" volume="0.25" />
+            
+            <load-scene-object key="scene-classroom-vic-booty.prefab" rename="scene" />
+            
+            <fade-to-black speed="-1" />
+
+            <autosave label="Classroom - Checking ${CHAR:VIC:NAME}'s backside" />
+
+            <flag name="CHAR:VIC:INTERACTIONS" bit-on="1" />
+
+            <dlg char="PLAYER">
+                <m wait="1">Holy Moley...</m>
+                <m>That's a nice view...</m>
+                <m>She is so focused in trying to seduce Mister ${CHAR:JEF:NAME} that I could safely stay here the whole day...</m>
+            </dlg>
+
+            <node-output node="loop" />
+        </n>
+
+        <!--
+        ###############################################
+        ### loop  #####################################
+        ###############################################
+        -->
+        <n id="loop">
+            <obj target="scene/interactables" active="true">
+                <outcome value="SPOT_1" node="spot-1" clear="true" />
+                <outcome value="SPOT_2" node="spot-2" clear="true" />
+                <outcome value="SPOT_3" node="spot-3" clear="true" />
+                <outcome value="PICTURE" node="take-picture" clear="true" />
+                <outcome value="LEAVE" node="leave" clear="true" />
+            </obj>
+        </n>
+        
+        <!--
+        ###############################################
+        ### spot-1 ####################################
+        ###############################################
+        -->
+        <n id="spot-1">
+            <obj target="scene/interactables" active="false" />
+
+            <dlg char="PLAYER">
+                <m wait="1">She seems so distracted...</m>
+                <m>I think if she wouldn't even notice if I carefully... displace things for a better view...</m>
+            </dlg>
+
+            <choice>
+                <c pos="E">
+                    <text>Pull up skirt</text>
+                    <then>
+                        <flag name="CHAR:VIC:INTERACTIONS" bit-on="2" />
+
+                        <sys>INTERACTION\n\n
+                            When a mouse move icon appears at the corner of the screen, it means you have movement control on a scene.\n\n
+                            In this scene, *MOVE MOUSE UPWARDS* to lift ${CHAR:VIC:NAME}'s skirt
+                        </sys>
+                        
+                        <anim target="scene">
+                            <int name="skirt" value="1" />
+                        </anim>
+
+                        <obj target="scene/cinemachine/target">
+                            <message name="Recenter" />
+                            <message name="SetReadInput" ><bool value="false" /></message>
+                        </obj>
+            
+                        <obj target="scene/axis-control" active="true">
+                            <message name="ResetPos" />
+                            <outcome value="END" clear="true" />
+                        </obj>
+
+                        <obj target="scene/axis-control" active="false" />
+
+                        <obj target="scene/cinemachine/target">
+                            <message name="SetReadInput" ><bool value="true" /></message>
+                        </obj>
+
+                        <dlg char="PLAYER">
+                            <m>Nice panties, ${CHAR:VIC:NAME}...</m>
+                        </dlg>
+
+                        <node-output node="loop" />
+                    </then>
+                </c>
+                <c out="loop" pos="W">
+                    <text>Nope</text>
+                </c>
+            </choice>
+        </n>
+        
+        <!--
+        ###############################################
+        ### spot-2 ####################################
+        ###############################################
+        -->
+        <n id="spot-2">
+            <obj target="scene/interactables" active="false" />
+
+            <dlg char="PLAYER">
+                <m wait="1">I think I can go a little further...</m>
+            </dlg>
+
+            <choice>
+                <c pos="E">
+                    <text>Pull up more</text>
+                    <then>
+                        <flag name="CHAR:VIC:INTERACTIONS" bit-on="3" />
+
+                        <anim target="scene">
+                            <int name="skirt" value="2" />
+                        </anim>
+
+                        <obj target="scene/cinemachine/target">
+                            <message name="Recenter" />
+                            <message name="SetReadInput" ><bool value="false" /></message>
+                        </obj>
+            
+                        <obj target="scene/axis-control" active="true">
+                            <message name="ResetPos" />
+                            <outcome value="END" clear="true" />
+                        </obj>
+
+                        <obj target="scene/axis-control" active="false" />
+
+                        <obj target="scene/cinemachine/target">
+                            <message name="SetReadInput" ><bool value="true" /></message>
+                        </obj>
+
+                        <dlg char="PLAYER">
+                            <m>Yeah... Sneak increased to 100...</m>
+                        </dlg>
+
+                        <node-output node="loop" />
+                    </then>
+                </c>
+                <c out="loop" pos="W">
+                    <text>Nope</text>
+                </c>
+            </choice>
+        </n>
+
+        <!--
+        ###############################################
+        ### spot-3 ####################################
+        ###############################################
+        -->
+        <n id="spot-3">
+            <obj target="scene/interactables" active="false" />
+
+            <dlg char="PLAYER">
+                <m wait="1">MOAR!!!1</m>
+            </dlg>
+
+            <choice>
+                <c pos="E">
+                    <text>MOAR!!!1</text>
+                    <then>
+                        <flag name="CHAR:VIC:INTERACTIONS" bit-on="5" />
+
+                        <wait time="0.25" />
+
+                        <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                            <message name="GenerateImpulse"><float value="10" /></message>
+                        </load-scene-object>
+                        <anim target="scene">
+                            <int name="skirt" value="1" />
+                        </anim>
+                        <dlg char="PLAYER">
+                            <m>Oh shit...</m>
+                        </dlg>
+                        
+                        <dlg char="VIC" track="scene/vic-track">
+                            <m>Huh!?! What are you doing behind me, weirdo?</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Nothing... I was just uuuh...</m>
+                        </dlg>
+                        
+                        <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                            <message name="GenerateImpulse"><float value="10" /></message>
+                        </load-scene-object>
+                        <flag name="CHAR:VIC:AFFINITY" dec="5">
+                            ${CHAR:VIC:NAME} disliked that
+                        </flag>
+                        <dlg char="VIC" track="scene/vic-track">
+                            <m>Just get away from me, you creep!</m>
+                        </dlg>
+
+                        <fade-to-black keep="true" />
+                        <bgm volume="0" />
+                        <bootstrap script="intro" node="classroom-location" />
+                    </then>
+                </c>
+                <c out="loop" pos="W">
+                    <text>Nope</text>
+                </c>
+            </choice>
+        </n>
+
+        <!--
+        ###############################################
+        ### take-picture ##############################
+        ###############################################
+        -->
+        <n id="take-picture">
+            <obj target="scene/interactables" active="false" />
+
+            <flag name="CHAR:VIC:INTERACTIONS" bit-on="6" />
+            
+            <dlg char="PLAYER">
+                <m wait="0.5">A wise man once said: "Pics... or it didn't happen..."</m>
+            </dlg>
+
+            <load-scene-object key="picture-taker.prefab" />
+
+            <obj target="picture-taker.prefab">
+                <outcome copy-to="PICS:VIC:BOOTY" destroy="true" />
+            </obj>
+
+            <trophy unlock="pantsu-01" />
+
+            <dlg char="PLAYER">
+                <m>This is what I call photography class...</m>
+            </dlg>
+
+            <wait time="1" />
+
+            <node-output node="leave" />
+        </n>
+
+        <!--
+        ###############################################
+        ### leave #####################################
+        ###############################################
+        -->
+        <n id="leave">
+            <obj target="scene/interactables" active="false" />
+            <dlg char="PLAYER">
+                <m>Well... I'd better not push my luck and get back to Earth now...</m>
+            </dlg>
+
+            <anim target="scene">
+                <int name="skirt" value="1" />
+            </anim>
+
+            <wait time="1" />
+            
+            <fade-to-black keep="true" />
+
+            <bootstrap script="intro" node="classroom-location" />
+        </n>
+    </nodes>
+</xml-script>

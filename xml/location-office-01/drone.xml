@@ -1,0 +1,235 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <fade-to-black keep="true" speed="2" />
+            <bgm volume="0" />
+            <bootstrap node="start" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## start ######################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black keep="true" speed="1000" />
+            <load-scene-object key="scene-office-drone-01.prefab" rename="scene" />
+            <obj target="scene/interactables" active="false" />
+            <fade-to-black speed="-2" />
+
+            <dlg char="PLAYER">
+                <m>There it is!</m>
+                <m wait="0.5">That must be ${CHAR:BRK:NAME}'s drone...</m>
+                <m>Now I just need to find where is the memory card bay in that thing...</m>
+            </dlg>
+
+            <node-output node="interactables-loop" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## interactables-loop ########################################
+            ##############################################################
+        -->
+        <n id="interactables-loop">
+            <obj target="scene/interactables" active="true">
+                <outcome value="CAMERA" node="interactables-camera" clear="true" />
+                <outcome value="MEM" node="interactables-mem" clear="true" />
+                <outcome value="PROPELLER" node="interactables-propeller" clear="true" />
+                <outcome value="BODY" node="interactables-body"  clear="true" />
+                <outcome value="LEAVE" node="interactables-leave" clear="true" />
+            </obj>
+        </n>
+
+        <!--
+            ##############################################################
+            ## interactables-camera ########################################
+            ##############################################################
+        -->
+        <n id="interactables-camera">
+            <obj target="scene/interactables" active="false" />
+
+            <dlg char="PLAYER">
+                <m>That's the camera... The most useful tool of this thing...</m>
+                <m wait="0.5">I wonder if at some point I'll capture interesting images using that toy...</m>
+                <m wait="0.5">But that's not what I'm looking for right now...</m>
+            </dlg>
+
+            <node-output node="interactables-loop" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## interactables-propeller ########################################
+            ##############################################################
+        -->
+        <n id="interactables-propeller">
+            <obj target="scene/interactables" active="false" />
+
+            <dlg char="PLAYER">
+                <m>Here we have the notorious finger slicers...</m>
+                <m>And that thing is still twitching... Probably some current leak...</m>
+                <m wait="0.5">I'd better stay away from that...</m>
+            </dlg>
+
+            <node-output node="interactables-loop" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## interactables-body ########################################
+            ##############################################################
+        -->
+        <n id="interactables-body">
+            <obj target="scene/interactables" active="false" />
+
+            <dlg char="PLAYER">
+                <m>I can't just take the whole thing with me...</m>
+                <m>I just need to find the memory card bay...</m>
+            </dlg>
+
+            <node-output node="interactables-loop" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## interactables-leave ########################################
+            ##############################################################
+        -->
+        <n id="interactables-leave">
+            <obj target="scene/interactables" active="false" />
+
+            <dlg char="PLAYER">
+                <m>I can't leave without finding the memory card first...</m>
+                <m>This is my only chance...</m>
+            </dlg>
+
+            <node-output node="interactables-loop" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## interactables-mem ########################################
+            ##############################################################
+        -->
+        <n id="interactables-mem">
+            <obj target="scene/interactables" active="false" />
+
+            <dlg char="PLAYER">
+                <m>Hey... I think it's there...</m>
+            </dlg>
+
+            <fade-to-black speed="3" keep="true" />
+            <obj target="scene/mem-card" active="true" />
+            <sfx clip="item" async="true" />
+            <fade-to-black speed="-3" />
+
+            <dlg char="PLAYER">
+                <m wait="1">Yeah... I got it...</m>
+                <m>Now... I'd better take care to not drop this little guy...</m>
+                <m wait="0.5">Last time I had one of these, it vanished through some hole in my pocket...</m>
+                <m>I should connect it to my phone... just to keep it safe...</m>
+            </dlg>
+
+            <wait time="0.3" />
+            <fade-to-black speed="3" keep="true"  layer="1000"/>
+            <obj target="scene/mem-card" active="false" />
+            <sfx clip="beep" />
+            <fade-to-black speed="-3" />
+
+            <dlg char="PLAYER">
+                <m>Shit... I thought I had disabled the auto-play content...</m>
+                <m>It's not secure... And with ${CHAR:BRK:NAME}'s hacking tools in the card I could get some nasty vir-</m>
+            </dlg>
+
+            <fade-to-black speed="4" keep="true" />
+            <obj target="scene" destroy="0" />
+            <load-scene-object key="scene-brk-selfie.prefab" />
+            <fade-to-black speed="-4" />
+
+            <trophy unlock="birds-are-not-real-01" />
+
+            <dlg char="PLAYER">
+                <m wait="5">Oh, dear...</m>
+                <m wait="4">Okay... This is definitely not 'school hacking evidence'...</m>
+                <m>But now I understand what ${CHAR:BRK:NAME} meant with 'embarrassing'...</m>
+            </dlg>
+
+            <sys>
+                You can use your phone video player controls to pause, and change playback speed\n\n
+                You can click the progress bar to pause the clip at a specific time\n\n
+                Keep the mouse quiet to hide the UI\n\n
+                Press the 'X' button to exit
+            </sys>
+
+            <obj target="scene-brk-selfie.prefab">
+                <message name="ClearOutcome"></message>
+            </obj>
+
+            <obj target="scene-brk-selfie.prefab">
+                <outcome />
+            </obj>
+
+            <fade-to-black keep="true" speed="0.25" layer="1000" />
+            <obj target="scene-brk-selfie.prefab" destroy="0" />
+
+            <load-scene-object key="scene-principal-talk.prefab" rename="scene" />
+            <anim target="scene"><bool name="principal-out" value="true" /></anim>
+
+            <fade-to-black speed="-1" />
+
+            <obj target="scene/player">
+                <message name="AnimateWeightToCoroutine"><float value="1" /></message>
+            </obj>
+
+            <flag name="QUEST:MEM_CARD" bit-on="11" />
+            <string name="QUEST:MEM_CARD:OBJECTIVE" set="Give the memory card back to ${CHAR:BRK:NAME}" />
+            <log icon="QUEST">Objectives updated!</log>
+            
+            <bgm volume="0" />
+            <dlg char="PLAYER" track="scene/player">
+                <m wait="1">Well... Mission Passed... Respect plus...</m>
+                <m>I'd better give this interesting footage back to ${CHAR:BRK:NAME} before the-</m>
+            </dlg>
+
+            <bgm loop="loop-pri" volume="0.25" />
+            <anim target="scene" trigger="next" />
+            
+            <dlg char="PRI" track="scene/principal-out">
+                <m wait="0.5">It was him... I know... He's the who did this little prank...</m>
+                <m wait="0.5">Be prepared, kid... One day I'll catch you in the act...</m>
+                <m>Your expulsion memo is ready, just waiting for this day...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="scene/player">
+                <m>Oh shit...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+
+            <dlg char="PRI" track="scene/principal-out">
+                <m>Damn it... And now I have see ${CHAR:JUS:NAME}'s unsettling grin again...</m>
+                <m>Urgh... I hate my life...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="scene/player">
+                <m>Time to bail!</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="0.5" keep="true" />
+
+            <bootstrap script="location-mainhall-01/location" spawn="spawn/hall-of-fame" />
+        </n>
+
+
+    </nodes>
+</xml-script>

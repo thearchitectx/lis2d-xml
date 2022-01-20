@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>This door is locked...</m>
+            </dlg>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="CHAR:JUL:INTERACTIONS" bit-unset="0" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="0" />
+                </check-group>
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>But I can hear some muffled sounds from inside the room...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <choice>
+                <c pos="E">
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:JUL:INTERACTIONS" bit-unset="0" />
+                        <check-flag flag="QUEST:JUL:PHONE" bit-unset="0" />
+                    </check-group>
+                    <text>[Look through keyhole]</text>
+                    <then>
+                        <bgm volume="0"/>
+                        <fade-to-black keep="true" />
+                        <bootstrap node="zac-jul-scene" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <check-group op="OR">
+                        <check-flag flag="CHAR:JUL:INTERACTIONS" bit-set="0" />
+                        <check-flag flag="QUEST:JUL:PHONE" bit-set="0" />
+                    </check-group>
+                    <text>[Look through keyhole]</text>
+                    <then>
+                        <bgm volume="0"/>
+                        <fade-to-black keep="true" />
+                        <bootstrap node="empty-room" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Leave]</text>
+                </c>
+            </choice>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+
+        <!--
+            ##############################################################
+            ## zac-jul-scene ############################################
+            ##############################################################
+        -->
+        <n id="zac-jul-scene">
+            <flag name="CHAR:JUL:INTERACTIONS" bit-on="0" />
+            <fade-to-black keep="true" speed="1000"/>
+            <bgm loop="loop-jul" volume="0.25" />
+            <load-scene-object key="scene-hallway-zac-jul.prefab" rename="scene" />
+            <anim target="scene" trigger="next" />
+
+            <fade-to-black speed="-1" />
+            <autosave label="Hallway - Peeping on Room 103" />
+
+            <wait />
+            <dlg char="PLAYER">
+                <m>Oups... I don't think that is a proper use of school property...</m>
+            </dlg>
+            <wait time="2" />
+
+            <dlg track="scene/track-jul">
+                <m>Wait... Did you hear that?</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Choose the girl's name" /></message>
+                <message name="LoadGenerateList"><string value="female-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Juliet" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:JUL:NAME" destroy="true" />
+            </obj>
+
+            <dlg track="scene/track-zac">
+                <m>Huh!?</m>
+                <m>Come on, ${CHAR:JUL:NAME}... There's nothing out there...</m>
+                <m>Let's just enjoy ourselves...</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Choose the dude's name" /></message>
+                <message name="LoadGenerateList"><string value="male-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Zach" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:ZAC:NAME" destroy="true" />
+            </obj>
+
+            <dlg char="JUL" track="scene/track-jul">
+                <m>I'm serious, ${CHAR:ZAC:NAME}...</m>
+                <m>I think there's someone peeping on us...</m>
+            </dlg>
+
+            <dlg char="ZAC" track="scene/track-zac">
+                <m wait="2">Just be quiet, babe... please...</m>
+                <m wait="1">You're so hot...</m>
+                <m wait="1">Making out with you is such a torture...</m>
+                <m>I can't stand it... I just need to...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <wait time="1" />
+
+            <dlg char="JUL" track="scene/track-jul">
+                <m wait="0.5">${CHAR:ZAC:NAME}!?!?</m>
+                <m wait="0.5">What do you think you're doing?</m>
+                <m>We can't...</m>
+            </dlg>
+
+            <dlg char="ZAC" track="scene/track-zac">
+                <m wait="1">Yes we can, babe...</m>
+                <m wait="0.5">I need it...</m>
+                <m>Why do you do this to me?</m>
+            </dlg>
+
+            <dlg char="JUL" track="scene/track-jul">
+                <m>Did you forget where we are, big guy?</m>
+                <m>We can get in serious trouble if someone catches you acting like that...</m>
+                <m>Can't you just hold yourself until the weekend?</m>
+            </dlg>
+
+            <dlg char="ZAC" track="scene/track-zac">
+                <m wait="1">The weekend!?!</m>
+                <m>Oh, come on... I feel like my balls are going to explode...</m>
+                <m>Just let me...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <wait time="1" />
+
+            <dlg char="JUL" track="scene/track-jul">
+                <m>${CHAR:ZAC:NAME}!?!? What the fuck are you doing?</m>
+            </dlg>
+
+            <choice>
+                <c pos="E">
+                    <text>[Take Picture]</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>It's time to gather some evidence...</m>
+                        </dlg>
+                        <load-scene-object key="picture-taker.prefab" />
+                        
+                        <obj target="picture-taker.prefab">
+                            <outcome copy-to="PICS:JUL:MAKE_OUT" destroy="true" />
+                        </obj>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Nope]</text>
+                    <then>
+                        <wait />
+                    </then>
+                </c>
+            </choice>
+
+            <dlg char="JUL" track="scene/track-jul">
+                <m>${CHAR:ZAC:NAME}!! Quit it, you fucking moron!!</m>
+                <m>You'd better behave or I'm leaving right now!!</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+
+            <dlg char="ZAC" track="scene/track-zac">
+                <m wait="0.5">Urgh... Okay... okay...</m>
+                <m>You're going to kill me, ${CHAR:JUL:NAME}...</m>
+            </dlg>
+
+            <wait time="2" />
+
+            <fade-to-black keep="true" />
+            <bgm volume="0" />
+            <bootstrap script="location-hallway-01/location" />
+        </n>
+
+
+        <!--
+            ##############################################################
+            ## empty-room ################################################
+            ##############################################################
+        -->
+        <n id="empty-room">
+            <fade-to-black keep="true" speed="1000"/>
+            <bgm loop="loop-urban" as-music="false" volume="0.25" />
+            <load-scene-object key="scene-hallway-zac-jul.prefab" rename="scene" />
+            <fade-to-black speed="-1" />
+
+            <wait />
+
+            <dlg char="PLAYER">
+                <m wait="0.5">The room seems empty now...</m>
+                <m>Whoever was here already left...</m>
+            </dlg>
+
+            <fade-to-black keep="true" />
+            <bgm volume="0" />
+            <bootstrap script="location-hallway-01/location" />
+        </n>
+        
+    </nodes>
+</xml-script>

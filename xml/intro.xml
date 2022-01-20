@@ -1,0 +1,298 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <n id="root">
+            <if>
+                <check-flag flag="FLG:0" eq="1" />
+                <then>
+                    <sys>
+                        WARNING!!\n\n
+                        All save slots are already occupied!!\n\n
+                        Proceeding with this new game will result in *SLOT 01* being *OVERWRITTEN*\n\n
+                        You have been warned!!
+                    </sys>
+                </then>
+            </if>
+
+            <flag name="DAY:CURRENT" set="1" />
+
+            <sfx clip="explosion" async="true" volume="0" />
+
+            <bgm loop="loop-rumble" as-music="false" />
+            
+            <wait time="3" />
+            
+            <dlg>
+                <m>zzzzzz...  zzz... zzzzzz...</m>
+            </dlg>
+            
+            <wait time="3" />
+            
+            <load-scene-object key="vfx-dizzy.prefab"  />
+            <load-scene-object key="shot-classroom-01.prefab"  />
+            
+            <sfx clip="explosion" async="true" />
+            <bgm volume="0" />
+            
+            <wait time="4" />
+
+            <dlg>
+                <m wait="2">Wha... What the...</m>
+                <m wait="2">Shit... I feel so high...</m>
+                <m wait="1">I don't remember smoking anything suspicious... But this is definitely some sort of bad trip...</m>
+                <m wait="0.5">Actually... I can't even remember my name...</m>
+                <m>I think it is...</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Choose your character name" /></message>
+                <message name="LoadGenerateList"><string value="male-names.txt" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:PLAYER:NAME" destroy="true" />
+            </obj>
+
+            <dlg char="PLAYER">
+                <m wait="2">Yeah... It's ${CHAR:PLAYER:NAME}... Why my parents gave me such lame name?</m>
+                <m wait="1">Now... I... I just need to focus...</m>
+                <m wait="1">Where the hell am I?</m>
+            </dlg>
+
+            <anim target="vfx-dizzy.prefab" trigger="off" />
+            <obj target="vfx-dizzy.prefab" destroy="5" />
+            <wait time="2" />
+
+            <log><![CDATA[<color=cyan>MOVE MOUSE</color> to look around]]></log>
+
+            <obj target="shot-classroom-01.prefab/player">
+                <message name="AnimateWeightToCoroutine"><float value="1" /></message>
+            </obj>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m wait="2">Uuh... This place... looks like...</m>
+                <m wait="1">....... a classroom...</m>
+                <m wait="1">Damn it!!! Did I sleep during class again!?!</m>
+                <m>Well... At least I'm starting to remember shit...</m>
+                <m>Like... Being reprehended several times in the past for crashing during class and-</m>
+            </dlg>
+
+            <load-scene-object key="shot-char-kate-01.prefab" proxy="KATE">
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot-classroom-01.prefab" /></message>
+            </load-scene-object>
+            
+            <anim target="KATE" idle="NEUTRAL" face="DISAPPROVE" />
+            <obj target="shot-classroom-01.prefab">
+                <message name="Recenter" broadcast="true" />
+            </obj>
+            <sfx clip="swoosh" async="true" />
+            
+            <bgm loop="loop-kate" volume="0.25" fade-speed="0.1" />
+
+            <wait time="0.25" />
+            <sfx clip="voice-hem-a" async="true" />
+            <dlg char="KATE" track="KATE">
+                <m wait="1">Hey... What's wrong with you?</m>
+                <m>First you sleep during the whole class... and now you're staring at the horizon... making funny faces...</m>
+            </dlg>
+            <wait time="2" />
+            <anim target="KATE" trigger="say-01" />
+            <dlg char="KATE" track="KATE">
+                <m>You're not under the influence of drugs are you? Because I'm responsible for the-</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m wait="1">Woah... Easy there, girl...</m>
+                <m>Who are you again??</m>
+            </dlg>
+            
+            <anim target="KATE" trigger="say-02" face="DISAPPROVE" />
+            <dlg char="KATE" track="KATE">
+                <m>Huh!? Don't you remember the other girls harassing me during class?</m>
+                <m>They keep whispering my name all the time, just to nag me...</m>
+                <m wait="0.5">My name is...</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Her name is:" /></message>
+                <message name="LoadGenerateList"><string value="female-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Kate" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:KATE:NAME" destroy="true" />
+            </obj>
+
+            <log>Pick an answer in the fancy choice wheel</log>
+            
+            <choice id="CHAR:KATE:CLASSROOM:1">
+                <c pos="NE">
+                    <text>Nice to meet you, ${CHAR:KATE:NAME}...</text>
+                    <then>
+                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="1" />
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>It's nice to meet you, ${CHAR:KATE:NAME}...</m>
+                        </dlg>
+                        <anim target="KATE" idle="CUTE" face="NEUTRAL" trigger="say-01" />
+                        <flag name="CHAR:KATE:AFFINITY" inc="1">${CHAR:KATE:NAME} liked that</flag>
+                        <sfx clip="voice-gasp-a" async="true"/>
+                        <dlg char="KATE" track="KATE">
+                            <m>Oh... Thank you... That was unexpected...</m>
+                            <m>I mean, your presence here is unexpected... Just like meeting someone with good manners in this place...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>You wont tell on me, right?</text>
+                    <then>
+                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="0" />
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Hey... You won't tell on me to the principal or anything right?</m>
+                            <m>I mean... You seem quite the straitlaced type... Is that why people pick on you?</m>
+                        </dlg>
+                        <anim target="KATE" idle="CUTE" face="DISAPPROVE"  trigger="say-01" />
+                        <sfx clip="voice-sigh-a" async="true"/>
+                        <dlg char="KATE" track="KATE">
+                            <m>Sigh... I... I don't...</m>
+                            <m>You won't understand... I'm not that kind of person, okay?</m>
+                            <m>I just... think the appearance of a new weird student in the middle of school year is very strange...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+            
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Well... I wish I had a good explanation for me being here, but...</m>
+                <m>I honestly don't have many coherent memories in my mind right now...</m>
+            </dlg>
+
+            <anim target="KATE" idle="CUTE" face="CUTE" trigger="say-02" />
+            <dlg char="KATE" track="KATE">
+                <m>Oh, my... Are you sure you're not sick?</m>
+                <m>You surely look disorientated...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Nah... I was a bit dizzy earlier, but I'm feeling better now...</m>
+            </dlg>
+            
+            <anim target="KATE" idle="CUTE" face="CUTE" trigger="say-01" />
+            <dlg char="KATE" track="KATE">
+                <m wait="1">Well... If nobody is questioning your appearance here, I won't be the first one...</m>
+                <m wait="0.5">I should go now while none of those girls are around to mess with me...</m>
+            </dlg> 
+
+            <obj target-key="shot-char-kate-01.prefab" destroy="2">
+                <message name="StartCurrent"></message>
+                <message name="EndRight"></message>
+                <message name="TriggerEnterAndKeep"></message>
+            </obj>
+
+            <bgm volume="0" fade-speed="0.2" />
+
+            <wait time="1" />
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m wait="1">Hum... I have a feeling this will be a quite peculiar week...</m>
+                <m>I should talk with the teacher... Whoever he is...</m>
+            </dlg>
+
+            <wait />
+
+            <sys>
+                Press *ESC* to pause the game and check stats, objectives, items and manage save games\n\n
+                This game saves your progress often and *automatically*.\n\n
+                If you wish to keep a *copy* of the latest game state (AKA save scum), just *SWITCH* to an empty slot\n\n
+                The current active save slot is displayed during autosave and flashes in the SAVES screen
+            </sys>
+
+            <fade-to-black keep="true" />
+            
+            <obj target-key="shot-classroom-01.prefab" destroy="0" />
+            
+            <node-output node="classroom-location" />
+        </n>
+        
+        <!--##########################################
+            # classroom-location #####################
+            ########################################## -->
+        <n id="classroom-location">
+            <bgm loop="loop-urban" as-music="false" volume="0.25" fade-speed="0.5" />
+            
+            <fade-to-black keep="true" />
+            <load-scene-object key="location-classroom-01.prefab" />
+            <load-scene-object key="location-classroom-01-jef-vic.prefab" parent="location-classroom-01.prefab">
+                <message name="FindReferenceBackground"><string value="location-classroom-01.prefab" /></message>
+            </load-scene-object>
+
+            <if>
+                <check-flag flag="QUEST:INTRO" bit-set="0" />
+                <then>
+                    <if>
+                        <check-flag flag="QUEST:INTRO" bit-unset="2" />
+                        <then>
+                            <load-scene-object key="location-classroom-01-napkin.prefab" parent="location-classroom-01.prefab" />
+                        </then>
+                    </if>
+        
+                    <if>
+                        <check-flag flag="QUEST:INTRO" bit-unset="3" />
+                        <then>
+                            <load-scene-object key="location-classroom-01-can.prefab" parent="location-classroom-01.prefab" />
+                        </then>
+                    </if>
+        
+                    <if>
+                        <check-flag flag="QUEST:INTRO" bit-unset="4" />
+                        <then>
+                            <load-scene-object key="location-classroom-01-banana.prefab" parent="location-classroom-01.prefab" />
+                        </then>
+                    </if>
+                    <if>
+                        <check-flag flag="QUEST:INTRO" bit-unset="5" />
+                        <then>
+                            <load-scene-object key="location-classroom-01-bottle.prefab" parent="location-classroom-01.prefab" />
+                        </then>
+                    </if>
+                </then>
+            </if>
+            
+            <fade-to-black speed="-1" />
+            
+            <autosave label="Classroom - Intro" />
+            <wait />
+
+            <if>
+                <check-flag flag="QUEST:INTRO" bit-unset="0" />
+                <then>
+                    <log><![CDATA[Use *A/D KEYS* or *ARROW KEYS* to explore]]></log>
+                    <log><![CDATA[*LEFT CLICK* or *SPACE BAR* to activate highlighted elements]]></log>
+                </then>
+            </if>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:INTRO" bit-set="0" />
+                    <check-flag flag="QUEST:INTRO" bit-unset="1" />
+                </check-group>
+                <then>
+                    <flag name="QUEST:INTRO" bit-on="1" />
+                    <obj target="#Player"><message name="SetInputActive"><bool value="false" /></message></obj>
+                    <sys>
+                        Some stuff located near the floor can only be noticed when you *CROUCH*\n\n
+                        Press *S* or *DOWN ARROW* key to crouch to check items on the ground
+                    </sys>
+                    <obj target="#Player"><message name="SetInputActive"><bool value="true" /></message></obj>
+                </then>
+            </if>
+
+        </n>
+
+        
+    </nodes>
+</xml-script>

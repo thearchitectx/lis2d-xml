@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="n1">
+            <fade-to-black keep="true" speed="1000" />
+            <bgm loop="loop-urban" as-music="false" volume="0.25" fade-speed="0.5" />
+            
+            <load-scene-object key="location-office-01.prefab" rename="location"/>
+            <obj target="location/perceptibles" active="false" />
+
+            <fade-to-black speed="-1" />
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:MEM_CARD" bit-set="10" />
+                    <check-flag flag="QUEST:MEM_CARD" bit-unset="11" />
+                </check-group>
+                <then>
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="false" /></message>
+                    </obj>
+
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>Okay... The principal won't be out for long... I don't have time to screw around here...</m>
+                        <m>I just need to find where the hell is the drone...</m>
+                    </dlg>
+
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="true" /></message>
+                    </obj>
+                </then>
+            </if>
+
+            <obj target="location/perceptibles" active="true" />
+            <load-scene-object key="location-office-01-drone.prefab"/>
+
+            <autosave label="Principal's Office - Exploring" />
+
+            <inject node="lib-post-start" />
+        </n>
+    </nodes>
+</xml-script>

@@ -1,0 +1,765 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Hello there...</m>
+            </dlg>
+            
+            <bgm volume="0" />
+            <fade-to-black speed="1" keep="true" />
+
+            <bootstrap node="start" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## start #####################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black speed="1000" keep="true" />
+
+            <bgm loop="loop-kate" volume="0.25"/>
+            <load-scene-object key="shot-hallway-02.prefab" />
+            <load-scene-object key="shot-char-kate-01.prefab"  proxy="KATE">
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot-hallway-02.prefab" /></message>
+            </load-scene-object>
+            <obj target="shot-hallway-02.prefab/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+            <sfx clip="swoosh" async="true" />
+
+            <fade-to-black speed="-1" />
+
+            <anim target="KATE" idle="NEUTRAL" face="NEUTRAL" />
+            <if>
+                <check-flag flag="CHAR:KATE:INTERACTIONS" bit-unset="5" />
+                <then>
+                    <flag name="CHAR:KATE:INTERACTIONS" bit-on="5" />
+                    <node-output node="first-interaction" />
+                </then>
+                <else>
+                    <node-output node="dialog-root" />
+                </else>
+            </if>
+        </n>
+
+        <!--
+            ##########################################################
+            ### first-interaction ####################################
+            ##########################################################
+        -->
+        <n id="first-interaction">
+            <dlg char="KATE" track="KATE">
+                <m>Oh... It's you...</m>
+            </dlg>
+            <wait time="0.5" />
+
+            <if>
+                <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="3" />
+                <then>
+                    <dlg char="KATE" track="KATE">
+                        <m>You simply made up that story about Mister ${CHAR:JEF:NAME} coming here to check what was happening, right?</m>
+                    </dlg>
+                    
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>Yup... I had to think fast... But it worked...</m>
+                        <m>You see... People who have delusions of power are always terrified of people who have some actual power...</m>
+                    </dlg>
+                    
+                    <anim target="KATE" trigger="say-02" />
+                    <dlg char="KATE" track="KATE">
+                        <m>I... I suspected it was a lie... The staff is never around when the bullies are acting...</m>
+                        <m >But you shouldn't lie... Lying is a sin and God doesn't approve any kind of...</m>
+                    </dlg>
+                    <wait time="0.5"/>
+
+                    <sfx clip="voice-sigh-a" async="true" />
+                    <anim target="KATE" trigger="say-01" face="SIGH" />
+                    <dlg char="KATE" track="KATE">
+                        <m>Sigh... What am I even saying?</m>
+                        <m>I have to snap out of that indoctrination...</m>
+                    </dlg>
+
+                    <flag name="CHAR:KATE:AFFINITY" inc="1">${CHAR:KATE:NAME} liked that!</flag>
+                    <anim target="KATE" idle="CUTE" face="CUTE" />
+                    <dlg char="KATE" track="KATE">
+                        <m>What I mean is... Thank you for your intervention...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <anim target="KATE" idle="NEUTRAL" face="DISAPPROVE" />
+                    <dlg char="KATE" track="KATE">
+                        <m>So... Did you enjoy the show?</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>Shit... You were not not kidding when you talked about being harassed by other girls...</m>
+                    </dlg>
+
+                    <anim target="KATE" trigger="say-02" />
+                    <dlg char="KATE" track="KATE">
+                        <m>That was just a sample the daily routine of this shool...</m>
+                        <m>Actually, throwing our stuff on the floor is far from the worst 'pranks' bullies pull on people around here...</m>
+                        <m>It's the kind of behaviour I have to deal here...</m>
+                    </dlg>
+                    <choice>
+                        <c pos="NE">
+                            <text>I'm sorry that happens to you</text>
+                            <then>
+                                <dlg char="PLAYER" track="#PlayerTrack">
+                                    <m>That sucks... I'm sorry you have to go trough this every day...</m>
+                                </dlg>
+                                <anim target="KATE" idle="NEUTRAL" face="DISAPPROVE" />
+                                <dlg char="KATE" track="KATE">
+                                    <m>Well, don't be... I also don't like when people feel pity of me...</m>
+                                    <m>I'm trying to get out of this situation by my own means...</m>
+                                </dlg>
+                            </then>
+                        </c>
+                        <c pos="SE">
+                            <text>Such nice people, huh?</text>
+                            <then>
+                                <dlg char="PLAYER" track="#PlayerTrack">
+                                    <m>Such nice group of people, huh?</m>
+                                </dlg>
+                                <anim target="KATE" trigger="say-01" face="SIGH" />
+                                <sfx clip="voice-sigh-a" />
+                                <dlg char="KATE" track="KATE">
+                                    <m>Sigh... I know, right?</m>
+                                </dlg>
+                                <flag name="CHAR:KATE:AFFINITY" inc="1">${CHAR:KATE:NAME} liked that!</flag>
+                                <anim target="KATE" idle="CUTE" face="CUTE" />
+                                <dlg char="KATE" track="KATE">
+                                    <m>But, hey... You're neither bullying me nor patronizing me about the reasons my life sucks...</m>
+                                    <m>That's fresh... I like it...</m>
+                                </dlg>
+                            </then>
+                        </c>
+                    </choice>
+                </else>
+            </if>
+
+            <anim target="KATE" face="SIGH" />
+            <dlg char="KATE" track="KATE">
+                <m>Anyways... I just need to find a way to open my locker and leave this building...</m>
+            </dlg>
+            <anim target="KATE" face="CUTE" idle="CUTE" />
+            <dlg char="KATE" track="KATE">
+                <m>All I need for now is to keep distance from those girls...</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##########################################################
+            ### dialog-root ##########################################
+            ##########################################################
+        -->
+        <n id="dialog-root">
+            <choice>
+                <c pos="NW" out="locker-quest-start">
+                    <text>Problem with the locker?</text>
+                    <check-flag flag="QUEST:KATE_LOCKER" bit-unset="0" />
+                </c>
+                <c pos="NW" out="locker-quest-key-found">
+                    <text>Found the locker key</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:KATE_LOCKER" bit-set="0" />
+                        <check-flag flag="QUEST:KATE_LOCKER" bit-set="4" />
+                        <check-flag flag="QUEST:KATE_LOCKER" bit-unset="31" />
+                    </check-group>
+                </c>
+                <c pos="NW">
+                    <text>Progress with the locker?</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:KATE_LOCKER" bit-set="0" />
+                        <check-flag flag="QUEST:KATE_LOCKER" bit-unset="4" />
+                    </check-group>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Had any progress finding your combination?</m>
+                        </dlg>
+                        <anim target="KATE" face="SIGH" idle="NEUTRAL" />
+                        <dlg char="KATE" track="KATE">
+                            <m>No... It's almost impossible...</m>
+                        </dlg>
+                        <anim target="KATE" face="NEUTRAL" idle="NEUTRAL" />
+                        <dlg char="KATE" track="KATE">
+                            <m>My only hope is you finding the key...</m>
+                        </dlg>
+                        <node-output node="dialog-root" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>About the school...</text>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>What can you tell me about this school?</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <anim target="KATE" face="SIGH" idle="NEUTRAL" trigger="say-01" />
+                        <sfx clip="voice-sigh-a" async="true" />
+                        <dlg char="KATE" track="KATE">
+                            <m>Sigh... More than the fact that ${MISC:SCHOOL:NAME} is my own personal hell?</m>
+                        </dlg>
+                        <anim target="KATE" face="NEUTRAL" idle="NEUTRAL"  />
+                        <dlg char="KATE" track="KATE">
+                            <m>All you need to know is that here you have the rich spoiled kids and the 'cool' scholarship hipsters...</m>
+                            <m>If you're not in one of these groups, then you end up like me...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Uuh... Can't see myself in any of those... Though not being rich is not exactly my choice...</m>
+                        </dlg>
+
+                        <anim target="KATE" trigger="say-02" />
+                        <dlg char="KATE" track="KATE">
+                            <m>My family wasn't sure if I should come... Mostly because of the 'liberal' environment...</m>
+                            <m>Unfortunately... They ended up sending me here anyways...</m>
+                        </dlg>
+
+                        <node-output node="dialog-root" />
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>Take a picture?</text>
+                    <check-flag flag="CHAR:KATE:INTERACTIONS" bit-unset="6" />
+                    <then>
+                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="6" />
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>So... Mister ${CHAR:JEF:NAME} assigned me to work on his... uuuhh... yearbook...</m>
+                        </dlg>
+                        <anim target="KATE" trigger="say-01" />
+                        <dlg char="KATE" track="KATE">
+                            <m>Woah... That's quite a responsibility...</m>
+                            <m>He must trust in your talent...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m wait="0.5">Yeah... He does...</m>
+                            <m>Would you allow me to start working on the project with a picture of yours?</m>
+                        </dlg>
+                        <anim target="KATE" face="SIGH" />
+                        <dlg char="KATE" track="KATE">
+                            <m>Oh... I'm sorry...</m>
+                        </dlg>
+                        <anim target="KATE" idle="UPSET" face="UPSET" />
+                        <dlg char="KATE" track="KATE">
+                            <m>I'm really upset about about my locker right now...</m>
+                            <m>...and I don't want to appear in a yearbook picture with with a worried face...</m>
+                        </dlg>
+                        <anim target="KATE" idle="NEUTRAL" face="NEUTRAL" />
+                        <node-output node="dialog-root" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[Leave]</text>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Talk to you later...</m>
+                        </dlg>
+
+                        <fade-to-black keep="true" />
+                        <bgm volume="0" />
+                        <bootstrap script="location-hallway-01/location" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--
+            ##########################################################
+            ### locker-quest-start ###################################
+            ##########################################################
+        -->
+        <n id="locker-quest-start">
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Hey... Did you say you have a problem with your locker?</m>
+            </dlg>
+
+            <anim target="KATE" face="SIGH" idle="NEUTRAL" />
+            <dlg char="KATE" track="KATE">
+                <m>Yeah... Those damned girls...</m>
+            </dlg>
+            
+            <anim target="KATE" idle="NEUTRAL" face="NEUTRAL" />
+            <dlg char="KATE" track="KATE">
+                <m>They changed my locker combination and now I can't get my stuff...</m>
+                <m>I don't know how they managed to do that, but it was obviously yet another of their 'funny' pranks... </m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Hum... They probably found some administration master key...</m>
+                <m>You can easily change combinations with one of those...</m>
+            </dlg>
+
+            <anim target="KATE" idle="UPSET" face="UPSET" />
+            <dlg char="KATE" track="KATE">
+                <m>Oh no... What am I going to do now?</m>
+                <m>I could talk with that scary ${MISC:SCHOOL:NAME} security chief... But he always says that I'm looking for trouble...</m>
+                <m>I don't wanna ask for his help again...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Look... Having a stolen administration key in your possession is quite risky...</m>
+                <m>The girls probably ditched the key as soon as they messed with your locker...</m>
+            </dlg>
+
+            <anim target="KATE" idle="NEUTRAL" face="NEUTRAL" />
+            <dlg char="KATE" track="KATE">
+                <m>You mean... You think we might find the key around here?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Absolutely... I'd have thrown it into some of the trash cans as soon as I finished using it...</m>
+                <m>It's always safe to get rid of evidence against yourself as soon as you can...</m>
+            </dlg>
+
+            <anim target="KATE" idle="CUTE" face="CUTE" />
+            <dlg char="KATE" track="KATE">
+                <m>Wow... I'm a little concerned about your knowledge regarding stolen property and evidence cleaning, but...</m>
+                <m>If you could find where they dumped that key... Then I could finally open my locker and get out of this place...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Sure... I can do a quick sweep for the key in the hallway...</m>
+                <m>Like... digging through trash is starting to become a theme here...</m>
+            </dlg>
+
+            <anim target="KATE" trigger="say-01" />
+            <dlg char="KATE" track="KATE">
+                <m>Oh... Thank you so much!!</m>
+                <m>Tell me as soon as you find the key!!</m>
+            </dlg>
+
+            <flag name="QUEST:KATE_LOCKER" bit-on="0" icon="QUEST">Objectives updated</flag>
+            <string name="QUEST:KATE_LOCKER:OBJECTIVE">Find a locker master key in some of the hallway trash cans</string>
+
+            <bootstrap script="location-hallway-01/location" />
+        </n>
+
+        <!--
+            ##########################################################
+            ### locker-quest-key-found ###############################
+            ##########################################################
+        -->
+        <n id="locker-quest-key-found">
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Guess what... I have the lockers key...</m>
+            </dlg>
+
+            <anim target="KATE" idle="CUTE" face="CUTE" trigger="say-02" />
+            <sfx clip="voice-gasp-a" async="true" />
+            <dlg char="KATE" track="KATE">
+                <m>Oh my God!! Really!?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Turns out your 'friends' are pretty predictable... I found it in one of the trashcans...</m>
+            </dlg>
+
+            <wait time="1" />
+
+            <flag name="ITEM:LOCKERS_KEY" set="0" icon="KEY">Locker key was given to ${CHAR:KATE:NAME}</flag>
+            <flag name="QUEST:KATE_LOCKER" bit-on="31" />
+            <string name="QUEST:KATE_LOCKER:OBJECTIVE" unset="true" />
+            <log icon="QUEST">Objectives updated!</log>
+            <sfx clip="item" async="true" />
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Here... You can use it to open your locker...</m>
+            </dlg>
+
+            <flag name="CHAR:KATE:AFFINITY" inc="2">${CHAR:KATE:NAME} liked that!</flag>
+            <anim target="KATE" trigger="say-02" />
+            <dlg char="KATE" track="KATE">
+                <m>Oh... Thank you so much...</m>
+            </dlg>
+
+            <anim target="KATE" idle="CUTE" face="SIGH" />
+            <dlg char="KATE" track="KATE">
+                <m>I... I think this is the first time someone do something nice for me in this school...</m>
+            </dlg>
+            <anim target="KATE" face="CUTE" />
+            
+            <if>
+                <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="6" />
+                <then>
+                    <dlg char="KATE" track="KATE">
+                        <m wait="0.5">You... You asked for a picture earlier... Mister ${CHAR:JEF:NAME}'s yearbook project, right?</m>
+                        <m>You can take the picture now if you want...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="KATE" track="KATE">
+                        <m wait="0.5">If there's anything I could for you...</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>Hey... Mister ${CHAR:JEF:NAME} assigned me to work on his... uuuhh... yearbook...</m>
+                        <m>Can I start it taking your picture?</m>
+                    </dlg>
+                    <anim target="KATE" trigger="say-01" />
+                    <dlg char="KATE" track="KATE">
+                        <m wait="0.5">Of course... It's the least I could do...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Awesome...</m>
+                <m>Strike a pose for me!</m>
+            </dlg>
+
+            <anim target="KATE" trigger="say-01" idle="UPSET" face="UPSET" />
+            <dlg char="KATE" track="KATE">
+                <m>a... pose...</m>
+                <m>but... I don't know what to...</m>
+                <m>... and... people will laugh at me...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Come on... There's no one around to look you...</m>
+                <m>You're in the photography class, right? It must include photo modeling lesson, I guess...</m>
+                <m>Just strike the first pose that goes on your mind...</m>
+            </dlg>
+
+            <anim target="KATE" idle="CUTE" face="CUTE" />
+            <dlg char="KATE" track="KATE">
+                <m>Well... In this case...</m>
+                <m>I think I can try some cool modeling poses...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap node="locker-quest-take-pic" />
+        </n>
+
+        <!--
+            ##########################################################
+            ### locker-quest-take-pic ################################
+            ##########################################################
+        -->
+        <n id="locker-quest-take-pic">
+            <fade-to-black keep="true" speed="1000" />
+            <bgm loop="loop-kate" volume="0.25" />
+
+            <load-scene-object key="scene-hallway-kate-picture-01.prefab" rename="KATE" />
+
+            <dlg char="KATE">
+                <m>What about this...</m>
+            </dlg>
+
+            <fade-to-black speed="-1" />
+            <autosave label="Hallway - ${CHAR:KATE:NAME} poses" />
+
+            <dlg char="KATE"  track="KATE">
+                <m>I think the only time I made some real photo modeling was for my first communion celebration...</m>
+                <m>I took a lot of pictures like... praying, receiving the eucharist and... well...</m>
+                <m>My mom forced me to pose during the whole day of the rite...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Look... Religion is a touchy subject... If there was a God, he would say it's wise to avoid the topic...</m>
+            </dlg>
+
+            <sfx clip="voice-huh-a" async="true" />
+            <dlg char="KATE"  track="KATE">
+                <m>Huh!?!</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m wait="0.5">Oh... Uuh... Forget what I just said... I still feel a little dizzy...</m>
+                <m>What I mean is...</m>
+            </dlg>
+
+            <sys>
+                Persuasion options are unlocked based on your character reputation status (paragon/renegade points)\n\n
+                These options appear in specific colors in the choice wheel
+            </sys>
+
+            <choice>
+                <c pos="NW" style="PARAGON">
+                    <text>Feel comfortable like this?</text>
+                    <check-flag flag="PLAYER:STAT:PARAGON" gte="2" />
+                    <lock-reason>[Paragon 2+ required]</lock-reason>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Do you really feel comfortable with this?</m>
+                        </dlg>
+                        <dlg char="KATE" track="KATE">
+                            <m wait="0.5">Oh... I guess... I...</m>
+                            <m>I don't know... the church has been part of my life since... always...</m>
+                        </dlg>
+
+                        <fade-to-black speed="3" keep="true" />
+                        <obj target="KATE" destroy="0" />
+                        <load-scene-object key="scene-hallway-kate-picture-02.prefab" rename="scene"></load-scene-object>
+                        <fade-to-black speed="-3"  />
+
+                        <dlg char="KATE" track="scene/track-kate">
+                            <m wait="0.5">but... to be honest... it's quite annoying sometimes... how those people are so judgy and condescending with me...</m>
+                            <m wait="0.5">it's my parents... they... they've been bringing me to Sunday school since I'm a little kid...</m>
+                            <m wait="0.5">They are the reason I'm like this today...</m>
+                            <m>But... I... I shouldn't bad mouth them... I... I should be grateful...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Hey... Let me tell you something...</m>
+                        </dlg>
+
+                        <fade-to-black speed="3" keep="true" />
+                        <obj target="scene"><message name="Recenter" broadcast="true" /></obj>
+                        <anim target="scene" trigger="paragon" />
+                        <fade-to-black speed="-3" />
+
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Do you know what's the first lesson I think they teach in Parenting 101?</m>
+                            <m wait="1">I believe it's something like: "Shove your own lifestyle into your kid's throat"...</m>
+                        </dlg>
+                        <dlg char="KATE" track="scene/track-kate">
+                            <m>Tee hee... I think that's exactly this one...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>So don't feel guilty to go against your parents sometimes... They screw up just like everyone else...</m>
+                            <m>Just remember they are not here... So you can be whoever you want...</m>
+                        </dlg>
+                        <wait time="1" />
+                        <dlg char="KATE" track="scene/track-kate">
+                            <m wait="1">Yeah... I... I guess you're right...</m>
+                            <m>Thank you, ${CHAR:PLAYER:NAME}...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m wait="0.5">There's nothing to thank me for...</m>
+                            <m>Are you still down for the picture?</m>
+                        </dlg>
+                        <dlg char="KATE" track="scene/track-kate">
+                            <m wait="0.5">Yes... I'll cheer up and try another pose...</m>
+                            <m>Just... promise you won't laugh, okay?</m>
+                        </dlg>
+
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" />
+                        <bootstrap node="locker-quest-take-pic-cheer"/>
+                    </then>
+                </c>
+                <c pos="SW" style="RENEGADE">
+                    <text>No wonder you're bullied...</text>
+                    <check-flag flag="PLAYER:STAT:RENEGADE" gte="2" />
+                    <lock-reason>[Renegade 2+ required]</lock-reason>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>This is what you call cool modeling? No wonder you're bullied by the other girls...</m>
+                        </dlg>
+                        <dlg char="KATE" track="KATE">
+                            <m>Oh... But I... I was just-</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>What's next? Are you going to pull a purity ring?</m>
+                        </dlg>
+                        
+                        <fade-to-black speed="3" keep="true" />
+                        <obj target="KATE" destroy="0" />
+                        <load-scene-object key="scene-hallway-kate-picture-02.prefab" rename="scene"></load-scene-object>
+                        <fade-to-black speed="-3"  />
+
+                        <dlg char="KATE" track="scene/track-kate">
+                            <m wait="1.5">no... i... that's not how i-</m>
+                            <m wait="1">i... i know you're just being honest... i know how lame i am...</m>
+                            <m>i... i just wanted to not be like this...</m>
+                        </dlg>
+                        
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Hey... Let me tell you something...</m>
+                        </dlg>
+
+                        <fade-to-black speed="3" keep="true" />
+                        <obj target="scene"><message name="Recenter" broadcast="true" /></obj>
+                        <anim target="scene" trigger="renegade" />
+                        <fade-to-black speed="-3" />
+
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Do you wanna change the way these people treat you around here?</m>
+                        </dlg>
+                        <dlg char="KATE" track="scene/track-kate">
+                            <m>yes...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>People learn Art and Science here, right? Those two have a bad history with church business...</m>
+                            <m>So... You should focus on leaving the the Sunday school lessons behind...</m>
+                        </dlg>
+                        <dlg char="KATE" track="scene/track-kate">
+                            <m wait="1">i... i'll try...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Good...</m>
+                            <m>Now cheer up and seek inspiration somewhere else... Show me another pose...</m>
+                        </dlg>
+                        <dlg char="KATE" track="scene/track-kate">
+                            <m wait="1">Yes... I can do that...</m>
+                            <m>Just... Please, don't laugh...</m>
+                        </dlg>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" />
+                        <bootstrap node="locker-quest-take-pic-cheer"/>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>If this is your best pose...</text>
+                    <then>
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Well... If this is the is really the pose you want...</m>
+                        </dlg>
+
+                        <load-scene-object key="picture-taker.prefab" />
+                        <obj target="picture-taker.prefab">
+                            <outcome copy-to="PICS:KATE:HALLWAY" destroy="true" />
+                        </obj>
+
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Done... I got it...</m>
+                        </dlg>
+
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" />
+                        <bootstrap node="locker-quest-after-pic" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--
+            ##########################################################
+            ### locker-quest-take-pic=cheer ##########################
+            ##########################################################
+        -->
+        <n id="locker-quest-take-pic-cheer">
+            <fade-to-black keep="true" speed="1000" />
+            <bgm loop="loop-kate" volume="0.25" />
+
+            <load-scene-object key="scene-hallway-kate-picture-01.prefab" proxy="KATE" />
+            
+            <anim target="KATE" trigger="cheer" />
+            <dlg char="KATE" track="KATE">
+                <m>What about this one?</m>
+            </dlg>
+            <fade-to-black speed="-1" />
+
+            <autosave label="Hallway - Taking ${CHAR:KATE:NAME}'s picture" />
+
+            <dlg char="KATE" track="KATE">
+                <m>I had this stupid idea of getting into the cheerleaders team...</m>
+                <m>I even trained some moves by myself... But I always knew the girls wouldn't let me into the team...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Well... That's so much better...</m>
+            </dlg>
+            
+            <dlg char="KATE" track="KATE">
+                <m>Oh... Come on... This is embarrassing... I must be looking like an idiot...</m>
+            </dlg>
+            
+            <choice>
+                <c pos="NW">
+                    <text>You look cute</text>
+                    <then>
+                        <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>You just look cute... Everyone would want you in their team...</m>
+                            <m>Cheerleaders are the most important cultural staple of this country... There's nothing to be embarrassed about...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>You look okay</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Nah... You look okay... Don't worry about what others think...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>You look sexy</text>
+                    <then>
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>You look sexy... You definitely have the talent for the job...</m>
+                            <m>Cheerleaders are the most important cultural staple of this country... There's nothing to be embarrassed about...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <dlg char="KATE" track="KATE">
+                <m>Oh my God... Please, just take the picture before someone catches me doing this and I die of embarrassment...</m>
+            </dlg>
+
+            <load-scene-object key="picture-taker.prefab" />
+            <obj target="picture-taker.prefab">
+                <outcome copy-to="PICS:KATE:HALLWAY" destroy="true" />
+            </obj>
+
+            <trophy unlock="sunday-school-01" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Okay... I got it...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap node="locker-quest-after-pic" />
+        </n>
+
+        <!--
+            ##########################################################
+            ### locker-quest-after-pic ###############################
+            ##########################################################
+        -->
+        <n id="locker-quest-after-pic">
+            <fade-to-black keep="true" speed="1000" />
+            <bgm volume="0.25" />
+
+            <load-scene-object key="shot-hallway-02.prefab" />
+            <load-scene-object key="shot-char-kate-01.prefab"  proxy="KATE">
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot-hallway-02.prefab" /></message>
+            </load-scene-object>
+            <obj target="shot-hallway-02.prefab/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+            
+            <anim target="KATE" idle="CUTE" face="CUTE" />
+
+            <fade-to-black speed="-1" />
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Cool... I have the picture... Wanna check it out?</m>
+            </dlg>
+
+            <dlg char="KATE" track="KATE">
+                <m wait="1">No, thanks... Spare me of the cringe, please...</m>
+                <m wait="0.5">Now that I can get my stuff all I want is to leave this place...</m>
+                <m>Thanks again for the help... See you later...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Yep... See ya...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap script="location-hallway-01/location" />
+        </n>
+    </nodes>
+</xml-script>

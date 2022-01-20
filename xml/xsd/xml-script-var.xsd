@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="flag">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="DAY:CURRENT" />
+            <!-- Current week day -->
+            <xs:enumeration value="PLAYER:STAT:PARAGON" />
+            <xs:enumeration value="PLAYER:STAT:RENEGADE" />
+            <xs:enumeration value="PLAYER:STAT:RIFT" />
+            <xs:enumeration value="CHAR:BRK:INTERACTIONS" />
+            <!-- BRK interaction LOG bits 
+                (0): selected brk-first-dialog choice NE "I didn't mean to underestimate" 
+                (1): selected brk-first-dialog choice SE "after all that womansplaining" 
+                (2): choice brk-mem-card#gave-mem-card-comment: (NW) No need to explain
+                (3): choice brk-mem-card#gave-mem-card-comment: (W) Make what?
+                (4): choice brk-mem-card#gave-mem-card-comment: (SW) Make a trendy TikTok?
+            -->
+
+            <xs:enumeration value="CHAR:JUS:INTERACTIONS" />
+            <!-- JUS interaction LOG bits
+                (0): had first dialog
+                (1): asked 'discount'
+            -->
+
+            <xs:enumeration value="CHAR:JEF:INTERACTIONS" />
+            <!-- JEF interaction LOG bits
+                (0): intro-jef-dialog#root entered "NW" dialog-vic
+                (1): intro-jef-dialog#root answered #dialog-vic-NW
+                (2): intro-jef-dialog#root answered #dialog-vic-SW
+                (3): intro-jef-dialog#root entered "SW" dialog-kate
+                (4): intro-jef-dialog#root entered "E" dialog-talk
+            -->
+            <xs:enumeration value="CHAR:SAM:INTERACTIONS" />
+            <!-- SAM interaction LOG bits
+                (0): Had first dialog
+                (1): choice first-dialog-01: (NW) The Wise Mystical Janitor!
+                (2): choice first-dialog-01: (W) I have a spirit animal too!
+                (3): choice first-dialog-01: (SW) Are you baked?
+                (4): Learned Rift Energy
+            -->
+            
+            <xs:enumeration value="CHAR:TAY:INTERACTIONS" />
+            <!-- TAY interaction LOG bits
+                (0): choice victoria-loyalty-1: (SW) She made you her lapdog
+                (1): choice victoria-loyalty-1: (NW) She made you her lapdog
+            -->
+            
+            <xs:enumeration value="CHAR:KATE:AFFINITY" />
+            <!-- Kate affinity score -->
+            <xs:enumeration value="CHAR:KATE:INTERACTIONS" />
+            <!-- Kate interaction LOG  bits
+                (0): choice CHAR:KATE:CLASSROOM:1 - A
+                (1): choice CHAR:KATE:CLASSROOM:1 - B
+                (2): met hallway bullied scene
+                (3): made paragon interrupt during scene-hallway-kate-bullied
+                (4): missed paragon interrupt during scene-hallway-kate-bullied
+                (5): interacted after scene-hallway-kate-bullied
+                (6): asked for picture at hallway
+            -->
+            <xs:enumeration value="CHAR:JUL:INTERACTIONS" />
+            <!-- JUL interaction LOG  bits 
+                (0): Watched make-out scene
+                (1): Took picture of make-out scene
+            -->
+            
+            <xs:enumeration value="CHAR:VIC:AFFINITY" />
+            <xs:enumeration value="CHAR:MAX:AFFINITY" />
+            <xs:enumeration value="CHAR:MAX:INTERACTIONS" />
+            <!--
+                (0): Met on restroom scene
+                (1): Hold her when fainting on restroom scene
+                (2): Didn't hold her when fainting on restroom scene
+                (3): Interrupt missed on restroom scene
+                (4): Choice 'max-restroom-root' - Used (Ghosting that dude is not cool)
+                (5): Choice 'max-restroom-root' - Used (Get rid of the stalker)
+                (6): Laughed at time powers (renegade interrupt)
+                (7): Choice 'cheer-max-choice': - used (No need to hide)
+                (8): Choice 'cheer-max-choice': - used (Chill until you feel better)
+                (9): Choice 'cheer-max-choice': - used (You can change)
+            -->
+            
+            <!-- Kate affinity score -->
+            <xs:enumeration value="CHAR:VIC:INTERACTIONS" />
+            <!-- VIC interaction LOG bits
+                (0): First met harassing JEF
+                (1): Booty at classroom scene - viewed scene
+                (2): Booty at classroom scene - Lifted skirt level 1
+                (3): Booty at classroom scene - Lifted skirt level 2
+                (4): Booty at classroom scene - Lifted skirt level 3
+                (5): Booty at classroom scene - caught
+                (6): Booty at classroom scene - took picture
+                (7): Choice VIC:CLASSROOM:TALK (A) hello
+                (8): Choice VIC:CLASSROOM:TALK (B) fine ass
+                (9): scene-vic-leave-classroom interrupt: paragon
+                (10): scene-vic-leave-classroom interrupt: renegade
+                (11): scene-vic-leave-classroom interrupt: none
+            -->
+            <xs:enumeration value="QUEST:INTRO:COUNT" />
+            <!-- QUEST:INTRO picked garbage count -->
+            <xs:enumeration value="QUEST:INTRO" />
+            <!-- QUEST:INTRO bits
+                (0): Started
+                (1): Showed crouch tutorial
+                (2): Picked NAPKIN
+                (3): Picked CAN
+                (4): Picked BANANA
+                (5): Picked BOTTLE
+                (6): ENDED
+            -->
+            <xs:enumeration value="QUEST:PRINCIPAL1" />
+            <!-- QUEST:INTRO bits
+                (0): Started
+                (1): Had meeting with the principal
+                (2): Got girl's garbage collection job
+                (3): TAY left women restroom 
+                (4): Choice (tay-women-restroom-dialog) used 'funny how we keep meeting'
+                (5): Choice (tay-women-restroom-dialog) used 'I need to check the restroom'
+                (6): Choice (tay-women-restroom-dialog) used 'A protest?'
+                (7): Choice (tay-women-restroom-dialog) used 'about courtney'
+                (8): Used Rift Energy option to make TAY leave
+                (9): Found bracelet
+                (10): Delivered bracelet to TAY 
+                (11): Entered women's room once
+                (12): Collected PIZZA
+                (13): Collected BOTTLE
+                (14): Collected CAN
+                (15): Collected BANANA PEEL
+                
+            -->
+            <xs:enumeration value="QUEST:KATE_LOCKER" />
+            <!-- QUEST:KATE_LOCKER bits
+                (0): Started
+                (1): Rummaged trash can 1
+                (2): Rummaged trash can 2
+                (3): Rummaged trash can 3
+                (4): Found key
+                (31): Ended
+            -->
+            
+            <xs:enumeration value="QUEST:MEM_CARD" />
+            <!-- QUEST:MEM_CARD bits
+                (0): First met BRK
+                (1): Asked about drone
+                (2): Commented about confiscated drone
+                (3): Chose 'School can't keep your stuff'
+                (4): Chose 'You're hiding something about the drone'
+                (5): Offered help
+                (6): Learned about school meeting
+                (7): Learned about VIP list
+                (8): Learned about Prescott
+                (9): Told BRK about the plan
+                (10): Entered principal's office
+                (11): Recovered memory card
+                (12): Gave memory card back
+                (13): BRK went to women's restroom 
+            -->
+
+            <xs:enumeration value="QUEST:DEEP_FAKE1" />
+
+            <xs:enumeration value="QUEST:JUL:PHONE" />
+            <!-- QUEST:JUL:PHONE bits
+                (0): Started
+                (31): Ended
+            -->
+
+            <xs:enumeration value="ITEM:LOCKERS_KEY" />
+            <xs:enumeration value="ITEM:MONEY" />
+            <xs:enumeration value="ITEM:LOCKPICK" />
+            <xs:enumeration value="ITEM:TREASURE_DETECTOR" />
+            <xs:enumeration value="ITEM:BRACELET" />
+
+            <xs:enumeration value="MISC:ENVIRONMENT" />
+            <!-- MISC:ENVIRONMENT bits
+                (0): Administration: drawer on left unlocked
+                (1): Administration: drawer on right unlocked
+                (2): Lockpick: viewed lockpick tutorial
+                (3): First entered men's restroom
+                (4): Commented rift energy opportunity
+                (11): Lost Money 01 found
+                (12): Lost Money 02 found
+                (13): Lost Money 03 found
+            -->
+
+            <xs:enumeration value="FLG:0" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="string">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="QUEST:INTRO:OBJECTIVE" />
+            <!-- QUEST:INTRO objective -->
+            <xs:enumeration value="QUEST:PRINCIPAL1:OBJECTIVE" />
+            <xs:enumeration value="QUEST:PRINCIPAL1:OPT1:OBJECTIVE" />
+            <!-- QUEST:PRINCIPAL1 objective -->
+            <xs:enumeration value="QUEST:KATE_LOCKER:OBJECTIVE" />
+            <!-- QUEST:PRINCIPAL1 objective -->
+            <xs:enumeration value="QUEST:MEM_CARD:OBJECTIVE" />
+            <xs:enumeration value="QUEST:MEM_CARD:RETURN_LOCATION" />
+            <!-- QUEST:MEM_CARD objective -->
+
+            
+            <xs:enumeration value="PICS:VIC:BOOTY" />
+            <xs:enumeration value="PICS:KATE:HALLWAY" />
+            <xs:enumeration value="PICS:JUL:MAKE_OUT" />
+            
+            <xs:enumeration value="CHAR:BRK:NAME" />
+            <xs:enumeration value="CHAR:JEF:NAME" />
+            <xs:enumeration value="CHAR:JUS:NAME" />
+            <xs:enumeration value="CHAR:PRI:NAME" />
+            <xs:enumeration value="CHAR:SAM:NAME" />
+            <xs:enumeration value="MISC:SCHOOL:NAME" />
+
+            <xs:enumeration value="SYSTEM:VERSION" />
+            <xs:enumeration value="SYSTEM:SCRIPT:PATH" />
+            <xs:enumeration value="SYSTEM:SCRIPT:NODE" />
+            <xs:enumeration value="SYSTEM:PLAYER:SPAWN" />
+            <xs:enumeration value="ARG:0" />
+            <xs:enumeration value="ARG:1" />
+            <xs:enumeration value="ARG:2" />
+            <xs:enumeration value="ARG:3" />
+            <xs:enumeration value="ARG:4" />
+            <xs:enumeration value="TMP:0" />
+            <xs:enumeration value="TMP:1" />
+            <xs:enumeration value="TMP:2" />
+            <xs:enumeration value="TMP:3" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

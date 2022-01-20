@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!-- 
+            ###############################################
+            ## root     ###################################
+            ###############################################
+        -->
+        <n id="root">
+            <fade-to-black keep="true" speed="1000" />
+            
+            <sfx clip="interrupt-renegade" async="true" volume="0" />
+            <sfx clip="interrupt-paragon" async="true" volume="0" />
+            <bgm loop="loop-vic" volume="0.25" />
+            
+            <load-scene-object key="scene-vic-leave-classroom.prefab" rename="scene" />
+            <load-scene-object key="interrupt.prefab" rename="interrupt" active="false" />
+            
+            <fade-to-black speed="-1" />
+
+            <autosave label="Classroom - ${CHAR:VIC:NAME} is leaving" />
+
+            <dlg char="VIC" track="scene/track-jef">
+                <m>Come on, ${CHAR:VIC:NAME}...</m>
+                <m wait="0.5">Just cordially say goodbye bye to ${CHAR:PLAYER:NAME} and let me concentrate on this report...</m>
+            </dlg>
+
+            <sys>INTERRUPTS\n\n
+                During some scenes, you'll have the opportunity to act quickly and change the course of action\n\n
+                When a PARAGON or RENEGADE icon appear at the corner of the screen you'll have a few seconds to *LEFT CLICK* or *RIGHT CLICK* to choose one action\n\n
+                Don't you dare say those are quick time events! They are called *interrupts*!
+            </sys>
+
+            <anim target="scene" trigger="next" />
+
+            <dlg char="VIC" ttl="3" track="scene/track-vic">
+                <m>Have a nice day, buddy...</m>
+            </dlg>
+
+            <obj target="scene">
+                <outcome value="INTERRUPT_START" clear="true" />
+            </obj>
+            
+            <obj target="interrupt" active="true">
+                <message name="EnableParagon" />
+                <message name="EnableRenegade" />
+                <message name="SetWaitInputTime"><float value="4"></float></message>
+                <outcome value="PARAGON" node="paragon" destroy="true" />
+                <outcome value="RENEGADE" node="renegade" destroy="true" />
+                <outcome value="TIME_UP" node="time-up" destroy="true" />
+            </obj>
+        </n>
+
+        <!-- 
+            ###############################################
+            ## renegade ###################################
+            ###############################################
+        -->
+        <n id="renegade">
+            <flag name="PLAYER:STAT:RENEGADE" inc="2" icon="RENEGADE">Renegade +2</flag>
+            <sfx clip="interrupt-renegade" async="true" />
+
+            <flag name="CHAR:VIC:INTERACTIONS" bit-on="10" />
+
+            <anim target="scene" trigger="slap" waitEndOfClip="0" />
+
+            <dlg char="VIC" track="scene/track-vic">
+                <m>you... you...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="scene/track-player">
+                <m>What? Lost your words?</m>
+                <m>If your parents did this every time you misbehaved, then maybe you'd have learned to interact with people with a little respect...</m>
+                <m>And I think you even enjoyed the novelty of not being on top for the first time in your life, didn't you?</m>
+            </dlg>
+            <flag name="CHAR:VIC:AFFINITY" inc="1">${CHAR:VIC:NAME} liked that!</flag>
+            <dlg char="VIC" track="scene/track-vic">
+                <m wait="1">how... how dare you... you...</m>
+                <m>Mister ${CHAR:JEF:NAME}... sir... didn't you see what this... this idiot just did to me?</m>
+            </dlg>
+
+            <dlg char="JEF" track="scene/track-jef">
+                <m>${CHAR:VIC:NAME}... I'm trying to focus on this report... I already told you that I need some privacy...</m>
+                <m>All I can see now is you still antagonizing your classmate...</m>
+            </dlg>
+
+            <dlg char="VIC" track="scene/track-vic">
+                <m>But... but he... he...</m>
+            </dlg>
+
+            <dlg char="JEF" track="scene/track-jef">
+                <m>Sigh... You should apologize to ${CHAR:PLAYER:NAME}...</m>
+            </dlg>
+            
+            <dlg char="VIC" track="scene/track-vic">
+                <m>a... apologize!?!?</m>
+            </dlg>
+
+            <dlg char="JEF" track="scene/track-jef">
+                <m>You asked me to pick up you calls later while promising you'd be nice to other students...</m>
+                <m>But you just called him an 'idiot'... So if you want to keep your promise, then apologize...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            
+            <dlg char="VIC" track="scene/track-vic">
+                <m>Uhg... I... didn't mean to... and he just... just...</m>
+            </dlg>
+            
+            <dlg char="JEF" track="scene/track-jef">
+                <m>You can do better than that, ${CHAR:VIC:NAME}...</m>
+                <m>Just apologize properly and leave, please...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <dlg char="VIC" track="scene/track-vic">
+                <m instant="true">|I gotta keep cool... I just need need to take a deep breath and ...|</m>
+            </dlg>
+            <wait />
+            
+            <anim target="scene" trigger="next" />
+            <dlg char="VIC" track="scene/track-vic">
+                <m>I'm sorry, ${CHAR:PLAYER:NAME}...</m>
+            </dlg>
+
+            <node-output node="leave" />
+        </n>
+
+        <!-- 
+            ###############################################
+            ## paragon ####################################
+            ###############################################
+        -->
+        <n id="paragon">
+            <sfx clip="interrupt-paragon" async="true" />
+            <flag name="CHAR:VIC:INTERACTIONS" bit-on="9" />
+            <flag name="PLAYER:STAT:PARAGON" inc="2" icon="PARAGON">+2 Paragon</flag>
+
+            <anim target="scene" trigger="warn" />
+
+            <dlg char="PLAYER" track="scene/track-player">
+                <m>Hey... Be careful... I think Mister ${CHAR:JEF:NAME} is watching you...</m>
+            </dlg>
+
+            <sfx clip="voice-gasp-a" />
+            <anim target="scene" trigger="next" />
+
+            <dlg char="PLAYER" track="scene/track-player">
+                <m>Didn't he agree to pick up your calls if you behaved nicely today?</m>
+            </dlg>
+            
+            
+            <dlg char="VIC" track="scene/track-vic">
+                <m>Oh no... Oh no... I can't lose my chance with him...</m>
+                <m wait="1">What... What is he doing now? I... I can't look now without acting suspicious...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="scene/track-player">
+                <m>Don't worry... I think he didn't noticed your... hand signs...</m>
+            </dlg>
+            
+            <dlg char="VIC" track="scene/track-vic">
+                <m>But it was your fault... Why did you...</m>
+            </dlg>
+
+            <wait time="1" />
+            <anim target="scene" trigger="next" />
+            <sfx clip="voice-sigh-b" />
+            <dlg char="VIC" track="scene/track-vic">
+                <m>Sigh... Whatever...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <dlg char="VIC" track="scene/track-vic" ttl="3">
+                <m>I... I gotta go...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="scene/track-player">
+                <m>Sure... You're welcome...</m>
+            </dlg>
+
+            <node-output node="leave" />
+        </n>
+
+        <!-- 
+            ###############################################
+            ## time-up ####################################
+            ###############################################
+        -->
+        <n id="time-up">
+            <flag name="CHAR:VIC:INTERACTIONS" bit-on="11" />
+            <wait time="1" />
+            <dlg char="JEF" track="scene/track-jef">
+                <m wait="1">I saw what you did ${CHAR:VIC:NAME}... You're incorrigible...</m>
+                <m>Sigh... At least now I have a good excuse to not pick up her calls later...</m>
+            </dlg>
+
+            <node-output node="leave" />
+        </n>
+
+        <!-- 
+            ###############################################
+            ## leave ######################################
+            ###############################################
+        -->
+        <n id="leave">
+            <wait />
+            <fade-to-black keep="true" />
+            <bootstrap script="intro-jef-dialogue" />
+        </n>
+    </nodes>
+</xml-script>

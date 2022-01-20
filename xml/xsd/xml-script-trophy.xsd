@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="trophy">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="pantsu-01" />
+            <xs:enumeration value="sunday-school-01" />
+            <xs:enumeration value="birds-are-not-real-01" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

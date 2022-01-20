@@ -1,0 +1,7 @@
+<items>
+    <item id="LOCKERS_KEY" label="Lockers Key" icon="icon-key" />
+    <item id="MONEY" label="Money" icon="icon-money" />
+    <item id="TREASURE_DETECTOR" label="Treasure Detector" icon="icon-gadget" price="5">This amazing device beeps when it detects lost valuables next to you. Don't ask how! Just think how easy it is to make a profit in a school full of careless rich students.</item>
+    <item id="LOCKPICK" label="Lockpick" icon="icon-lockpick" price="2">A little tool capable of opening some locks. It's quite frail, so it usually brakes after a single use.</item>
+    <item id="BRACELET" label="Bracelet" icon="icon-bracelet" price="10">A girly bracelet</item>
+</items>

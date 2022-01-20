@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<trophies>
+    <trophy id="pantsu-01" label="Pantsu Hunter I" icon="char/VIC.png">
+        Take a picture of her panties while she is distracted in the classroom
+    </trophy>
+    <trophy id="sunday-school-01" label="Sunday School Reject I" icon="char/KATE.png">
+        Take a good picture of her in the hallway 
+    </trophy>
+    <trophy id="birds-are-not-real-01" label="Bird's Aren't Real I" icon="char/BRK.png">
+        Find her drone and check what's in the memory card
+    </trophy>
+</trophies>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="n1">
+            <bgm loop="loop-urban" as-music="false" volume="0.25" fade-speed="0.5" />
+            
+            <if>
+                <check-text text="CHAR:JUS:NAME" eq="#EMPTY" />
+                <then>
+                    <string name="CHAR:JUS:NAME" set="Chill Dude"></string>
+                </then>
+            </if>
+
+            <fade-to-black keep="true" />
+            <load-scene-object key="location-administration-01.prefab" />
+
+            <fade-to-black speed="-1" />
+
+            <autosave label="Administration - Exploring" />
+
+            <inject node="lib-post-start" />
+        </n>
+    </nodes>
+</xml-script>

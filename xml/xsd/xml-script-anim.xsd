@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="look-behaviour">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="LEFT" />
+            <xs:enumeration value="NEUTRAL" />
+            <xs:enumeration value="RIGHT" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="face-behaviour">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CUTE" />
+            <xs:enumeration value="DISAPPROVE" />
+            <xs:enumeration value="NEUTRAL" />
+            <xs:enumeration value="UPSET" />
+            <xs:enumeration value="SIGH" />
+            <xs:enumeration value="SURPRISED" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="idle-behaviour">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CUTE" />
+            <xs:enumeration value="NEUTRAL" />
+            <xs:enumeration value="UPSET" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

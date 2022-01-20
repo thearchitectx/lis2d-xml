@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <choice>
+                <c pos="NW">
+                    <text>[Drawer Cabinet]</text>
+                    <then>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" speed="3" />
+                        <bootstrap script="scene-administration-investigate-01" />
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>[Back Cabinets]</text>
+                    <then>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" speed="3" />
+                        <bootstrap script="scene-administration-investigate-02" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[Leave]</text>
+                </c>
+            </choice>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+
+
+    </nodes>
+</xml-script>

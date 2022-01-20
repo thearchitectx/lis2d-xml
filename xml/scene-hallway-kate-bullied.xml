@@ -1,0 +1,329 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## n1 ########################################################
+            ##############################################################
+        -->
+        <n id="n1">
+            <flag  name="CHAR:KATE:INTERACTIONS" bit-on="2" />
+
+            <bgm loop="loop-urban" as-music="false" volume="0.25" fade-speed="0.5" />
+            
+            <fade-to-black keep="true" />
+
+            <load-scene-object key="location-hallway-01.prefab" />
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+                <message name="LookLeft" />
+            </obj>
+
+            <fade-to-black speed="-1" />
+            
+            <autosave  label="Hallway" />
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Finally... After so much time inside a classroom...</m>
+                <m wait="1">I... can't exactly remember how I got here, but it shouldn't so hard to find my way around this place...</m>
+            </dlg>
+            <obj target="#Player">
+                <message name="LookRight" />
+            </obj>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Now... Up here we have...</m>
+            </dlg>
+
+            <load-scene-object key="image-viewer.prefab">
+                <message name="SetImage"><string value="scene-hallway-kate-bullied-view.png" /></message>
+            </load-scene-object>
+
+            <wait />
+
+            <dlg char="PLAYER">
+                <m wait="1">uuh... what's up over there?</m>
+                <m wait="1">It seems we have another instance of the classic post-class bullying scene...</m>
+                <m>I think that's ${CHAR:KATE:NAME}... The girl I met earlier...</m>
+            </dlg>
+            
+            <obj target="image-viewer.prefab">
+                <message name="FadeAndDestroy" />
+            </obj>
+
+            <dlg char="PLAYER">
+                <m>Let's check what's going on...</m>
+            </dlg>
+
+            <fade-to-black keep="true" />
+            
+            <obj target="location-hallway-01.prefab" destroy="0" />
+            <load-scene-object key="scene-hallway-kate-bullied.prefab" rename="scene" />
+            
+            <fade-to-black speed="-1" />
+
+            <dlg char="KATE" track="scene/track-kate">
+                <m>I... don't know what are you talking about...</m>
+                <m>Please... Just leave me alone...</m>
+            </dlg>
+
+            <anim target="scene"><int name="step" value="2" /></anim>
+            
+            <bgm volume="0" fade-speed="0" />
+            <dlg char="KATE" track="scene/track-kate">
+                <m>I... I didn't do it... I swear...</m>
+                <m>I don't care about your stupid club...</m>
+            </dlg>
+            
+            <bgm loop="loop-tay" volume="0.25" fade-speed="0.5" />
+            <anim target="scene"><int name="step" value="3" /></anim>
+
+            <dlg char="TAY" track="scene/track-tay">
+                <m wait="1">What did you say!?!</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Choose the girl name" /></message>
+                <message name="LoadGenerateList"><string value="female-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Taylor" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:TAY:NAME" destroy="true" />
+            </obj>
+
+            <dlg char="TAY" track="scene/track-tay">
+                <m>Say that again about the Vortex, bitch... I dare you...</m>
+            </dlg>
+
+            <dlg char="KATE" track="scene/track-kate">
+                <m>I'm... I'm sorry...</m>
+                <m>I just... I didn't...</m>
+            </dlg>
+
+            <dlg char="TAY" track="scene/track-tay">
+                <m>Bullshit... You must be the one who complained to the principal about how 'selective' the Vortex is...</m>
+                <m wait="0.5">Now he is making us invite all students to our next party if we want to host it in school premises...</m>
+                <m>You said you don't care about the club... But I bet you're all excited to finally be allowed to hang out with the cool girls...</m>
+            </dlg>
+
+            <dlg char="KATE" track="scene/track-kate">
+                <m>I... I don't know...</m>
+            </dlg>
+
+            <dlg char="TAY" track="scene/track-tay">
+                <m>Well... You would not be stupid enough to refuse a Vortex invite...</m>
+            </dlg>
+            <anim target="scene" trigger="push" />
+            <dlg char="TAY" track="scene/track-tay">
+                <m wait="1">Would you!?!?</m>
+                <m wait="0.5">${CHAR:VIC:NAME} wanna see your pathetic face at the party...</m>
+                <m>I don't know why, but it doesn't matter... If she wants you there, then you'd better be there...</m>
+            </dlg>
+
+            <dlg char="KATE" track="scene/track-kate">
+                <m>Okay... I... I'll...</m>
+                <m>I just... I don't know if-</m>
+            </dlg>
+
+            <anim target="scene">
+                <bool name="cou" value="true" />
+            </anim>
+
+            <sfx clip="swoosh" async="true" />
+
+            <dlg char="COU" track="scene/track-cou">
+                <m>Hey ${CHAR:TAY:NAME}!! There you are!</m>
+                <m>I've been looking for you... Did you forget about our daily duties?</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab">
+                <message name="SetPrompt"><string value="Choose the girl name" /></message>
+                <message name="LoadGenerateList"><string value="female-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Courtney" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:COU:NAME" destroy="true" />
+            </obj>
+
+            <dlg char="TAY" track="scene/track-tay">
+                <m>${CHAR:COU:NAME}... Did you forget what I said?</m>
+                <m wait="0.5">I told you to wait for me at the main hall...</m>
+                <m wait="0.5">You shouldn't be around when I deal with the trash... I don't want you mixed with these people...</m>
+            </dlg>
+
+            <anim target="scene">
+                <int name="cou-exp" value="1" />
+            </anim>
+
+            <dlg char="COU" track="scene/track-cou">
+                <m wait="0.5">Oups... Sorry...</m>
+                <m wait="0.5">It's because... You were taking so long...</m>
+                <m>And it's getting late... Aren't we supposed to pay another visit to the janitor lair today?</m>
+            </dlg>
+
+            <anim target="scene">
+                <int name="cou-exp" value="0" />
+            </anim>
+
+            <dlg char="COU" track="scene/track-cou">
+                <m>Shouting at that creepy man is so fun... Feels like an adventure!</m>
+            </dlg>
+
+            <wait  />
+            <dlg char="KATE" track="scene/track-kate">
+                <m>You... You should leave him alone... He's a good person...</m>
+            </dlg>
+
+            <anim target="scene" trigger="push" />
+
+            <dlg char="TAY" track="scene/track-tay">
+                <m>Hey! You do not have permission to talk to my girl!!</m>
+            </dlg>
+
+            <anim target="scene">
+                <int name="step" value="4" />
+                <int name="cou-exp" value="1" />
+            </anim>
+
+            <dlg char="TAY" track="scene/track-tay">
+                <m>..to ${CHAR:COU:NAME}... I mean... You don't talk to her...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="scene">
+                <int name="cou-exp" value="2" />
+            </anim>
+            <wait time="0.5" />
+
+            <dlg char="COU" track="scene/track-cou">
+                <m>You make up so many funny rules, ${CHAR:TAY:NAME}...</m>
+                <m>Each day you become a little more like ${CHAR:VIC:NAME}...</m>
+                <m>Remember last week when we're trying to-</m>
+            </dlg>
+
+            <anim target="scene"><int name="step" value="5" /></anim>
+
+            <dlg char="TAY" track="scene/track-tay">
+                <m>${CHAR:COU:NAME}... Please... Just wait for me at the main hall, would you?</m>
+                <m>I'll be there in a minute...</m>
+            </dlg>
+
+            <anim target="scene">
+                <int name="cou-exp" value="0" />
+            </anim>
+
+            <dlg char="COU" track="scene/track-cou">
+                <m>Oh... Okay...</m>
+                <m>But don't take long... I'm impatient!</m>
+            </dlg>
+
+            <anim target="scene">
+                <bool name="cou" value="false" />
+            </anim>
+            <sfx clip="swoosh" async="true" />
+            <dlg char="COU" track="scene/track-cou">
+                <m>See ya...</m>
+            </dlg>
+
+            <wait time="1.5" />
+
+            <anim target="scene" trigger="push">
+                <int name="step" value="3" />
+            </anim>
+
+            <dlg char="TAY" track="scene/track-tay">
+                <m>Why did you have to say something, loser?</m>
+                <m>Couldn't you just keep your damn mouth shut?</m>
+            </dlg>
+
+            <sfx clip="interrupt-paragon" async="true" volume="0" />
+            <load-scene-object key="interrupt.prefab" rename="interrupt" active="false" />
+
+            <anim target="scene" trigger="throw-books" />
+            <dlg char="TAY" track="scene/track-tay" ttl="2">
+                <m>You owe me, bitch...</m>
+            </dlg>
+
+            <obj target="interrupt" active="true">
+                <message name="EnableParagon" />
+                <message name="SetWaitInputTime"><float value="2.5"></float></message>
+                <outcome value="PARAGON" node="paragon" destroy="true" />
+                <outcome value="TIME_UP" node="time-up" destroy="true" />
+            </obj>
+        </n>
+
+        <!--
+            ##############################################################
+            ## time-up ###################################################
+            ##############################################################
+        -->
+        <n id="time-up">
+            <flag name="CHAR:KATE:INTERACTIONS" bit-on="4" />
+            <anim target="scene">
+                <int name="step" value="8" />
+            </anim>
+            <wait time="2" />
+
+            <dlg char="TAY" >
+                <m wait="1">Now look at the mess you made...</m>
+                <m wait="1">You should already have learned the rules of this shool, girl...</m>
+                <m>You can go back to your miserable life, now... I have more important stuff to do...</m>
+                <m>Also... Have fun trying to open your locker... bye...</m>
+            </dlg>
+
+            <fade-to-black keep="true" />
+            <obj target="scene" destroy="0" />
+
+            <bootstrap script="location-hallway-01/location" spawn="spawn/art-class"  />
+        </n>
+
+        <!--
+            ##############################################################
+            ## paragon ###################################################
+            ##############################################################
+        -->
+        <n id="paragon">
+            <flag name="CHAR:KATE:INTERACTIONS" bit-on="3" />
+            <flag name="PLAYER:STAT:PARAGON" inc="2" icon="PARAGON">Paragon +2</flag>
+            <sfx clip="interrupt-paragon" async="true"/>
+
+            <anim target="scene">
+                <bool name="player" value="true" />
+            </anim>
+            
+            <dlg char="PLAYER" track="scene/track-player">
+                <m>Hey... You'd better leave her alone... Mister ${CHAR:JEF:NAME} is coming to check out what is this fuzz about...</m>
+            </dlg>
+
+            <anim target="scene">
+                <int name="step" value="6" />
+            </anim>
+
+            <dlg char="TAY" track="scene/track-tay">
+                <m>Shit... Mister ${CHAR:JEF:NAME}!?!</m>
+                <m>I... I promised to him to...</m>
+                <m>He can't catch me harassing people again... I need to leave...</m>
+                <m>You were lucky today, bitch...</m>
+            </dlg>
+
+            <anim target="scene">
+                <int name="step" value="7" />
+            </anim>
+
+            <dlg char="TAY" track="scene/track-tay" ttl="2">
+                <m>But you still owe me...</m>
+            </dlg>
+
+            <wait time="3" />
+
+            <fade-to-black keep="true" />
+            <obj target="scene" destroy="0" />
+
+            <bootstrap script="location-hallway-01/location" spawn="spawn/art-class"  />
+        </n>
+
+    </nodes>
+</xml-script>

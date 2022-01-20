@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <n id="n1">
+            <fade-to-black keep="true" />
+            
+            <bootstrap script="scene-jef-vic-classroom" />
+        </n>
+    </nodes>
+</xml-script>

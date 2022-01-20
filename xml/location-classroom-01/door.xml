@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ################################################## 
+            ## n1 ############################################ 
+            ################################################## 
+        -->
+        <n id="n1">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+            
+            <wait />
+
+            <if>
+                <check-flag flag="QUEST:INTRO" bit-unset="6" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m wait="0.5">I can't leave now...</m>
+                        <m>I should report to the teacher first...</m>
+                    </dlg>
+                    <node-output node="leave" />
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="CHAR:KATE:INTERACTIONS" bit-unset="2" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m wait="0.5">I can finally leave...</m>
+                        <m>Let me check how much money I have first...</m>
+                    </dlg>
+                    <flag name="ITEM:MONEY" inc="5" icon="MONEY">You found $5 in your wallet</flag>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>Yeah... Five bucks... Such a great fortune...</m>
+                    </dlg>
+                    <sys>
+                        Money is needed to buy some essential progression items\n\n
+                        Try to find ways to collect more money to make your life easy and progress in the story
+                    </sys>
+
+                    <fade-to-black keep="true" />
+                    <sfx clip="door-transition" />
+                    <bootstrap script="scene-hallway-kate-bullied" spawn="spawn/art-class" />
+                </then>
+                <else>
+                    <fade-to-black keep="true" speed="3" />
+                    <sfx clip="door-transition" />
+                    <bootstrap script="location-hallway-01/location" spawn="spawn/art-class" />
+                </else>
+            </if>
+        </n>
+
+        <!-- 
+            #########################################
+            ## leave ################################
+            #########################################
+        -->
+        <n id="leave">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+    </nodes>
+</xml-script>

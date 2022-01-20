@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <n id="tutorial">
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="2" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-on="2" />
+                    <sys>
+                        *Move mouse* or use *A,D* keys to position the pick and *left click* when the lock is positioned under a tumbler to activate it\n\n
+                        After discovering the first loose tumbler, you need to figure the correct sequence\n\n
+                        The next correct tumbler is always directly left or right from the latest you activated\n\n
+                        The lock will reset if you activate a tumbler in the wrong sequence. *Right click* if you want to give up
+                    </sys>
+                </then>
+            </if>
+        </n>
+    </nodes>
+</xml-script>

@@ -1,0 +1,319 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+
+    <include node-prefix="lockpick-">_lib/lockpick.xml</include>
+    <include node-prefix="quest-mem-card-">_lib/quest-mem-card.xml</include>
+
+    <nodes>
+        <!--###############################################
+            ### root ######################################
+            ###############################################-->
+        <n id="root">
+            <fade-to-black keep="true" speed="1000" />
+            
+            <bgm loop="loop-urban" as-music="false" volume="0.25" />
+            
+            <load-scene-object key="scene-administration-investigate-01.prefab" rename="scene" />
+            
+            <fade-to-black speed="-1" />
+
+            <autosave label="Classroom - Investigating administration office" />
+
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### investigate-loop ##########################
+            ###############################################-->
+        <n id="investigate-loop">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="true" /></message>
+            </obj>
+            <obj target="scene/interactables" active="true">
+                <outcome value="DRAWERS-R" node="drawers-r" clear="true"  />
+                <outcome value="DRAWERS-L" node="drawers-l" clear="true"  />
+                <outcome value="FILE_FOLDER" node="file-folder" clear="true"  />
+                <outcome value="MAGAZINES" node="magazines" clear="true"  />
+                <outcome value="COFFEE" node="coffee" clear="true"  />
+                <outcome value="SWIM" node="swim" clear="true"  />
+                <outcome value="SIGN" node="sign-bully" clear="true"  />
+                <outcome value="LEAVE" node="leave" clear="true"  />
+            </obj>
+        </n>
+
+        <!--###############################################
+            ### drawers-l #################################
+            ###############################################-->
+        <n id="drawers-l">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="false" /></message>
+            </obj>
+            <obj target="scene/interactables" active="false" />
+
+            <!-- is drawer-l locked ? -->
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="0" /> 
+                <then>
+                    <dlg char="PLAYER">
+                        <m>These drawers are locked... But with the right tool I could solve the problem...</m>
+                    </dlg>
+                    <choice>
+                        <c pos="E">
+                            <text>[Use lockpick]</text>
+                            <lock-reason>[You need a lockpick]</lock-reason>
+                            <check-flag flag="ITEM:LOCKPICK" gte="1" />
+                            <then>
+                                <!-- Passes MISC:ENVIRONMENT bit index -->
+                                <string name="ARG:0" set="0" />
+                                <bgm volume="0" />
+                                <fade-to-black keep="true" />
+                                <bootstrap node="do-lockpick" />
+                            </then>
+                        </c>
+                        <c pos="W" out="investigate-loop">
+                            <text>[Leave]</text>
+                        </c>
+                    </choice>
+                </then>
+            </if>
+            
+            <anim target="scene"><bool name="drawer-l" value="true" /></anim>
+            <dlg char="PLAYER">
+                <m wait="1">Let's see...</m>
+                <m>There's a "VIP Contact List" in here... It contain a few numbers and names...</m>
+                <m wait="1">Chambers... Prescott... Smith... It even has the Principal's cellphone number!</m>
+            </dlg>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:MEM_CARD" bit-set="5" />
+                    <check-flag flag="QUEST:MEM_CARD" bit-unset="7" />
+                </check-group>
+                <then>
+                    <flag name="QUEST:MEM_CARD" bit-on="7" />
+                    <inject node="quest-mem-card-progress" />
+                </then>
+                <else>
+                    <dlg char="PLAYER">
+                        <m>Nothing i didn't already know ...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <anim target="scene"><bool name="drawer-l" value="false" /></anim>
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### drawers-r #################################
+            ###############################################-->
+        <n id="drawers-r">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="false" /></message>
+            </obj>
+            <obj target="scene/interactables" active="false" />
+
+            <!-- is drawer-r locked ? -->
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="1" /> 
+                <then>
+                    <dlg char="PLAYER">
+                        <m>These drawers are locked... But with the right tool I could solve the problem...</m>
+                    </dlg>
+                    <choice>
+                        <c pos="E">
+                            <text>[Use lockpick]</text>
+                            <lock-reason>[You need a lockpick]</lock-reason>
+                            <check-flag flag="ITEM:LOCKPICK" gte="1" />
+                            <then>
+                                <!-- Passes MISC:ENVIRONMENT bit index -->
+                                <string name="ARG:0" set="1" />
+                                <bgm volume="1" />
+                                <fade-to-black keep="true" />
+                                <bootstrap node="do-lockpick" />
+                            </then>
+                        </c>
+                        <c pos="W" out="investigate-loop">
+                            <text>[Leave]</text>
+                        </c>
+                    </choice>
+                </then>
+            </if>
+            
+            <anim target="scene"><bool name="drawer-r" value="true" /></anim>
+            <dlg char="PLAYER">
+                <m>There is a file of school meeting minutes here... Let's check what happened in the latest one...</m>
+            </dlg>
+            
+            <load-scene-object key="image-viewer.prefab">
+                <message name="SetImage"><string value="scene-administration-investigate-01-file-folder.png" /></message>
+                <message name="SetImageScale"><float value="0.8" /></message>
+            </load-scene-object>
+
+            <dlg char="PLAYER">
+                <m wait="1">"Meeting started at 16PM", blah blah blah... "Administration issues", blah, blah...</m>
+                <m wait="1">But, hey... Here it says the principal had to close the meeting earlier due to a urgent call from a student's parent VIP asking to meet him...</m>
+                <m>I seems the principal drops anything he's doing to promptly serve the rich students' parents...</m>
+            </dlg>
+
+            <obj target="image-viewer.prefab" destroy="0"></obj>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:MEM_CARD" bit-set="5" />
+                    <check-flag flag="QUEST:MEM_CARD" bit-unset="6" />
+                </check-group>
+                <then>
+                    <flag name="QUEST:MEM_CARD" bit-on="6" />
+                    <inject node="quest-mem-card-progress" />
+                </then>
+                <else>
+                    <dlg char="PLAYER">
+                        <m>Nothing I didn't already know though...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <anim target="scene"><bool name="drawer-r" value="false" /></anim>
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### file-folder ###############################
+            ###############################################-->
+        <n id="file-folder">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="false" /></message>
+            </obj>
+            <obj target="scene/interactables" active="false" />
+            <dlg char="PLAYER">
+                <m>These file folders might hide some interesting information...</m>
+            </dlg>
+            <load-scene-object key="image-viewer.prefab">
+                <message name="SetImage"><string value="scene-administration-investigate-01-file-folder.png" /></message>
+                <message name="SetImageScale"><float value="0.8" /></message>
+            </load-scene-object>
+
+            <dlg char="PLAYER">
+                <m wait="1">Let's see...</m>
+                <m>There's a bunch of records about the school sports teams here...</m>
+                <m>Swimming times... football strategies... No cheerleader or swimsuit pics, though... Lame...</m>
+            </dlg>
+
+            <obj target="image-viewer.prefab">
+                <message name="FadeAndDestroy" />
+            </obj>
+            
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### magazines #################################
+            ###############################################-->
+        <n id="magazines">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="false" /></message>
+            </obj>
+            <obj target="scene/interactables" active="false" />
+            <dlg char="PLAYER">
+                <m>It's just a stack of typical girly magazines...</m>
+                <m>This seems a bit out of place here, though...</m>
+            </dlg>
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### sign-bully ################################
+            ###############################################-->
+        <n id="sign-bully">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="false" /></message>
+            </obj>
+            <obj target="scene/interactables" active="false" />
+            <dlg char="PLAYER">
+                <m>Yeah... Me too...</m>
+                <m>I'm not sure posting around this kind of sign is effective against actual bullies, though...</m>
+            </dlg>
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### coffee ####################################
+            ###############################################-->
+        <n id="coffee">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="false" /></message>
+            </obj>
+            <obj target="scene/interactables" active="false" />
+            <dlg char="PLAYER">
+                <m>Ahh... Coffee... My favorite legalized narcotic...</m>
+                <m>However... By the nasty color of that liquid, I'd say it has been resting there for a couple of days...</m>
+            </dlg>
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### swim ######################################
+            ###############################################-->
+        <n id="swim">
+            <obj target="scene">
+                <message name="SetReadInput" broadcast="true"><bool value="false" /></message>
+            </obj>
+            <obj target="scene/interactables" active="false" />
+            <dlg char="PLAYER">
+                <m>My favorite sport: Swimsuits... I mean... Swimming....</m>
+                <m>It looks better when they use a 2 piece... But I'd still love to watch this lovely team compete...</m>
+            </dlg>
+            <node-output node="investigate-loop" />
+        </n>
+
+        <!--###############################################
+            ### leave #####################################
+            ###############################################-->
+        <n id="leave">
+            <bgm volume="0"/>
+            <fade-to-black speed="3" keep="true" />
+            <bootstrap script="location-administration-01/location" spawn="drawers" />
+        </n>
+
+        <!--###############################################
+            ### do-lockpick ###############################
+            ###############################################-->
+        <n id="do-lockpick">
+            <fade-to-black keep="true" speed="1000" />
+            <load-scene-object key="lockpick.prefab">
+                <message name="Generate"><float value="5" /></message>
+                <message name="DisableInput" />
+            </load-scene-object>
+            <fade-to-black speed="-2" />
+
+            <inject node="lockpick-tutorial" />
+
+            <obj target="lockpick.prefab">
+                <message name="EnableInput" />
+                <outcome copy-to="TMP:0" />
+            </obj>
+
+            <if>
+                <check-text text="TMP:0" eq="UNLOCKED" />
+                <then>
+                    <flag name="ITEM:LOCKPICK" dec="1">Discarded 1 used lockpick</flag>
+                    <flag name="MISC:ENVIRONMENT" bit-on="${ARG:0}"></flag>
+                    <dlg char="PLAYER">
+                        <m>Nice... I did it... It's unlocked...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="PLAYER">
+                        <m>Maybe I should try this later...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <fade-to-black keep="true" />
+            <bootstrap node="root" />
+        </n>
+    </nodes>
+</xml-script>

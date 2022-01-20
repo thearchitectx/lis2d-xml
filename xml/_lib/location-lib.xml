@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <n id="pre-start">
+            <nop />
+        </n>
+
+        <n id="post-start">
+            <if>
+                <check-flag flag="ITEM:TREASURE_DETECTOR" gte="1" />
+                <then>
+                    <load-scene-object key="item-detector.prefab" parent="#Player" />
+                </then>
+            </if>
+        </n>
+    </nodes>
+</xml-script>

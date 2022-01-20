@@ -1,0 +1,576 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--###############################################
+            ### root ######################################
+            ###############################################-->
+        <n id="root">
+            <fade-to-black keep="true" speed="1000" />
+            
+            <bgm loop="loop-vic" volume="0.25" />
+            
+            <load-scene-object key="scene-jef-vic-classroom.prefab" rename="scene" />
+            
+            <fade-to-black speed="-1" />
+
+            <autosave label="Classroom - Checking ${CHAR:VIC:NAME} and Mister ${CHAR:JEF:NAME}" />
+
+            <if>
+                <check-flag flag="CHAR:VIC:INTERACTIONS" bit-unset="0" />
+                <then>
+                    <flag name="CHAR:VIC:INTERACTIONS" bit-on="0" />
+                    <node-output node="first-interaction" />
+                </then>
+                <else>
+                    <node-output node="interactables" />
+                </else>
+            </if>
+
+        </n>
+
+        <!--###############################################
+            ### first-interaction #########################
+            ###############################################-->
+        <n id="first-interaction">
+            <log>*MOUSE WHEEL* can be used sometimes to zoom in/out</log>
+
+            <dlg track="scene/track-vic">
+                <m wait="1">So...</m>
+                <m>Mister...</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Choose the *teacher* name" /></message>
+                <message name="LoadGenerateList"><string value="male-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Jefferson" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:JEF:NAME" destroy="true" />
+            </obj>
+            
+            <dlg track="scene/track-vic">
+                <m>Mister ${CHAR:JEF:NAME}... It's an important academic issue...</m>
+                <m>Do you understand why I need your complete attention in that matter, sir?</m>
+            </dlg>
+
+            <dlg char="JEF" track="scene/track-jef">
+                <m>Please...</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Choose the *girl* name" /></message>
+                <message name="LoadGenerateList"><string value="female-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Victoria" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:VIC:NAME" destroy="true" />
+            </obj>
+
+            <dlg char="JEF" track="scene/track-jef">
+                <m>Please, ${CHAR:VIC:NAME}... This is beyond inappropriate...</m>
+            </dlg>
+            
+            <dlg char="VIC" track="scene/track-vic">
+                <m>Why worry so much, sir?</m>
+                <m>I'm a student... You're a teacher... It's just natural to have a private lecture to understand better some lessons...</m>
+            </dlg>
+            
+            <dlg char="JEF" track="scene/track-jef">
+                <m>${CHAR:VIC:NAME}... Meeting in your bedroom for a "lesson" after dinner is way off limits in this school...</m>
+            </dlg>
+
+            <dlg char="VIC" track="scene/track-vic">
+                <m wait="1">But... Mister ${CHAR:JEF:NAME}...</m>
+                <m>Please... Just watch this...</m>
+            </dlg>
+            
+            <anim target="scene"><bool name="skin" value="true" /></anim>
+            
+            <wait />
+
+            <dlg char="VIC" track="scene/track-vic">
+                <m wait="1">Can you see my skin? Notice how I'm having goosebumps just imagining how much I could learn from you...</m>
+                <m>You teach... I learn... It's what we're supposed to do...</m>
+                <m>There's nothing wrong about that, right ?</m>
+            </dlg>
+
+            <wait />
+            
+            <dlg char="JEF" track="scene/track-jef">
+                <m>For God's sake, ${CHAR:VIC:NAME}...</m>
+                <m>Please, cover yourself... You're going to put me in serious trouble...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="skin" value="false" /></anim>
+
+            <dlg char="VIC" track="scene/track-vic">
+                <m wait="0.5">Oh... I'm sorry, sir...</m>
+                <m>Was I a bad girl? Do I need punishment?</m>
+                <m>Do want me to be on detention? Maybe at some cozy place where you can teach me how to be good girl?</m>
+            </dlg>
+
+            <dlg char="JEF" track="scene/track-jef">
+                <m instant="true">|Sigh... What did I do to deserve this...|</m>
+            </dlg>
+
+            <sys>
+                When a magnifying glass appears on the corner, you are in a investigation scene\n\n
+                During a investigation scene, move the mouse around and click to find interactive elements\n\n
+                You can hold *CTRL* key or *RIGHT MOUSE BUTTON* to move the mouse without affecting the camera
+            </sys>
+            
+            <node-output node="interactables" />
+        </n>
+        
+        <!--###############################################
+            ### interactables ##########################
+            ###############################################-->
+        <n id="interactables">
+            <obj target="scene/interactables" active="true">
+                <outcome value="TALK-JEF" node="talk-jef" clear="true"  />
+                <outcome value="TALK-VIC" node="talk-vic" clear="true"  />
+                <outcome value="BOOTY" node="booty" clear="true"  />
+                <outcome value="LEAVE" node="leave" clear="true"  />
+            </obj>
+        </n>
+            
+        <!--###############################################
+            ### talk-jef ##################################
+            ###############################################-->
+        <n id="talk-jef">
+            <obj target="scene/interactables" active="false" />
+
+            <if>
+                <check-flag flag="QUEST:INTRO" bit-unset="0" /> 
+                <then>
+                    <node-output node="talk-jef-2" />
+                </then>
+            </if>
+            <if>
+                <check-flag flag="QUEST:INTRO:COUNT" lte="3" /> 
+                <then>
+                    <node-output node="talk-jef-more-to-find" />
+                </then>
+                <else>
+                    <node-output node="talk-jef-all-found" />
+                </else>
+            </if>
+        </n>
+
+        <!--###############################################
+            ### talk-jef-2 ################################
+            ###############################################-->
+        <n id="talk-jef-2">
+            <dlg char="PLAYER" track="scene/track-player">
+                <m>Uhh... Hello, sir... Would you please-</m>
+            </dlg>
+
+            <anim target="scene">
+                <bool name="dialog" value="true"/>
+                <bool name="jef-turn" value="true"/>
+                <bool name="vic-turn" value="true"/>
+            </anim>
+
+            <sfx clip="voice-huh-b" async="true" />
+            
+            <dlg char="VIC" track="scene/track-vic">
+                <m>Huh!?! Why don't you go away, loser?</m>
+                <m>Can't you see Mister ${CHAR:JEF:NAME} is busy with me?</m>
+            </dlg>
+
+            <wait time="1" />
+
+            <anim target="scene">
+                <bool name="jef-turn" value="false"/>
+            </anim>
+            
+            <dlg char="JEF" track="scene/track-jef">
+                <m>${CHAR:VIC:NAME}... We talked about this before...</m>
+                <m>This is not the proper way to address your classmates...</m>
+                <m wait="0.5">It's difficult to evolve in the path of Art without a minimum of empathy...</m>
+            </dlg>
+            
+            <wait time="0.5"/>
+            <anim target="scene">
+                <bool name="vic-turn" value="false"/>
+            </anim>
+
+            <dlg char="VIC" track="scene/track-vic">
+                <m>I'm sorry, Mr ${CHAR:JEF:NAME}...</m>
+                <m>You see... That's another reason why I need those private lessons...</m>
+            </dlg>
+
+            <anim target="scene">
+                <bool name="vic-turn" value="true"/>
+            </anim>
+
+            <dlg char="VIC" track="scene/track-vic">
+                <m>I just can't help myself around some certain kind of people...</m>
+                <m>We were having such a good time by ourselves, without the presence of the sleeping beauty here...</m>
+            </dlg>
+            
+            <anim target="scene">
+                <bool name="jef-turn" value="true"/>
+            </anim>
+            
+            <dlg char="JEF" track="scene/track-jef">
+                <m>Hey... You're ${CHAR:PLAYER:NAME}, right?</m>
+                <m>I see you finally... uuh... recovered consciousness...</m>
+            </dlg>
+
+            <choice>
+                <c pos="NE">
+                    <text>Sorry about that...</text>
+                    <then>
+                        <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Sorry for crashing during your class, Mr ${CHAR:JEF:NAME}...</m>
+                            <m wait="0.5">It won't happen again... I... hope so...</m>
+                        </dlg>
+
+                        <anim target="scene" trigger="jef-say" />
+
+                        <dlg char="JEF" track="scene/track-jef">
+                            <m>Oh... Don't concern yourself about that little incident...</m>
+                            <m wait="0.5">Results are what matter to me... The means to get there are you choice...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Well... I'll try to increasing my sleep hours outside class for a change...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>Your lecture is like a sedative...</text>
+                    <then>
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Don't blame me, Mr ${CHAR:JEF:NAME}... I gotta say... Your lecture is like a powerful sedative...</m>
+                            <m wait="0.5">Students who can keep awake are like everyday heroes...</m>
+                        </dlg>
+
+                        <anim target="scene" trigger="jef-say" />
+
+                        <dlg char="JEF" track="scene/track-jef">
+                            <m>Uhm... Students... Sedative... That's an interesting choice of words...</m>
+                            <m wait="0.5">It seems you're actually a perceptive young man...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Uuh... Thanks?</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="scene"><bool name="vic-turn" value="false" /></anim>
+            <dlg char="VIC" track="scene/track-vic">
+                <m>Will you really let him off the hook so easily, Mr ${CHAR:JEF:NAME}?</m>
+                <m>Sleeping during you class... It's so disrespectful to a wonderful man like you...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="jef-turn" value="false" /></anim>
+            <dlg char="JEF" track="scene/track-jef">
+                <m>He's new around here, ${CHAR:VIC:NAME}...</m>
+                <m>And I believe he already have his share of problems...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="scene/track-player">
+                <m>That doesn't sound good...</m>
+            </dlg>
+            
+            <anim target="scene"><bool name="jef-turn" value="true" /></anim>
+            <dlg char="JEF" track="scene/track-jef">
+                <m>Yeah... I mean... The principal told me you have a post-class assignment...</m>
+                <m wait="0.5">It's kind of weird... It appears he wants you responsible for cleaning the classroom...</m>
+            </dlg>
+            
+            <anim target="scene"><bool name="vic-turn" value="true" /></anim>
+            <dlg char="VIC" track="scene/track-vic">
+                <m>Ha... It's not weird... I think it's just training for his future career...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="jef-turn" value="false" /></anim>
+            <dlg char="JEF" track="scene/track-jef">
+                <m>${CHAR:VIC:NAME}, please...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="jef-turn" value="true" /></anim>
+            <dlg char="JEF" track="scene/track-jef">
+                <m wait="0.5">Now... I don't agree with the some of the principal's attitudes... But as staff member I'm required to supervise extra-class assignments...</m>
+                <m>So... Just for record... Pick up whatever your classmates left around that belongs to a garbage can, okay?</m>
+                <m wait="1">Remember to look down the tables... Some students think whatever falls under a table vanishes from the universe...</m>
+                <m>Come talk to me again when you're done...</m>
+            </dlg>
+            
+            <flag name="QUEST:INTRO" bit-on="0" />
+
+            <node-output node="leave" />
+        </n>
+
+        <!--###############################################
+            ### talk-jef-more-to-find #######################
+            ###############################################-->
+        <n id="talk-jef-more-to-find">
+            <dlg char="PLAYER" track="scene/track-player">
+                <m>So... anything more, Mr ${CHAR:JEF:NAME}?</m>
+            </dlg>
+
+            <anim target="scene">
+                <bool name="dialog" value="true"/>
+                <bool name="jef-turn" value="true"/>
+                <bool name="vic-turn" value="true"/>
+            </anim>
+
+            <dlg char="JEF" track="scene/track-jef">
+                <m>There are still garbage pieces to be picked around the classroom...</m>
+                <m>Remember you won't notice some things on the ground unless you check closely by CROUCHING in front of them...</m>
+            </dlg>
+
+            <node-output node="leave" />
+        </n>
+
+        <!--###############################################
+            ### talk-jef-all-found ##########################
+            ###############################################-->
+        <n id="talk-jef-all-found">
+            <dlg char="PLAYER" track="scene/track-player">
+                <m>I think I got everything, Mr ${CHAR:JEF:NAME}...</m>
+            </dlg>
+
+            <anim target="scene">
+                <bool name="dialog" value="true"/>
+                <bool name="jef-turn" value="true"/>
+                <bool name="vic-turn" value="true"/>
+            </anim>
+
+            <dlg char="JEF" track="scene/track-jef">
+                <m>Indeed... The classroom seems much more pleasant now...</m>
+                <m>Nice job...</m>
+            </dlg>
+
+            <anim target="scene" trigger="vic-say" />
+            <dlg char="VIC" track="scene/track-vic">
+                <m>Impressive... It seems you'll have a nice future as a janitor...</m>
+            </dlg>
+
+            <anim target="scene">
+                <bool name="jef-turn" value="false"/>
+            </anim>
+            <dlg char="JEF" track="scene/track-jef">
+                <m>${CHAR:VIC:NAME}... I think we chatted enough for today...</m>
+                <m>Please, give me a little privacy now... I have some important reports to check now...</m>
+            </dlg>
+            
+            <anim target="scene">
+                <bool name="vic-turn" value="false"/>
+            </anim>
+            <dlg char="VIC" track="scene/track-vic">
+                <m>Of course, sir... Whatever you ask me... I'll do it for you...</m>
+            </dlg>
+            <anim target="scene" trigger="vic-say" />
+            <dlg char="VIC" track="scene/track-vic">
+                <m wait="1">But.. Can you please pick up my calls tonight? I just need some guidance on your last assignment... Please...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="jef-say" />
+            <dlg char="JEF" track="scene/track-jef">
+                <m>Sigh... Look... If you improve your manners and deal respectfully with your colleagues, then I might give some of my time later...</m>
+            </dlg>
+
+            <anim target="scene" trigger="vic-say" />
+            <dlg char="VIC" track="scene/track-vic">
+                <m wait="1">Really!?! Then I promise I'll be super nice with all the other morons... I mean... all the other students in this school...</m>
+                <m>You'll see... I'll just grab my stuff and say a friendly goodbye to our new classmate here...</m>
+            </dlg>
+
+            <anim target="scene" trigger="jef-say" />
+            <dlg char="JEF" track="scene/track-jef">
+                <m>Good... I hope you do...</m>
+            </dlg>
+
+            <anim target="scene">
+                <bool name="jef-turn" value="true"/>
+            </anim>
+            <dlg char="JEF" track="scene/track-jef">
+                <m>And you, ${CHAR:PLAYER:NAME}... Please, stay here... We need to talk...</m>
+            </dlg>
+
+            <fade-to-black keep="true"/>
+            
+            <bootstrap script="scene-vic-leave-classroom" />
+        </n>
+
+        <!--###############################################
+            ### talk-vic ##################################
+            ###############################################-->
+        <n id="talk-vic">
+            <obj target="scene/interactables" active="false" />
+            <if>
+                <check-group op="OR">
+                    <check-flag flag="CHAR:VIC:INTERACTIONS" bit-set="7" />
+                    <check-flag flag="CHAR:VIC:INTERACTIONS" bit-set="8" />
+                </check-group>
+                <then>
+                    <dlg char="PLAYER" track="scene/track-player">
+                        <m instant="true">|She will not be happy if I bother her again... I'd better leave her alone for now...|</m>
+                    </dlg>
+                    <node-output node="interactables" />
+                </then>
+            </if>
+
+
+            <choice id="VIC:CLASSROOM:TALK">
+                <c out="interactables" pos="E">
+                    <text>[Leave her alone]</text>
+                </c>
+                <c pos="NE">
+                    <text>Hello there...</text>
+                    <then>
+                        <flag name="CHAR:VIC:INTERACTIONS" bit-on="7" />
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Hello, there... You're ${CHAR:VIC:NAME}, right?</m>
+                        </dlg>
+
+                        <anim target="scene">
+                            <bool name="dialog" value="true"/>
+                            <bool name="vic-turn" value="true"/>
+                            <bool name="jef-turn" value="true"/>
+                        </anim>
+                        
+                        <dlg char="VIC" track="scene/track-vic">
+                            <m>Urgh... Just piss off, boy...</m>
+                            <m>I'm talking to a real man here... I don't need another boot licker following me around...</m>
+                        </dlg>
+                        
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Sheesh... I think just met the new miss congeniality...</m>
+                        </dlg>
+
+                        <anim target="scene">
+                            <bool name="jef-turn" value="false"/>
+                        </anim>
+                        <dlg char="JEF" track="scene/track-jef">
+                            <m>${CHAR:VIC:NAME}... Please...</m>
+                        </dlg>
+
+                        <anim target="scene">
+                            <bool name="vic-turn" value="false"/>
+                        </anim>
+                        <dlg char="VIC" track="scene/track-vic">
+                            <m wait="1">I'm sorry, sir... I'll be nice... I promise...</m>
+                            <m>Unless, of course, you ask me to be naughty... That would be much more fun...</m>
+                        </dlg>
+
+                        <wait />
+
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Sigh... This is getting old already...</m>
+                        </dlg>
+
+                        <node-output node="leave"/>
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>That's a fine ass...</text>
+                    <then>
+                        <flag name="CHAR:VIC:INTERACTIONS" bit-on="8" />
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Well... That's what I call a fine ass...</m>
+                        </dlg>
+                        
+                        <anim target="scene">
+                            <bool name="dialog" value="true"/>
+                            <bool name="vic-turn" value="true"/>
+                            <bool name="jef-turn" value="true"/>
+                        </anim>
+
+                        <dlg char="VIC" track="scene/track-vic">
+                            <m wait="0.5">Urgh... I heard that, you idiot...</m>
+                            <m>You must have some nerve to talk to me like that...</m>
+                        </dlg>
+                        <wait />
+                        <anim target="scene" trigger="vic-say" />
+                        <flag name="CHAR:VIC:AFFINITY" inc="2">${CHAR:VIC:NAME} liked that</flag>
+                        <dlg char="VIC" track="scene/track-vic">
+                            <m wait="0.5">At least I can see you're not another snowflake like so many others in this school...</m>
+                        </dlg>
+
+                        <anim target="scene">
+                            <bool name="jef-turn" value="false"/>
+                        </anim>
+
+                        <dlg char="JEF" track="scene/track-jef">
+                            <m>Well... You try hard enough to make people afraid of you, ${CHAR:VIC:NAME}...</m>
+                        </dlg>
+                        
+                        <anim target="scene">
+                            <bool name="jef-turn" value="true"/>
+                        </anim>
+                        
+                        <dlg char="JEF" track="scene/track-jef">
+                            <m>And you, young man...</m>
+                            <m>That's not the proper way to talk to a lady...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER" track="scene/track-player">
+                            <m>Whatever you say, sir...</m>
+                        </dlg>
+
+                        <node-output node="leave"/>
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--###############################################
+            ### booty #####################################
+            ###############################################-->
+        <n id="booty">
+            <obj target="scene/interactables" active="false" />
+
+            <if>
+                <check-group op="OR">
+                    <check-flag flag="CHAR:VIC:INTERACTIONS" bit-set="5" />
+                    <check-flag flag="CHAR:VIC:INTERACTIONS" bit-set="6" />
+                </check-group>
+                <then>
+                    <dlg char="PLAYER" track="scene/track-player">
+                        <m instant="true">|I messed around enough back there... She might be on alert now...|</m>
+                        <m instant="true">|I'd better keep my distance...|</m>
+                    </dlg>
+
+                    <node-output node="interactables" />
+                </then>
+            </if>
+
+            <choice>
+                <c out="interactables" pos="W">
+                    <text>[Leave]</text>
+                </c>
+                <c  pos="E">
+                    <text>[Check it closer]</text>
+                    <then>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" />
+                        <bootstrap script="scene-classroom-vic-booty" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--###############################################
+            ### leave ######################################
+            ###############################################-->
+        <n id="leave">
+            <fade-to-black keep="true" />
+            <bootstrap script="intro" node="classroom-location" />
+        </n>
+
+    </nodes>
+</xml-script>

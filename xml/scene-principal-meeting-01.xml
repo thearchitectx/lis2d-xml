@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+    <!--###############################################
+        ### root ######################################
+        ###############################################-->
+        <n id="root">
+            <fade-to-black keep="true" speed="1000" />
+            
+            <bgm loop="loop-pri" volume="0.15" />
+            
+            <load-scene-object key="scene-principal-computer.prefab" rename="scene" />
+
+            <dlg char="PRI" track="scene">
+                <m>So... Mister ${CHAR:PLAYER:NAME}...</m>
+            </dlg>
+            
+            <fade-to-black speed="-3" />
+
+            <autosave label="Meeting Principal ${CHAR:PRI:NAME}" />
+
+            <dlg char="PRI" track="scene">
+                <m wait="1">You're late... And I'm a very busy man...</m>
+                <m>You don't need to sit... This meeting won't take long...</m>
+                <m>I just need a minute to finish this report...</m>
+            </dlg>
+
+            <wait time="6" />
+            <dlg char="PLAYER">
+                <m>...........</m>
+            </dlg>
+
+            <choice>
+                <c pos="NW">
+                    <text>Sorry for interrupting your work</text>
+                    <then>
+                        <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                        <dlg char="PLAYER">
+                            <m>I'm sorry for being late and interrupting your work, Mister ${CHAR:PRI:NAME}...</m>
+                        </dlg>
+                        <anim target="scene" trigger="next" />
+                        <dlg char="PLAYER">
+                            <m wait="1">I wasn't sure of the precise time this meeting was scheduled...</m>
+                            <m>Next time I'll try to...</m>
+                        </dlg>
+
+                        <wait time="2" />
+
+                        <dlg char="PLAYER">
+                            <m>I... uuuhh...</m>
+                        </dlg>
+                        <dlg char="PRI" track="scene">
+                            <m>Yes? Anything more to say?</m>
+                            <m wait="1">Is the act over yet?</m>
+                            <m wait="0.5">It's obvious you're pretending to be a well behaved student now...</m>
+                            <m>But you don't fool me, boy... The tiger cannot change its stripes...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Stay silent]</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>...........</m>
+                        </dlg>
+                        <wait time="4" />
+                        <anim target="scene" trigger="next" />
+                        <dlg char="PLAYER">
+                            <m>.........??</m>
+                        </dlg>
+                        <wait time="1" />
+                        <dlg char="PRI" track="scene">
+                            <m>Don't you have anything to say?</m>
+                            <m wait="1">Are you pretending to be patient or do you simply don't care...</m>
+                            <m>But you don't fool me, boy... The tiger cannot change its stripes...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>[Whistle a tune loudly]</text>
+                    <then>
+                        <sfx clip="whistle-song" async="true" />
+                        <wait time="4" />
+                        
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <anim target="scene" trigger="next" />
+                        <wait time="2" />
+
+                        <dlg char="PRI" track="scene">
+                            <m wait="1">Sigh... Exactly the behaviour I expected...</m>
+                            <m wait="1">No discipline... No respect...</m>
+                            <m>So this is what you think?</m>
+                            <m wait="1.5">That this is a joke? Some sort of game where you are the hero and I'm the evil villain?</m>
+                            <m>Well... I have to break the news to you, boy... You're simply... wrong...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <fade-to-black keep="true" speed="2" />
+            <obj target="scene" destroy="0" />
+            <bootstrap node="n2" />
+        </n>
+
+    <!--###############################################
+        ### n2 ######################################
+        ###############################################-->
+        <n id="n2">
+            <fade-to-black keep="true" speed="100000" />
+            
+            <bgm loop="loop-pri" volume="0.15" />
+            
+            <load-scene-object key="scene-principal-talk.prefab" rename="scene" />
+
+            <fade-to-black speed="-2" />
+            
+            <autosave label="Meeting Principal ${CHAR:PRI:NAME}" />
+
+            <obj target="scene/player">
+                <message name="AnimateWeightToCoroutine"><float value="1" /></message>
+            </obj>
+
+            <dlg char="PRI" track="scene/principal">
+                <m>You have to understand, young man... I'm not like the other educators you encountered during your life...</m>
+                <m wait="0.5">I know your record and every little stain you spread across it...</m>
+                <m>The only feat that impressed me is how you managed to be registered as a student in this school...</m>
+                <m>I'm still trying to understand how you accomplished that...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="scene/player">
+                <m>Well... I also have no idea of how that happened...</m>
+                <m>But you probably won't believe that, right?</m>
+            </dlg>
+
+            <anim target="scene/principal" trigger="say-01" />
+            <dlg char="PRI" track="scene/principal">
+                <m>For once... We agree...</m>
+            </dlg>
+            
+            <wait />
+            
+            <dlg char="PLAYER" track="scene/player">
+                <m>UUhh... That is... good?</m>
+            </dlg>
+            
+            <anim target="scene/principal" trigger="say-01" />
+            <dlg char="PRI" track="scene/principal">
+                <m>Nevertheless... As a man who always play by the rules, I just have to accept you were lawfully registered in ${MISC:SCHOOL:NAME}...</m>
+                <m>Rules, you see... Something you clearly despise... but also the basic foundation of our society...</m>
+                <m>The same rules that allow the educational staff to create new internship programs and enroll students on it as they see fit...</m>
+            </dlg>
+            
+            <anim target="scene/principal" face="SIGH" />
+            <dlg char="PRI" track="scene/principal">
+                <m>Like this obnoxious boy, Justin...</m>
+                <m>His teacher somehow thought that enrolling him in the administrative internship would help on his "focus" problem...</m>
+            </dlg>
+            
+            <anim target="scene/principal" face="DISAPPROVE" />
+            <dlg char="PRI" track="scene/principal">
+                <m wait="0.5">Well... I created something special for you... The "general maintenance helper" internship...</m>
+                <m>Our janitor... He's getting old and tired, so you'll help him doing tasks like the one you had after class today...</m>
+            </dlg>
+            
+            <anim target="scene/principal" trigger="say-01" />
+            <dlg char="PRI" track="scene/principal">
+                <m>I think it's the type of work that would develop the "humility" skills you need...</m>
+                <m>You're welcomed to leave ${MISC:SCHOOL:NAME} if you this is not the kind of job you want...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="scene/player">
+                <m>Well... There is this quote I once heard...</m>
+                <m>"There is no such thing as a bad job... What is bad is having to work..."</m>
+            </dlg>
+
+            <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Find the janitor" />
+            <flag name="QUEST:PRINCIPAL1" bit-on="1" icon="QUEST">Objectives Updated</flag>
+
+            <anim target="scene/principal" face="SIGH" />
+            <dlg char="PRI" track="scene/principal">
+                <m wait="0.5">Sigh... Please... Just leave my office now and look for the janitor...</m>
+            </dlg>
+            <anim target="scene/principal" face="DISAPPROVE" />
+            <dlg char="PRI" track="scene/principal">
+                <m>He will be the one assigning you tasks...</m>
+            </dlg>
+
+            <anim target="scene/principal" trigger="say-01" />
+            <dlg char="PRI" track="scene/principal">
+                <m>Now... Get out of my sight...</m>
+            </dlg>
+
+            <obj target="scene/player">
+                <message name="AnimateWeightToCoroutine"><float value="0" /></message>
+            </obj>
+
+            <dlg char="PLAYER" track="scene/player">
+                <m>Sure... Bye...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="0.5" />
+
+            <bootstrap script="location-administration-01/location" spawn="spawn/office" />
+        </n>
+    </nodes>
+</xml-script>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="n1">
+            <bgm loop="loop-urban" as-music="false" volume="0.25" fade-speed="0.5" />
+            
+            <fade-to-black keep="true" />
+            <load-scene-object key="location-classroom-01.prefab" />
+
+            <load-scene-object key="location-classroom-01-jef.prefab" parent="location-classroom-01.prefab">
+                <message name="FindReferenceBackground"><string value="location-classroom-01.prefab" /></message>
+            </load-scene-object>
+
+            <fade-to-black speed="-1" />
+
+            <inject node="lib-post-start" />
+        </n>
+    </nodes>
+</xml-script>

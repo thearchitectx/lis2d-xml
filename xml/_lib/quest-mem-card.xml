@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## progress ##################################
+            ##############################################################
+        -->
+        <n id="progress">
+            <if>
+                <!-- quest started ? -->
+                <check-flag flag="QUEST:MEM_CARD" bit-set="5" />
+                <then>
+                    <flag name="FLG:0" set="0" />
+                    
+                    <if>
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="6" />
+                        <then>
+                            <flag name="FLG:0" inc="1" />
+                        </then>
+                    </if>
+                    <if>
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="7" />
+                        <then>
+                            <flag name="FLG:0" inc="1" />
+                        </then>
+                    </if>
+                    <if>
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="8" />
+                        <then>
+                            <flag name="FLG:0" inc="1" />
+                        </then>
+                    </if>
+        
+                    <if>
+                        <!-- found all 3 pieces ? -->
+                        <check-flag flag="FLG:0" gte="3" />
+                        <then>
+                            <dlg char="PLAYER" track="#PlayerTrack">
+                                <m>That's it...</m>
+                                <m>If the principal receive an urgent request form this Prescott dude, then I bet he will immediately run out the office to meet the man...</m>
+                                <m wait="1">I could send him a spoofed message, but I don't remember having any access points in this local network...</m>
+                                <m>I should tell ${CHAR:BRK:NAME} about this plan... She might have the tools to make it happen...</m>
+                            </dlg>
+                            <string name="QUEST:MEM_CARD:OBJECTIVE" set="Tell ${CHAR:BRK:NAME} about the plan to recover her memory card from the principal's office" />
+                            <log icon="QUEST">Found all data reports about the principal</log>
+                            <log icon="QUEST">Objectives updated!</log>
+                        </then>
+                        <else>
+                            <log icon="QUEST">Found *${FLG:0}* of *3* data reports about the principal</log>
+                            <string name="QUEST:MEM_CARD:OBJECTIVE" set="In order to recover Brooke's memory card from the principal's office, learn more information about him that could help creating plan of distraction" />
+                            <log icon="QUEST">Objectives updated!</log>
+                            <dlg char="PLAYER" track="#PlayerTrack">
+                                <m>Now that's some interesting info...</m>
+                                <m>But I think there's more pieces of this puzzle to be found...</m>
+                            </dlg>
+                        </else>
+                    </if>
+                </then>
+            </if>
+
+        </n>
+    </nodes>
+</xml-script>

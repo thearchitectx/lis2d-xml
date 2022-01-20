@@ -1,0 +1,937 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--
+        ###############################################
+        ### start ###############################
+        ###############################################
+        -->
+        <n id="start">
+            <fade-to-black speed="999999" keep="true" />
+            <load-scene-object key="scene-max-restroom-01.prefab" rename="scene" />
+            <proxy target="scene/MAX" name="MAX" />
+            <bgm loop="loop-urban" as-music="false" volume="0.25" />
+            <fade-to-black speed="-1" />
+
+            <!-- (0): Met on restroom scene -->
+            <flag name="CHAR:MAX:INTERACTIONS" bit-on="0" />
+
+            <dlg char="PLAYER">
+                <m wait="1.5">Sigh... The girls restroom is not that interesting when there are no girls around and you have a boring job do to...</m>
+                <m>I understand the principal's plan now... All work and no play makes ${CHAR:PLAYER:NAME} a dull-</m>
+            </dlg>
+
+            <sfx clip="voice-sigh-a" async="true" />
+            <dlg char="MAX" track="MAX">
+                <m>I can't give up...</m>
+                <m>I have to try again...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <bgm loop="loop-rumble" as-music="false" volume="0.5" />
+            <wait time="1" />
+
+            <dlg char="PLAYER">
+                <m wait="1">What the...</m>
+                <m>Hello!? Is someone there!?!</m>
+            </dlg>
+
+            <dlg char="MAX" track="MAX">
+                <m>.... not... working...</m>
+                <m>.... need... focus...</m>
+            </dlg>
+
+            <wait time="1" />
+
+            <dlg char="PLAYER">
+                <m>Can you hear me? Sorry to interrupt your rave party there... but I'm supposed to clean the-</m>
+            </dlg>
+
+            <load-scene-object key="vfx-dizzy.prefab"  />
+            <sfx clip="explosion" async="true" />
+            <bgm loop="loop-title" as-music="true" volume="0.25" />
+
+            <dlg char="PLAYER">
+                <m wait="3">Whoa...</m>
+                <m wait="3">Okay... now this feels familiar...</m>
+                <m>Just have to snap out of it again...</m>
+            </dlg>
+
+            <anim target="vfx-dizzy.prefab" trigger="off" />
+            <obj target="vfx-dizzy.prefab" destroy="5" />
+            <wait time="3" />
+
+            <anim target="scene" trigger="next" />
+            <wait time="3" />
+
+            <dlg char="PLAYER">
+                <m wait="1">Great... I bet they will make me do pest control next...</m>
+                <m>Where is that zapper racket when i need it?</m>
+            </dlg>
+
+            <dlg track="MAX">
+                <m>i'm... sorry... can't... do this... anymore...</m>
+            </dlg>
+
+            <sfx clip="interrupt-paragon" async="true" volume="0" />
+            <load-scene-object key="interrupt.prefab" rename="interrupt" active="false" />
+
+            <dlg char="PLAYER">
+                <m>Huh!?</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+
+            <wait time="2" />
+
+            <sfx clip="interrupt-paragon" async="true" volume="0" />
+            <sfx clip="interrupt-renegade" async="true" volume="0" />
+            <obj target="interrupt" active="true">
+                <message name="EnableParagon" />
+                <message name="EnableRenegade" />
+                <message name="SetWaitInputTime"><float value="2.5"></float></message>
+                <outcome value="PARAGON" node="hold-max" destroy="true" clear="true" />
+                <outcome value="RENEGADE" node="let-max-fall" destroy="true" clear="true" />
+                <outcome value="TIME_UP" node="time-up" destroy="true" />
+            </obj>
+        </n>
+
+        <!--
+        ###############################################
+        ### hold-max ###################################
+        ###############################################
+        -->
+        <n id="hold-max">
+            <!-- (1): Interrupt paragon on restroom scene -->
+            <flag name="CHAR:MAX:INTERACTIONS" bit-on="1" />
+            <sfx clip="interrupt-paragon" async="true"/>
+            <load-scene-object key="cinemachine-impulse.prefab" />
+            
+            <load-scene-object key="scene-max-restroom-03.prefab" rename="scene-03" active="false" />
+            <obj target="scene" destroy="0" />
+            <proxy target="scene-03/MAX" name="MAX" />
+            <proxy target="scene-03/PLAYER" name="PLAYER" />
+            <proxy target="scene-03" name="scene" />
+            <obj target="scene" active="true" />
+
+            
+            <anim target="scene" trigger="next" />
+            <obj target="cinemachine-impulse.prefab" destroy="2">
+                <message name="GenerateImpulse"><float value="10" /></message>
+            </obj>
+
+            <wait time="1" />
+
+            <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="2">Got ya!</m>
+                <m wait="1">Hey... Are you okay!?</m>
+                <m wait="3">Wake up, please...</m>
+                <m>Come on, girl... This is a nice 'meet cute' situation and everything... but...</m>
+                <m>It would to be difficult to explain this scene if someone come in now...</m>
+            </dlg>
+            <dlg char="MAX" track="MAX">
+                <m>hhmmnn....</m>
+            </dlg>
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Sigh... Why weird shit keeps happening to me all the time?</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <wait time="2" />
+            
+            <dlg char="MAX" track="MAX">
+                <m>huuumm... what...</m>
+                <m>what's going on...</m>
+            </dlg>
+            
+            <wait time="1" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Well... You tell me...</m>
+                <m>You're the one who fainted after some freaky light show back there...</m>
+            </dlg>
+
+            <dlg char="MAX" track="MAX">
+                <m wait="2">i... fainted...</m>
+                <m wait="1">but... i...</m>
+                <m>i tried so hard...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I guess you tried too hard... Whatever it was...</m>
+            </dlg>
+
+
+            <dlg char="MAX" track="MAX">
+                <m>oh... it's... you...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Yeah... Me... The most famous person in this place, it seems...</m>
+                <m>I mean... I'm used to it now... Everyone seems to know me...</m>
+                <m>But I don't know anyone... What is your name?</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Her name is:" /></message>
+                <message name="LoadGenerateList"><string value="female-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Max" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:MAX:NAME" destroy="true" />
+            </obj>
+
+            <load-scene-object key="scene-max-restroom-04.prefab" rename="scene-04" />
+            <obj target="scene-03" destroy="0" />
+            <proxy target="scene-04/MAX" name="MAX" />
+            <proxy target="scene-04/PLAYER" name="PLAYER" />
+
+            <dlg char="MAX" track="MAX">
+                <m wait="1">i'm... ${CHAR:MAX:NAME}...</m>
+                <m>you... saved... me...</m>
+            </dlg>
+            
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="0.5">I think 'saved' is a huge overstatement...</m>
+                <m>I just didn't wanted to see you falling on this filthy floor... At least not before I finished cleaning it...</m>
+            </dlg>
+
+            <flag name="CHAR:MAX:AFFINITY" inc="2" icon="AFFINITY">${CHAR:MAX:NAME} liked that!</flag>
+            <dlg char="MAX" track="MAX">
+                <m wait="2">thank... you...</m>
+                <m>i... i think i can stand now...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="0.5" />
+            <bootstrap node="dialog-start" />
+        </n>
+
+        <!--
+        ###############################################
+        ### time-up ###################################
+        ###############################################
+        -->
+        <n id="time-up">
+            <!-- (3): Interrupt renegade on restroom scene -->
+            <flag name="CHAR:MAX:INTERACTIONS" bit-on="3" />
+            <node-output node="let-max-fall" />
+        </n>
+
+        <!--
+        ###############################################
+        ### let-max-fall ##############################
+        ###############################################
+        -->
+        <n id="let-max-fall">
+            <!-- (2): Didn't hold her when fainting on restroom scene -->
+            <flag name="CHAR:MAX:INTERACTIONS" bit-on="2" />
+            <sfx clip="interrupt-renegade" async="true"/>
+            <load-scene-object key="cinemachine-impulse.prefab" />
+            
+            <load-scene-object key="scene-max-restroom-02.prefab" rename="scene-02" active="false" />
+            <obj target="scene" destroy="0" />
+            <proxy target="scene-02/MAX" name="MAX" />
+            <proxy target="scene-02/PLAYER" name="PLAYER" />
+            <proxy target="scene-02" name="scene" />
+            <obj target="scene" active="true" />
+            
+            <sfx clip="impact" async="true" />
+            <obj target="cinemachine-impulse.prefab" destroy="2">
+                <message name="GenerateImpulse"><float value="20" /></message>
+            </obj>
+
+            <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">Whoa... Watch it!</m>
+                <m>What's wrong with you, girl!?</m>
+            </dlg>
+
+            <dlg char="MAX" track="MAX">
+                <m>huuumm... what...</m>
+                <m>what's going on...</m>
+            </dlg>
+
+            <wait time="1" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>What's going on!?</m>
+                <m>Besides you dropping cold from back there after a psychedelic acid trip light show?</m>
+            </dlg>
+
+            <dlg char="MAX" track="MAX">
+                <m wait="2">i'm sorry... i tried... but...</m>
+                <m>you... you're still here...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Yeah... Me... The most famous person in this place, it seems...</m>
+                <m>I mean... I'm used to it now... Everyone seems to know me...</m>
+                <m>But I don't know anyone... What is your name?</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Her name is:" /></message>
+                <message name="LoadGenerateList"><string value="female-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Max" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:MAX:NAME" destroy="true" />
+            </obj>
+
+            <dlg char="MAX" track="MAX">
+                <m wait="2">i'm... ${CHAR:MAX:NAME}...</m>
+                <m>i... i think i can stand now...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="0.5" />
+            <bootstrap node="dialog-start" />
+        </n>
+
+        <!--
+        ###############################################
+        ### dialog-start ##############################
+        ###############################################
+        -->
+        <n id="dialog-start">
+            <fade-to-black speed="9999999" keep="true" />
+            <load-scene-object key="shot-restroom-women-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-max-01.prefab" rename="MAX" />
+
+            <bgm loop="loop-max" volume="0.25" />
+
+            <obj target="MAX">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="SetParallaxSpeed"><float value="0.4" /></message>
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </obj>
+            
+            <fade-to-black speed="-1" />
+            
+            <autosave label="Chatting with ${CHAR:MAX:NAME}" />
+            
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <proxy target="shot/player" name="PLAYER" />
+
+            <dlg char="MAX" track="MAX">
+                <m>I'm sorry... I... I fainted again...</m>
+                <m>I heard you asking if the restroom was empty...</m>
+                <m>But... I thought...</m>
+            </dlg>
+            <anim target="MAX" face="SIGH" />
+            <dlg char="MAX" track="MAX">
+                <m>... I thought it was someone else...</m>
+                <m>so I... kept quiet......</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Someone else... like... some creepy dude you're trying to avoid?</m>
+            </dlg>
+            
+            <anim target="MAX" trigger="say-01" face="UPSET"  />
+            <dlg char="MAX" track="MAX">
+                <m>Well... Not exactly...</m>
+                <m>I mean...</m>
+            </dlg>
+            <anim target="MAX" face="SIGH" />
+            <dlg char="MAX" track="MAX">
+                <m>he's kinda nice... but doesn't give much space...</m>
+            </dlg>
+
+            <anim target="MAX" face="NEUTRAL" />
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+        ###############################################
+        ### dialog-root ##############################
+        ###############################################
+        -->
+        <n id="dialog-root">
+            <choice id="max-restroom-root">
+                <c pos="NW">
+                    <text>Ghosting that dude is not cool</text>
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:MAX:INTERACTIONS" bit-unset="4" />
+                        <check-flag flag="CHAR:MAX:INTERACTIONS" bit-unset="5" />
+                    </check-group>
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="4" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="0.5">It's not my business, but... You're not ghosting this dude you talked about, are you?</m>
+                            <m wait="0.5">I mean... That's not cool...</m>
+                            <m>Just tell him you're not interested if that's the case...</m>
+                        </dlg>
+                        <anim target="MAX" trigger="surprised" face="SURPRISED" />
+                        <dlg char="MAX" track="MAX">
+                            <m wait="0.5">Oh... It's... uuh...</m>
+                            <m>It's... not like that...</m>
+                            <m>He's just... just a good friend...</m>
+                        </dlg>
+                        <wait time="0.5"/>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Damn... Somebody just got mercilessly shoved into the friendzone...</m>
+                            <m>You are ruthless...</m>
+                        </dlg>
+                        <anim target="MAX" face="CUTE" trigger="giggle" />
+                        <dlg char="MAX" track="MAX">
+                            <m wait="1">Hey... Now you're just teasing me...</m>
+                            <m>Well... It's obvious you're not from here, ${CHAR:PLAYER:NAME}...</m>
+                        </dlg>
+                        <flag name="CHAR:MAX:AFFINITY" inc="1" icon="AFFINITY">${CHAR:MAX:NAME} liked that</flag>
+                        <dlg char="MAX" track="MAX">
+                            <m>Empathy is a rare trait this town... It's good to see some coming from you...</m>
+                        </dlg>
+                        <anim target="MAX" face="NEUTRAL" />
+                        <node-output node="dialog-root" />
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>Get rid of the stalker</text>
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:MAX:INTERACTIONS" bit-unset="4" />
+                        <check-flag flag="CHAR:MAX:INTERACTIONS" bit-unset="5" />
+                    </check-group>
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="5" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Look, if there's a stalker after you, then we should do something to get rid of him...</m>
+                            <m>These people can become really dangerous...</m>
+                        </dlg>
+                        <anim target="MAX" trigger="surprised" face="UPSET" />
+                        <dlg char="MAX" track="MAX">
+                            <m>What? No... He's not a stalker...</m>
+                        </dlg>
+                        <anim target="MAX" face="DISAPPROVE" />
+                        <dlg char="MAX" track="MAX">
+                            <m>You...</m>
+                            <m>You don't need to worry about that, okay...</m>
+                        </dlg>
+                        <anim target="MAX" face="NEUTRAL" />
+                        <node-output node="dialog-root" />
+                    </then>
+                </c>
+                <c pos="E" out="fainted-again">
+                    <text>You fainted "again"?</text>
+                </c>
+            </choice>
+        </n>
+
+        <!--
+        ###############################################
+        ### fainted-again ##############################
+        ###############################################
+        -->
+        <n id="fainted-again">
+            <dlg char="PLAYER" track="PLAYER">
+                <m>You said you fainted "again"!?</m>
+                <m>This is not a good sign... You should see a doctor...</m>
+            </dlg>
+            <anim target="MAX" trigger="say-01" />
+            <dlg char="MAX" track="MAX">
+                <m>Oh... Thanks for being worried about my health, but...</m>
+                <m>I already know what is wrong with me...</m>
+            </dlg>
+            <dlg char="PLAYER" track="PLAYER">
+                <m>You do!? It's about those weird sounds and lights, right?</m>
+            </dlg>
+            <anim target="MAX" trigger="shrug" face="UPSET" />
+            <dlg char="MAX" track="MAX">
+                <m wait="0.5">Sigh... It's... complicated...</m>
+                <m>You're gonna just laugh at me...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>No I won't...</m>
+                <m>Come on... Try me...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="shrug" face="SIGH" />
+            <dlg char="MAX"  track="MAX">
+                <m>Well... Okay...</m>
+                <m>This is something you'd need to know sooner or later anyway...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="say-01" face="SIGH" />
+            <dlg char="MAX"  track="MAX">
+                <m wait="0.5">The truth is... I have some kind of "time rewind" super power and...</m>
+            </dlg>
+
+            <load-scene-object key="interrupt.prefab" active="false" />
+            <obj target="interrupt.prefab" active="true">
+                <message name="EnableRenegade" />
+                <message name="SetWaitInputTime"><float value="2.5"></float></message>
+                <outcome value="RENEGADE" destroy="true" clear="true" copy-to="TMP:0" />
+                <outcome value="TIME_UP" destroy="true" copy-to="TMP:0" />
+            </obj>
+
+            <if>
+                <check-text text="TMP:0" eq="RENEGADE" />
+                <then>
+                    <!-- (6): Laughed at time powers (renegade interrupt) -->
+                    <flag name="CHAR:MAX:INTERACTIONS" bit-on="6" /> 
+                    <load-scene-object key="cinemachine-impulse.prefab" destroy="3">
+                        <message name="GenerateImpulse"><float value="10" /></message>
+                    </load-scene-object>
+                    
+                    <sfx clip="interrupt-renegade" async="true" />
+                    <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>BWAHAHA! Come on, Kitty Pride... Are you serious!?</m>
+                    </dlg>
+                    <anim target="MAX" trigger="surprised" face="DISAPPROVE" />
+                    <dlg char="MAX"  track="MAX">
+                        <m>Hey... You said you wouldn't laugh!</m>
+                        <m>And yes, I'm dead serious! Do you wanna hear it or not?</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Sorry... That caught me by surprise...</m>
+                        <m>Come on... Tell me the whole story...</m>
+                    </dlg>
+                    <anim target="MAX" face="SIGH" />
+                    <dlg char="MAX"  track="MAX">
+                        <m>Sigh... Then try to behave...</m>
+                    </dlg>
+                    <wait time="1" />
+                </then>
+            </if>
+            
+            <anim target="MAX" face="NEUTRAL" />
+            <dlg char="MAX" track="MAX">
+                <m>... back there... I was...</m>
+                <m>I was trying to reverse today's events...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="MAX" face="UPSET" />
+            <dlg char="MAX" track="MAX">
+                <m>But I can't do it anymore...</m>
+                <m>Somehow I lost the ability to pull the trick...</m>
+                <m>My powers simply stopped working at the exact moment you 'appeared' in ${MISC:SCHOOL:NAME}...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>You mean I somehow took away your powers?</m>
+                <m>There it is... Yet another weird stuff to be blamed for, I guess...</m>
+            </dlg>
+            <wait time="1" />
+
+            <if>
+                <check-text text="TMP:0" neq="RENEGADE" />
+                <then>
+                    <anim target="MAX" trigger="surprised" face="SURPRISED" />
+                    <dlg char="MAX"  track="MAX">
+                        <m>Wait... You didn't laugh... Do you actually believe me?</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Of course... Why would I laugh?</m>
+                        <m>Besides... It kinda makes sense...</m>
+                        <m>I feel your story has something to do with the strange shit I've experiencing in this school...</m>
+                    </dlg>
+                    <flag name="CHAR:MAX:AFFINITY" inc="1" icon="AFFINITY">${CHAR:MAX:NAME} liked that</flag>
+                    <anim target="MAX" trigger="say-01" face="CUTE" />
+                    <dlg char="MAX"  track="MAX">
+                        <m>Well... Thanks for believing me!</m>
+                        <m>You're awesome!</m>
+                    </dlg>
+                </then>
+            </if>
+            
+            <anim target="MAX" trigger="say-01" face="NEUTRAL" />
+            <dlg char="MAX" track="MAX">
+                <m>Now... The only reason I'm talking about this... is because it also concerns you...</m>
+                <m>I mean... You don't have any memories from before today, do you?</m>
+            </dlg>
+            <anim target="MAX" trigger="shrug" />
+            <dlg char="MAX" track="MAX">
+                <m>Can you remember anything from before the moment you woke up at Mr. ${CHAR:JEF:NAME}'s class?</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Well... Now that you mentioned... My past memories are all kind of... blurred...</m>
+            </dlg>
+            
+            <anim target="MAX" trigger="say-01"  />
+            <dlg char="MAX" track="MAX">
+                <m>Yeah... Sorry... But that's my fault...</m>
+            </dlg>
+            
+            <wait time="1" />
+            <anim target="MAX" look="RIGHT" />
+            <dlg char="MAX" track="MAX">
+                <m>It all started here at this exact place... I was chilling here after class...</m>
+                <m>... when my I heard an old friend coming in...</m>
+            </dlg>
+            <anim target="MAX" idle="UPSET" face="UPSET" look="NEUTRAL" />
+            <dlg char="MAX" track="MAX">
+                <m wait="1">She was arguing with this person... But he had a gun and... He...</m>
+                <m wait="1">He shot her...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Holy shit...</m>
+            </dlg>
+
+            <anim target="MAX" idle="NEUTRAL" face="UPSET" />
+            <dlg char="MAX" track="MAX">
+                <m>It all happened so fast... I remember trying to reverse time and save her...</m>
+                <m>But I was too scared and... my powers got out of control...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>That doesn't sound good...</m>
+            </dlg>
+
+            <load-scene-object key="rac-flashback.prefab" />
+
+            <anim target="MAX" idle="NEUTRAL" face="NEUTRAL" />
+            <dlg char="MAX" track="MAX">
+                <m>You see... Before you appeared here... A girl went missing...</m>
+                <m>Her name was...</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Choose the girl name" /></message>
+                <message name="LoadGenerateList"><string value="female-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Rachel" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:RAC:NAME" destroy="true" />
+            </obj>
+
+            <anim target="rac-flashback.prefab" trigger="next"></anim>
+            
+            <anim target="MAX" idle="NEUTRAL" face="UPSET" look="NEUTRAL" />
+            <dlg char="MAX" track="MAX">
+                <m>Her name was ${CHAR:RAC:NAME}...</m>
+                <m>My powers sent me back to the days when she was still around here...</m>
+            </dlg>
+            <anim target="rac-flashback.prefab" trigger="next"></anim>
+            <dlg char="MAX" track="MAX">
+                <m>But at the same time... I was in another place... where I saw... you...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>So I randomly appeared in your mind trip... That's just my luck...</m>
+            </dlg>
+            
+            <anim target="MAX" trigger="say-01" face="UPSET" look="NEUTRAL" />
+            <dlg char="MAX" track="MAX">
+                <m>I guess you and ${CHAR:RAC:NAME} were both in a critical point of... parallel worlds... or different timelines...</m>
+                <m>It all ended in flash and a loud bang... I woke back at Mr ${CHAR:JEF:NAME}'s class and you were there sleeping...</m>
+                <m>I think I tangled your timelines together... And it seems it made you swap time and space with ${CHAR:RAC:NAME}...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Damn... I'm not saying you made all this up... But that sounds like some low budget trippy sci-fi shit...</m>
+                <m>And it doesn't explain why people simply accepts my sudden presence here, though...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="shrug" face="SIGH"  />
+            <dlg char="MAX" track="MAX">
+                <m>I think the universe is trying to adapt to the mess I made...</m>
+                <m>Because... Everybody knew ${CHAR:RAC:NAME} before... But now no one remembers her... It's like she never existed...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="say-01" face="NEUTRAL" />
+            <dlg char="MAX" track="MAX">
+                <m>Meanwhile... It's like people are somehow affected to not question your presence...</m>
+                <m>I've been seeing they act a little different when you're around...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Maybe it's my charm that is stunning them?</m>
+            </dlg>
+
+            <anim target="MAX" idle="UPSET" face="UPSET" />
+            <dlg char="MAX" track="MAX">
+                <m>No, it's not... And now I can't fix it...</m>
+                <m>Trying to use my powers now just make me fell sick and tired, nothing else!!</m>
+                <m>That's why I passed out "again"...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Well... Losing your powers might not be such bad news...</m>
+                <m>I mean... It sounds like you were about to tear the space-time continuum and destroy the entire universe...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="3" keep="true" />
+            <bootstrap node="fainted-again-2" />
+        </n>
+
+        <!--
+        ###############################################
+        ### fainted-again-2 ##############################
+        ###############################################
+        -->
+        <n id="fainted-again-2">
+            <fade-to-black speed="9999999" keep="true" />
+            <load-scene-object key="scene-max-restroom-05.prefab" rename="scene" />
+            <proxy target="scene/MAX" name="MAX" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <bgm loop="loop-max" volume="0.25" />
+            <fade-to-black speed="-3" />
+
+            <autosave label="Chatting with ${CHAR:MAX:NAME}" />
+
+            <dlg char="MAX" track="MAX">
+                <m>Yeah... Maybe you're right...</m>
+                <m wait="1">I should stop trying to mess with time for a while... I don't wanna make things even worse...</m>
+                <m>I just hope ${CHAR:RAC:NAME} is-</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <wait time="0.5" />
+            
+            <dlg char="MAX" track="MAX">
+                <m>ouch...</m>
+            </dlg>
+            <wait time="1" />
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey... Are you okay?</m>
+            </dlg>
+            <dlg char="MAX" track="MAX">
+                <m>i... i just... need...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <wait time="1" />
+            
+            <dlg char="MAX" track="MAX">
+                <m wait="1">.......</m>
+                <m wait="1">I... I'm sorry... This another nasty effect of those stupid powers......</m>
+                <m wait="1">It's the final touch in my loner weirdo image, isn't it?</m>
+                <m>...... i'm just... pathetic...</m>
+            </dlg>
+
+            <choice id="cheer-max-choice">
+                <c pos="NW" style="PARAGON">
+                    <text>No need to hide</text>
+                    <check-flag flag="PLAYER:STAT:PARAGON" gte="5" />
+                    <lock-reason>[Paragon 5+ required]</lock-reason>
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="7" />
+                        <anim target="scene" trigger="next" />
+                        <anim target="scene"><bool name="control" value="true" /></anim>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Hey... There's no reason to hide your face...</m>
+                        </dlg>
+
+                        <obj target="scene/axis-control" active="true" />
+                        <wait time="1" />
+                        <dlg char="MAX" track="MAX">
+                            <m wait="1">my face... is stupid... and i...</m>
+                            <m>i now people think i'm just another loser artist wannabe...</m>
+                        </dlg>
+                        
+                        <wait time="0.5" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="2.5">No, you're not...</m>
+                            <m>And why the hell would you care about what people think of you?</m>
+                        </dlg>
+                        <wait time="2" />
+                        <dlg char="MAX" track="MAX">
+                            <m>........</m>
+                        </dlg>
+                        
+                        <wait time="2" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="1">Look... I only met you a few minutes ago... but I can already say that you're such a lovely girl...</m>
+                        </dlg>
+
+                        <wait time="2" />
+                        <flag name="CHAR:MAX:AFFINITY" inc="2" icon="AFFINITY">${CHAR:MAX:NAME} liked that</flag>
+                        <dlg char="MAX" track="MAX">
+                            <m wait="2">thank you... i really needed to talk with someone...</m>
+                            <m>you... you seem to be a nice person...</m>
+                        </dlg>
+
+                        <anim target="scene" trigger="next" />
+                        <anim target="scene"><bool name="control" value="false" /></anim>
+
+
+                        <wait time="2" />
+                        <obj target="scene/axis-control" active="false" />
+
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Now you should get some rest...</m>
+                            <m>You have what is called the "Psychic Nosebleed"... Like Akira, The Butterfly Effect, Stranger Things... Writers have been abusing this trope for decades now...</m>
+                            <m>Enjoy a few hours of sleep and you'll be okay...</m>
+                        </dlg>
+
+                        <wait time="2" />
+                        <dlg char="MAX" track="MAX">
+                            <m wait="2">you're right... i'm so tired...</m>
+                            <m wait="1">Thanks again... I'm glad I met you...</m>
+                            <m>I should go now... I still have to work on Mr. ${CHAR:JEF:NAME}'s contest picture...</m>
+                            <m>We should meet again later... And try to fix this mess somehow...</m>
+                            <m>I'm sorry for interrupting your... work...</m>
+                            <m>See you later...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>Chill until you feel better</text>
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="8" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="1">Hey... I can see you've been under a lot of stress...</m>
+                            <m>You should just chill now... until you feel better...</m>
+                        </dlg>
+                        <dlg char="MAX" track="MAX">
+                            <m>Well... It's not like I remember the last time I wasn't stressed...</m>
+                            <m wait="1">But you're probably right... My mind is so tired that it's affecting my body...</m>
+                            <m>I should go now... I still have to work on Mr. ${CHAR:JEF:NAME}'s contest picture...</m>
+                            <m>We should meet again later... And try to fix this mess somehow...</m>
+                            <m>I'm sorry for interrupting your... work...</m>
+                            <m>See you later...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW" style="RENEGADE">
+                    <text>You can change</text>
+                    <check-flag flag="PLAYER:STAT:RENEGADE" gte="5" />
+                    <lock-reason>[Renegade 5+ required]</lock-reason>
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="9" />
+                        <anim target="scene" trigger="next" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="1">So... Are upset about being a wallflower?</m>
+                            <m>That is a choice, you know? You can be whoever you want...</m>
+                        </dlg>
+
+                        <dlg char="MAX" track="MAX">
+                            <m>i... i don't know...</m>
+                            <m>I mean... just... look at me...</m>
+                        </dlg>
+                        
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Let me show you something...</m>
+                        </dlg>
+
+                        <fade-to-black keep="true" speed="2" layer="-1" />
+                        <obj target="scene" destroy="0" />
+
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Here...</m>
+                        </dlg>
+
+                        <load-scene-object key="scene-max-restroom-06.prefab" rename="scene" />
+                        <proxy target="scene/MAX" name="MAX" />
+                        <proxy target="scene/PLAYER" name="PLAYER" />
+                        <fade-to-black speed="-2" />
+
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>So... What do you see there?</m>
+                        </dlg>
+
+                        <wait time="1" />
+
+                        <dlg char="MAX" track="MAX">
+                            <m>i just... i... i don't...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>I see a pretty and talented girl that just needs a confidence boost...</m>
+                            <m>Don't you want to be strong? To be... noticed?</m>
+                        </dlg>
+
+                        
+                        <dlg char="MAX" track="MAX">
+                            <m>i... i think i do...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Well... I know changing is not easy...</m>
+                            <m>But this change is what will make your life... and you art grow...</m>
+                        </dlg>
+
+                        <wait time="1" />
+
+                        <dlg char="MAX" track="MAX">
+                            <m>please... you... you know your presence is affecting people in this place...</m>
+                            <m>you're not trying to use that influence on me, are you?</m>
+                        </dlg>
+
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Of course not...</m>
+                            <m>It's just some friendly advice... I wanna see you... improve...</m>
+                        </dlg>
+
+                        <wait time="1" />
+
+                        <dlg char="MAX" track="MAX">
+                            <m wait="2">I... I want that too...</m>
+                            <m>Please, I... I need to go now... I still have to work on Mr. ${CHAR:JEF:NAME}'s contest picture...</m>
+                            <m>We can talk about this mess later...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Okay... See you later then...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="0.5" />
+            <bootstrap node="end" />
+        </n>
+
+        <!--
+        ###############################################
+        ### end ##############################
+        ###############################################
+        -->
+        <n id="end">
+            <fade-to-black speed="9999999" keep="true" />
+            <load-scene-object key="shot-restroom-women-01.prefab" rename="shot" />
+            <fade-to-black speed="-1" />
+
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <proxy target="shot/player" name="PLAYER" />
+
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Okay... It seems I'm involved in some really crazy shit this time...</m>
+                <m wait="1">I've heard about girls doing weird stuff in their restrooms, but I didn't expect that...</m>
+                <m>I guess I don't have much of a choice but keep following the school routine...</m>
+                <m>I should keep my eye on her...</m>
+            </dlg>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:MEM_CARD" bit-set="12" />
+                    <check-flag flag="QUEST:MEM_CARD" bit-unset="13" />
+                </check-group>
+                <then>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>For now... I can say there's no one else in this restroom... Just like ${CHAR:BRK:NAME} wanted...</m>
+                        <m>I'd better break the news for her...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <fade-to-black keep="true" speed="1" />
+            <bootstrap script="location-restroom-women-01/location" spawn="spawn/mirrors" />
+        </n>
+    </nodes>
+</xml-script>

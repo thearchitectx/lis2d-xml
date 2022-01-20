@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <dlg char="PLAYER" track="#Player">
+                <m>Shiny... What's this?</m>
+            </dlg>
+
+            <load-scene-object key="image-viewer.prefab">
+                <message name="SetReadInput"><bool value="false" /></message>
+                <message name="SetImage"><string value="icon-bracelet" /></message>
+                <message name="SetImageScale"><float value="0.25" /></message>
+            </load-scene-object>
+
+            <choice>
+                <c pos="E">
+                    <text>[Take]</text>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Now let's see...</m>
+                            <m wait="1">This must be ${CHAR:COU:NAME}'s bracelet... The one ${CHAR:TAY:NAME} is looking for...</m>
+                            <m>${CHAR:TAY:NAME} will be happy if I give this to her...</m>
+                        </dlg>
+
+                        <obj target="sprite" destroy="0" />
+                        <sfx clip="item" async="true" />
+                        <obj target="image-viewer.prefab">
+                            <message name="FadeAndDestroy" />
+                        </obj>
+
+                        <flag name="ITEM:BRACELET" set="1" icon="QUEST">You found '${ITEM:BRACELET:LABEL}'</flag>
+                        <flag name="QUEST:PRINCIPAL1" bit-on="9" icon="QUEST">Objectives updated!</flag>
+                        <string name="QUEST:PRINCIPAL1:OPT1:OBJECTIVE" unset="true" />
+
+                        <obj target="#Player">
+                            <message name="SetInputActive"><bool value="true" /></message>
+                        </obj>
+                        <script-outcome value="_destroyParent" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Leave]</text>
+                </c>
+            </choice>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+
+    </nodes>
+</xml-script>

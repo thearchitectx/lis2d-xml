@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="n1">
+            <fade-to-black keep="true" speed="1000" />
+            <bgm loop="loop-urban" as-music="false" volume="0.25" fade-speed="0.5" />
+            
+            <load-scene-object key="location-mainhall-01.prefab" rename="location"/>
+
+            <if>
+                <check-flag flag="QUEST:MEM_CARD" bit-unset="13" />
+                <then>
+                    <if>
+                        <check-text text="CHAR:BRK:NAME" eq="#EMPTY" />
+                        <then>
+                            <string name="CHAR:BRK:NAME" set="Geeky Girl" />
+                        </then>
+                    </if>
+
+                    <load-scene-object key="location-mainhall-01-brk.prefab" parent="location" />
+                </then>
+            </if>
+
+            <!-- lost money 02 -->
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="12" />
+                <then>
+                    <load-scene-object key="location-mainhall-01-lost-money-02.prefab" parent="location" />
+                </then>
+            </if>
+
+            <!-- bracelet -->
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:PRINCIPAL1" bit-set="6" />
+                    <check-flag flag="QUEST:PRINCIPAL1" bit-set="7" />
+                    <check-flag flag="QUEST:PRINCIPAL1" bit-unset="9" />
+                </check-group>
+                <then>
+                    <load-scene-object key="location-mainhall-01-bracelet.prefab" parent="location" />
+                </then>
+            </if>
+
+            <fade-to-black speed="-1" />
+
+            <autosave label="Main Hall - Exploring" />
+
+            <inject node="lib-post-start" />
+        </n>
+    </nodes>
+</xml-script>

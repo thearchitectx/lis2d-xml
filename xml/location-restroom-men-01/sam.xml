@@ -1,0 +1,497 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Hello there...</m>
+            </dlg>
+            
+            <bgm volume="0" />
+            <fade-to-black speed="1" keep="true" />
+
+            <bootstrap node="start" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## start ######################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black speed="10000" keep="true" />
+            <bgm loop="loop-sam" volume="0.2"/>
+            
+            <load-scene-object key="shot-restroom-men-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-sam-01.prefab" rename="SAM" />
+            <proxy target="shot/player" name="PLAYER" />
+            
+            <fade-to-black speed="-1" />
+            <obj target="PLAYER">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <autosave label="Men's Restroom - ${CHAR:SAM:NAME}" />
+
+            <dlg char="SAM" track="SAM">
+                <m>Greetings, youngster...</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## dialog-root ###############################################
+            ##############################################################
+        -->
+        <n id="dialog-root">
+            <choice>
+                <c pos="W" out="whats-up">
+                    <check-flag flag="CHAR:SAM:INTERACTIONS" bit-unset="0" />
+                    <text>What's up?</text>
+                </c>
+                <c pos="NW" out="helper">
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:SAM:INTERACTIONS" bit-set="0" />
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="1" />
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-unset="2" />
+                    </check-group>
+                    <text>The principal sent me here</text>
+                </c>
+                <c pos="SW" out="two-girls">
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:SAM:INTERACTIONS" bit-set="0" />
+                        <check-flag flag="CHAR:SAM:INTERACTIONS" bit-unset="4" />
+                    </check-group>
+                    <text>Did you see two girls here?</text>
+                </c>
+                <c pos="E">
+                    <text>I should go</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>I should go...</m>
+                        </dlg>
+                        <node-output node="end" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--
+            ##############################################################
+            ## whats-up ##################################################
+            ##############################################################
+        -->
+        <n id="whats-up">
+            <dlg char="PLAYER" track="PLAYER">
+                <m>So... What's up around here?</m>
+            </dlg>
+            
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="His name is:" /></message>
+                <message name="LoadGenerateList"><string value="male-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Samuel" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:SAM:NAME" destroy="true" />
+            </obj>
+
+            <if>
+                <check-flag flag="CHAR:SAM:INTERACTIONS" bit-unset="0" />
+                <then>
+                    <flag name="CHAR:SAM:INTERACTIONS" bit-on="0" />
+                    <anim target="SAM" trigger="say-01" />
+                    <dlg char="SAM" track="SAM">
+                        <m>Hello... I am ${CHAR:SAM:NAME}...</m>
+                        <m>And you... I see... Are another student eager to take a route on life's crossroads...</m>
+                    </dlg>
+                </then>
+            </if>
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="1" />
+                <then>
+                    <anim target="SAM" trigger="say-01" />
+                    <dlg char="SAM" track="SAM">
+                        <m>It would be entertaining to chat with you...</m>
+                        <m wait="0.5">But sometimes... just sometimes... The universe demands order...</m>
+                        <m>So, please... First, meet the principal and then we can continue this conversation...</m>
+                    </dlg>
+
+                    <node-output node="end" />
+                </then>
+            </if>
+
+            <dlg char="SAM" track="SAM">
+                <m>You already met the Principal... Am I right?</m>
+            </dlg>
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Actually I did... How did you know, dude?</m>
+            </dlg>
+
+            <anim target="SAM" trigger="say-01" />
+            <dlg char="SAM" track="SAM">
+                <m wait="0.5">There are many answers to that question...</m>
+                <m>Space and time flows everywhere in this world, and if you listen carefully... you can read all information the universe produces...</m>
+            </dlg>
+            <anim target="SAM" face="SIGH" />
+            <dlg char="SAM" track="SAM">
+                <m>... in small threads of light... quantum converging points... flag variables in a game state file...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>..........</m>
+                <m>Yeah... I think the principal probably just texted you to saying I was coming...</m>
+            </dlg>
+            
+            <anim target="SAM" trigger="shrug" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m>Unfruitful concerns that consume the world's vital energy...</m>
+                <m>But the truth is always like sunshine... It enlightens but also always cast a shadow...</m>
+            </dlg>
+            <anim target="SAM" face="SIGH" />
+            <dlg char="SAM" track="SAM">
+                <m>All I can say is... My spirit animal whispers, even when I don't ask...</m>
+            </dlg>
+
+            <choice id="first-dialog-01">
+                <c pos="NW">
+                    <text>The Wise Mystical Janitor!</text>
+                    <then>
+                        <flag name="PLAYER:STAT:PARAGON" icon="PARAGON" inc="1">Paragon +1</flag>
+                        <flag name="CHAR:SAM:INTERACTIONS" bit-on="1" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Are you the local "Wise Mystical Janitor"? Seriously?</m>
+                            <m>This school looked hip at first, but I'm starting to feel I'm in "Not Another Teen Movie"...</m>
+                        </dlg>
+                        <anim target="SAM" trigger="giggle" face="CUTE" />
+                        <dlg char="SAM" track="SAM">
+                            <m wait="0.5">Ha... Check this out... The first who actually gets it...</m>
+                            <m>I know exactly what are you talking about, man... Isn't Mr. T the best?</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>I have a spirit animal too!</text>
+                    <then>
+                        <flag name="CHAR:SAM:INTERACTIONS" bit-on="2" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>The spirit animal... Like our destiny shining at the horizon...</m>
+                            <m>Prompting us to face the universe in many different lifetimes...</m>
+                        </dlg>
+                        <anim target="SAM" trigger="say-01" face="DISAPPROVE" />
+                        <dlg char="SAM" track="SAM">
+                            <m>Hey... Are you trying to actually say something or just trying to mock me?</m>
+                            <m>I can't say which one you're doing worst...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>Are you baked?</text>
+                    <then>
+                        <flag name="PLAYER:STAT:PARAGON" icon="RENEGADE" inc="1">Renegade +1</flag>
+                        <flag name="CHAR:SAM:INTERACTIONS" bit-on="3" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Are you baked?</m>
+                            <m>Get your shit together, man... You're on the clock...</m>
+                        </dlg>
+                        <anim target="SAM" trigger="say-01" face="DISAPPROVE" />
+                        <dlg char="SAM" track="SAM">
+                            <m>Oh... So smart...</m>
+                            <m>Like I haven't been heard that a hundred times already...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="SAM" trigger="shrug" face="SIGH" />
+            <dlg char="SAM" track="SAM">
+                <m wait="0.5">Sigh... I feel there's no problem to open up about it with you...</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="SAM" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m>Because... Yes... Of course it's an act...</m>
+                <m>I mean... Look at me... It's like someone designed me to look like a creep...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="SAM" trigger="say-01"  />
+            <dlg char="SAM" track="SAM">
+                <m>I had to come up with some cool quirk that would balance my appearance... Or else all the girl's in this school would be too afraid of me and never come near...</m>
+                <m>And if they didn't come near... how would I know the sweet scent of each one of them? How would I know each detail of their skin?</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="SAM" face="SIGH" />
+            <dlg char="SAM" track="SAM">
+                <m>Oh, boy... And they smell so good...</m>
+            </dlg>
+            
+            <wait time="1.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I don't think it's about the looks in your case...</m>
+                <m>I mean... A man on his 50s pulling tricks to sniff teenage girls is the sheer definition of a creep...</m>
+            </dlg>
+            
+            <anim target="SAM" face="DISAPPROVE" />
+            <dlg char="SAM" track="SAM">
+                <m>Bullshit... Have you ever seen a good looking man being judged like that?</m>
+            </dlg>
+            <anim target="SAM" trigger="say-01" />
+            <dlg char="SAM" track="SAM">
+                <m>If George Clooney walked around sniffing girls he would be called 'eccentric', not a 'creep'!</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Yeah... Whatever you say, man...</m>
+            </dlg>
+
+            <dlg char="SAM" track="SAM">
+                <m>Anyways... You're not here to talk about my lifestyle, are you?</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## helper ####################################################
+            ##############################################################
+        -->
+        <n id="helper">
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey... The principal told me to meet you...</m>
+                <m>It seems I'm supposed to be your... helper?</m>
+            </dlg>
+
+            <anim target="SAM" trigger="giggle" face="CUTE" />
+            <dlg char="SAM" track="SAM">
+                <m wait="0.5">Bwahaha! Isn't that man ridiculous?</m>
+                <m>I mean... After many years working here, this job started to really bore me...</m>
+            </dlg>
+            
+            <anim target="SAM" trigger="shrug" />
+            <anim target="SAM" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m>So I pretty much space out here the whole day dreaming about the cuties of this school...</m>
+                <m>But that idiot thinks I'm taking longer to get work done because I'm getting old or some shit like that...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Won't he kick out of the job? He surely seems the type who loves to fire people...</m>
+            </dlg>
+
+            <anim target="SAM" trigger="giggle" face="CUTE" />
+            <dlg char="SAM" track="SAM">
+                <m>He doesn't have the balls to fire an ancient ${MISC:SCHOOL:NAME} heritage like me...</m>
+            </dlg>
+            <anim target="SAM" face="NEUTRAL" />
+            
+            <choice>
+                <c pos="NW">
+                    <text>He made you my 'advisor'</text>
+                    <text></text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="0.5">So he made you my internship 'advisor'... Just my luck...</m>
+                            <m>It seems the principal mixed business and pleasure in this move...</m>
+                        </dlg>
+                        <anim target="SAM" trigger="shrug" />
+                        <dlg char="SAM" track="SAM">
+                            <m wait="0.5">Hey... We live in a society that likes to look down on physical labor...</m>
+                            <m>But you should be proud... How would the world work without us, the blue collar army?</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>I have to cover your lazy ass</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="0.5">Great... Now I have to cover the poor work of a lazy ass... Thanks a lot...</m>
+                            <m>Internship is indeed an accurate preview for adult life, I guess...</m>
+                        </dlg>
+                        <anim target="SAM" trigger="say-01"  />
+                        <dlg char="SAM" track="SAM">
+                            <m wait="0.5">You see... It's not that I'm lazy... I simply don't care... Not nearly as much as before...</m>
+                            <m>It's one of the few good perks of getting old...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="SAM" trigger="shrug" face="SIGH" />
+            <dlg char="SAM" track="SAM">
+                <m>Also... This job offers some benefits that you might not be aware of...</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="SAM" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m>For example... What do think about getting into the girl's restroom?</m>
+                <m>Because that's the place we need some garbage collection next!</m>
+                <m>Nice, huh!?</m>
+            </dlg>
+
+            <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Clean the girl's restroom" />
+            <flag name="QUEST:PRINCIPAL1" bit-on="2" icon="QUEST">Objectives updated</flag>
+
+            <if>
+                <check-flag flag="QUEST:DEEP_FAKE1" bit-set="1" />
+                <then>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="0.25">That's actually quite... convenient...</m>
+                        <m>I'm on a quest about getting in there...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Yeah... Sure... It's my dream...</m>
+                        <m>Do I simply get into there and say hello to the girls?</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <anim target="SAM" trigger="say-01" />
+            <dlg char="SAM" track="SAM">
+                <m>Well... Unfortunately you must wait for the restroom to be empty before going in...</m>
+                <m wait="0.5">Just knock and ask if there's anyone in... It sucks, but you don't wanna give reasons for the principal to bust your ass...</m>
+                <m>Report to me when the work is done...</m>
+            </dlg>
+            <anim target="SAM" trigger="giggle" face="CUTE" />
+            <dlg char="SAM" track="SAM">
+                <m>Have fun!</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## two-girls ####################################################
+            ##############################################################
+        -->
+        <n id="two-girls">
+            <flag name="CHAR:SAM:INTERACTIONS" bit-on="4" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I saw two girls coming out of this room earlier...</m>
+                <m>What the hell were they doing here?</m>
+            </dlg>
+            <anim target="SAM" trigger="say-01" face="CUTE" />
+            <dlg char="SAM" track="SAM">
+                <m>Oh, man... They're hot, aren't they?</m>
+            </dlg>
+            <anim target="SAM" face="SIGH" />
+            <dlg char="SAM" track="SAM">
+                <m>But they're also a thorn in my side...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>What's the matter? I thought you were always excited with the opportunities to sniff girls...</m>
+            </dlg>
+
+            <anim target="SAM" trigger="say-01" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m>The problem is their rich kids club assigning them those 'tasks'...</m>
+                <m>I mean... I don't care when they just call me a 'weirdo'... But those two are on a quest to "expose" me...</m>
+            </dlg>
+            <anim target="SAM" trigger="shrug" face="SIGH" />
+            <dlg char="SAM" track="SAM">
+                <m>I'm trying to stay more time at the men's room also to avoid them... But that's not stopping them to coming in to accuse me of my "crimes"...</m>
+            </dlg>
+            <anim target="SAM" face="NEUTRAL" />
+
+            <wait time="1.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Tough luck, huh?</m>
+            </dlg>
+
+            <anim target="SAM" trigger="say-01" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m>Well... You could help me with that by changing the way those girls think...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Me? What the hell could I do?</m>
+            </dlg>
+
+            <anim target="SAM" trigger="say-01" />
+            <dlg char="SAM" track="SAM">
+                <m>Look... I can feel you emanating a different energy...</m>
+            </dlg>
+            <anim target="SAM" trigger="shrug" face="SIGH" />
+            <dlg char="SAM" track="SAM">
+                <m>Some kind of aura that is foreign to this universe, twisting the way this world is supposed to be...</m>
+                <m>I feel like it affected me already, and I think you can use it to influence things around here...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey... Are you back saying mystical crap again?</m>
+            </dlg>
+            
+            <anim target="SAM" trigger="say-01" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m>No, man... I'm dead serious... I've been feeling this world changing since the moment you appeared here...</m>
+                <m>It's like you carry in yourself a rift in space-time... and the energy that comes through that affects everything around you...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Dude... You're totally in the loony janitor mode again...</m>
+                <m>And that trend of inserting supernatural elements in a seemingly realistic teen plot is getting old, you know...</m>
+            </dlg>
+
+            <anim target="SAM" trigger="shrug" />
+            <dlg char="SAM" track="SAM">
+                <m>If you don't believe me, then you should try to use this energy when the right opportunity appears...</m>
+                <m>You might be able to influence matter and minds!</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Are you saying I can do some kind of Jedi tricks now!?!.</m>
+            </dlg>
+
+            <flag name="PLAYER:STAT:RIFT" inc="2" icon="RIFT">You earned 2 Rift Energy Points</flag>
+
+            <sys>
+                RIFT ENERGY\n\n
+                You can use *Rift Energy Points* in specific moments during the game\n
+                It can open shortcuts during quests or enable special events during some scenes\n
+                Spend Rift Energy points wisely, as they can only be recovered by special items or by performing certain tasks\n
+            </sys>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Let me guess... I'll get a nosebleed if I overuse this power, right?</m>
+                <m>Hard magic systems suck...</m>
+            </dlg>
+
+            <anim target="SAM" trigger="shrug" face="DISAPPROVE" />
+            <dlg char="SAM" track="SAM">
+                <m>Hey... You're being kind of a jerk now...</m>
+                <m>Just try to focus the energy at the right time and you'll understand...</m>
+            </dlg>
+            <anim target="SAM" face="NEUTRAL" />
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## end ##################################################
+            ##############################################################
+        -->
+        <n id="end">
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap script="location-restroom-men-01/location" spawn="spawn/middle" />
+        </n>
+    </nodes>
+</xml-script>

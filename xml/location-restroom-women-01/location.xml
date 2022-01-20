@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="n1">
+            <fade-to-black keep="true" speed="1000" />
+            <bgm loop="loop-urban" as-music="false" volume="0.25" fade-speed="0.25" />
+
+            <load-scene-object key="location-restroom-women-01.prefab" rename="location"/>
+
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="12" /> <!-- (12): Collected PIZZA -->
+                <then>
+                    <load-scene-object key="location-restroom-women-01-pizza.prefab" rename="pizza"/>
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="13" /> <!-- (13): Collected BOTTLE -->
+                <then>
+                    <load-scene-object key="location-restroom-women-01-bottle.prefab" rename="bottle"/>
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="14" /> <!-- (14): Collected CAN -->
+                <then>
+                    <load-scene-object key="location-restroom-women-01-can.prefab" rename="can"/>
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="15" /> <!-- (15): Collected BANANA PEEL -->
+                <then>
+                    <load-scene-object key="location-restroom-women-01-banana.prefab" rename="banana"/>
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="CHAR:MAX:INTERACTIONS" bit-unset="0" /> <!-- (0): Met on restroom scene -->
+                <then>
+                    <load-scene-object key="location-restroom-women-01-max-trigger.prefab" rename="max-trigger"/>
+                </then>
+            </if>
+
+            
+            <fade-to-black speed="-1" />
+
+            
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="11" /> <!-- (11): Entered women's room once -->
+                <then>
+                    <flag name="QUEST:PRINCIPAL1" bit-on="11" />
+                    <inject node="first-enter" />
+                </then>
+            </if>
+            
+            <autosave label="Women's Restroom - Exploring" />
+
+            <inject node="lib-post-start" />
+        </n>
+
+
+        <!--
+        ##############################################################
+        ## first-enter ##########################################
+        ##############################################################
+        -->
+        <n id="first-enter">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+            <dlg char="PLAYER" track="#PlayerTrack">   
+                <m wait="2">Uuh... Hello?</m>
+                <m>Well... Guess I free to do my business here...</m>
+            </dlg>
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+    </nodes>
+</xml-script>

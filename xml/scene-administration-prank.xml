@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <n id="root">
+            <fade-to-black keep="true" speed="1000" />
+            <bgm loop="loop-pri" volume="0.25" fade-speed="0.5" />
+            <load-scene-object key="scene-administration-prank.prefab" rename="PRI" />
+
+            <fade-to-black speed="-0.25" />
+            <wait time="1" />
+            <dlg char="PRI" track="PRI">
+                <m>Dear God... There's still so much work to be done in the performance reports...</m>
+                <m>Why there's always so much-</m>
+            </dlg>
+
+            <sfx clip="beep" async="false" />
+
+            <dlg char="PRI" track="PRI">
+                <m wait="1">Huh... A message... from...</m>
+                <m wait="1">Mister Prescott!?!</m>
+                <m wait="2">Oh, Lord... He's asking to meet him at the parking lot right now...</m>
+                <m>I can't leave the man waiting...</m>
+            </dlg>
+
+            <sfx clip="door-transition" async="true" />
+            <fade-to-black keep="true" speed="4" />
+            <dlg char="PRI">
+                <m>Get out of the way, boys... I have urgent matters to take care of...</m>
+            </dlg>
+
+            <sfx clip="swoosh" />
+            <wait time="1" />
+
+            <fade-to-black speed="-2" />
+
+            <anim target="PRI" trigger="next" />
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Nice... He took the bait... Left in such a hurry that he didn't even locked the door...</m>
+                <m>The way is open to sneak into his office...</m>
+            </dlg>
+
+            <flag name="QUEST:MEM_CARD" bit-on="10" />
+
+            <fade-to-black keep="true" speed="0.5" />
+            <bgm volume="0" />
+            <sfx clip="door-transition" />
+            <bootstrap script="location-office-01/location" spawn="spawn/door" />
+        </n>
+    </nodes>
+</xml-script>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="sfx">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="explosion" />
+            <xs:enumeration value="swoosh" />
+            <xs:enumeration value="impact" />
+            <xs:enumeration value="item" />
+            <xs:enumeration value="beep" />
+            <xs:enumeration value="knock-door" />
+            <xs:enumeration value="interrupt-paragon" />
+            <xs:enumeration value="interrupt-renegade" />
+            <xs:enumeration value="door-transition" />
+            <xs:enumeration value="voice-gasp-a" />
+            <xs:enumeration value="voice-hem-a" />
+            <xs:enumeration value="voice-hem-b" />
+            <xs:enumeration value="voice-sigh-a" />
+            <xs:enumeration value="voice-sigh-b" />
+            <xs:enumeration value="voice-huh-a" />
+            <xs:enumeration value="voice-huh-b" />
+            <xs:enumeration value="rummage" />
+            <xs:enumeration value="whistle-song" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="loop">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="loop-brk" />
+            <xs:enumeration value="loop-jul" />
+            <xs:enumeration value="loop-jus" />
+            <xs:enumeration value="loop-kate" />
+            <xs:enumeration value="loop-max" />
+            <xs:enumeration value="loop-pri" />
+            <xs:enumeration value="loop-rumble" />
+            <xs:enumeration value="loop-sam" />
+            <xs:enumeration value="loop-tay" />
+            <xs:enumeration value="loop-title" />
+            <xs:enumeration value="loop-urban" />
+            <xs:enumeration value="loop-vic" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <!-- Received clean restroom quest objective? -->
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="2" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>This is the girl's restroom. Trying to get in without an 'official' excuse would only lead me to a lot of trouble...</m>
+                    </dlg>
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="true" /></message>
+                    </obj>
+                    <script-outcome value="_end" />
+                </then>
+            </if>
+
+            <!-- TAY at door ? -->
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:PRINCIPAL1" bit-set="2" />
+                    <check-flag flag="QUEST:PRINCIPAL1" bit-unset="3" />
+                </check-group>
+                <then>
+                    <bgm volume="0" />
+                    <fade-to-black keep="true" speed="2" />
+                    <bootstrap script="scene-tay-women-restroom-door" />
+                </then>
+            </if>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:PRINCIPAL1" bit-set="3" /> <!-- (3): TAY left women restroom -->
+                    <check-flag flag="QUEST:PRINCIPAL1" bit-unset="11" /> <!-- (11): Entered women's room once -->
+                </check-group>
+                <then>
+                    <bgm volume="0" />
+                    <fade-to-black keep="true" speed="2" />
+                    <bootstrap node="first-time-enter" />
+                </then>
+            </if>
+
+            <sfx clip="door-transition" async="true" />
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="2" />
+
+            <bootstrap script="location-restroom-women-01/location" spawn="spawn/door" />
+        </n>
+
+        <!--
+        ##############################################################
+        ## first-time-enter ##########################################
+        ##############################################################
+        -->
+        <n id="first-time-enter">
+            <fade-to-black keep="true" speed="10000" />
+            <bgm loop="loop-urban" as-music="false" volume="0" />
+            <load-scene-object key="shot-mainhall-03.prefab" rename="shot" />
+            <fade-to-black speed="-1" />
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+            <proxy target="shot/player" name="PLAYER" />
+            
+            <choice>
+                <c pos="W">
+                    <text>[ Knock ]</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Sigh... This is going to be awkward...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <sfx clip="knock-door" async="false" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Hello? Anybody there?</m>
+                        </dlg>
+                        
+                        <sfx clip="knock-door" async="false" />
+                        <wait time="1" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Can't hear anyone answering...</m>
+                            <m wait="1">I'm coming in!! Last warning!!</m>
+                        </dlg>
+
+                        <fade-to-black keep="true" speed="1" />
+                        <sfx clip="door-transition" async="false" />
+                        <bootstrap script="location-restroom-women-01/location" spawn="spawn/door" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[ Leave ]</text>
+                    <then>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" speed="3" />
+                        <bootstrap script="location-mainhall-02/location" spawn="spawn/women-restroom" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+        
+    </nodes>
+</xml-script>

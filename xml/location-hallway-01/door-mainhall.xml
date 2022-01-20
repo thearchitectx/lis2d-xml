@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <sfx clip="door-transition" async="true" />
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="3" />
+
+            <bootstrap script="location-mainhall-01/location" spawn="spawn/hallway" />
+        </n>
+
+
+    </nodes>
+</xml-script>

@@ -1,0 +1,928 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <string name="QUEST:MEM_CARD:RETURN_LOCATION" set="${ARG:0}" />
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Hello...</m>
+            </dlg>
+            
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="3" />
+            <bootstrap node="start" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## start ######################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black keep="true" speed="1000" />
+            <load-scene-object key="shot-mainhall-01.prefab" rename="shot" />
+            <fade-to-black speed="-1" />
+            <bgm loop="loop-brk" volume="0.25" />
+
+            <load-scene-object key="shot-char-brk-01.prefab" proxy="BRK">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <autosave label="Main Hall - Chatting with ${CHAR:BRK:NAME}" />
+
+            <if>
+                <check-flag flag="QUEST:MEM_CARD" bit-unset="0" />
+                <then>
+                    <node-output node="first-dialog" />
+                </then>
+            </if>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:MEM_CARD" bit-set="5" />
+                    <check-flag flag="QUEST:MEM_CARD" bit-unset="12" />
+                </check-group>
+                <then>
+                    <dlg char="BRK" track="BRK">
+                        <m>So... Did you already find a way to recover my memory card?</m>
+                        <m>Please, hurry... The principal might try to check it any time now...</m>
+                    </dlg>
+                </then>
+            </if>
+            <if>
+                <check-flag flag="QUEST:MEM_CARD" bit-set="12" />
+                <then>
+                    <dlg char="BRK" track="BRK">
+                        <m>So... Did you find a way to check the girl's restroom?</m>
+                    </dlg>
+                </then>
+            </if>
+            
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## first-dialog ##############################################
+            ##############################################################
+        -->
+        <n id="first-dialog">
+            <flag name="QUEST:MEM_CARD" bit-on="0" />
+            <dlg char="BRK" track="BRK">
+                <m>Huh!? Who the hell are...</m>
+            </dlg>
+            
+            <wait />
+
+            <anim target="BRK" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m>Wait... I know who you are... The mysterious new guy...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>You know me but I don't know you... How fair is that?</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="Choose the girl name" /></message>
+                <message name="LoadGenerateList"><string value="female-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Brooke" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:BRK:NAME" destroy="true" />
+            </obj>
+
+            <anim target="BRK" trigger="shrug" />
+            <dlg char="BRK" track="BRK">
+                <m>Oh... My name is ${CHAR:BRK:NAME}...</m>
+                <m>I'm the brightest student of this school and high rank officer in the fight against patriarchy...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m wait="0.5">Yeah... The patriarchy...  Of course...</m>
+                <m wait="0.5">But... You said you know me?</m>
+                <m>My memories are not exactly clear right now, however... I don't remember being famous or anything...</m>
+            </dlg>
+
+            <anim target="BRK" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m>No, dummy... I know you because I hacked the school student database and stumbled upon your file...</m>
+                <m>Unfortunately my rootkit never fully acquired administrative rights, so I just got basic info like your name and weekly schedule...</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Hum... That's interesting...</m>
+            </dlg>
+
+            <anim target="BRK" face="DISAPPROVE" trigger="surprised" />
+            <dlg char="BRK" track="BRK">
+                <m>Interesting!?! Just... 'interesting'!?!</m>
+                <m>Don't you know what a rootkit is?!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>It's like a-</m>
+            </dlg>
+
+            <anim target="BRK" face="SIGH" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m>Yeah... You'll say it's like a virus, but it's more a program targeted to exploit specific vulnerabilities...</m>
+            </dlg>
+            <anim target="BRK" face="NEUTRAL" />
+            <dlg char="BRK" track="BRK">
+                <m>Those vulnerabilities are like little doors that a skilled hacker is able to recognize and use to enter a remote system when they are not upgraded frequently...</m>
+                <m>Upgrades usually close those doors, but there's always new technical flaws we can exploit...</m>
+                <m>It's quite complex and something few people like me can do... It's not just 'interesting'...</m>
+                <m>Do you understand now?</m>
+            </dlg>
+
+            <choice id="brk-first-dialog">
+                <c pos="NE">
+                    <text>I didn't mean to underestimate your feat</text>
+                    <then>
+                        <flag name="CHAR:BRK:INTERACTIONS" bit-on="0" />
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Sorry... I didn't mean to understate your feat...</m>
+                            <m>I know how cool is what you did...</m>
+                        </dlg>
+                        <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                        <anim target="BRK" idle="UPSET" trigger="say-01"></anim>
+                        <dlg char="BRK" track="BRK">
+                            <m>Oh... Okay... I...</m>
+                        </dlg>
+                        <anim target="BRK" idle="UPSET" face="SIGH"></anim>
+                        <dlg char="BRK" track="BRK">
+                            <m>No... I should be the one apologizing... I shouldn't be bragging about that...</m>
+                            <m>It's one of my bad traits...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Don't worry ... I also have long list of bad traits too... I just need to remember all of them...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>Surely, after all that 'womansplaining'...</text>
+                    <then>
+                        <flag name="CHAR:BRK:INTERACTIONS" bit-on="1" />
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Yeah... After all that 'womansplaining' session, I think any moron would understand...</m>
+                        </dlg>
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <anim target="BRK" face="UPSET" trigger="surprised" />
+                        <dlg char="BRK" track="BRK">
+                            <m>What!? No... That's not what I was... I was just...</m>
+                            <m>I mean... that word you said... it doesn't even exist...</m>
+                            <m>I mean... it doesn't work that way...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Sure... Let's not start making up new words... No one likes that, right?</m>
+                        </dlg>
+                        <anim target="BRK" face="SIGH" />
+                        <dlg char="BRK" track="BRK">
+                            <m wait="1">Yeah... I... I'm sorry... I guess...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Nah... That's okay... Just messing with you...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="BRK" face="UPSET" idle="UPSET" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">Look... I don't usually behave like that... it's because I'm upset about my drone...</m>
+                <m>I mean... there's already a fair share of nasty spoiled girls in this school...</m>
+            </dlg>
+            <anim target="BRK" face="NEUTRAL" idle="NEUTRAL" />
+            <dlg char="BRK" track="BRK">
+                <m>And talking like that is just another of a way to increase their numbers...</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+
+        <!--
+            ##############################################################
+            ## dialog-root  ##############################################
+            ##############################################################
+        -->
+        <n id="dialog-root">
+            <flag name="QUEST:MEM_CARD" bit-on="0" />
+
+            <choice>
+                <c pos="NE" out="dialog-drone">
+                    <text>About your drone</text>
+                    <check-flag flag="QUEST:MEM_CARD" bit-unset="1" />
+                </c>
+                <c pos="NE" out="dialog-plan">
+                    <text>I have a plan!</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="6" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="7" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="8" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="10" />
+                    </check-group>
+                </c>
+                <c pos="NE">
+                    <text>School can't keep your stuff</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="1" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="2" />
+                    </check-group>
+                    <then>
+                        <flag name="QUEST:MEM_CARD" bit-on="2" />
+                        <flag name="QUEST:MEM_CARD" bit-on="3" />
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Don't worry about your drone... The school will give your stuff back later... A couple of days without it can't be so bad...</m>
+                        </dlg>
+            
+                        <anim idle="NEUTRAL" face="NEUTRAL" trigger="shrug"></anim>
+                        <dlg char="BRK" track="BRK">
+                            <m wait="0.5">Yeah... I guess you're right...</m>
+                        </dlg>
+                        <anim face="UPSET" idle="UPSET"></anim>
+                        <dlg char="BRK" track="BRK">
+                            <m>But... That's no the point...</m>
+                        </dlg>
+
+                        <node-output node="dialog-drone-2" />
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>You're hiding something</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="1" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="2" />
+                    </check-group>
+                    <then>
+                        <flag name="QUEST:MEM_CARD" bit-on="2" />
+                        <flag name="QUEST:MEM_CARD" bit-on="4" />
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Hey... I think you're not telling me the whole story about that drone business...</m>
+                            <m>The principal can't just keep your stuff forever, and you know it...</m>
+                            <m>Which means you must be concerned about something else...</m>
+                        </dlg>
+            
+                        <anim target="BRK" idle="UPSET" face="UPSET" trigger="surprised" />
+                        <dlg char="BRK" track="BRK">
+                            <m>Oh... No... I'm not... I... uuh........</m>
+                        </dlg>
+                        <wait time="1.5" />
+                        <anim target="BRK"  face="SIGH" idle="UPSET" />
+                        <dlg char="BRK" track="BRK">
+                            <m>Sigh... It's just too obvious, isn't?</m>
+                            <m>I guess I can't hide it form you...</m>
+                        </dlg>
+
+                        <node-output node="dialog-drone-2" />
+                    </then>
+                </c>
+                <c pos="NE" out="drone-dialog-offer-help">
+                    <text>I can help with your drone problem</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="2" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="5" />
+                    </check-group>
+                </c>
+                <c pos="E" out="end-quest">
+                    <text>I got your memory card!</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="11" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="12" />
+                    </check-group>
+                </c>
+                <c pos="NW">
+                    <text>Yearbook picture?</text>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Hey... Mister ${CHAR:JEF:NAME} assigned me to work on a yearbook project...</m>
+                            <m>Would you mind posing for a picture?</m>
+                        </dlg>
+                        <anim target="BRK" idle="NEUTRAL" face="DISAPPROVE" trigger="surprised" />
+                        <dlg char="BRK" track="BRK">
+                            <m wait="0.5">Yearbook? That doesn't sound right...</m>
+                            <m>Your fancy Art teacher usually go for more 'alternative' hip projects than a simple yearbook...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Well... can't say you're wrong about that...</m>
+                        </dlg>
+                        <anim target="BRK" idle="UPSET" face="UPSET" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m>Look... I'm really worried about my drone right now to think about pictures...</m>
+                        </dlg>
+                        <anim target="BRK" idle="UPSET" face="NEUTRAL" />
+                        <dlg char="BRK" track="BRK">
+                            <m>Maybe later, okay?</m>
+                        </dlg>
+
+                        <node-output node="dialog-root" />
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>About ${MISC:SCHOOL:NAME}</text>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>What can you tell me about ${MISC:SCHOOL:NAME}?</m>
+                        </dlg>
+                        <anim target="BRK" idle="NEUTRAL" face="NEUTRAL" trigger="shrug" />
+                        <dlg char="BRK" track="BRK">
+                            <m wait="0.5">Well... Not much...</m>
+                            <m>We have nice girls like ${CHAR:KATE:NAME} and bitchy girls like ${CHAR:VIC:NAME}...</m>
+                            <m wait="0.5">If you met those two then you already know the two borders of the spectrum...</m>
+                            <m>The boys... Well, they're are all assholes... Some a little more than others...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>I hope that doesn't include me...</m>
+                        </dlg>
+                        <anim target="BRK" idle="NEUTRAL" face="NEUTRAL" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m>You are being judged at this exact moment... So please, make an effort to be better than them... It's not that hard...</m>
+                        </dlg>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Whatever you say...</m>
+                        </dlg>
+
+                        <node-output node="dialog-root" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Leave]</text>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>See you later...</m>
+                        </dlg>
+
+                        <fade-to-black keep="true" />
+                        <bgm volume="0" />
+                        
+                        <bootstrap script="${QUEST:MEM_CARD:RETURN_LOCATION}" spawn="hallway-corner" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--
+            ##############################################################
+            ## dialog-drone  #############################################
+            ##############################################################
+        -->
+        <n id="dialog-drone">
+            <flag name="QUEST:MEM_CARD" bit-on="1" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>You said you where upset about your drone?</m>
+            </dlg>
+
+            <anim target="BRK" face="SIGH" />
+            <dlg char="BRK" track="BRK">
+                <m>Yeah... I messed up again...</m>
+                <m>The principal caught me flying it inside the building and confiscated it...</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Do you need a license to fly it or something?</m>
+            </dlg>
+
+            <anim target="BRK" face="UPSET" idle="UPSET" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m>No... I'm just not supposed to use while indoors...</m>
+                <m wait="0.5">I tried to tell the principal I was just checking if my new propellers were working but...</m>
+                <m>He started talking the old bullshit about never bending the rules or whatever...</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Jeez... I don't know him much... But I like him even less now...</m>
+            </dlg>
+
+            <anim target="BRK" face="SIGH" idle="UPSET" trigger="shrug" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">It was so embarrassing... Everybody passing by snickering while that creepy man lectured me about 'what ties society together'...</m>
+                <m>I... I just want my drone back...</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## dialog-drone-2  ###########################################
+            ##############################################################
+        -->
+        <n id="dialog-drone-2">
+            <anim target="BRK" face="UPSET" idle="UPSET" />
+            <dlg char="BRK" track="BRK">
+                <m wait="0.5">You see... It's not exactly... my drone... I'm worried about...</m>
+                <m>It's the memory card connected to the drone I need to get back before... before...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Hmm... So the plot thickens...</m>
+            </dlg>
+            
+            <anim target="BRK" face="SIGH" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">Yeah... I don't wanna to risk the principal snooping into my memory card, okay?</m>
+                <m>It would be really embarrassing....</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Memory card... embarrassing content...</m>
+                <m>Is it what I think it is?</m>
+            </dlg>
+
+            <anim target="BRK" face="UPSET" trigger="surprised" />
+            <dlg char="BRK" track="BRK">
+                <m>What!?! No!!! It's... it's just... evidence...</m>
+                <m>I mean... evidence of... my........ school hacking... that's it...</m>
+            </dlg>
+            <anim target="BRK" face="SIGH" />
+            <dlg char="BRK" track="BRK">
+                <m>And... I could get into serious trouble if the principal finds it in my memory card...</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## drone-dialog-offer-help  ##################################
+            ##############################################################
+        -->
+        <n id="drone-dialog-offer-help">
+            <flag name="QUEST:MEM_CARD" bit-on="5" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>I could give you hand to solve your lost drone problem, if you want...</m>
+            </dlg>
+            
+            <anim target="BRK"  face="CUTE" idle="CUTE" trigger="surprised" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">Oh... Would you really help me!?</m>
+                <m>Because.. I already have a plan that requires a little bit of your time...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Well... Let's hear it...</m>
+            </dlg>
+
+            <anim target="BRK"  face="NEUTRAL" idle="NEUTRAL" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m>All you need to do is to figure a way to lure the principal out of his office... Then sneak in and find my drone...</m>
+                <m>You need to take out the memory card and leave the drone there, or else he'll know what we did...</m>
+                <m>Isn't it a nice plan!?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>...it just requires "a little bit of my time"...</m>
+            </dlg>
+
+            <anim target="BRK"  face="SIGH" />
+            <dlg char="BRK" track="BRK">
+                <m>Yeah... I know my plan involves mostly your action, but... it's my only chance...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>I'll see what I can do, okay?</m>
+            </dlg>
+
+            <string name="QUEST:MEM_CARD:OBJECTIVE" set="Find a way to lure the principal out of his office, and recover ${CHAR:BRK:NAME}'s memory card" />
+
+            <anim target="BRK"  face="CUTE" trigger="surprised" />
+            <dlg char="BRK" track="BRK">
+                <m>Will you!? That's awesome!!</m>
+                <m>Please, don't take long... I'll be waiting here...</m>
+            </dlg>
+
+            <bgm volume="0"/>
+            <fade-to-black keep="true" />
+            <bootstrap script="${QUEST:MEM_CARD:RETURN_LOCATION}" spawn="hallway-corner" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## dialog-plan  ###########################################
+            ##############################################################
+        -->
+        <n id="dialog-plan">
+            <flag name="QUEST:MEM_CARD" bit-on="9" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Hey... I have a plan to fool the principal and gain access to his office...</m>
+            </dlg>
+            <anim target="BRK" face="CUTE" idle="CUTE" trigger="surprised" />
+            <dlg char="BRK" track="BRK">
+                <m>OMFG!! Really!?</m>
+                <m>So what are you waiting for? What is the plan about?</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>It's simple... I found the phone number of a hotshot named Prescott... Some kind of big donor...</m>
+            </dlg>
+            <anim target="BRK" face="UPSET" idle="UPSET" trigger="surprised" />
+            <dlg char="BRK" track="BRK">
+                <m>Oh, shit... That name...</m>
+                <m>You... You shouldn't say that name out loud around here...</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>What's up with not saying the name? I thought this was ${MISC:SCHOOL:NAME}, not Hogwarts...</m>
+            </dlg>
+            <anim target="BRK" face="SIGH" idle="CUTE" trigger="shrug" />
+            <dlg char="BRK" track="BRK">
+                <m>Look... The man you're talking about is powerful, evil and obsessed with this school...</m>
+                <m>So, yes... Take off his nose and he becomes pretty much the Voldemort of this place...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Whatever... We won't mess with him... only with the principal...</m>
+            </dlg>
+            <anim target="BRK" face="NEUTRAL" idle="NEUTRAL" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m>'Only' with the principal... right...</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Yes... Can you send a spoofed message to the his phone?</m>
+                <m>A message from Prescott, asking the principal to come out for an urgent meeting is all we need to make him leave the office for a few minutes...</m>
+            </dlg>
+            <anim target="BRK" face="NEUTRAL" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">Oh... That's...</m>
+                <m wait="0.5">That's actually a really good plan...</m>
+                <m>It seems you're not as useless as the other boys in this school...</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Whoa... Was that a compliment?</m>
+            </dlg>
+            <anim target="BRK" face="SIGH" trigger="shrug" />
+            <dlg char="BRK" track="BRK">
+                <m>Oh... Just shut up and let's do this...</m>
+            </dlg>
+            <anim target="BRK" face="CUTE" />
+            <dlg char="BRK" track="BRK">
+                <m>Spoof a message is the most basic trick... I can easily do that...</m>
+                <m>And you... Get ready to infiltrate the office!</m>
+            </dlg>
+
+            <dlg char="BRK" track="BRK">
+                <m>Principal ${CHAR:PRI:NAME} is about to receive a very important request!</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="0.5" />
+            <wait time="1" />
+            <bootstrap script="scene-administration-prank" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## end-quest  ###########################################
+            ##############################################################
+        -->
+        <n id="end-quest">
+            <flag name="QUEST:MEM_CARD" bit-on="12" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Hey... I found you memory card!</m>
+            </dlg>
+
+            <anim target="BRK" face="CUTE" idle="CUTE" trigger="surprised" />
+            <dlg char="BRK" track="BRK">
+                <m>You did!?!?! Oh my God!! I can't believe it!!!</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Yep... The principal almost caught me, but I survived...</m>
+            </dlg>
+            
+            <anim target="BRK" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m wait="0.5">I know it was dangerous... Thank you so much...</m>
+                <m wait="0.5">Now, where is it? Please... Give it to me...</m>
+                <m>I can't wait to delete that... evidence...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Sure... Let me just take it off my phone...</m>
+            </dlg>
+            
+            <fade-to-black keep="true" speed="3" layer="-1" />
+            <sfx clip="item" async="true" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Here you go...</m>
+            </dlg>
+            <fade-to-black speed="-3" />
+
+            <anim target="BRK" face="SURPRISED" idle="NEUTRAL" trigger="surprised" />
+            <dlg char="BRK" track="BRK">
+                <m>Wait... You plugged it into your phone!?!?!</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Uuuhh... Oups...</m>
+            </dlg>
+            
+            <anim target="BRK" face="UPSET" idle="UPSET" />
+            <dlg char="BRK" track="BRK">
+                <m>No... no... no... I can't believe it...</m>
+                <m>You... You watched it... Didn't you?</m>
+            </dlg>
+            <wait time="1.5" />
+            <anim target="BRK" face="SIGH" />
+            <dlg char="BRK" track="BRK">
+                <m>Oh my God... This is so embarrassing... Why... Why did you do that!?!?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m wait="0.5">Well... First... You never said to NOT do it...</m>
+                <m wait="0.5">Second... I was just trying to keep the card in a safe place...</m>
+                <m>But then... The 'show' started playing automatically...</m>
+            </dlg>
+
+            <anim target="BRK" face="DISAPPROVE" idle="NEUTRAL" />
+            <dlg char="BRK" track="BRK">
+                <m>Uurgh... JUST STOP!!! Stop talking about it, please!!</m>
+                <m>I don't need to hear your comments about what you saw...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Come on... Think how much worse it would be if the principal found it...</m>
+                <m>It wouldn't be just embarrassing...</m>
+                <m>I'm pretty sure that performing such stunt inside school property is against some rule...</m>
+            </dlg>
+
+            <anim target="BRK" face="SIGH" trigger="shrug" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">Sigh...</m>
+                <m>I was just...</m>
+            </dlg>
+            <anim target="BRK" face="UPSET" />
+            <dlg char="BRK" track="BRK">
+                <m>Just trying to...</m>
+                <m>to make a.......</m>
+            </dlg>
+
+            <choice id="gave-mem-card-comment">
+                <c pos="NW">
+                    <text>No need to explain</text>
+                    <then>
+                        <flag name="CHAR:BRK:INTERACTIONS" bit-on="2" />
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Hey... There's no need to explain yourself to me...</m>
+                            <m>It's already bad enough I pried into your intimate stuff... Sorry about that...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                        <anim target="BRK" face="UPSET" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m wait="1">Oh... That's okay... I...</m>
+                            <m>I should be thanking you... and not flipping out about the video...</m>
+                            <m>It was my fault... I should have deleted it right away...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>Make what?</text>
+                    <then>
+                        <flag name="CHAR:BRK:INTERACTIONS" bit-on="3" />
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Make what? Now I'm curious...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>Make a trendy TikTok?</text>
+                    <then>
+                        <flag name="CHAR:BRK:INTERACTIONS" bit-on="4" />
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Were you trying to shoot some trendy TikTok?</m>
+                            <m>You know they can ban you for that kind of content, right?</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <anim target="BRK" idle="UPSET" face="UPSET" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m wait="1">Please...</m>
+                            <m>This is already humiliating enough...</m>
+                            <m>Just let me explain...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="BRK" idle="NEUTRAL" trigger="shrug" />
+            <dlg char="BRK" track="BRK">
+                <m>Look... Have you ever heard about deepfakes?</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Yep... That video editing thing useful to make shitpost memes and take down governments...</m>
+            </dlg>
+            
+            <anim target="BRK" trigger="say-01" face="NEUTRAL" />
+            <dlg char="BRK" track="BRK">
+                <m>Yeah... My plan was to create one...</m>
+                <m>A deepfake of ${CHAR:VIC:NAME} flashing in the school restroom...</m>
+                <m>I recorded myself doing the deed in the actual restroom as the background source, and was going to blend her face and hair over mine...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>I assume you and ${CHAR:VIC:NAME} aren't exactly best buddies...</m>
+            </dlg>
+
+            <anim target="BRK" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m>That bitch would be in some well deserved trouble if that kind of video went viral and ended up in the principal's radar...</m>
+                <m>That would teach her to not mess with me...</m>
+            </dlg>
+            
+            <anim target="BRK" trigger="shrug" face="SIGH" />
+            <dlg char="BRK" track="BRK">
+                <m>Unfortunately... Deepfake tools are not as straightforward as I thought...</m>
+                <m>I never managed to make them work with the video I recorded... I'm still trying to figure the problem...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Maybe it didn't work because-</m>
+            </dlg>
+            
+            <anim target="BRK" trigger="say-01" face="DISAPPROVE" />
+            <if>
+                <check-flag flag="CHAR:BRK:INTERACTIONS" bit-set="1" />
+                <then>
+                    <dlg char="BRK" track="BRK">
+                        <m>Hey... You don't need to manspl...</m>
+                    </dlg>
+                    <anim target="BRK" face="SIGH" />
+                    <dlg char="BRK" track="BRK">
+                        <m>I mean... You don't need to... explain condescendingly me the problem to me...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="BRK" track="BRK">
+                        <m>Hey... You don't need to mansplain me the problem...</m>
+                    </dlg>
+                </else>
+            </if>
+            
+            <anim target="BRK" face="NEUTRAL" />
+            <dlg char="BRK" track="BRK">
+                <m>You see... The deep fake software works better when the image has slow movement and when people's faces are not much close to the lens...</m>
+                <m>But it's not easy to shot a video like that of yourself in a selfie style...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Well... What if you have an assistant?</m>
+                <m>'Someone' that could go with you to the restroom and help record that  background video with the perfect deepfake conditions?</m>
+            </dlg>
+
+            <anim target="BRK" face="CUTE" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m>Yeah... That could work...</m>
+                <m>It would seem like some of ${CHAR:VIC:NAME}'s stupid friends were the one recording... The framing and movement would be perfect for the software to...</m>
+            </dlg>
+            
+            <anim target="BRK" face="DISAPPROVE" trigger="surprised" />
+            <dlg char="BRK" track="BRK">
+                <m>Wait a minute... 'Someone' means YOU!?!?! Recording me while I... I...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>You need someone you can trust for that don't you?</m>
+                <m>Didn't I show how you can trust me by finding your memory card?</m>
+            </dlg>
+
+            <anim target="BRK" face="DISAPPROVE" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m>Trust!!?! You plugged my memory card in your phone and watched an intimate video of mine...</m>
+                <m>Do you really think I want someone who did that to enter in a restroom with me while...</m>
+            </dlg>
+            <anim target="BRK" face="SIGH"  />
+            <dlg char="BRK" track="BRK">
+                <m>...while i... show... my...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Well... I wouldn't see anything I hadn't before, right?</m>
+            </dlg>
+
+            <anim target="BRK" face="DISAPPROVE" />
+            <dlg char="BRK" track="BRK">
+                <m>You're really pushing your luck, boy...</m>
+            </dlg>
+            <wait time="1.5" />
+            
+            <anim target="BRK" trigger="shrug" face="SIGH" />
+            <dlg char="BRK" track="BRK">
+                <m>Sigh... Unfortunately... You might be only person I know in this school that can help me make this plan work...</m>
+                <m>My friends are all too coward to stand against the Vortex Club tyranny...</m>
+            </dlg>
+            
+            <wait time="1" />
+            <anim target="BRK" idle="UPSET" face="UPSET" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">I can't believe what I'm about to say, but...</m>
+                <m>Would you please check if the girl's restroom is empty? I can't be seen lurking around there now with you...</m>
+                <m>If there's no one there, then we can come in quickly to... record a better background video...</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="CHAR:MAX:INTERACTIONS" bit-set="0" />
+                <then>
+                    <string name="QUEST:MEM_CARD:OBJECTIVE" set="Tell ${CHAR:BRK:NAME} the women's restroom is empty" />
+                    <log icon="QUEST">Objectives updated!</log>
+                    <choice>
+                        <c pos="W">
+                            <text>Sure thing!</text>
+                        </c>
+                        <c pos="E" out="have-empty-girls-restroom">
+                            <text>I've been there already</text>
+                        </c>
+                    </choice>
+                </then>
+                <else>
+                    <string name="QUEST:MEM_CARD:OBJECTIVE" set="Find a way to get inside the women's restroom and check if it's empty" />
+                    <log icon="QUEST">Objectives updated!</log>
+                </else>
+            </if>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Quest gladly accepted, ma'am...</m>
+            </dlg>
+
+            <anim target="BRK" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="BRK" track="BRK">
+                <m>Yeah... Just shut up and go now before I decide to kill myself...</m>
+            </dlg>
+
+            <fade-to-black keep="true" />
+            <bgm volume="0" />
+            
+            <bootstrap script="${QUEST:MEM_CARD:RETURN_LOCATION}" spawn="hallway-corner" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## have-empty-girls-restroom  ###############################
+            ##############################################################
+        -->
+        <n id="have-empty-girls-restroom">
+            <flag name="QUEST:MEM_CARD" bit-on="13" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Guess what... I've already been at the girls restroom... And it's totally empty now...</m>
+            </dlg>
+
+            <anim target="BRK" face="CUTE" idle="CUTE" trigger="surprised" />
+            <dlg char="BRK" track="BRK">
+                <m wait="0.5">Really?!? That's awesome!!!</m>
+            </dlg>
+            <anim target="BRK" face="SIGH" idle="UPSET"  />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">I mean... It's not like I'm eager to get in there with you...</m>
+                <m>I just... I just need to record the video template properly...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>So... Are you down to do it now?</m>
+            </dlg>
+
+            <anim target="BRK" face="NEUTRAL" idle="NEUTRAL"  />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">Well... It's my best plan of attack against the Vortex... It must to be done...</m>
+                <m>I'm going to the restroom now... Please, give it a minute before coming in...</m>
+                <m>I don't wanna risk people seeing us walking in there together...</m>
+            </dlg>
+
+            <string name="QUEST:MEM_CARD:OBJECTIVE" set="Meet ${CHAR:BRK:NAME} in the women's restroom" />
+            <log icon="QUEST">Objectives updated!</log>
+
+            <obj target="BRK">
+                <message name="StartCenter" />
+                <message name="EndRight" />
+                <message name="TriggerEnter" />
+            </obj>
+
+            <wait time="1" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>This is going to be interesting...</m>
+            </dlg>
+
+            <fade-to-black keep="true" />
+            <bgm volume="0" />
+            
+            <bootstrap script="${QUEST:MEM_CARD:RETURN_LOCATION}" spawn="hallway-corner" />
+        </n>
+    </nodes>
+</xml-script>

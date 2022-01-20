@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="xml-script-var.xsd" />
+    <xs:include schemaLocation="xml-script-prefabs.xsd" />
+    <xs:include schemaLocation="xml-script-trophy.xsd" />
+    <xs:include schemaLocation="xml-script-character.xsd" />
+    <xs:include schemaLocation="xml-script-anim.xsd" />
+    <xs:include schemaLocation="xml-script-sfx.xsd" />
+    <xs:simpleType name="variable">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="$\{.+\}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="int-or-variable">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="((\d+(\.\d+){0,1})|($\{.+\}))"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="dialogStyle">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="OBJECTIVE"/>
+            <xs:enumeration value="SUBJECTIVE"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="fadeToBlackMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="none"/>
+            <xs:enumeration value="to"/>
+            <xs:enumeration value="from" />
+            <xs:enumeration value="to-from" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="script-outcome">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="_destroyObject"/>
+            <xs:enumeration value="_destroyParent"/>
+            <xs:enumeration value="_end"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="choice-pos">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NE" />
+            <xs:enumeration value="SE" />
+            <xs:enumeration value="SW" />
+            <xs:enumeration value="NW" />
+            <xs:enumeration value="E" />
+            <xs:enumeration value="W" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="choice-style">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="RIFT" />
+            <xs:enumeration value="PARAGON" />
+            <xs:enumeration value="RENEGADE" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="studio-token-category">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BASIC" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ui-icon">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PARAGON" />
+            <xs:enumeration value="RENEGADE" />
+            <xs:enumeration value="RIFT" />
+            <xs:enumeration value="SAVE" />
+            <xs:enumeration value="QUEST" />
+            <xs:enumeration value="KEY" />
+            <xs:enumeration value="MONEY" />
+            <xs:enumeration value="LOCKPICK" />
+            <xs:enumeration value="BUTTERFLY" />
+            <xs:enumeration value="AFFINITY" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="float-elem">
+        <xs:attribute name="value" type="xs:float" use="required" />
+    </xs:complexType>
+    <xs:complexType name="integer-elem">
+        <xs:attribute name="value" type="xs:integer" use="required" />
+    </xs:complexType>
+    <xs:complexType name="string-elem">
+        <xs:attribute name="value" type="xs:string" use="required" />
+    </xs:complexType>
+    <xs:complexType name="bool-elem">
+        <xs:attribute name="value" type="xs:boolean" use="required" />
+    </xs:complexType>
+    <xs:complexType name="check-flag-type">
+        <xs:attribute name="flag" type="flag" use="required" />
+        <xs:attribute name="eq" type="xs:integer" use="optional" />
+        <xs:attribute name="eq-str" type="xs:string" use="optional" />
+        <xs:attribute name="gte" type="int-or-variable" use="optional" />
+        <xs:attribute name="lte" type="xs:integer" use="optional" />
+        <xs:attribute name="mod" type="xs:integer" use="optional" />
+        <xs:attribute name="bit-set" type="xs:unsignedByte" use="optional" />
+        <xs:attribute name="bit-unset" type="xs:unsignedByte" use="optional" />
+        <xs:attribute name="inverse" type="xs:boolean" use="optional" />
+    </xs:complexType>
+    <xs:complexType name="check-text-type">
+        <xs:attribute name="text" type="string" use="required" />
+        <xs:attribute name="ref" type="xs:boolean" use="optional" />
+        <xs:attribute name="eq" type="xs:string" use="optional" />
+        <xs:attribute name="neq" type="xs:string" use="optional" />
+        <xs:attribute name="match" type="xs:string" use="optional" />
+        <xs:attribute name="inverse" type="xs:boolean" use="optional" />
+    </xs:complexType>
+    <xs:complexType name="object-message">
+        <xs:choice>
+            <xs:element name="int" minOccurs="0" maxOccurs="unbounded" type="integer-elem"></xs:element>
+            <xs:element name="string" minOccurs="0" maxOccurs="unbounded" type="string-elem"></xs:element>
+            <xs:element name="bool" minOccurs="0" maxOccurs="unbounded" type="bool-elem"></xs:element>
+            <xs:element name="float" minOccurs="0" maxOccurs="unbounded" type="float-elem"></xs:element>
+        </xs:choice>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="broadcast" type="xs:boolean" default="false" />
+    </xs:complexType>
+    <xs:complexType name="object-outcome">
+        <xs:attribute name="copy-to" type="xs:string" />
+        <xs:attribute name="value" type="xs:string" />
+        <xs:attribute name="destroy" type="xs:boolean" />
+        <xs:attribute name="node" type="xs:IDREF" />
+        <xs:attribute name="clear" type="xs:boolean" />
+    </xs:complexType>
+    <xs:complexType name="check-group-type">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="check-flag" minOccurs="0" type="check-flag-type" />
+            <xs:element name="check-text" minOccurs="0" type="check-text-type" />
+            <xs:element name="check-group" minOccurs="0" type="check-group-type" />
+        </xs:choice>
+        <xs:attribute name="op" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="AND"/>
+                    <xs:enumeration value="OR"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="nType">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="nop">
+                <xs:complexType></xs:complexType>
+            </xs:element>
+            <xs:element name="load-scene-object">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="message" minOccurs="0" maxOccurs="unbounded" type="object-message" />
+                    </xs:sequence>
+                    <xs:attribute name="key" type="prefab" use="required" />
+                    <xs:attribute name="proxy" type="xs:string" use="optional" />
+                    <xs:attribute name="rename" type="xs:string" use="optional" />
+                    <xs:attribute name="parent" type="xs:string" use="optional" />
+                    <xs:attribute name="active" type="xs:boolean" use="optional" />
+                    <xs:attribute name="ignore-if-exists" type="xs:boolean" use="optional" />
+                    <xs:attribute name="destroy" type="xs:decimal" use="optional" />
+                    <xs:attribute name="world-position-stays" type="xs:boolean" use="optional" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="flag">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="name" type="flag" use="optional" />
+                            <xs:attribute name="icon" type="ui-icon" use="optional" />
+                            <xs:attribute name="ref" type="string" use="optional" />
+                            <xs:attribute name="inc" type="int-or-variable" use="optional" />
+                            <xs:attribute name="dec" type="int-or-variable" use="optional" />
+                            <xs:attribute name="set" type="int-or-variable" use="optional" />
+                            <xs:attribute name="copy-flag" type="flag" use="optional" />
+                            <xs:attribute name="random-max" type="xs:string" use="optional" />
+                            <xs:attribute name="bit-on" type="xs:string" use="optional" />
+                            <xs:attribute name="bit-off" type="xs:string" use="optional" />
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="string">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="name" type="string" use="required" />
+                            <xs:attribute name="ref" type="xs:boolean" use="optional" />
+                            <xs:attribute name="set" type="xs:string"  use="optional" />
+                            <xs:attribute name="unset" type="xs:boolean"  use="optional" />
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="trophy">
+                <xs:complexType>
+                    <xs:attribute name="unlock" type="trophy" use="required" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="proxy">
+                <xs:complexType>
+                    <xs:attribute name="target" type="xs:string" use="required" />
+                    <xs:attribute name="name" type="xs:string" use="required" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="wait">
+                <xs:complexType>
+                    <xs:attribute name="time" type="xs:decimal" use="optional" />
+                    <xs:attribute name="rnd" type="xs:decimal" use="optional" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="anim">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="int" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="name" type="xs:string" />
+                                <xs:attribute name="value" type="xs:int" />
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="bool" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="name" type="xs:string" />
+                                <xs:attribute name="value" type="xs:boolean" />
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="target" type="xs:string" />
+                    <xs:attribute name="idle" type="idle-behaviour" />
+                    <xs:attribute name="face" type="face-behaviour" />
+                    <xs:attribute name="look" type="look-behaviour" />
+                    <xs:attribute name="trigger" type="xs:string" />
+                    <xs:attribute name="waitEndOfClip" type="xs:integer" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="sys" type="xs:string" />
+            <xs:element name="dlg">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded" minOccurs="1">
+                        <xs:element name="m">
+                            <xs:complexType>
+                                <xs:simpleContent>
+                                    <xs:extension base="xs:string">
+                                        <xs:attribute name="wait" type="xs:decimal" />
+                                        <xs:attribute name="instant" type="xs:boolean" />
+                                    </xs:extension>
+                                </xs:simpleContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="char" type="character" />
+                    <xs:attribute name="ttl" type="xs:decimal" />
+                    <xs:attribute name="track" type="xs:string" />
+                    <xs:attribute name="style" type="dialogStyle" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="if">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element name="check-flag" minOccurs="0" type="check-flag-type" />
+                            <xs:element name="check-text" minOccurs="0" type="check-text-type" />
+                            <xs:element name="check-group" minOccurs="0" type="check-group-type"  />
+                        </xs:choice>
+                        <xs:element name="then" minOccurs="1" maxOccurs="1" type="nType" />
+                        <xs:element name="else" minOccurs="0" maxOccurs="1" type="nType" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="choice">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:element name="c">
+                            <xs:complexType>
+                                <xs:choice maxOccurs="unbounded">
+                                    <xs:element name="check-flag" type="check-flag-type" minOccurs="0" maxOccurs="unbounded" />
+                                    <xs:element name="check-group" type="check-group-type" minOccurs="0" maxOccurs="unbounded" />
+                                    <xs:element name="text" type="xs:string" minOccurs="1" maxOccurs="1" />
+                                    <xs:element name="lock-reason" type="xs:string" minOccurs="0" maxOccurs="1" />
+                                    <xs:element name="then" type="nType" minOccurs="0" maxOccurs="1" />
+                                </xs:choice>
+                                <xs:attribute name="out" type="xs:IDREF" use="optional" />
+                                <xs:attribute name="pos" type="choice-pos" use="required" />
+                                <xs:attribute name="style" type="choice-style" use="optional" />
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="help" type="xs:boolean" />
+                    <xs:attribute name="id" type="xs:string" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="pick-text">
+                <xs:complexType>
+                    <xs:choice maxOccurs="unbounded" >
+                        <xs:element name="flag" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:attribute name="name" type="flag" use="required" />
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="t" minOccurs="0">
+                            <xs:complexType>
+                                <xs:simpleContent>
+                                    <xs:extension base="xs:string" />
+                                </xs:simpleContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:choice>
+                    <xs:attribute name="text" type="string" use="required" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="switch-text">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:element name="case">
+                            <xs:complexType>
+                                <xs:simpleContent>
+                                    <xs:extension base="xs:string">
+                                        <xs:attribute name="eq" type="xs:string" use="required" />
+                                    </xs:extension>
+                                </xs:simpleContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="flag" type="flag" use="optional" />
+                    <xs:attribute name="string" type="string" use="optional" />
+                    <xs:attribute name="output" type="string" use="required" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="stat">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="char" type="character" use="required" />
+                            <xs:attribute name="set" type="xs:decimal" use="optional" />
+                            <xs:attribute name="inc" type="xs:decimal" use="optional" />
+                            <xs:attribute name="notify" type="xs:boolean" use="optional" />
+                            <xs:attribute name="clamp-a" type="xs:integer" use="optional" />
+                            <xs:attribute name="clamp-b" type="xs:integer" use="optional" />
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="rig-track">
+                <xs:complexType>
+                    <xs:attribute name="of" type="character" use="required" />
+                    <xs:attribute name="target" type="xs:string" />
+                    <xs:attribute name="target-transition-speed" type="xs:decimal" />
+                    <xs:attribute name="eye" type="xs:decimal"  />
+                    <xs:attribute name="head" type="xs:decimal"  />
+                    <xs:attribute name="custom" type="xs:decimal"  />
+                    <xs:attribute name="custom-path" type="xs:string"  />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="obj">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="message" minOccurs="0" maxOccurs="unbounded" type="object-message" />
+                        <xs:element name="outcome" minOccurs="0" maxOccurs="unbounded" type="object-outcome" />
+                    </xs:sequence>
+                    <xs:attribute name="target" type="xs:string" use="optional" />
+                    <xs:attribute name="target-key" type="prefab" use="optional" />
+                    <xs:attribute name="active" type="xs:boolean" use="optional" />
+                    <xs:attribute name="destroy" type="xs:integer" use="optional" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="log">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="icon" type="ui-icon" use="optional" />
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="fade-to-black">
+                <xs:complexType>
+                    <xs:attribute name="speed" type="xs:string"  use="optional" />
+                    <xs:attribute name="keep" type="xs:boolean" use="optional" />
+                    <xs:attribute name="async" type="xs:boolean" use="optional" />
+                    <xs:attribute name="layer" type="xs:integer" use="optional" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="autosave">
+                <xs:complexType>
+                    <xs:attribute name="label" type="xs:string" use="optional" />
+                    <xs:attribute name="log" type="xs:string" use="optional" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="script-outcome">
+                <xs:complexType>
+                    <xs:attribute name="value" type="script-outcome" use="optional" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="node-output">
+                <xs:complexType>
+                    <xs:attribute name="node" type="xs:IDREF" use="required" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="inject">
+                <xs:complexType>
+                    <xs:attribute name="node" type="xs:string" use="required" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="sfx">
+                <xs:complexType>
+                    <xs:attribute name="clip" type="sfx" use="required" />
+                    <xs:attribute name="async" type="xs:boolean" />
+                    <xs:attribute name="volume" type="xs:decimal" />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="bgm">
+                <xs:complexType>
+                    <xs:attribute name="on-root" type="xs:boolean" use="optional"  />
+                    <xs:attribute name="as-music" type="xs:boolean" default="true" use="optional"  />
+                    <xs:attribute name="loop" type="loop" use="optional"  />
+                    <xs:attribute name="name" use="optional"  />
+                    <xs:attribute name="volume" type="xs:decimal" use="optional"  />
+                    <xs:attribute name="fade-speed" type="xs:decimal" use="optional"  />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="bootstrap">
+                <xs:complexType>
+                    <xs:attribute name="script" type="xs:string" use="optional"  />
+                    <xs:attribute name="node" type="xs:string" use="optional"  />
+                    <xs:attribute name="spawn" type="xs:string" use="optional"  />
+                </xs:complexType>
+            </xs:element>
+        </xs:choice>
+        <xs:attribute name="id" type="xs:ID" use="optional" />
+        <xs:attribute name="out" type="xs:string" use="optional" />
+    </xs:complexType>
+
+    <xs:element name="xml-script">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="include" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="node-prefix" type="xs:string" use="required" />
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="nodes">
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded">
+                            <xs:element name="n" type="nType" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema> 

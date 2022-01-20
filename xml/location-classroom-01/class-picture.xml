@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <n id="n1">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+            
+            <load-scene-object key="image-viewer.prefab">
+                <message name="SetImage"><string value="location-classroom-01-class-picture.png" /></message>
+            </load-scene-object>
+            
+            <wait />
+            
+            <dlg char="PLAYER">
+                <m wait="0.5">It seems they are all about to jump down each other's throats here...</m>
+                <m>Well... Nothing like a picture of your class without your presence to make you feel at home...</m>
+            </dlg>
+            
+            <obj target="image-viewer.prefab">
+                <message name="FadeAndDestroy" />
+            </obj>
+
+            <wait />
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+    </nodes>
+</xml-script>
