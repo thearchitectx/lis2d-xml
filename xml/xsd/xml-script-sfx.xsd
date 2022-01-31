@@ -18,7 +18,9 @@
             <xs:enumeration value="voice-sigh-b" />
             <xs:enumeration value="voice-huh-a" />
             <xs:enumeration value="voice-huh-b" />
+            <xs:enumeration value="voice-orgasm-a" />
             <xs:enumeration value="rummage" />
+            <xs:enumeration value="unlock" />
             <xs:enumeration value="whistle-song" />
         </xs:restriction>
     </xs:simpleType>
@@ -36,6 +38,7 @@
             <xs:enumeration value="loop-title" />
             <xs:enumeration value="loop-urban" />
             <xs:enumeration value="loop-vic" />
+            <xs:enumeration value="loop-moan-01" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

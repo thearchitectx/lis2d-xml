@@ -33,10 +33,11 @@
             <xs:enumeration value="CHAR:SAM:INTERACTIONS" />
             <!-- SAM interaction LOG bits
                 (0): Had first dialog
-                (1): choice first-dialog-01: (NW) The Wise Mystical Janitor!
-                (2): choice first-dialog-01: (W) I have a spirit animal too!
-                (3): choice first-dialog-01: (SW) Are you baked?
-                (4): Learned Rift Energy
+                (1): Had dialog after meeting principal
+                (2): choice first-dialog-01: (NW) The Wise Mystical Janitor!
+                (3): choice first-dialog-01: (W) I have a spirit animal too!
+                (4): choice first-dialog-01: (SW) Are you baked?
+                (5): Learned Rift Energy
             -->
             
             <xs:enumeration value="CHAR:TAY:INTERACTIONS" />
@@ -125,8 +126,12 @@
                 (13): Collected BOTTLE
                 (14): Collected CAN
                 (15): Collected BANANA PEEL
+                (16): Finished cleaning girls restroom
+                (17): Reported to SAM
                 
             -->
+            <xs:enumeration value="QUEST:PRINCIPAL1:GARBAGE_COUNT" />
+
             <xs:enumeration value="QUEST:KATE_LOCKER" />
             <!-- QUEST:KATE_LOCKER bits
                 (0): Started
@@ -152,10 +157,19 @@
                 (10): Entered principal's office
                 (11): Recovered memory card
                 (12): Gave memory card back
-                (13): BRK went to women's restroom 
+                (13): BRK went to women's restroom
+                (14): Choice (bkr-record-video-video-loop-01) used (NW) Sure about this?
+                (15): Choice (bkr-record-video-video-loop-01) used (SW) Quit stalling
+                (16): Choice (bkr-record-video-video-loop-01) used (NE) Start with the glasses?
+                (17): Choice (bkr-record-video-video-loop-01) used (SE) Why so shy now?
+                (18): Choice (bkr-record-video-video-loop-01) used (NE) You're beautiful without the glasses
+                (19): Choice (bkr-record-video-video-loop-01) used (SE) Glasses get in the way of deepfakes
+                (21): Had half session video
+                (22): Had full session video
+                (23): Recorded video with brk
             -->
 
-            <xs:enumeration value="QUEST:DEEP_FAKE1" />
+            <xs:enumeration value="QUEST:MEM_CARD:HEAT_SCORE" />
 
             <xs:enumeration value="QUEST:JUL:PHONE" />
             <!-- QUEST:JUL:PHONE bits

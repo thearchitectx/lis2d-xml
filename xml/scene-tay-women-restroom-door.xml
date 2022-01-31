@@ -419,6 +419,7 @@
 
             <bgm volume="0" />
             <bgm name="rift-bgm" loop="loop-rumble" as-music="false" volume="0.5" />
+            <flag name="PLAYER:STAT:RIFT" dec="1" icon="RIFT">Used 1 Rift energy point</flag>
             <load-scene-object key="vfx-rift.prefab" />
             <wait />
 
@@ -472,6 +473,8 @@
 
             <flag name="QUEST:PRINCIPAL1" bit-on="3" /> <!-- (3): TAY left women restroom  -->
             <flag name="QUEST:PRINCIPAL1" bit-on="8" /> <!-- (8): Used Rift Energy option to make TAY leave -->
+            <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Clean the women's restroom" />
+            <log icon="QUEST">Objectives Updated!</log>
 
             <fade-to-black keep="true" />
             <bootstrap script="location-mainhall-02/location" spawn="spawn/women-restroom" />
@@ -556,6 +559,8 @@
 
             <flag name="QUEST:PRINCIPAL1" bit-on="3" /> <!-- (3): TAY left women restroom  -->
             <flag name="QUEST:PRINCIPAL1" bit-on="10" /> <!-- (10): Delivered bracelet to TAY -->
+            <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Clean the women's restroom" />
+            <log icon="QUEST">Objectives Updated!</log>
 
             <bgm volume="0" />
             <fade-to-black keep="true" />

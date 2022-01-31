@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <n id="n1">
+            <obj target="#Player"><message name="SetInputActive"><bool value="false" /></message></obj>
+            
+            <wait time="0.5" />
+            <choice>
+                <c out="n1-clean" pos="E"><text>[Collect ${ARG:1}]</text></c>
+                <c out="leave" pos="W"><text>[Leave]</text></c>
+            </choice>
+        </n>
+        
+        <n id="leave">
+            <obj target="#Player"><message name="SetInputActive"><bool value="true" /></message></obj>
+        </n>
+
+        <n id="n1-clean">
+            <if>
+                <check-text text="ARG:0" eq="PIZZA" />
+                <then>
+                    <flag name="QUEST:PRINCIPAL1" bit-on="12" />
+                </then>
+            </if>
+            <if>
+                <check-text text="ARG:0" eq="BOTTLE" />
+                <then>
+                    <flag name="QUEST:PRINCIPAL1" bit-on="13" />
+                </then>
+            </if>
+            <if>
+                <check-text text="ARG:0" eq="CAN" />
+                <then>
+                    <flag name="QUEST:PRINCIPAL1" bit-on="14" />
+                </then>
+            </if>
+            <if>
+                <check-text text="ARG:0" eq="BANANA" />
+                <then>
+                    <flag name="QUEST:PRINCIPAL1" bit-on="15" />
+                </then>
+            </if>
+
+            <flag name="QUEST:PRINCIPAL1:GARBAGE_COUNT" inc="1" />
+
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1:GARBAGE_COUNT" eq="1" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>It's a shitty job... But someone has to do it...</m>
+                    </dlg>
+                    <log icon="QUEST">Collected *${QUEST:PRINCIPAL1:GARBAGE_COUNT}* of *4* pieces of garbage</log>
+                    <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Collect more trash at the women's restroom" />
+                </then>
+            </if>
+            
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1:GARBAGE_COUNT" eq="2" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>I have to clean this shit up...</m>
+                    </dlg>
+                    <log icon="QUEST">Collected *${QUEST:PRINCIPAL1:GARBAGE_COUNT}* of *4* pieces of garbage</log>
+                    <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Collect more trash at the women's restroom" />
+                </then>
+            </if>
+            
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1:GARBAGE_COUNT" eq="3" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>What a mess... And girls still call men 'pigs'?</m>
+                    </dlg>
+                    <log icon="QUEST">Collected *${QUEST:PRINCIPAL1:GARBAGE_COUNT}* of *4* pieces of garbage</log>
+                    <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Collect more trash at the women's restroom" />
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1:GARBAGE_COUNT" eq="4" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>I hope this is the last one...</m>
+                    </dlg>
+
+                    <flag name="QUEST:PRINCIPAL1" bit-on="16" />
+                    <log icon="QUEST">Collected all pieces of garbage</log>
+                    <log icon="QUEST">Objectives updated</log>
+                    <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Report to ${CHAR:SAM:NAME}" />
+                </then>
+            </if>
+
+            <obj target="#Player"><message name="SetInputActive"><bool value="true" /></message></obj>
+            <obj target="_parent" destroy="0" />
+            <sfx clip="item" />
+        </n>
+    </nodes>
+</xml-script>

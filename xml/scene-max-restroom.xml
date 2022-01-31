@@ -587,7 +587,7 @@
             <anim target="MAX" idle="NEUTRAL" face="UPSET" />
             <dlg char="MAX" track="MAX">
                 <m>It all happened so fast... I remember trying to reverse time and save her...</m>
-                <m>But I was too scared and... my powers got out of control...</m>
+                <m>But I was too scared and... my powers went out of control...</m>
             </dlg>
 
             <dlg char="PLAYER" track="PLAYER">
@@ -870,7 +870,7 @@
 
                         <dlg char="PLAYER" track="PLAYER">
                             <m>Of course not...</m>
-                            <m>It's just some friendly advice... I wanna see you... improve...</m>
+                            <m>It's just some friendly advice... I wanna see you improve...</m>
                         </dlg>
 
                         <wait time="1" />
@@ -909,6 +909,7 @@
 
             <proxy target="shot/player" name="PLAYER" />
 
+            <trophy unlock="polaroid-fever-01" />
 
             <dlg char="PLAYER" track="PLAYER">
                 <m>Okay... It seems I'm involved in some really crazy shit this time...</m>

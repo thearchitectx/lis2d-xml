@@ -142,7 +142,7 @@
             <wait />
             
             <dlg char="PLAYER" track="scene/player">
-                <m>UUhh... That is... good?</m>
+                <m>UUhh... Is that... good?</m>
             </dlg>
             
             <anim target="scene/principal" trigger="say-01" />
@@ -167,7 +167,7 @@
             <anim target="scene/principal" trigger="say-01" />
             <dlg char="PRI" track="scene/principal">
                 <m>I think it's the type of work that would develop the "humility" skills you need...</m>
-                <m>You're welcomed to leave ${MISC:SCHOOL:NAME} if you this is not the kind of job you want...</m>
+                <m>You're free to leave ${MISC:SCHOOL:NAME} if you think this is not the kind of job you want...</m>
             </dlg>
 
             <dlg char="PLAYER" track="scene/player">

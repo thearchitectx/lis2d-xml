@@ -486,7 +486,8 @@
 
             <sys>
                 Persuasion options are unlocked based on your character reputation status (paragon/renegade points)\n\n
-                These options appear in specific colors in the choice wheel
+                These options appear in specific colors in the choice wheel\n\n
+                Some of your character's dialog lines will be automatically based on the current paragon/renegade balance\n\n
             </sys>
 
             <choice>

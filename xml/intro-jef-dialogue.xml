@@ -275,7 +275,7 @@
                 <m>You see... At first my project was focused on innocence and helplessness themes... It was based on "chemical persuasion"...</m>
             </dlg>
             <dlg char="PLAYER" track="#PlayerTrack">
-                <m>Uuh... Do you realize how shady that sounds?</m>
+                <m>Dude... That sounds like Bill Cosby level of shady...</m>
             </dlg>
             <anim target="JEF" trigger="say-01" />
             <dlg char="JEF" track="JEF">
@@ -411,7 +411,7 @@
             </dlg>
             <anim target="JEF" trigger="shrug" />
             <dlg char="JEF" track="JEF">
-                <m>Go talk to him... But I suggest you to avoid any unnecessary confrontation with him...</m>
+                <m>Go talk to him... But I suggest you to avoid any unnecessary confrontation with the man...</m>
                 <m>He's highly strict when it comes to school rules... But that will not stop him from finding ways to make your life miserable here...</m>
             </dlg>
 

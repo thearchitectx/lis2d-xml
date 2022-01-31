@@ -9,4 +9,10 @@
     <trophy id="birds-are-not-real-01" label="Bird's Aren't Real I" icon="char/BRK.png">
         Find her drone and check what's in the memory card
     </trophy>
+    <trophy id="birds-are-not-real-02" label="Bird's Aren't Real II" icon="char/BRK.png">
+        Have a 'full' recording session with her
+    </trophy>
+    <trophy id="polaroid-fever-01" label="Polaroid Fever I" icon="char/MAX.png">
+        Discover why you're here
+    </trophy>
 </trophies>

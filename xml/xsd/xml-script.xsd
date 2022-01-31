@@ -213,6 +213,12 @@
                                 <xs:attribute name="value" type="xs:int" />
                             </xs:complexType>
                         </xs:element>
+                        <xs:element name="inc" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="name" type="xs:string" />
+                                <xs:attribute name="value" type="xs:int" />
+                            </xs:complexType>
+                        </xs:element>
                         <xs:element name="bool" minOccurs="0" maxOccurs="unbounded">
                             <xs:complexType>
                                 <xs:attribute name="name" type="xs:string" />
@@ -225,6 +231,7 @@
                     <xs:attribute name="face" type="face-behaviour" />
                     <xs:attribute name="look" type="look-behaviour" />
                     <xs:attribute name="trigger" type="xs:string" />
+                    <xs:attribute name="inc" type="xs:string" />
                     <xs:attribute name="waitEndOfClip" type="xs:integer" />
                 </xs:complexType>
             </xs:element>
@@ -271,7 +278,14 @@
                                     <xs:element name="check-flag" type="check-flag-type" minOccurs="0" maxOccurs="unbounded" />
                                     <xs:element name="check-group" type="check-group-type" minOccurs="0" maxOccurs="unbounded" />
                                     <xs:element name="text" type="xs:string" minOccurs="1" maxOccurs="1" />
-                                    <xs:element name="lock-reason" type="xs:string" minOccurs="0" maxOccurs="1" />
+                                    <xs:element name="lock-reason" minOccurs="0" maxOccurs="1">
+                                        <xs:complexType mixed="true">
+                                            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+                                                <xs:element name="check-flag" type="check-flag-type" minOccurs="0" maxOccurs="unbounded" />
+                                                <xs:element name="check-group" type="check-group-type" minOccurs="0" maxOccurs="unbounded" />   
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
                                     <xs:element name="then" type="nType" minOccurs="0" maxOccurs="1" />
                                 </xs:choice>
                                 <xs:attribute name="out" type="xs:IDREF" use="optional" />
@@ -372,6 +386,7 @@
                     <xs:attribute name="speed" type="xs:string"  use="optional" />
                     <xs:attribute name="keep" type="xs:boolean" use="optional" />
                     <xs:attribute name="async" type="xs:boolean" use="optional" />
+                    <xs:attribute name="fill" type="xs:boolean" use="optional" />
                     <xs:attribute name="layer" type="xs:integer" use="optional" />
                 </xs:complexType>
             </xs:element>

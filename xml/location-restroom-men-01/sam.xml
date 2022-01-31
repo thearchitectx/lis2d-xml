@@ -57,21 +57,41 @@
         <n id="dialog-root">
             <choice>
                 <c pos="W" out="whats-up">
-                    <check-flag flag="CHAR:SAM:INTERACTIONS" bit-unset="0" />
+                    <check-flag flag="CHAR:SAM:INTERACTIONS" bit-unset="0" /> <!-- (0): Had first dialog -->
                     <text>What's up?</text>
+                </c>
+                <c pos="W" out="met-principal">
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:SAM:INTERACTIONS" bit-set="0" /> <!-- (0): Had first dialog -->
+                        <check-flag flag="CHAR:SAM:INTERACTIONS" bit-unset="1" /> <!-- (1): Had dialog after meeting principal -->
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="1" />
+                    </check-group>
+                    <text>Can we talk now?</text>
+                </c>
+                <c pos="W">
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="16" />
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-unset="17" />
+                    </check-group>
+                    <text>I finished cleaning the girl's restroom</text>
+                    <then>
+                        <sys>Main quest content for this version ends here!\n\nRemember to check trophies to track content found\n\nSee you soon!</sys>
+                        <fade-to-black  keep="true"/>
+                        <bootstrap script="title" />
+                    </then>
                 </c>
                 <c pos="NW" out="helper">
                     <check-group op="AND">
-                        <check-flag flag="CHAR:SAM:INTERACTIONS" bit-set="0" />
+                        <check-flag flag="CHAR:SAM:INTERACTIONS" bit-set="1" /> <!-- (1): Had dialog after meeting principal -->
                         <check-flag flag="QUEST:PRINCIPAL1" bit-set="1" />
                         <check-flag flag="QUEST:PRINCIPAL1" bit-unset="2" />
                     </check-group>
-                    <text>The principal sent me here</text>
+                    <text>You have a 'job' for me?</text>
                 </c>
                 <c pos="SW" out="two-girls">
                     <check-group op="AND">
-                        <check-flag flag="CHAR:SAM:INTERACTIONS" bit-set="0" />
-                        <check-flag flag="CHAR:SAM:INTERACTIONS" bit-unset="4" />
+                        <check-flag flag="CHAR:SAM:INTERACTIONS" bit-set="1" /> <!-- (1): Had dialog after meeting principal -->
+                        <check-flag flag="CHAR:SAM:INTERACTIONS" bit-unset="5" /> <!-- (5): Learned Rift Energy -->
                     </check-group>
                     <text>Did you see two girls here?</text>
                 </c>
@@ -108,7 +128,7 @@
             </obj>
 
             <if>
-                <check-flag flag="CHAR:SAM:INTERACTIONS" bit-unset="0" />
+                <check-flag flag="CHAR:SAM:INTERACTIONS" bit-unset="0" /> <!-- (0): Had first dialog -->
                 <then>
                     <flag name="CHAR:SAM:INTERACTIONS" bit-on="0" />
                     <anim target="SAM" trigger="say-01" />
@@ -131,6 +151,20 @@
                     <node-output node="end" />
                 </then>
             </if>
+
+            <node-output node="met-principal" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## met-principal ####################################################
+            ##############################################################
+        -->
+        <n id="met-principal">
+            <flag name="CHAR:SAM:INTERACTIONS" bit-on="1" /> <!--(1): Had dialog after meeting principal-->
+            <dlg char="PLAYER" track="PLAYER">
+                <m>So... About the...</m>
+            </dlg>
 
             <dlg char="SAM" track="SAM">
                 <m>You already met the Principal... Am I right?</m>
@@ -169,7 +203,7 @@
                     <text>The Wise Mystical Janitor!</text>
                     <then>
                         <flag name="PLAYER:STAT:PARAGON" icon="PARAGON" inc="1">Paragon +1</flag>
-                        <flag name="CHAR:SAM:INTERACTIONS" bit-on="1" />
+                        <flag name="CHAR:SAM:INTERACTIONS" bit-on="2" />
                         <dlg char="PLAYER" track="PLAYER">
                             <m>Are you the local "Wise Mystical Janitor"? Seriously?</m>
                             <m>This school looked hip at first, but I'm starting to feel I'm in "Not Another Teen Movie"...</m>
@@ -184,7 +218,7 @@
                 <c pos="W">
                     <text>I have a spirit animal too!</text>
                     <then>
-                        <flag name="CHAR:SAM:INTERACTIONS" bit-on="2" />
+                        <flag name="CHAR:SAM:INTERACTIONS" bit-on="3" />
                         <dlg char="PLAYER" track="PLAYER">
                             <m>The spirit animal... Like our destiny shining at the horizon...</m>
                             <m>Prompting us to face the universe in many different lifetimes...</m>
@@ -200,7 +234,7 @@
                     <text>Are you baked?</text>
                     <then>
                         <flag name="PLAYER:STAT:PARAGON" icon="RENEGADE" inc="1">Renegade +1</flag>
-                        <flag name="CHAR:SAM:INTERACTIONS" bit-on="3" />
+                        <flag name="CHAR:SAM:INTERACTIONS" bit-on="4" />
                         <dlg char="PLAYER" track="PLAYER">
                             <m>Are you baked?</m>
                             <m>Get your shit together, man... You're on the clock...</m>
@@ -263,7 +297,6 @@
 
             <node-output node="dialog-root" />
         </n>
-
         <!--
             ##############################################################
             ## helper ####################################################
@@ -271,8 +304,8 @@
         -->
         <n id="helper">
             <dlg char="PLAYER" track="PLAYER">
-                <m>Hey... The principal told me to meet you...</m>
-                <m>It seems I'm supposed to be your... helper?</m>
+                <m>The principal told me to talk to you about... uuh...</m>
+                <m>Well... It seems I'm supposed to be your... helper...</m>
             </dlg>
 
             <anim target="SAM" trigger="giggle" face="CUTE" />
@@ -346,11 +379,14 @@
             <flag name="QUEST:PRINCIPAL1" bit-on="2" icon="QUEST">Objectives updated</flag>
 
             <if>
-                <check-flag flag="QUEST:DEEP_FAKE1" bit-set="1" />
+                <check-group op="AND">
+                    <check-flag flag="QUEST:MEM_CARD" bit-set="12" />
+                    <check-flag flag="QUEST:MEM_CARD" bit-unset="13" />
+                </check-group>
                 <then>
                     <dlg char="PLAYER" track="PLAYER">
                         <m wait="0.25">That's actually quite... convenient...</m>
-                        <m>I'm on a quest about getting in there...</m>
+                        <m>I'm on a quest about getting into there...</m>
                     </dlg>
                 </then>
                 <else>
@@ -381,7 +417,7 @@
             ##############################################################
         -->
         <n id="two-girls">
-            <flag name="CHAR:SAM:INTERACTIONS" bit-on="4" />
+            <flag name="CHAR:SAM:INTERACTIONS" bit-on="5" /> <!-- (5): Learned Rift Energy -->
             <dlg char="PLAYER" track="PLAYER">
                 <m>I saw two girls coming out of this room earlier...</m>
                 <m>What the hell were they doing here?</m>

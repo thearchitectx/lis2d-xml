@@ -117,7 +117,7 @@
             </dlg>
 
             <dlg char="PLAYER" track="#PlayerTrack">
-                <m wait="0.5">Yeah... The patriarchy...  Of course...</m>
+                <m wait="0.5">Uuh... okay... whatever you say...</m>
                 <m wait="0.5">But... You said you know me?</m>
                 <m>My memories are not exactly clear right now, however... I don't remember being famous or anything...</m>
             </dlg>
@@ -310,6 +310,13 @@
                         <check-flag flag="QUEST:MEM_CARD" bit-unset="12" />
                     </check-group>
                 </c>
+                <c pos="E" out="have-empty-girls-restroom">
+                    <text>Girl's restroom is empty!</text>
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:MAX:INTERACTIONS" bit-set="0" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="12" />
+                    </check-group>
+                </c>
                 <c pos="NW">
                     <text>Yearbook picture?</text>
                     <then>
@@ -358,7 +365,7 @@
                             <m>You are being judged at this exact moment... So please, make an effort to be better than them... It's not that hard...</m>
                         </dlg>
                         <dlg char="PLAYER" track="#PlayerTrack">
-                            <m>Whatever you say...</m>
+                            <m>I guess I should start building my reputation then...</m>
                         </dlg>
 
                         <node-output node="dialog-root" />
@@ -542,7 +549,7 @@
             <anim target="BRK" face="SIGH" idle="CUTE" trigger="shrug" />
             <dlg char="BRK" track="BRK">
                 <m>Look... The man you're talking about is powerful, evil and obsessed with this school...</m>
-                <m>So, yes... Take off his nose and he becomes pretty much the Voldemort of this place...</m>
+                <m>So, yes... Take off his nose and he becomes pretty much the evil Dark Lord of this place...</m>
             </dlg>
             <wait time="0.5" />
             <dlg char="PLAYER" track="#PlayerTrack">
@@ -571,7 +578,7 @@
             </dlg>
             <anim target="BRK" face="CUTE" />
             <dlg char="BRK" track="BRK">
-                <m>Spoof a message is the most basic trick... I can easily do that...</m>
+                <m>Spoofing a message is the most basic trick... I can easily do that...</m>
                 <m>And you... Get ready to infiltrate the office!</m>
             </dlg>
 
@@ -782,14 +789,14 @@
 
             <wait time="0.5" />
             <dlg char="PLAYER" track="#PlayerTrack">
-                <m>Well... What if you have an assistant?</m>
+                <m>Well... What if you had an assistant to record you a little further away?</m>
                 <m>'Someone' that could go with you to the restroom and help record that  background video with the perfect deepfake conditions?</m>
             </dlg>
 
             <anim target="BRK" face="CUTE" trigger="say-01" />
             <dlg char="BRK" track="BRK">
                 <m>Yeah... That could work...</m>
-                <m>It would seem like some of ${CHAR:VIC:NAME}'s stupid friends were the one recording... The framing and movement would be perfect for the software to...</m>
+                <m>It would seem like some of ${CHAR:VIC:NAME}'s stupid friends were recording... The framing and movement would be perfect for the software to...</m>
             </dlg>
             
             <anim target="BRK" face="DISAPPROVE" trigger="surprised" />
@@ -814,7 +821,7 @@
             </dlg>
 
             <dlg char="PLAYER" track="#PlayerTrack">
-                <m>Well... I wouldn't see anything I hadn't before, right?</m>
+                <m>Well... I wouldn't see anything that I hadn't seen before, right?</m>
             </dlg>
 
             <anim target="BRK" face="DISAPPROVE" />
@@ -879,7 +886,7 @@
         -->
         <n id="have-empty-girls-restroom">
             <flag name="QUEST:MEM_CARD" bit-on="13" />
-            <dlg char="PLAYER" track="PLAYER">
+            <dlg char="PLAYER" track="#PlayerTrack">
                 <m>Guess what... I've already been at the girls restroom... And it's totally empty now...</m>
             </dlg>
 
@@ -893,13 +900,13 @@
                 <m>I just... I just need to record the video template properly...</m>
             </dlg>
 
-            <dlg char="PLAYER" track="PLAYER">
+            <dlg char="PLAYER" track="#PlayerTrack">
                 <m>So... Are you down to do it now?</m>
             </dlg>
 
             <anim target="BRK" face="NEUTRAL" idle="NEUTRAL"  />
             <dlg char="BRK" track="BRK">
-                <m wait="1">Well... It's my best plan of attack against the Vortex... It must to be done...</m>
+                <m wait="1">Well... It's my best plan of attack against the Vortex... It must be done...</m>
                 <m>I'm going to the restroom now... Please, give it a minute before coming in...</m>
                 <m>I don't wanna risk people seeing us walking in there together...</m>
             </dlg>
@@ -915,7 +922,7 @@
 
             <wait time="1" />
 
-            <dlg char="PLAYER" track="PLAYER">
+            <dlg char="PLAYER" track="#PlayerTrack">
                 <m>This is going to be interesting...</m>
             </dlg>
 

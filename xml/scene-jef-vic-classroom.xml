@@ -301,7 +301,7 @@
 
             <anim target="scene"><bool name="jef-turn" value="true" /></anim>
             <dlg char="JEF" track="scene/track-jef">
-                <m wait="0.5">Now... I don't agree with the some of the principal's attitudes... But as staff member I'm required to supervise extra-class assignments...</m>
+                <m wait="0.5">Now... I don't agree with the some of the principal's attitude... But as staff member I'm required to supervise extra-class assignments...</m>
                 <m>So... Just for record... Pick up whatever your classmates left around that belongs to a garbage can, okay?</m>
                 <m wait="1">Remember to look down the tables... Some students think whatever falls under a table vanishes from the universe...</m>
                 <m>Come talk to me again when you're done...</m>

@@ -11,7 +11,7 @@
             <load-scene-object key="location-mainhall-02.prefab" rename="location"/>
 
             <if>
-                <check-flag flag="QUEST:MEM_CARD" bit-unset="31" />
+                <check-flag flag="QUEST:MEM_CARD" bit-unset="13" />
                 <then>
                     <if>
                         <check-text text="CHAR:BRK:NAME" eq="#EMPTY" />

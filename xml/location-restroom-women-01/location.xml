@@ -45,6 +45,15 @@
                 </then>
             </if>
 
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:MEM_CARD" bit-set="13" /> <!-- (13): BRK went to women's restroom -->
+                    <check-flag flag="QUEST:MEM_CARD" bit-unset="23" /> <!-- (23): Recorded video with brk -->
+                </check-group>
+                <then>
+                    <load-scene-object key="location-restroom-women-01-brk.prefab" rename="brk"/>
+                </then>
+            </if>
             
             <fade-to-black speed="-1" />
 

@@ -1,0 +1,1264 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <fade-to-black speed="9999999" keep="true" />
+            <bgm loop="loop-brk" volume="0.25" />
+            <load-scene-object key="shot-restroom-women-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-brk-01.prefab" rename="BRK" />
+            
+            <proxy target="shot/player" name="PLAYER" />
+
+            
+            <obj target="BRK">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="SetParallaxSpeed"><float value="0.4" /></message>
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </obj>
+
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <fade-to-black speed="-1" />
+            
+            <anim target="BRK" face="DISAPPROVE" />
+            <dlg char="BRK" track="BRK">
+                <m wait="0.5">And there you are...</m>
+                <m>You must have some nerve to enter the girl's restroom like that...</m>
+            </dlg>
+            <anim target="BRK" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m>Or maybe you're just a pervert with no shame at all...</m>
+            </dlg>
+            <wait time="0.5" />
+
+            <if>
+                <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
+                <then>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="0.5">You're not getting cold feet, are you?</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="0.5">Are you sure wasting time with your chit-chat while we're both here is a good idea?</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <anim target="BRK" trigger="shrug" face="SIGH" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">I'm just mustering up courage, okay...</m>
+                <m>I... I would never do something like this... with a boy... in the restroom...</m>
+            </dlg>
+            <anim target="BRK" face="DISAPPROVE" />
+            <dlg char="BRK" track="BRK">
+                <m>But I feel different today... I feel the opportunity to take down ${CHAR:VIC:NAME}'s reign is real this time...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Just saying... We don't have that much time to wonder about it...</m>
+            </dlg>
+
+            <anim target="BRK" idle="UPSET" face="UPSET" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">Yeah... I... I know...</m>
+                <m>Let's... do this...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="0.5" />
+            <bootstrap node="start" />
+
+        </n>
+
+        <!--
+            ##############################################################
+            ## start #####################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black speed="9999999" keep="true" />
+            <bgm loop="loop-urban" volume="0.25" />
+            <load-scene-object key="scene-brk-record-video-01.prefab" rename="scene" />
+            <obj target="scene/interactables" active="false" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <load-scene-object key="scene-brk-record-video-01-brk-01.prefab" rename="BRK">
+                <message name="FindReferenceBackground"><string value="scene" /></message>
+            </load-scene-object>
+
+            <flag name="QUEST:MEM_CARD:HEAT_SCORE" set="10" />
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="QUEST:MEM_CARD:HEAT_SCORE" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+            </load-scene-object>
+
+            <fade-to-black speed="-0.5" />
+
+            <autosave label="Record ${CHAR:BRK:NAME}'s video" />
+
+            <dlg char="BRK" track="BRK">
+                <m>Oh dear... This...</m>
+                <m>This is much easier said than done...</m>
+            </dlg>
+
+            <sys>
+                FEELING THE HEAT\n\n
+                The HEAT gauge appears during some special scenes.\n\n
+                During these scenes, some specific actions will make the HEAT increase. To fully complete the scene, you must fill the gauge\n\n 
+                If you're out of luck, you can spend Rift Energy to raise a large chunk of the HEAT gauge\n\n
+            </sys>
+
+            <node-output node="loop-01" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## loop-01 ###################################################
+            ##############################################################
+        -->
+        <n id="loop-01">
+            <obj target="scene/interactables" active="true">
+                <outcome value="TALK" node="loop-01-talk" clear="true" />
+                <outcome value="SOAP" node="loop-01-soap" clear="true" />
+                <outcome value="LEAK" node="loop-01-leak" clear="true" />
+                <outcome value="DOOR" node="loop-01-door" clear="true" />
+                <outcome copy-to="TMP:0" clear="true" />
+            </obj>
+
+            <anim target="scene" trigger="${TMP:0}"></anim>
+            <node-output node="loop-01" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## loop-01-talk ##############################################
+            ##############################################################
+        -->
+        <n id="loop-01-talk">
+            <obj target="scene/interactables" active="false" />
+
+            <choice id="bkr-record-video-video-loop-01">
+                <c pos="NW" style="PARAGON">
+                    <text>Sure about this?</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="14" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="15" />
+                        <check-flag flag="PLAYER:STAT:PARAGON" gte="6" />
+                    </check-group>
+                    <lock-reason>
+                        <check-group op="AND">
+                            <check-flag flag="QUEST:MEM_CARD" bit-unset="14" />
+                            <check-flag flag="QUEST:MEM_CARD" bit-unset="15" />
+                            <check-flag flag="PLAYER:STAT:PARAGON" gte="6" inverse="true" />
+                        </check-group>
+                        [Paragon 6+ required]
+                    </lock-reason>
+                    <then>
+                        <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                        <flag name="QUEST:MEM_CARD" bit-on="14" /> <!-- (14): Choice (bkr-record-video-video-loop-01) used (NW) -->
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="0.5">Hey... Are you really sure about this?</m>
+                            <m>If you're not feeling confident, we can just call it off... or try again later...</m>
+                        </dlg>
+
+                        <flag name="QUEST:MEM_CARD:HEAT_SCORE" inc="20" />
+                        <anim target="BRK" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m>Oh... Thank you for being patient with me...</m>
+                            <m wait="1">It's just... I'm not used to... expose myself... to others...</m>
+                            <m>But the cause is just... It must be done</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW" style="RENEGADE">
+                    <text>Quit stalling</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="14" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="15" />
+                        <check-flag flag="PLAYER:STAT:RENEGADE" gte="6"  />
+                    </check-group>
+                    <lock-reason>
+                        <check-group op="AND">
+                            <check-flag flag="QUEST:MEM_CARD" bit-unset="14" />
+                            <check-flag flag="QUEST:MEM_CARD" bit-unset="15" />
+                            <check-flag flag="PLAYER:STAT:RENEGADE" gte="6" inverse="true" />
+                        </check-group>
+                        [Paragon 6+ required]
+                    </lock-reason>
+                    <then>
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <flag name="QUEST:MEM_CARD" bit-on="15" /> <!-- (15): Choice (bkr-record-video-video-loop-01) used (NW) -->
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="0.5">Come on... Quit stalling...</m>
+                            <m>Just forget I'm here and try to relax...</m>
+                        </dlg>
+
+                        <anim target="BRK" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m>I... I'm not staling...</m>
+                            <m>It's just... not easy to look through your grin and pretend I'm alone...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="NE">
+                    <text>Start with the glasses?</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="16" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="17" />
+                    </check-group>
+                    <then>
+                        <flag name="QUEST:MEM_CARD" bit-on="16" /> <!-- (16): Choice (bkr-record-video-video-loop-01) used (NE) Start with the glasses? -->
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>So... Why don't you start slow and take off your glasses?</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <flag name="QUEST:MEM_CARD:HEAT_SCORE" inc="20" />
+                        <anim target="BRK" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m>Oh... Yeah... I think that's a good idea...</m>
+                        </dlg>
+                        <wait />
+                        <anim target="BRK"><bool name="glasses" value="false" /></anim>
+                        <sfx clip="swoosh" />
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>You weren't shy in the first video</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="16" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="17" />
+                    </check-group>
+                    <then>
+                        <flag name="QUEST:MEM_CARD" bit-on="17" /> <!-- (17): Choice (bkr-record-video-video-loop-01) used (SE) Why so shy now? -->
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="0.5">Why are you so shy now?</m>
+                            <m>I watched your first video, remember?</m>
+                            <m>You did it without any visible concerns if I remember well...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <anim target="BRK" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m wait="1">Yeah, but... There wasn't a boy recoding me that time...</m>
+                            <m wait="1">I need to do this at my own pace...</m>
+                            <m>Like... First getting rid of my glasses...</m>
+                        </dlg>
+                        <anim target="BRK"><bool name="glasses" value="false" /></anim>
+                        <sfx clip="swoosh" />
+                    </then>
+                </c>
+                <c pos="NE">
+                    <text>You look cute without the glasses</text>
+                    <check-group op="AND">
+                        <check-group op="OR">
+                            <check-flag flag="QUEST:MEM_CARD" bit-set="16" />
+                            <check-flag flag="QUEST:MEM_CARD" bit-set="17" />
+                        </check-group>
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="18" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="19" />
+                    </check-group>
+                    <then>
+                        <flag name="QUEST:MEM_CARD" bit-on="18" /> <!-- (18): Choice (bkr-record-video-video-loop-01) used (NE) You're beautiful without the glasses -->
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>See? You look cute without the glasses...</m>
+                        </dlg>
+
+                        <anim target="BRK" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m wait="0.5">You mean... I look ugly when I use the glasses!?!?</m>
+                            <m wait="1">I mean... It could be a compliment, not a comparison, but...</m>
+                            <m>Forget about it... Sorry... I don't deal well with ambiguous logic......</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>Glasses get in the way of deepfakes</text>
+                    <check-group op="AND">
+                        <check-group op="OR">
+                            <check-flag flag="QUEST:MEM_CARD" bit-set="16" />
+                            <check-flag flag="QUEST:MEM_CARD" bit-set="17" />
+                        </check-group>
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="18" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-unset="19" />
+                    </check-group>
+                    <then>
+                        <flag name="QUEST:MEM_CARD" bit-on="19" /> <!-- (19): Choice (bkr-record-video-video-loop-01) used (SE) Glasses get in the way of deepfakes -->
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Cool... The deepfake editor works better without the glasses blocking reference points on your face...</m>
+                        </dlg>
+
+                        <flag name="QUEST:MEM_CARD:HEAT_SCORE" inc="20" />
+                        <anim target="BRK" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m wait="1">Oh... I didn't know that... That's a good tip...</m>
+                            <m>At least with you here, I'm less likely to screw up the video again....</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E" out="loop-01">
+                    <check-group op="OR">
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="18" />
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="19" />
+                    </check-group>
+                    <text>How is it going to be?</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>So... How is it going to be?</m>
+                            <m>Do you want me to record using your phone?</m>
+                        </dlg>
+
+                        <dlg char="BRK" track="BRK">
+                            <m>I... I think so...</m>
+                            <m>Here... Take my phone and start recording... It's now or never...</m>
+                        </dlg>
+
+
+
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" />
+                        <sfx clip="item" />
+                        <bootstrap node="record-01" />
+                    </then>
+                </c>
+                <c pos="W" out="loop-01">
+                    <text>[Check around]</text>
+                </c>
+            </choice>
+            <node-output node="loop-01" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## loop-01-soap ##############################################
+            ##############################################################
+        -->
+        <n id="loop-01-soap">
+            <obj target="scene/interactables" active="false" />
+
+            <dlg char="PLAYER"  track="null">
+                <m instant="true">|It's a soap dispenser...|</m>
+                <m instant="true">|Can't see how it could help me now...|</m>
+            </dlg>
+            <node-output node="loop-01" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## loop-01-leak ##############################################
+            ##############################################################
+        -->
+        <n id="loop-01-leak">
+            <obj target="scene/interactables" active="false" />
+            
+            <dlg char="PLAYER"  track="null">
+                <m>Jeez... This is annoying...</m>
+            </dlg>
+            <choice>
+                <c pos="E">
+                    <text>[ Close Faucet ]</text>
+                    <then>
+                        <anim target="scene"><bool name="leak" value="false"/></anim>
+                        <wait time="1.5" />
+
+                        <flag name="QUEST:MEM_CARD:HEAT_SCORE" inc="20" />
+                        <anim target="scene" trigger="LOOK-A" />
+                        <anim target="BRK" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m>Oh my God... Thank you...</m>
+                            <m>That sound was making me even more nervous...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[ Leave ]</text>
+                </c>
+            </choice>
+            <node-output node="loop-01" />
+        </n>
+        
+        <!--
+            ##############################################################
+            ## loop-01-door ##############################################
+            ##############################################################
+        -->
+        <n id="loop-01-door">
+            <obj target="scene/interactables" active="false" />
+
+            <anim target="scene" trigger="LOOK-A" />
+            <anim target="BRK" trigger="say-01" />
+            <dlg char="BRK" track="BRK">
+                <m>Hey... Could you please lock the door for me?</m>
+                <m>I'd be much more relaxed if I was sure people can't come in here at anytime...</m>
+            </dlg>
+
+            <anim target="scene" trigger="LOOK-C" />
+            <dlg char="BRK" track="BRK">
+                <m>You work with ${CHAR:SAM:NAME}, right? Didn't he give you the key?</m>
+            </dlg>
+
+            <choice>
+                <c pos="SW" style="RENEGADE">
+                    <text>[Lie and pretend to lock]</text>
+                    <lock-reason>[Renegade +6 required]</lock-reason>
+                    <then>
+                        <dlg char="PLAYER" track="null">
+                            <m>Sure.... I totally have the key... Let me use it...</m>
+                        </dlg>
+                        <wait />
+                        <sfx clip="unlock" />
+                        <wait />
+                        <dlg char="PLAYER" track="null">
+                            <m>Done... You're safe now...</m>
+                        </dlg>
+
+                        <anim target="scene"><bool name="door" value="false"/></anim>
+                        <flag name="QUEST:MEM_CARD:HEAT_SCORE" inc="20" />
+                        <anim target="scene" trigger="LOOK-A" />
+
+                        <anim target="BRK" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m>Phew... That is a relief...</m>
+                            <m>Thank you... I feel a little safer now...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>${CHAR:SAM:NAME} never gave me the key</text>
+                    <then>
+                        <dlg char="PLAYER" track="null">
+                            <m wait="0.5">Sorry... ${CHAR:SAM:NAME} never gave me the key...</m>
+                            <m>But don't worry... I will hear if someone approaches the door...</m>
+                        </dlg>
+
+                        <anim target="scene" trigger="LOOK-A" />
+                        <anim target="BRK" trigger="say-01" />
+                        <dlg char="BRK" track="BRK">
+                            <m>Oh, God...... So we'll have to trust your perception skill to not get busted?</m>
+                            <m>That doesn't feel much reliably to me...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <node-output node="loop-01" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## record-01 ##############################################
+            ##############################################################
+        -->
+        <n id="record-01">
+            <fade-to-black keep="true" speed="9999999" />
+            <load-scene-object key="scene-brk-record-video-02.prefab" rename="scene"></load-scene-object>
+            <proxy target="scene/BRK" name="BRK" />
+            <load-scene-object key="video-recorder.prefab"></load-scene-object>
+            
+            <fade-to-black speed="-1" />
+
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="QUEST:MEM_CARD:HEAT_SCORE" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+            </load-scene-object>
+
+            <autosave label="Recording ${CHAR:BRK:NAME}'s Video" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">Alright... Film is rolling... Now it's up to you...</m>
+            </dlg>
+            
+            <anim target="BRK" trigger="next" />
+            <dlg char="BRK" track="BRK">
+                <m>Okay... I... I'll do it..</m>
+            </dlg>
+            <wait />
+
+            <anim target="BRK" trigger="next" />
+            <dlg char="BRK" track="BRK">
+                <m>I'll just think how ${CHAR:VIC:NAME} will be pissed off when I upload the deepfake...</m>
+            </dlg>
+            <wait />
+
+            <anim target="BRK" trigger="next" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">and how she'll be forced to close the Vortex for good...</m>
+                <m wait="1">yes... we will be free...</m>
+                <m>this is for freedom...</m>
+            </dlg>
+
+            <anim target="BRK" trigger="next" />
+            <wait time="2.5" />
+
+            
+            <load-scene-object key="interrupt.prefab" rename="interrupt" active="false" />
+            <obj target="scene/cinemachine/target">
+                <message name="SetToMinLens" />
+                <message name="Recenter" />
+                <message name="SetReadInput" ><bool value="false" /></message>
+            </obj>
+
+            <sfx clip="interrupt-paragon" async="true" volume="0" />
+            <sfx clip="interrupt-renegade" async="true" volume="0" />
+            <obj target="interrupt" active="true">
+                <message name="EnableParagon" />
+                <message name="EnableRenegade" />
+                <message name="SetWaitInputTime"><float value="2.5"></float></message>
+                <outcome value="PARAGON" copy-to="TMP:0" destroy="true" />
+                <outcome value="RENEGADE" copy-to="TMP:0" destroy="true" />
+                <outcome value="TIME_UP" copy-to="TMP:0" destroy="true" />
+            </obj>
+            
+            <if>
+                <check-text text="TMP:0" eq="RENEGADE" />
+                <then>
+                    <sfx clip="interrupt-renegade" async="true" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Hello there, nice ti-</m>
+                    </dlg>
+                    <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                        <message name="GenerateImpulse"><float value="50" /></message>
+                    </load-scene-object>
+                    <anim target="BRK" trigger="next" />
+                    <dlg char="BRK" track="BRK">
+                        <m wait="1">DON'T!!</m>
+                        <m>Just... Please be quiet for a moment... This is shameful enough without your awkward interrupts...</m>
+                    </dlg>
+                    <anim target="BRK" trigger="next" />
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="PARAGON" />
+                <then>
+                    <sfx clip="interrupt-paragon" async="true" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Are yo-</m>
+                    </dlg>
+                    <anim target="BRK" trigger="next" />
+                    <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                        <message name="GenerateImpulse"><float value="50" /></message>
+                    </load-scene-object>
+                    <dlg char="BRK" track="BRK">
+                        <m wait="1">DON'T!!</m>
+                        <m>Just... Please be quiet for a moment... This is shameful enough without your awkward interrupts...</m>
+                    </dlg>
+                    <anim target="BRK" trigger="next" />
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="TIME_UP" />
+                <then>
+                    <wait />
+                    <dlg char="BRK" track="BRK">
+                        <m>So.... Uuh... You're recording, right?</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Yep... Lightning and focus one hundred percent cool...</m>
+                    </dlg>
+
+                    <flag name="QUEST:MEM_CARD:HEAT_SCORE" inc="20" />
+                    <dlg char="BRK" track="BRK">
+                        <m>Sigh... At least your reaction shows a little more maturity than I expected...</m>
+                        <m>Thank you...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <wait time="2" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">Look... Just a little piece of advice...</m>
+                <m>Deepfake traces your expression an moves...</m>
+                <m>You don't wanna ${CHAR:VIC:NAME} looking bummed out in the video... No one will buy it that way...</m>
+            </dlg>
+            
+            <dlg char="BRK" track="BRK">
+                <m wait="1">Oh... That's true...</m>
+                <m>I guess... I... need to make an effort and play the part properly...</m>
+            </dlg>
+
+            <fade-to-black keep="true" speed="2" />
+            <bootstrap node="record-02" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## record-02 ##############################################
+            ##############################################################
+        -->
+        <n id="record-02">
+            <fade-to-black keep="true" speed="2" />
+            <load-scene-object key="scene-brk-record-video-03.prefab" rename="scene"></load-scene-object>
+            <proxy target="scene/BRK" name="BRK" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <obj target="PLAYER" active="false" />
+            <load-scene-object key="video-recorder.prefab"></load-scene-object>
+            <fade-to-black speed="-1" />
+            <bgm loop="loop-brk" volume="0.2" />
+
+            <autosave label="Recording ${CHAR:BRK:NAME}'s Video" />
+            
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="QUEST:MEM_CARD:HEAT_SCORE" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+            </load-scene-object>
+
+            <wait time="1" />
+
+            <dlg char="BRK" track="BRK">
+                <m>How about this?</m>
+            </dlg>
+            
+            <wait time="2" />
+
+            <dlg char="PLAYER" track="null">
+                <m>Nice... It's good to see you're getting on the mood...</m>
+            </dlg>
+            
+            <anim target="scene" face="DISAPPROVE"></anim>
+            <dlg char="BRK" track="BRK">
+                <m>Hey!! I'm not 'on the mood', okay!?</m>
+                <m wait="1">I'm just... acting!</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="null">
+                <m>Sure... Whatever you say...</m>
+            </dlg>
+            
+            <anim target="scene" face="UPSET"></anim>
+            <dlg char="BRK" track="BRK">
+                <m>It's just... not easy to imitate those shallow girls...</m>
+                <m>I don't have much of an idea on how to do emulate their stupid behaviour...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER"  track="null">
+                <m>It's quite easy... Just let me go there and I'll show you how they move...</m>
+            </dlg>
+
+            <anim target="scene" face="DISAPPROVE"></anim>
+            <dlg char="BRK" track="BRK">
+                <m>You wanna come here to... pose me... like... 'physically'!?!</m>
+            </dlg>
+            
+            <dlg char="PLAYER"  track="null">
+                <m>Yeah... Just to make sure the video is gonna be the way you want...</m>
+            </dlg>
+            
+            <anim target="scene" face="UPSET"></anim>
+            <dlg char="BRK" track="BRK">
+                <m wait="1">...........</m>
+                <m wait="1">I... usually wouldn't never agree with this kind of... of...</m>
+                <m>But... Today I feel... different... I feel I should not give up...</m>
+            </dlg>
+            <anim target="scene" face="DISAPPROVE"></anim>
+            <dlg char="BRK" track="BRK">
+                <m wait="1">You can come... but... behave yourself!!</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER" track="null">
+                <m>Cool... I'll place the phone here so it we can keep recording...</m>
+            </dlg>
+
+            <fade-to-black speed="2" keep="true" />
+            <sfx clip="swoosh" async="true" />
+            <obj target="scene/PLAYER" active="true" />
+            <obj target="video-recorder.prefab" destroy="0" />
+            <fade-to-black speed="-2" />
+
+            <obj target="scene">
+                <message name="Recenter" broadcast="true" />
+                <message name="SetReadInput" broadcast="true">
+                    <bool value="false" />
+                </message>
+            </obj>
+
+            <anim target="scene" face="SURPRISED"></anim>
+            <dlg char="BRK" track="BRK">
+                <m>Wait... What do you think you're doing!?!?</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I'll just show how girls like ${CHAR:VIC:NAME} move in front of a camera...</m>
+            </dlg>
+            
+            <anim target="scene" face="DISAPPROVE"></anim>
+            <dlg char="BRK" track="BRK">
+                <m>But... Do you really need to be so... handsy?</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Of course... You must try to get in sync with my hands movements...</m>
+            </dlg>
+            
+            <wait />
+            <anim target="scene" face="UPSET" />
+            <dlg char="BRK" track="BRK">
+                <m>sigh... i... i just hope you're not making up this stuff...</m>
+            </dlg>
+            
+            
+            <wait />
+            <sys>
+                FEELING THE HEAT\n\n
+                Sometimes you'll be able to increase heat while on control of an animation
+                by keeping a certain pace, reaching some areas, or simply moving for a certain time.
+                \n
+                You'll you see a quick vfx when the 'sweet spot' is reached
+            </sys>
+
+            <anim target="scene" face="NEUTRAL" />
+            <obj target="scene/PLAYER/axis-control" active="true">
+                <message name="SetTargetDistance"><float value="10" /></message>
+                <outcome value="TARGET_DISTANCE" copy-to="TMP:0" clear="true" />
+                <outcome copy-to="TMP:0" clear="true" />
+            </obj>
+
+            <if>
+                <check-text text="TMP:0" eq="TARGET_DISTANCE" />
+                <then>
+                    <obj target="scene/PLAYER/axis-control" active="false" />
+                    
+                    <flag name="QUEST:MEM_CARD:HEAT_SCORE" inc="20" />
+                    <load-scene-object key="vfx-heat.prefab" />
+                    <anim target="scene" face="UPSET"></anim>
+                    <dlg char="BRK" track="BRK">
+                        <m wait="1">uunnnhg... please...</m>
+                        <m wait="1">your hands... are... making...</m>
+                        <m>... i... i think we...</m>
+                    </dlg>
+                    <wait />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Don't worry...</m>
+                        <m>You're almost learning the moves...</m>
+                    </dlg>
+
+                    <obj target="scene/PLAYER/axis-control" active="true">
+                        <outcome value="CONTINUE" copy-to="TMP:0" clear="true" />
+                    </obj>
+                </then>
+            </if>
+
+            <obj target="scene/PLAYER/axis-control" active="false" />
+            <anim target="scene" face="UPSET"></anim>
+            <dlg char="BRK" track="BRK">
+                <m>oh, my...</m>
+                <m wait="1">i... thanks... for teaching... the moves... i...</m>
+                <m wait="1">...i think i know how to do it now...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap node="record-03" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## record-03 ##############################################
+            ##############################################################
+        -->
+        <n id="record-03">
+            <fade-to-black keep="true" speed="999999" />
+            <load-scene-object key="scene-brk-record-video-04.prefab" rename="scene" />
+            <proxy target="scene/BRK" name="BRK" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <bgm loop="loop-brk" volume="0.2" />
+            <fade-to-black speed="-1" />
+
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="QUEST:MEM_CARD:HEAT_SCORE" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+            </load-scene-object>
+
+            <autosave label="Recording ${CHAR:BRK:NAME}'s video" />
+
+            <dlg char="BRK" track="BRK">
+                <m>so... uuuuhh...</m>
+                <m>do you think... we have enough... footage?</m>
+            </dlg>
+
+            <node-output node="record-03-loop" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## record-03-loop ##############################################
+            ##############################################################
+        -->
+        <n id="record-03-loop">
+            <choice>
+                <c pos="E">
+                    <text>We have enough</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Yeah... I think this is all we can do for now...</m>
+                        </dlg>
+                        <dlg char="BRK" track="BRK">
+                            <m>Oh... Thank God...</m>
+                        </dlg>
+                        <wait />
+                        <bgm volume="0" />
+                        <fade-to-black speed="1" keep="true" />
+                        <wait time="2" />
+                        <bootstrap  node="half-complete" />
+                    </then>
+                </c>
+                <c pos="NE" style="RIFT">
+                    <text>[Raise Heat]</text>
+                    <check-flag flag="PLAYER:STAT:RIFT" gte="1" />
+                    <lock-reason>[Not enough Rift Energy]</lock-reason>
+                    <then>
+                        <bgm name="rift-bgm" loop="loop-rumble" as-music="false" volume="0.5" />
+                        <flag name="PLAYER:STAT:RIFT" dec="1" icon="RIFT">Used 1 Rift energy point</flag>
+                        <load-scene-object key="vfx-rift.prefab" />
+                        <wait />
+                        
+                        <dlg char="BRK" track="BRK">
+                            <m wait="1">Huh!?! What's happening'!?!</m>
+                        </dlg>
+                        <wait />
+                        <flag name="QUEST:MEM_CARD:HEAT_SCORE" inc="70" />
+                        <flag name="PLAYER:STAT:RIFT" dec="1" />
+                        <dlg char="BRK" track="BRK">
+                            <m>oh... my...</m>
+                            <m>why the room suddenly went... hotter...</m>
+                        </dlg>
+
+                        <wait time="1" />
+                        <bgm name="rift-bgm" volume="0" />
+                        <anim target="vfx-rift.prefab">
+                            <bool name="active" value="false" />
+                        </anim>
+                        <wait time="1" />
+                        <node-output node="record-03-loop" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <check-flag flag="QUEST:MEM_CARD:HEAT_SCORE" gte="100" />
+                    <text>We can do it even better</text>
+                    <lock-reason>[Full HEAT bar required]</lock-reason>
+                    <then>
+                        <anim target="scene" trigger="next" />
+                        <wait time="0.5" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Actually... I have an idea to make your video even better...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <dlg char="BRK" track="BRK">
+                            <m>..... better?</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="0.5">Look... A video of ${CHAR:VIC:NAME} flashing in the restroom might not have all the impact you want...</m>
+                            <m>But... What if we stage a deepfake of her... fooling around with an undisclosed dude in the restroom...</m>
+                            <m>That would be a total blast!</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <dlg char="BRK" track="BRK">
+                            <m wait="1">foo...... fooling... around... like... with you?</m>
+                            <m>i... i knew a pervert like you would suggest... something like that...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>I just want to help increase the success chances of your revenge plan...</m>
+                            <m>Just think about the scandal we would throw ${CHAR:VIC:NAME} into...</m>
+                        </dlg>
+                        <wait time="1" />
+                        <dlg char="BRK" track="BRK">
+                            <m wait="1">...... yeah... that would be a big hit...</m>
+                            <m>...... then... maybe... if... you...</m>
+                            <m>...you would't do anything too much weird to me... would you?</m>
+                        </dlg>
+
+                        <wait />
+                        <bgm volume="0" />
+                        <fade-to-black speed="1" keep="true" />
+                        <wait time="2" />
+                        <bootstrap  node="record-04" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--
+            ##############################################################
+            ## record-04 ##############################################
+            ##############################################################
+        -->
+        <n id="record-04">
+            <fade-to-black keep="true" speed="999999" />
+            <load-scene-object key="scene-brk-record-video-05.prefab" rename="scene" />
+            <proxy target="scene/BRK" name="BRK" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <bgm loop="loop-brk" volume="0.2" />
+            <fade-to-black speed="-1" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Don't worry... We can do just enough to hurt her reputation...</m>
+            </dlg>
+
+            <wait />
+
+            <dlg char="BRK" track="BRK">
+                <m wait="1">enough?</m>
+                <m>how much is... enough?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            
+            <anim target="scene" inc="step" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I think a little bit of skin contact is required...</m>
+            </dlg>
+
+            <dlg char="BRK" track="BRK">
+                <m>........</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Like this...</m>
+            </dlg>
+
+            <anim target="scene" inc="step" />
+            <wait />
+
+            <sfx clip="voice-gasp-a" async="true" />
+            <dlg char="BRK" track="BRK">
+                <m>oh my God...</m>
+                <m>how........ how dare you...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Come on... No need to play outraged now...</m>
+            </dlg>
+
+            <dlg char="BRK" track="BRK">
+                <m>but you... you are...</m>
+            </dlg>
+
+            <wait time="0.5" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I'm just helping you...</m>
+                <m wait="1">...to put your plan in practice...</m>
+                <m wait="1">You're supposed to play ${CHAR:VIC:NAME}, remember?</m>
+                <m>Just relax... I'll show you how it's done...</m>
+            </dlg>
+
+            <anim target="scene" inc="step" />
+
+            <obj target="scene/axis-control" active="true" />
+            <obj target="scene/axis-control/control-grope" active="true" />
+            
+            <bgm name="moan" loop="loop-moan-01" fade-speed="0.25" volume="0.15" />
+            <obj target="scene/axis-control/control-grope/arm-f-grope" >
+                <message name="SetTargetDistance"><float value="8" /></message>
+                <outcome value="TARGET_DISTANCE" clear="true" />
+            </obj>
+
+            <obj target="scene/axis-control" active="false" />
+
+            <bgm name="moan"  volume="0" />
+            <anim target="scene"><bool name="sigh" value="true" /></anim>
+            <dlg char="BRK" track="BRK">
+                <m wait="1">mmnngh... I... I...</m>
+            </dlg>
+
+            <wait />
+                
+            <sys>
+                Some of your characters responses will be dynamically based on the current PARAGON / RENEGADE balance\n\n
+                Teach him to be a dick and he will learn! Show him the nice path and he will follow!
+            </sys>
+                
+            <dlg char="BRK" track="BRK">
+                <m wait="1">I can't believe I'm allowing this to happen... i am...</m>
+            </dlg>
+            <anim target="scene"><bool name="sigh" value="false" /></anim>
+            <dlg char="BRK" track="BRK">
+                <m wait="1">...in the middle of the school restroom... doing... doing...</m>
+                <m>oh my god... what am I doing...</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
+                <then>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Hey... Don't fret...</m>
+                        <m>No one knows you're here... and it's for a greater good, right?</m>
+                    </dlg>
+                    <dlg char="BRK" track="BRK">
+                        <m wait="1">yeah... it's true...</m>
+                        <m>it's just to... free us... of tyranny...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>I tell you what you're doing...</m>
+                        <m>You're being groped in a restroom by a dude you've just met and loving the heat you're feeling...</m>
+                        <m>What does that say about you, huh?</m>
+                    </dlg>
+                    <wait />
+                    <anim target="scene"><bool name="sigh" value="true" /></anim>
+                    <dlg char="BRK" track="BRK">
+                        <m wait="1">no... i...</m>
+                        <m>.............</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Yeah... I  agree...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <wait time="2" />
+
+            <anim target="scene"><bool name="sigh" value="false" /></anim>
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Now... Let me check if I can find a weak spot...</m>
+            </dlg>
+
+            <obj target="scene/axis-control" active="true" />
+            <obj target="scene/axis-control/control-grope" active="false" />
+            <obj target="scene/axis-control/control-nipples" active="true" />
+
+            <bgm name="moan" loop="loop-moan-01" fade-speed="0.25" volume="0.15" />
+            <obj target="scene/axis-control/control-nipples/arm-f-nipple" >
+                <message name="SetTargetDistance"><float value="8" /></message>
+                <outcome value="TARGET_DISTANCE" clear="true" />
+            </obj>
+
+            <obj target="scene/axis-control" active="false" />
+
+            <anim target="scene"><bool name="ahegao" value="true" /></anim>
+            <dlg char="BRK" track="BRK">
+                <m wait="1">mmmnghh... please... i... am... i... feel....</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Easy there... We're almost done...</m>
+                <m wait="1">And you're playing the part very well...</m>
+                <m>I can't wait to see how the deepfake editor process your... reactions...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="ahegao" value="false" /></anim>
+
+            <obj target="scene/axis-control" active="true" />
+            <obj target="scene/axis-control/control-grope" active="true" />
+            <obj target="scene/axis-control/control-nipples" active="true" />
+            <obj target="scene/axis-control/control-nipples/arm-f-nipple" active="false" />
+            <obj target="scene/axis-control/control-nipples/arm-b-nipple" active="false" />
+            <obj target="scene/axis-control/canvas-commands" active="true" />
+
+            <obj target="scene/axis-control">
+                <outcome clear="true"  />
+            </obj>
+            <obj target="scene/axis-control" active="false" />
+
+            <anim target="scene" inc="step" />
+
+            <bgm name="moan" loop="loop-moan-01" fade-speed="0.25" volume="0.4" />
+            <anim target="scene" inc="heat" />
+            <anim target="scene"><bool name="ahegao" value="true" /></anim>
+            <dlg char="BRK" track="BRK">
+                <m>mmmmmnghh... please... i can't... take this... anymore...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Okay... We can stop now, then...</m>
+            </dlg>
+
+            <dlg char="BRK" track="BRK">
+                <m>stop... now...</m>
+            </dlg>
+
+            <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                <message name="GenerateImpulse"><float value="30" /></message>
+            </load-scene-object>
+            <anim target="scene" inc="heat" />
+            <dlg char="BRK" track="BRK">
+                <m>NO!!</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Uh oh...</m>
+                <m>I think we have an overheating issue here...</m>
+            </dlg>
+            <dlg char="BRK" track="BRK">
+                <m>don't stop...</m>
+                <m>don't stop touching me...</m>
+                <m>i'm feeling.... felling...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <load-scene-object key="scene-brk-record-video-06.prefab" active="true" />
+            <obj target="scene" destroy="0" />
+            <obj target="scene-brk-record-video-06.prefab" active="true" />
+            <bgm name="moan" loop="loop-moan-01" volume="0" />
+            <sfx clip="voice-orgasm-a" async="true" />
+
+            <obj target="scene-brk-record-video-06.prefab">
+                <outcome clear="true" />
+            </obj>
+
+            <fade-to-black keep="true" speed="0.25" />
+            
+            <wait time="3" />
+            <bootstrap node="complete" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## complete ##################################################
+            ##############################################################
+        -->
+        <n id="complete">
+            <fade-to-black speed="9999999" keep="true" />
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <load-scene-object key="shot-restroom-women-01.prefab" rename="shot"  />
+            <load-scene-object key="shot-char-brk-01.prefab" rename="BRK" active="false">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+            
+            <proxy target="shot/player" name="PLAYER" />
+            
+            <fade-to-black speed="-0.5" />
+
+            <autosave label="After recording ${CHAR:BRK:NAME}'s video" />
+
+            <flag name="QUEST:MEM_CARD" bit-on="22" /> <!-- Had full session video -->
+            <trophy unlock="birds-are-not-real-02" />
+
+            <obj target="BRK" active="true" />
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <anim target="BRK" face="UPSET" idle="UPSET" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">Oh my God...</m>
+                <m>What... What did just happened to me?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Uuh... Was that some kind of rhetorical question?</m>
+                <m>I mean... I didn't think you would actual-</m>
+            </dlg>
+
+            <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                <message name="GenerateImpulse"><float value="30" /></message>
+            </load-scene-object>
+            <anim target="BRK" face="DISAPPROVE" idle="NEUTRAL" trigger="surprised" />
+            <dlg char="BRK" track="BRK">
+                <m wait="1">SHUT UP!</m>
+                <m>You... you... just... shut up... please...</m>
+                <m>You can't ever talk about what we did... to anyone... never...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Okay... I'll zip it, miss tsundere...</m>
+            </dlg>
+
+            <anim target="BRK" face="SIGH"  trigger="sigh" />
+            <dlg char="BRK" track="BRK">
+                <m>Sigh... Just please...</m>
+            </dlg>
+
+            <node-output node="end" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## half-complete ##################################################
+            ##############################################################
+        -->
+        <n id="half-complete">
+            <fade-to-black speed="9999999" keep="true" />
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <load-scene-object key="shot-restroom-women-01.prefab" rename="shot"  />
+            <load-scene-object key="shot-char-brk-01.prefab" rename="BRK" active="false">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+            
+            <proxy target="shot/player" name="PLAYER" />
+            
+            <fade-to-black speed="-0.5" />
+
+            <autosave label="After recording ${CHAR:BRK:NAME}'s video" />
+            <flag name="QUEST:MEM_CARD" bit-on="21" /> <!-- (21): Had half session video -->
+            <obj target="BRK" active="true" />
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <node-output node="end" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## end ##################################################
+            ##############################################################
+        -->
+        <n id="end">
+            <anim target="BRK" face="UPSET"  />
+            <dlg char="BRK" track="BRK">
+                <m>We... We recorded... everything... right?</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">Yep...</m>
+                <m>Now all you need now is to cast the editing magic...</m>
+            </dlg>
+            
+            <anim target="BRK" face="NEUTRAL"  />
+            <dlg char="BRK" track="BRK">
+                <m>I... I talk to you later after prepping the video...</m>
+                <m>and... uh... thank you... for the... help...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Believe it... It was my pleasure...</m>
+            </dlg>
+
+            <anim target="BRK" face="SIGH"  />
+            <dlg char="BRK" track="BRK">
+                <m>.......</m>
+            </dlg>
+
+            <obj target="BRK">
+                <message name="StartCenter" />
+                <message name="EndRight" />
+                <message name="TriggerEnter" />
+            </obj>
+
+            <flag name="QUEST:MEM_CARD" bit-on="23" /> <!-- (23): Recorded video with brk -->
+            <string name="QUEST:MEM_CARD:OBJECTIVE" unset="true" />
+            <fade-to-black keep="true" />
+            <bootstrap script="location-restroom-women-01/location" spawn="mirrors" />
+
+        </n>
+    </nodes>
+</xml-script>
