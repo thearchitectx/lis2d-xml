@@ -55,7 +55,7 @@
                     <text>[Leave]</text>
                     <then>
                         <obj target="#Player">
-                            <message name="SetInputActive"><bool value="false" /></message>
+                            <message name="SetInputActive"><bool value="true" /></message>
                         </obj>
                         <script-outcome value="_end" />
                     </then>

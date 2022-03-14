@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <sys>Not implemented yet!</sys>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+    </nodes>
+</xml-script>

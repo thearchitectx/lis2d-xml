@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:simpleType name="sfx">
-        <xs:restriction base="xs:string">
+<xs:simpleType name="sfx">
+    <xs:restriction base="xs:string">
+            <xs:enumeration value="cymbal" />
             <xs:enumeration value="explosion" />
             <xs:enumeration value="swoosh" />
             <xs:enumeration value="impact" />
             <xs:enumeration value="item" />
             <xs:enumeration value="beep" />
+            <xs:enumeration value="bus" />
             <xs:enumeration value="knock-door" />
             <xs:enumeration value="interrupt-paragon" />
             <xs:enumeration value="interrupt-renegade" />
             <xs:enumeration value="door-transition" />
+            <xs:enumeration value="switch" />
+            <xs:enumeration value="phone-call-tone" />
+            <xs:enumeration value="phone-pickup" />
             <xs:enumeration value="voice-gasp-a" />
             <xs:enumeration value="voice-hem-a" />
             <xs:enumeration value="voice-hem-b" />
@@ -27,6 +32,7 @@
     <xs:simpleType name="loop">
         <xs:restriction base="xs:string">
             <xs:enumeration value="loop-brk" />
+            <xs:enumeration value="loop-chl" />
             <xs:enumeration value="loop-jul" />
             <xs:enumeration value="loop-jus" />
             <xs:enumeration value="loop-kate" />
@@ -37,7 +43,10 @@
             <xs:enumeration value="loop-tay" />
             <xs:enumeration value="loop-title" />
             <xs:enumeration value="loop-urban" />
+            <xs:enumeration value="loop-computer" />
+            <xs:enumeration value="loop-urban-outside" />
             <xs:enumeration value="loop-vic" />
+            <xs:enumeration value="loop-war" />
             <xs:enumeration value="loop-moan-01" />
         </xs:restriction>
     </xs:simpleType>

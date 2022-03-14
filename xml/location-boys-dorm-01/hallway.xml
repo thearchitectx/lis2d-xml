@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <fade-to-black fill="true" speed="3" keep="true" />
+            <bgm volume="0" />
+            <bootstrap script="location-boys-dorm-02/location" spawn="spawn/walkway" />
+        </n>
+    </nodes>
+</xml-script>

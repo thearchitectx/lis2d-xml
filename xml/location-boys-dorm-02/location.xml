@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="n1">
+            <fade-to-black keep="true" speed="99999" />
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <load-scene-object key="location-boys-dorm-02.prefab" />
+
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="16" />
+                <then>
+                    <anim target="location-boys-dorm-01.prefab" trigger="light-1-instant-off" />
+                    <anim target="location-boys-dorm-01.prefab"><bool name="light-1" value="false" /></anim>
+                </then>
+            </if>
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="17" />
+                <then>
+                    <anim target="location-boys-dorm-01.prefab" trigger="light-2-instant-off" />
+                    <anim target="location-boys-dorm-01.prefab"><bool name="light-2" value="false" /></anim>
+                </then>
+            </if>
+
+            <fade-to-black speed="-3" fill="true" />
+
+            <autosave label="Boys Dorm - Exploring" />
+
+            <inject node="lib-post-start" />
+        </n>
+    </nodes>
+</xml-script>

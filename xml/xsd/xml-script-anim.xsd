@@ -15,6 +15,7 @@
             <xs:enumeration value="UPSET" />
             <xs:enumeration value="SIGH" />
             <xs:enumeration value="SURPRISED" />
+            <xs:enumeration value="EMBARRASSED" />
         </xs:restriction>
     </xs:simpleType>
 

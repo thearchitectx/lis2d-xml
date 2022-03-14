@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <if>
+                <!-- (20): First checked player laptop -->
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="20" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>This bed seems inviting...</m>
+                        <m>But I'd better check this room before indulging in it...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+    </nodes>
+</xml-script>

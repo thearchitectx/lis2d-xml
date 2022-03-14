@@ -14,21 +14,38 @@
             </obj>
 
             <wait />
+
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="17" /> <!-- (17): Reported to SAM -->
+                <then>
+                    <dlg char="PLAYER">
+                        <m>I'd love to get out here... But I still have stuff to do...</m>
+                    </dlg>
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="true" /></message>
+                    </obj>
+                    <script-outcome value="_end" />
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="CHAR:MAX:INTERACTIONS" bit-unset="10" /> <!-- Played scene-max-chl-campus -->
+                <then>
+                    <flag name="CHAR:MAX:INTERACTIONS" bit-on="10" />
+                    <sfx clip="door-transition" async="true" />
+                    <bgm volume="0" />
+                    <fade-to-black keep="true" speed="3" fill="true" />
+                    <bootstrap script="scene-max-chl-campus" />
+                </then>
+            </if>
             
-            <dlg char="PLAYER">
-                <m>I'd love to get out here... But I still have stuff to do...</m>
-            </dlg>
-
-            <obj target="#Player">
-                <message name="SetInputActive"><bool value="true" /></message>
-            </obj>
-
-            <!-- <sfx clip="door-transition" async="true" />
+            <sfx clip="door-transition" async="true" />
             <bgm volume="0" />
-            <fade-to-black keep="true" speed="3" />
-            <bootstrap script="location-administration-01/location" spawn="spawn/mainhall" /> -->
-        </n>
+            <wait time="0.25" />
+            <fade-to-black keep="true" speed="3" fill="true" />
 
+            <bootstrap script="location-campus-01/location" spawn="spawn/entrance" />
+        </n>
 
     </nodes>
 </xml-script>

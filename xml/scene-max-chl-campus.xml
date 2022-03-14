@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--###############################################
+            ### root ######################################
+            ###############################################-->
+        <n id="root">
+            <fade-to-black keep="true" speed="9999" />
+            
+            <bgm name="loop-urban-outside" loop="loop-urban-outside" volume="0.25"  />
+            <bgm loop="loop-title" volume="0.25" />
+            
+            <load-scene-object key="scene-max-chl-campus.prefab" rename="scene" />
+            <proxy target="scene/MAX" name="MAX" />
+            <proxy target="scene/CHL" name="CHL" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            
+            <wait />
+            <fade-to-black speed="-0.2" />
+
+            <!-- <autosave label="The Campus" /> -->
+
+            <dlg char="PLAYER" track="null">
+                <m wait="1">Finally... Some fresh air...</m>
+                <m>Gotta take a break to chill after a crazy day like this...</m>
+            </dlg>
+
+            <wait time="2" />
+            <anim target="scene" trigger="next" />
+
+            <dlg char="PLAYER"  track="null">
+                <m wait="1">This place doesn't seem that bad from the outside...</m>
+                <m wait="2">I mean... It's the classic bucolic campus in a school for kids unaware of their privileges...</m>
+                <m>It somehow even feels familiar...</m>
+            </dlg>
+
+            <wait />
+            <if>
+                <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
+                <then>
+                    <dlg char="PLAYER"  track="null">
+                        <m>It has its bunch of assholes, but also some cool people to know....</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="PLAYER" track="null">
+                        <m>I'm sure there are still many opportunities to take advantage of here....</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <wait time="2" />
+            <!-- wait animator behaviour pan -->
+            <obj target="scene">
+                <outcome clear="true" />
+            </obj>
+
+            <anim target="scene" trigger="next" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Wait... Is that-</m>
+            </dlg>
+
+            <wait />
+            
+            <dlg char="MAX" track="MAX">
+                <m>Are you sure you're okay?</m>
+                <m>Don't you feel strange or anything?</m>
+            </dlg>
+            <wait />
+            <dlg char="CHL" track="CHL">
+                <m>I already told you, ${CHAR:MAX:NAME}... I'm cool...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <dlg char="CHL" track="CHL">
+                <m>Don't worry about me...</m>
+            </dlg>
+
+            <wait />
+            
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="The name of this girl is:" /></message>
+                <message name="LoadGenerateList"><string value="female-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Chloe" /></message>
+            </load-scene-object>
+            
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:CHL:NAME" destroy="true" />
+            </obj>
+
+            <dlg char="CHL" track="CHL">
+                <m wait="0.5">I should be the one asking if you're feeling okay...</m>
+                <m>You're pale like a ghost and your nose is bleeding...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="MAX" track="MAX">
+                <m wait="1">Oh... Don't worry, I...</m>
+                <m>I'm just tired... We can talk about that later...</m>
+                <m>I need some rest... I'm on my way to the dorm...</m>
+            </dlg>
+            
+            <dlg char="CHL" track="CHL">
+                <m>I hope that annoying boyfriend of yours won't stop you in the way...</m>
+            </dlg>
+
+            <dlg char="MAX" track="MAX">
+                <m wait="1">Oh please, ${CHAR:CHL:NAME}... I can't handle your teasing right now...</m>
+                <m>Take care of yourself...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <wait />
+            <dlg char="CHL" track="CHL">
+                <m>As I always do, ${CHAR:MAX:NAME}...</m>
+            </dlg>
+
+            <wait />
+            <bgm volume="0" fade-speed="0.25" />
+            <bgm name="loop-urban-outside" volume="0" fade-speed="0.25" />
+            <fade-to-black speed="0.25" />
+            <bootstrap script="location-campus-01/location" spawn="spawn/entrance" />
+        </n>
+    </nodes>
+</xml-script>

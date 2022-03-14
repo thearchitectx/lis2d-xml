@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <bgm volume="0" />
+            <fade-to-black keep="true" fill="true" speed="3" />
+            <bootstrap node="start" />
+        </n>
+
+        <!--################################################
+            ## start ########################################
+            ################################################
+        -->
+        <n id="start">
+            <fade-to-black keep="true" speed="99999" />
+            <bgm loop="loop-urban" volume="0.25" />
+            <load-scene-object key="location-player-room-01-phone.prefab" rename="scene" />
+            <fade-to-black fill="true" speed="-3" />
+
+            <!-- First time checking phone -->
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="22" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-on="22" />
+                    <sys>
+                        The cellphone can be used to start special events\n\n
+                        When a girl gives you her number, you'll have the opportunity to start the event
+                    </sys>
+                </then>
+            </if>
+
+            <choice>
+                <c pos="NW">
+                    <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="17" />
+                    <text>Call Kate</text>
+                    <lock-reason>[ NOT FOUND YET ]</lock-reason>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>Kate told me to call her... She probably wants to meet somewhere outside the school...</m>
+                            <m>Should I do it now?</m>
+                        </dlg>
+                        <choice>
+                            <c pos="W"><text>[ Call Kate ]</text></c>
+                            <c pos="E" out="start"><text>[ Not now ]</text></c>
+                        </choice>
+
+                        <dlg char="PLAYER">
+                            <m>Let's do this...</m>
+                        </dlg>
+
+                        <wait time="1" />
+                        
+                        <anim target="scene" trigger="kate" />
+                        <sfx clip="phone-call-tone" async="false" />
+                        <wait time="0.5" />
+                        <sfx clip="phone-call-tone" async="false" />
+                        <sfx clip="phone-pickup" async="false" />
+
+                        <dlg char="KATE" track="scene/track">
+                            <m>Uuh... Hello...</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Hey, ${CHAR:KATE:NAME}... It's ${CHAR:PLAYER:NAME}...</m>
+                        </dlg>
+                        <dlg char="KATE" track="scene/track">
+                            <m wait="0.5">Oh... You... You actually called...</m>
+                            <m>Do you have time meet me now?</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Yeah... No more duties today, i believe...</m>
+                        </dlg>
+                        <dlg char="KATE" track="scene/track">
+                            <m>I want to talk somewhere far away from the school...</m>
+                            <m>There's a place in town called Two Wales Diner...</m>
+                            <m>We can meet there...</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Okay... See you there...</m>
+                        </dlg>
+                        <dlg char="KATE" track="scene/track">
+                            <m>Thank you... I'm leaving now...</m>
+                        </dlg>
+                        <sfx clip="phone-pickup" async="false" />
+
+                        <anim target="scene" trigger="off" />
+                        <wait time="1" />
+
+                        <dlg char="PLAYER">
+                            <m>Looks like it's time to hit the town...</m>
+                        </dlg>
+                        
+                        <bgm volume="0" fade-speed="0.5" />
+                        <fade-to-black keep="true" speed="0.5" />
+                        <sfx clip="bus"  async="false"/>
+
+                        <bootstrap script="scene-kate-diner-01" />
+                    </then>
+                </c>
+
+                <c pos="E">
+                    <text>[LEAVE]</text>
+                    <then>
+                        <bgm volume="0" />
+                        <fade-to-black fill="true" keep="true" speed="3" />
+                        <bootstrap script="location-player-room-01/location" spawn="spawn/phone" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+    </nodes>
+</xml-script>

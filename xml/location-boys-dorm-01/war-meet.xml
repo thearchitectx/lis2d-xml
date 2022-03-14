@@ -1,0 +1,509 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <fade-to-black fill="true" speed="3" keep="true" />
+            <bgm volume="0" />
+            <bootstrap node="start" />
+        </n>
+
+        <!--################################################
+            ## start ########################################
+            ################################################
+        -->
+        <n id="start">
+            <flag name="CHAR:WAR:INTERACTIONS" bit-on="0" />
+
+            <fade-to-black keep="true" speed="9999999" />
+
+            <bgm loop="loop-urban" volume="0.5" />
+            <load-scene-object key="scene-war-boys-dorm-01.prefab" rename="scene" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <proxy target="scene/WAR" name="WAR" />
+            <fade-to-black speed="-1" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">Okay... So it seems I'm supposed to have a room somewhere here...</m>
+                <m wait="1">This dorm doesn't seem so bad... It's a shame it's no coed though...</m>
+                <m>Well... I wonder which way should I first try to-</m>
+            </dlg>
+
+            <dlg char="WAR" track="WAR">
+                <m>Hey! You!</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Huh?</m>
+            </dlg>
+
+            <load-scene-object key="interrupt.prefab" rename="interrupt" active="false" />
+            <sfx clip="cymbal" async="true" volume="0" />
+            <sfx clip="interrupt-paragon" async="true" volume="0" />
+            <sfx clip="interrupt-renegade" async="true" volume="0" />
+            
+            <anim target="scene" trigger="next"></anim>
+
+            <wait />
+
+            <obj target="interrupt" active="true">
+                <message name="EnableParagon" />
+                <message name="EnableRenegade" />
+                <message name="SetWaitInputTime"><float value="2.5"></float></message>
+                <outcome value="PARAGON" copy-to="TMP:0" destroy="true" />
+                <outcome value="RENEGADE" copy-to="TMP:0" destroy="true" />
+                <outcome value="TIME_UP" copy-to="TMP:0" destroy="true" />
+            </obj>
+
+            <if>
+                <check-text text="TMP:0" eq="RENEGADE" />
+                <then>
+                    <sfx clip="interrupt-renegade" async="true" />
+                    <anim target="scene" trigger="renegade" />
+                    <wait />
+                    <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                    <flag name="CHAR:WAR:INTERACTIONS" bit-on="1" />
+                    <dlg char="WAR" track="WAR">
+                        <m>Ouch!!!</m>
+                    </dlg>
+                    <wait time="2" />
+                    <anim target="scene" trigger="next" />
+                    <dlg char="WAR" track="WAR">
+                        <m wait="1">why...</m>
+                        <m>why did you do that?</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="0.5">I saw you trying to assault me... That gives me the lawful right to defend myself with any kind of proportional force...</m>
+                        <m>At least that's what people on reddit always say... And redditors know what they're talk about... right?</m>
+                    </dlg>
+                    <dlg char="WAR" track="WAR">
+                        <m wait="1">i... i just...</m>
+                        <m>I just tried to push you... and you tried to... sterilize me!!!</m>
+                        <m>How's that 'proportional force'!?!?</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="0.5">Uuhh... oups!?</m>
+                    </dlg>
+                    <wait />
+                    <dlg char="WAR" track="WAR">
+                        <m>Sigh... Okay...</m>
+                        <m>Maybe I shouldn't have tried to get physical...</m>
+                    </dlg>
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="PARAGON" />
+                <then>
+                    <sfx clip="interrupt-paragon" async="true" />
+                    <anim target="scene" trigger="paragon" />
+                    <wait />
+                    <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                    <flag name="CHAR:WAR:INTERACTIONS" bit-on="2" />
+                    <dlg char="WAR" track="WAR">
+                        <m>Hey!!!</m>
+                    </dlg>
+                    <wait time="2" />
+                    <anim target="scene" trigger="next" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Are you okay there, buddy?</m>
+                        <m>I noticed you were in a rush... Didn't want to stand in your way...</m>
+                    </dlg>
+                    <dlg char="WAR" track="WAR">
+                        <m wait="1">Damn it...</m>
+                        <m>My opportunity attack was beaten by a successful agile check...</m>
+                    </dlg>
+                    <wait time="0.5" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="0.5">Dude... This is a high school dorm...</m>
+                        <m>Keep using D&amp;D terminology around here and a jock will appear out of thin air to mess you up...</m>
+                    </dlg>
+                    <dlg char="WAR" track="WAR">
+                        <m>This is not 90's, smart ass... And I'm not afraid of bullies...</m>
+                        <m>But that's not the point...</m>
+                    </dlg>
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="TIME_UP" />
+                <then>
+                    <flag name="CHAR:WAR:INTERACTIONS" bit-on="3" />
+                    <dlg char="WAR" track="WAR">
+                        <m>Yeah... You!!</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap node="dialog" />
+        </n>
+        
+        <!--################################################
+            ## dialog ########################################
+            ################################################
+        -->
+        <n id="dialog">
+            <fade-to-black keep="true" speed="9999999" />
+            <bgm loop="loop-war" volume="0.25" />
+            <load-scene-object key="shot-boys-dorm-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-war-01.prefab" rename="WAR" />
+
+            <!-- <bgm loop="loop-max" volume="0.25" /> -->
+
+            <obj target="WAR">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="SetParallaxSpeed"><float value="0.4" /></message>
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </obj>
+            
+            <fade-to-black speed="-1" />
+            
+            <!-- <autosave label="Chatting with ${CHAR:MAX:NAME}" /> -->
+            
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <proxy target="shot/player" name="PLAYER" />
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="His name is" /></message>
+                <message name="LoadGenerateList"><string value="male-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Warren" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:WAR:NAME" destroy="true" />
+            </obj>
+
+            <if>
+                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-set="3" />
+                <then>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Hey... What the fuck?</m>
+                        <m>What's wrong with you?</m>
+                    </dlg>
+
+                    <anim target="WAR" face="DISAPPROVE" />
+                    <dlg char="WAR" track="WAR">
+                        <m>Yeah... I usually don't resort to violence...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="WAR" track="WAR">
+                        <m>Look... I think we started off on the wrong foot...</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>I think it's more accurate to say that YOU started off...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <wait time="0.5" />
+
+            <anim target="WAR" face="DISAPPROVE" trigger="say-01" />
+            <dlg char="WAR" track="WAR">
+                <m>But it's all your fault!!!</m>
+                <m>You freaking perv... I saw you going into the girls room while ${CHAR:MAX:NAME} was there!!</m>
+            </dlg>
+            <wait time="0.5" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Uuh... I think you got the wrong idea...</m>
+            </dlg>
+
+            <anim target="WAR" trigger="surprised" />
+            <dlg char="WAR" track="WAR">
+                <m>Don't try to fool me!! I knew ${CHAR:MAX:NAME} had been alone in the restroom for half an hour when you entered...</m>
+                <m>I was going to kick the door and save her, but the principal appeared when I was about to do it...</m>
+                <m>He shoved me out of the building saying I was "disturbing the school routine"...</m>
+            </dlg>
+            <anim target="WAR" face="SIGH" />
+            <dlg char="WAR" track="WAR">
+                <m>I still can't believe that bastard didn't believe me!!</m>
+            </dlg>
+            
+            <wait />
+            <anim target="WAR" face="NEUTRAL" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Interesting... How did you know ${CHAR:MAX:NAME} was in the restroom by herself during all that time?</m>
+                <m wait="0.5">It sounds like the kind of info you can only acquire by stalking someone...</m>
+            </dlg>
+
+            <anim target="WAR" trigger="surprised" face="UPSET" />
+            <dlg char="WAR" track="WAR">
+                <m wait="0.5">What!?!? No... I...</m>
+                <m wait="0.5">I'd never do that her... I...</m>
+                <m>I just... I just worry about her safety and... uuhhh...</m>
+            </dlg>
+
+            <anim target="WAR" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="WAR" track="WAR">
+                <m  wait="0.5">Wait...</m>
+                <m>Don't try to change the subject here... It's about you sneaking into the girl's restroom we were talking about...</m>
+            </dlg>
+            <wait />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="0.5">Yeah... I know it's hard to believe...</m>
+                <m>But being there was kind of... part of my job...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="WAR" trigger="shrug" face="SIGH" />
+            <dlg char="WAR" track="WAR">
+                <m>Well... Actually... I believe you...</m>
+            </dlg>
+            <anim target="WAR" face="NEUTRAL" />
+            <dlg char="WAR" track="WAR">
+                <m>${CHAR:BRK:NAME} just told me about school records mentioning you enrolled as ${CHAR:SAM:NAME}'s helper...</m>
+            </dlg>
+            <anim target="WAR" face="SIGH" />
+            <dlg char="WAR" track="WAR">
+                <m>I realize now you were probably just going to work in there...</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="QUEST:MEM_CARD" bit-set="22" />
+                <then>
+                    <anim target="WAR" trigger="say-01" face="NEUTRAL" />
+                    <dlg char="WAR" track="WAR">
+                        <m wait="0.5">However... ${CHAR:BRK:NAME} sounded a little weird when talking about you...</m>
+                        <m wait="1">I never heard she stuttering like that when mentioning someone...</m>
+                    </dlg>
+                    <anim target="WAR" face="DISAPPROVE" />
+                    <dlg char="WAR" track="WAR">
+                        <m>You didn't do anything wrong to her, did you?</m>
+                    </dlg>
+                    <wait time="0.5" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Nope...</m>
+                        <m>I mean... I did nothing she didn't consent to...</m>
+                    </dlg>
+                    <anim target="WAR" trigger="shrug" face="SIGH" />
+                    <dlg char="WAR" track="WAR">
+                        <m>Please... Just... Don't tell me...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <wait />
+
+            <anim target="WAR" trigger="shrug" face="NEUTRAL" />
+            <dlg char="WAR" track="WAR">
+                <m wait="0.5">I... I don't get what your deal is...</m>
+                <m wait="0.5">The generic face... blank expression... unnatural self awareness... the stupid name...</m>
+                <m>You look like a goddamned isekay protagonist...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hum... That kind of make sense, but...</m>
+                <m>Dude... Seriously... You should go easier on the weeb references if you don't wanna die a virgin...</m>
+            </dlg>
+
+            <anim target="WAR" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="WAR" track="WAR">
+                <m wait="0.5">Urgh... What I mean is...</m>
+                <m wait="1">You seem to have a "people talent"... Maybe we should be allies instead of enemies...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I sense a new weird request coming...</m>
+            </dlg>
+            
+            <anim target="WAR" face="UPSET" />
+            <dlg char="WAR" track="WAR">
+                <m>Look... It's easy to notice that I have... "feelings" for ${CHAR:MAX:NAME}, right?</m>
+            </dlg>
+            <dlg char="PLAYER" track="PLAYER">
+                <m>That's what stalkers always say...</m>
+            </dlg>
+
+            <anim target="WAR" trigger="surprised" face="DISAPPROVE" />
+            <dlg char="WAR" track="WAR">
+                <m wait="0.5">Will you shut up and listen!?</m>
+                <m>I've been meeting ${CHAR:MAX:NAME} everyday since we arrived at ${MISC:SCHOOL:NAME}...</m>
+                <m>We are always exchanging messages and I love spending time with her...</m>
+            </dlg>
+            <anim target="WAR" trigger="shrug" face="UPSET" />
+            <dlg char="WAR" track="WAR">
+                <m wait="1">But she...</m>
+                <m>She doesn't seem to take my hints...</m>
+            </dlg>
+            <anim target="WAR" face="NEUTRAL" />
+            <dlg char="WAR" track="WAR">
+                <m>And ... I believe you could use your unique "talent" to help me...</m>
+                <m>You know... To make ${CHAR:MAX:NAME} understand how happy she could be with me...</m>
+            </dlg>
+            
+            <node-output node="dialog-loop" />
+        </n>
+        
+        <!--################################################
+            ## dialog-loop ########################################
+            ################################################
+        -->
+        <n id="dialog-loop">
+            <if>
+                <check-group op="OR">
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="4" />
+                        <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="5" />
+                        <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="6" />
+                    </check-group>
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="7" />
+                        <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="8" />
+                    </check-group>
+                </check-group>
+                <then>
+                    <choice id="choice-war-meet-loop">
+                        <c pos="NE">
+                            <text>You were friendzoned</text>
+                            <check-group op="AND">
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="4" />
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="5" />
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="6" />
+                            </check-group>
+                            <then>
+                                <flag name="CHAR:WAR:INTERACTIONS" bit-on="4" />
+                                <dlg char="PLAYER" track="PLAYER">
+                                    <m wait="1">Have you ever consider that you are the one not taking the hints?</m>
+                                    <m>I mean... If she friendzoned you, then it's over...</m>
+                                </dlg>
+                                <anim target="WAR" trigger="say-01" face="DISAPPROVE" />
+                                <dlg char="WAR" track="WAR">
+                                    <m>No... I refuse to admit defeat...</m>
+                                    <m>I know I have a chance if you're willing to help...</m>
+                                </dlg>
+                            </then>
+                        </c>
+                        <c pos="E">
+                            <text>Why not other girls?</text>
+                            <check-group op="AND">
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="4" />
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="5" />
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="6" />
+                            </check-group>
+                            <then>
+                                <flag name="CHAR:WAR:INTERACTIONS" bit-on="5" />
+                                <dlg char="PLAYER" track="PLAYER">
+                                    <m wait="1">If she doesn't take the hint, then just forget about her... </m>
+                                    <m>There are so many hot girls around here...</m>
+                                </dlg>
+                                <anim target="WAR" trigger="say-01" face="DISAPPROVE" />
+                                <dlg char="WAR" track="WAR">
+                                    <m>You don't understand, man... This is not about looks...</m>
+                                    <m>This is about my heart... You can't just choose which girl you fall for...</m>
+                                </dlg>
+                            </then>
+                        </c>
+                        <c pos="SE">
+                            <text>Just be more assertive</text>
+                            <check-group op="AND">
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="4" />
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="5" />
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="6" />
+                            </check-group>
+                            <then>
+                                <flag name="CHAR:WAR:INTERACTIONS" bit-on="6" />
+                                <dlg char="PLAYER" track="PLAYER">
+                                    <m wait="1">Then stop giving hints and start talking straight about your intentions...</m>
+                                    <m>Don't you take yourself as a badass? Be assertive then...</m>
+                                </dlg>
+                                <anim target="WAR" trigger="say-01" face="UPSET" />
+                                <dlg char="WAR" track="WAR">
+                                    <m>Well... It's easier said than done...</m>
+                                    <m>I'm afraid that kind of behaviour will scare her away... She is not used to that kind of approach...</m>
+                                </dlg>
+                            </then>
+                        </c>
+                        <c pos="NW">
+                            <text>I'm also interested in ${CHAR:MAX:NAME}</text>
+                            <check-group op="AND">
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="7" />
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="8" />
+                            </check-group>
+                            <then>
+                                <flag name="CHAR:WAR:INTERACTIONS" bit-on="7" />
+                                <dlg char="PLAYER" track="PLAYER">
+                                    <m>What if I am also interested in her?</m>
+                                </dlg>
+                                <anim target="WAR" trigger="surprised" face="UPSET" />
+                                <dlg char="WAR" track="WAR">
+                                    <m>What!?! You...</m>
+                                    <m wait="1">You're not serious, right?</m>
+                                    <m>Come on... Let's not get into some wasteful competition...</m>
+                                    <m>You can have all the other girls here for you... Just leave ${CHAR:MAX:NAME} for me...</m>
+                                </dlg>
+                            </then>
+                        </c>
+                        <c pos="SW">
+                            <text>How does helping you benefits me?</text>
+                            <check-group op="AND">
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="7" />
+                                <check-flag flag="CHAR:WAR:INTERACTIONS" bit-unset="8" />
+                            </check-group>
+                            <then>
+                                <flag name="CHAR:WAR:INTERACTIONS" bit-on="8" />
+                                <dlg char="PLAYER" track="PLAYER">
+                                    <m>I believe I would somehow benefit from this "alliance", right?</m>
+                                </dlg>
+                                <anim target="WAR" trigger="say-01" face="NEUTRAL" />
+                                <dlg char="WAR" track="WAR">
+                                    <m>Look... I spend a lot of time at the Science room... and I have access to several interesting chemical supplies...</m>
+                                    <m>If you help me, I can provide some really interesting stuff for you...</m>
+                                </dlg>
+                            </then>
+                        </c>
+                    </choice>
+
+                    <node-output node="dialog-loop" />
+                </then>
+            </if>
+
+            <wait />
+
+            <anim target="WAR" trigger="say-01" face="NEUTRAL" />
+            <dlg char="WAR" track="WAR">
+                <m>So... Please... Help me winning ${CHAR:MAX:NAME}'s heart, and you'll be very well compensated...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Can't promise anything...</m>
+                <m>It's a weird request... And I had a lot of weird requests today...</m>
+            </dlg>
+
+            <flag name="QUEST:WAR:CUPID" bit-on="0" />
+            <string name="QUEST:WAR:CUPID:OBJECTIVE" set="Help ${CHAR:WAR:NAME} hook up ${CHAR:MAX:NAME}... Or not!" />
+
+            <dlg char="WAR" track="WAR">
+                <m wait="1">Do the right thing, man... You won't regret...</m>
+            </dlg>
+
+            <obj target="WAR">
+                <message name="StartCenter" />
+                <message name="EndRight" />
+                <message name="TriggerEnter" />
+            </obj>
+
+            <dlg char="WAR" track="WAR">
+                <m>We talk later...</m>
+            </dlg>
+
+            <wait />
+            
+            <bgm volume="0" />
+            <fade-to-black keep="true"  />
+            <bootstrap script="location-boys-dorm-01/location" spawn="spawn/walkway" />
+        </n>
+    </nodes>
+</xml-script>

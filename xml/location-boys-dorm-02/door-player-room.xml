@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <if>
+                <!-- (19): First entered player room -->
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="19" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-on="19" />
+
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m wait="1">Hum... It's weird, but...</m>
+                        <m wait="1">Somehow... I feel this is supposed to be my room...</m>
+                        <m>Well... Let's check it out...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <sfx clip="door-transition" async="true" />
+            <fade-to-black fill="true" speed="3" keep="true" />
+            <bgm volume="0" />
+            <bootstrap script="location-player-room-01/location" spawn="spawn/door" />
+        </n>
+    </nodes>
+</xml-script>

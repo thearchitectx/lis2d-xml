@@ -13,12 +13,23 @@
                 <message name="SetInputActive"><bool value="false" /></message>
             </obj>
 
-            <sfx clip="door-transition" async="true" />
-            <bgm volume="0" />
-            <fade-to-black keep="true" speed="3" fill="true" />
-            <bootstrap script="location-mainhall-02/location" spawn="spawn/administration" />
-        </n>
+            <wait />
 
+            <if>
+                <check-text text="ARG:0" eq="POSTER_BELLE" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>There she is... The top genius entrepreneur of our generation...</m>
+                        <m>I'm glad this kind of decoration is allowed here...</m>
+                    </dlg>
+                </then>
+            </if>
+            
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
 
     </nodes>
 </xml-script>

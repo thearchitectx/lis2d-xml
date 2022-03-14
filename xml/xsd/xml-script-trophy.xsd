@@ -4,6 +4,8 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="pantsu-01" />
             <xs:enumeration value="sunday-school-01" />
+            <xs:enumeration value="sunday-school-02" />
+            <xs:enumeration value="sunday-school-03" />
             <xs:enumeration value="birds-are-not-real-01" />
             <xs:enumeration value="birds-are-not-real-02" />
             <xs:enumeration value="polaroid-fever-01" />

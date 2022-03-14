@@ -1,0 +1,841 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <fade-to-black fill="true" speed="3" keep="true" />
+            <bgm volume="0" />
+            <bootstrap node="start" />
+        </n>
+        
+        <!--################################################
+            ## start #######################################
+            ################################################
+        -->
+        <n id="start">
+            <fade-to-black keep="true" speed="10000" />
+            <bgm loop="loop-chl" volume="0.25" />
+            <load-scene-object key="shot-campus-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-chl-01.prefab" rename="CHL" />
+            <proxy target="shot/player" name="PLAYER" />
+
+            <obj target="CHL">
+                <message name="StartLeft" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </obj>
+            
+            <fade-to-black speed="-1" />
+            
+            <autosave label="Chatting with ${CHAR:CHL:NAME}" />
+
+            <obj target="PLAYER">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <if>
+                <check-flag flag="CHAR:CHL:INTERACTIONS" bit-unset="0" />
+                <then>
+                    <flag name="CHAR:CHL:INTERACTIONS" bit-on="0" />
+                    <node-output node="first-dialog" />
+                </then>
+            </if>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:TURF_WAR" bit-set="0" />
+                    <check-flag flag="QUEST:TURF_WAR" bit-unset="31" />
+                </check-group>
+                <then>
+                    <dlg char="CHL" track="CHL">
+                        <m>Hey... How's the Prescott investigation going?</m>
+                        <m>Just make sure he won't catch you in his room... Might be bad for your health...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <node-output node="dialog-root" />
+        </n>
+        
+        <!--################################################
+            ## first-dialog ################################
+            ################################################
+        -->
+        <n id="first-dialog">
+            <dlg char="CHL" track="CHL">
+                <m wait="0.5">Hey! It's the new mysterious ${MISC:SCHOOL:NAME}'s son...</m>
+                <m>What's up, dude?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">Yeah... Hello...</m>
+                <m>I thought my fame would be limited to inside the building...</m>
+                <m>But it seems I'll still hear that kind of greeting from the entire town...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="giggle" face="CUTE"></anim>
+            <dlg char="CHL" track="CHL">
+                <m wait="0.5">Nah, man... You don't need to worry about that...</m>
+                <m wait="0.5">Most of our kind population don't give a shit about happens inside this school... Including me...</m>
+                <m>It's ${CHAR:MAX:NAME} who told me earlier about your 'encounter' in the restroom...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hum... I guess you're ${CHAR:MAX:NAME}'s friend who got shot in the restroom...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="surprised" face="SURPRISED"></anim>
+            <dlg char="CHL" track="CHL">
+                <m wait="0.5">Woah... Jesus Christ, dude...</m>
+                <m>I'm not superstitious, but... Easy with the bad omens...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Oh... She didn't told you...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="say-01" face="DISAPPROVE"></anim>
+            <dlg char="CHL" track="CHL">
+                <m wait="0.5">Hey... I already have my quota of uncanny friends filled with ${CHAR:MAX:NAME}...</m>
+                <m>So please... Don't walk that path if you wanna keep talking to me, okay?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Believe it... I'm also exhausted from hearing weird stuff...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="shrug" face="NEUTRAL"></anim>
+            <if>
+                <check-flag flag="CHAR:MAX:INTERACTIONS" bit-set="1" />
+                <then>
+                    <dlg char="CHL" track="CHL">
+                        <m>Look... ${CHAR:MAX:NAME} only told me how you 'saved' her when she was passing out...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="CHL" track="CHL">
+                        <m>Look... ${CHAR:MAX:NAME} only told me that your were there whe she was passing out...</m>
+                    </dlg>
+                </else>
+            </if>
+            <dlg char="CHL" track="CHL">
+                <m>She didn't even thought about explaining what the hell you were doing in the girls restroom...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Uuh... It's a long and boring story...</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="CHAR:MAX:INTERACTIONS" bit-set="7" /> <!-- (7): Choice 'cheer-max-choice': - used (No need to hide) -->
+                <then>
+                    <anim target="CHL" trigger="shrug" face="CUTE"></anim>
+                    <dlg char="CHL" track="CHL">
+                        <m wait="0.5">Yeah... But I noticed she was a particularly 'excited' when talking about you...</m>
+                        <m wait="0.5">Like... You know... A little higher pitch voice... A particular smile...</m>
+                    </dlg>
+                    <anim target="CHL" face="SIGH"></anim>
+                    <dlg char="CHL" track="CHL">
+                        <m>Sigh... That little dork can't hide anything from me...</m>
+                    </dlg>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Jeez... I can only imagine her face when she hears you just said that to me...</m>
+                    </dlg>
+                    <anim target="CHL" trigger="surprised" face="CUTE"></anim>
+                    <dlg char="CHL" track="CHL">
+                        <m>Ha! I know, right...</m>
+                        <m>She will blush the freckles out of her face...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="CHAR:MAX:INTERACTIONS" bit-set="9" /> <!-- (9): Choice 'cheer-max-choice': - used (You can change) -->
+                <then>
+                    <anim target="CHL" trigger="shrug" face="DISAPPROVE"></anim>
+                    <dlg char="CHL" track="CHL">
+                        <m wait="1">Yeah... She say you didn't try anything 'inappropriate' when you were alone there...</m>
+                        <m>But I noticed she was a little distressed when talking about you for some reason...</m>
+                    </dlg>
+
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Uuh... Probably because she was not feeling well... nothing more...</m>
+                    </dlg>
+
+                    <anim target="CHL" face="SIGH"></anim>
+                    <dlg char="CHL" track="CHL">
+                        <m>Yeah... Sure...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <wait />
+
+            <anim target="CHL" trigger="shrug" face="NEUTRAL"></anim>
+            <dlg char="CHL" track="CHL">
+                <m wait="0.5">Well... You should know I'm the closest person ${CHAR:MAX:NAME} has in this town...</m>
+                <m>So I must ask... What are your intentions with her?</m>
+            </dlg>
+
+            <choice id="choice-chl-intentions-max">
+                <c pos="NE">
+                    <text>I'd rather not answer that</text>
+                    <then>
+                        <flag name="CHAR:CHL:INTERACTIONS" bit-on="1" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>I don't know... I feel that if say anything, you'll bring the answer at the most awkward moment...</m>
+                        </dlg>
+                        <anim target="CHL" face="CUTE" trigger="giggle" />
+                        <dlg char="CHL" track="CHL">
+                            <m wait="1">Ha... Of course I will...</m>
+                            <m>Okay, mister perceptive... I'll let you off the hook because that was a nice save...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>Just being friendly</text>
+                    <then>
+                        <flag name="CHAR:CHL:INTERACTIONS" bit-on="2" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>I'm just being friendly to her... Nothing more...</m>
+                        </dlg>
+                        <anim target="CHL" face="SIGH" />
+                        <dlg char="CHL" track="CHL">
+                            <m>Uhm... If you say so...</m>
+                        </dlg>
+                        <if>
+                            <check-flag flag="CHAR:MAX:INTERACTIONS" bit-set="7" /> <!-- (7): Choice 'cheer-max-choice': - used (No need to hide) -->
+                            <then>
+                                <anim target="CHL" trigger="say-01" face="DISAPPROVE" />
+                                <dlg char="CHL" track="CHL">
+                                    <m>Just make things clear with her, okay?</m>
+                                    <m>Don't play her... She already have her share of issues...</m>
+                                </dlg>
+                            </then>
+                        </if>
+                        <if>
+                            <check-flag flag="CHAR:MAX:INTERACTIONS" bit-set="9" /> <!-- (9): Choice 'cheer-max-choice': - used (You can change) -->
+                            <then>
+                                <anim target="CHL" trigger="say-01" face="DISAPPROVE" />
+                                <dlg char="CHL" track="CHL">
+                                    <m>Just... Don't try anything funny with her...</m>
+                                    <m>She's under my protection...</m>
+                                </dlg>
+                            </then>
+                        </if>
+                        <anim target="CHL" face="SIGH" />
+                        <dlg char="CHL" track="CHL">
+                            <m>It's just a shame that nerdy science class dude won't have some competition for ${CHAR:MAX:NAME}...</m>
+                            <m>She deserves better...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>I like her</text>
+                    <then>
+                        <flag name="CHAR:CHL:INTERACTIONS" bit-on="3" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Well... To be honest, I think I like her...</m>
+                        </dlg>
+                        <anim target="CHL" trigger="say-01" face="SIGH" />
+                        <dlg char="CHL" track="CHL">
+                            <m wait="0.5">Uhm... Just as I suspected...</m>
+                            <m>It's cute how you weirdos tend to attract each other...</m>
+                        </dlg>
+                        <wait />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>You know you don't look exactly like a normie, right?</m>
+                        </dlg>
+                        <wait />
+                        <anim target="CHL" face="DISAPPROVE" />
+                        <dlg char="CHL" track="CHL">
+                            <m wait="0.5">That's not the point!</m>
+                            <m wait="0.5">You just need to be aware that my approval is required, okay?</m>
+                            <m>${CHAR:MAX:NAME} is under my protection... I won't allow anyone hurt her...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <wait />
+            <anim target="CHL" trigger="shrug" face="NEUTRAL"></anim>
+            <dlg char="CHL" track="CHL">
+                <m wait="1">Anyways... I'm here on business today... I can't just keep chatting during my work hours...</m>
+                <m>I mean... If you wanna buy some weed, I'm the best supplier around here...</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--################################################
+            ## dialog-root #################################
+            ################################################
+        -->
+        <n id="dialog-root">
+            <choice id="choice-chl-01-root">
+                <c pos="NW" out="dialog-selling-pot-here">
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:CHL:INTERACTIONS" bit-unset="4" />
+                        <check-flag flag="CHAR:CHL:INTERACTIONS" bit-unset="5" />
+                    </check-group>
+                    <text>Selling pot here!?</text>
+                </c>
+                <c pos="NW" out="dialog-competition">
+                    <check-group op="AND">
+                        <check-group op="OR">
+                            <check-flag flag="CHAR:CHL:INTERACTIONS" bit-set="4" />
+                            <check-flag flag="CHAR:CHL:INTERACTIONS" bit-set="5" />
+                        </check-group>
+                        <check-flag flag="CHAR:CHL:INTERACTIONS" bit-unset="6" />
+                    </check-group>
+                    <text>Is Business here that easy?</text>
+                </c>
+                <c pos="NW" out="dialog-competition-help">
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:CHL:INTERACTIONS" bit-set="6" />
+                        <check-flag flag="QUEST:TURF_WAR" bit-unset="0" />
+                    </check-group>
+                    <text>Help with the 'competition'?</text>
+                </c>
+                <c pos="SW" out="dialog-student">
+                    <check-flag flag="CHAR:CHL:INTERACTIONS" bit-unset="7" />
+                    <text>Are you a student here?</text>
+                </c>
+                <c pos="SW" out="dialog-yearbook">
+                    <text>Picture for the yearbook?</text>
+                </c>
+                <c pos="W" out="dialog-tattoo">
+                    <text>About the tattoo</text>
+                </c>
+                <c pos="NE" out="buy-joint">
+                    <text>[Buy Joint]</text>
+                </c>
+                <c pos="E">
+                    <text>See you later</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>I should go...</m>
+                        </dlg>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" />
+                        <bootstrap script="location-campus-01/location" spawn="post-1" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--################################################
+            ## dialog-selling-pot-here #####################
+            ################################################
+        -->
+        <n id="dialog-selling-pot-here">
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Are you sure selling pot at the door of a school building is a good idea?</m>
+            </dlg>
+            <anim target="CHL" trigger="shrug" face="NEUTRAL" />
+            <dlg char="CHL" track="CHL">
+                <m>Huh!? Why not?</m>
+                <m wait="1">A place where dozens of wealthy gullible potential customers pass by the whole day...</m>
+            </dlg>
+            <anim target="CHL" face="SIGH" />
+            <dlg char="CHL" track="CHL">
+                <m>It would be stupid to not sell here...</m>
+            </dlg>
+            <anim target="CHL" face="NEUTRAL" />
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">Well... I can't deny it makes sense in the business point of view...</m>
+                <m>But your business is not exactly legal... And schools nowadays are usually under some serious vigilance...</m>
+                <m>Aren't you worried about security staff? Those types sometimes are more dangerous than cops...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="giggle" face="CUTE" />
+            <dlg char="CHL" track="CHL">
+                <m>Ha ha... Me? Worried about ${MISC:SCHOOL:NAME}'s one-man army?</m>
+            </dlg>
+
+            <anim target="CHL" face="NEUTRAL" />
+            <dlg char="CHL" track="CHL">
+                <m wait="0.5">Don't worry... I have the bad luck to know well the man in charge of security here...</m>
+                <m>He's always too busy harassing kids with military discipline lessons...</m>
+            </dlg>
+            <anim target="CHL" face="SIGH" />
+            <dlg char="CHL" track="CHL">
+                <m>... or worrying about terrorist attacks... or having like... 'Nam flashbacks...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Jeez... Paranoid ex-military wacko working in small private security services...</m>
+                <m>It's a classic trope that sometimes leads to some heavy bad shit...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="CHL" track="CHL">
+                <m>He's just a major asshole... And I'm very aware of how dangerous he is...</m>
+                <m>But I know every detail of his daily schedule...</m> 
+                <m>Like... at this exact moment... He's fully focused on his Big Brother surveillance project in the dorms area...</m> 
+            </dlg>
+            <anim target="CHL" face="SIGH" />
+            <dlg char="CHL" track="CHL">
+                <m>I just hope he won't install spy cameras in the girls showers...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>That's some serious inside info...</m>
+                <m>You broke into school offices to learn that?</m>
+            </dlg>
+
+            <anim target="CHL" face="NEUTRAL" />
+            <dlg char="CHL" track="CHL">
+                <m wait="0.5">I wish that was the case...</m>
+                <m wait="0.5">But the sad truth is... I'm unfortunate enough to have him living in my house, making my life a living hell...</m>
+                <m>Which also means I have the opportunity to hear him mumbling his daily planning every morning...</m>
+            </dlg>
+
+            <choice id="choice-chl-david-01">
+                <c pos="E">
+                    <text>He 'lives' with you!?</text>
+                    <then>
+                        <flag name="CHAR:CHL:INTERACTIONS" bit-on="4" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>He 'lives' with you!? What a creep...</m>
+                            <m>He should look for women of his age...</m>
+                        </dlg>
+                        <anim target="CHL" trigger="surprised" face="SURPRISED" />
+                        <dlg char="CHL" track="CHL">
+                            <m>What the... No... It's not what you're thinking, moron...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <anim target="CHL" face="DISAPPROVE" />
+                        <dlg char="CHL" track="CHL">
+                            <m wait="1">He's my step-führer... You can blame my mom for the bad taste...</m>
+                        </dlg>
+                        <anim target="CHL" face="SIGH" />
+                        <dlg char="CHL" track="CHL">
+                            <m>Eeeww... Dude... The nightmarish scenario you just put my head...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>I assume he's also not a fan of you</text>
+                    <then>
+                        <flag name="CHAR:CHL:INTERACTIONS" bit-on="5" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m wait="0.5">I can only imagine how much that sucks...</m>
+                            <m>I don't think he's a big supporter of your... life style...</m>
+                        </dlg>
+                        <anim target="CHL" trigger="say-01" face="UPSET" />
+                        <dlg char="CHL" track="CHL">
+                            <m>Sigh... Yeah... I know...</m>
+                        </dlg>
+                        <anim target="CHL" face="UPSET" />
+                        <dlg char="CHL" track="CHL">
+                            <m>It's yet another reason for me to get away of this town as soon as I can...</m>
+                            <m>..........</m>
+                        </dlg>
+                        <anim target="CHL" face="SIGH" />
+                        <dlg char="CHL" track="CHL">
+                            <m>Sigh... It's always good to open up about this... But also depressing...</m>
+                            <m>So please... Let's leave that topic behind...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="CHL" face="NEUTRAL" />
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--################################################
+            ## dialog-competition ##########################
+            ################################################
+        -->
+        <n id="dialog-competition">
+            <flag name="CHAR:CHL:INTERACTIONS" bit-on="6" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>So... No law enforcement problems... Lots of customers...</m>
+                <m>Running your business here must be a breeze, right?</m>
+            </dlg>
+
+            <anim target="CHL" face="SIGH" trigger="say-01" />
+            <dlg char="CHL" track="CHL">
+                <m>Yeah... I wish it was that easy...</m>
+            </dlg>
+            <anim target="CHL" face="UPSET" />
+            <dlg char="CHL" track="CHL">
+                <m>But the truth is... There's a threat much more dangerous than school security...</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Let me guess... A good spot for business also attracts aggressive competition...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="shrug" face="SIGH" />
+            <dlg char="CHL" track="CHL">
+                <m>Yep... Competition in this business is not about lower prices and better products...</m>
+                <m>Unfortunately, as you just said... 'Aggressive' is an accurate word to describe it...</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Shit... Are you involved in some kind of turf war against someone here!?</m>
+            </dlg>
+
+            <anim target="CHL" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="CHL" track="CHL">
+                <m>It's that fucking mobster Prescott...</m>
+                <m>He's already filthy rich... But he likes the status of being the sole dope provider for his high society classmates...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>You mean there's a Prescott studying here!? I heard that name before...</m>
+                <m>Doesn't sound like a friendly guy...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="say-01"  />
+            <dlg char="CHL" track="CHL">
+                <m>He's not... Last week he caught me here selling my humble weed...</m>
+                <m wait="0.5">He said if I wanna keep my business, then I should work for him... or else...</m>
+            </dlg>
+            <anim target="CHL" face="UPSET"  />
+            <dlg char="CHL" track="CHL">
+                <m>He sounded very serious... and by the bulge I noticed on his pants, I know he's not just bark...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>You checked the guy's junk while he was threatening you!?</m>
+            </dlg>
+            
+            <anim target="CHL" trigger="say-01" face="DISAPPROVE"  />
+            <dlg char="CHL" track="CHL">
+                <m>Yeah... Yeah... Very funny...</m>
+                <m>I guess I deserved that for the poor choice of words...</m>
+            </dlg>
+            
+            <anim target="CHL" trigger="say-01" face="UPSET"  />
+            <dlg char="CHL" track="CHL">
+                <m>But I'm talking about the gun I noticed he was carrying... He didn't bother much about properly concealing it...</m>
+                <m>I think he's disturbed enough to use it if I piss him off...</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--################################################
+            ## dialog-competition-help #####################
+            ################################################
+        -->
+        <n id="dialog-competition-help">
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Is there anything I can do to help with your "competitor" problem?</m>
+                <m>At least something not involving guns and bullets?</m>
+            </dlg>
+
+            <anim target="CHL" trigger="shrug" />
+            <dlg char="CHL" track="CHL">
+                <m>Are you kidding? I can't win a war using brute force...</m>
+                <m>I'd prefer solve it using diplomacy and espionage...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Blue haired girl solving a war through diplomacy and espionage... Feels like I'm talking to an asari...</m>
+            </dlg>
+            <anim target="CHL" trigger="shrug" face="DISAPPROVE" />
+            <dlg char="CHL" track="CHL">
+                <m>A-what!?!</m>
+            </dlg>
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Oh... I just... spaced out here for a moment...</m>
+                <m>Tell me about your plan...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="shrug" face="NEUTRAL" />
+            <dlg char="CHL" track="CHL">
+                <m>It's simple... Prescott deals some heavy stuff... Sometimes even to minors...</m>
+                <m>If I had some solid evidence that could put him in trouble for his criminal schemes... then I could make the idiot think twice before messing with me...</m>
+                <m>Maybe even ask for some money for my "silence"...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Of course... Blackmail the powerful rich psycho kid who walks around the "gun-free zone" school carrying a piece...</m>
+                <m>What could go wrong?</m>
+            </dlg>
+
+            <anim target="CHL" trigger="shrug" face="DISAPPROVE" />
+            <dlg char="CHL" track="CHL">
+                <m>Yeah... I'm well aware of the risks, okay?</m>
+                <m>But I won't chicken out...</m>
+            </dlg>
+
+            <anim target="CHL" face="SIGH" />
+            <dlg char="CHL" track="CHL">
+                <m>Look... I hate this town... All I need is to make a quick buck so I can leave this damned place forever...</m>
+                <m>Then the Prescotts will never hear about me again...</m>
+            </dlg>
+
+            <choice>
+                <c pos="NE">
+                    <text>Life must've been hard here</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Jeez... Life here must've been hard for you if you want to leave everything behind...</m>
+                            <m>When everything around you feels like shit, trying to run away is understandable...</m>
+                        </dlg>
+                        <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                        <anim target="CHL" trigger="surprised" face="CUTE" />
+                        <dlg char="CHL" track="CHL">
+                            <m wait="1">oh... thank you...</m>
+                            <m>I... I didn't expect to meet someone here that tries to understand me...</m>
+                        </dlg>
+                        <anim target="CHL" trigger="shrug" face="UPSET" />
+                        <dlg char="CHL" track="CHL">
+                            <m>Everyone I've ever met in this town has either abandoned or disappointed me...</m>
+                            <m>I feel there's someone out there... Someone that really connects to me, but...</m>
+                            <m>it's somehow missing...</m>
+                        </dlg>
+                        <wait />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>Sounds like a plan</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>It seems you have everything planned then...</m>
+                        </dlg>
+                        <anim target="CHL" trigger="shrug" face="UPSET" />
+                        <dlg char="CHL" track="CHL">
+                            <m>I've been planning to leave this place for years now, dude...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>Then you'll run away like a chicken</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>So you're going to literally run away from all your problems...</m>
+                            <m>That sounds like a big 'chicken out' to me...</m>
+                        </dlg>
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <anim target="CHL" trigger="surprised" face="UPSET" />
+                        <dlg char="CHL" track="CHL">
+                            <m>well... i... you...</m>
+                            <m>....... you don't... understand...</m>
+                        </dlg>
+                        <anim target="CHL" face="SIGH" />
+                        <dlg char="CHL" track="CHL">
+                            <m>Everyone I've ever met in this town has either abandoned or disappointed me...</m>
+                            <m>I just need... to leave...</m>
+                        </dlg>
+                        <wait />
+                    </then>
+                </c>
+            </choice>
+            
+            <anim target="CHL" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="CHL" track="CHL">
+                <m>But first... I need to put this plan in practice!</m>
+            </dlg>
+            <anim target="CHL" face="NEUTRAL" />
+            <dlg char="CHL" track="CHL">
+                <m>I'm sure we can find some compromising criminal evidence against Prescott in his bedroom...</m>
+                <m>You have access to the boys dorm, right? You probably have a room next to the Lion's den...</m>
+                <m>I just need you to break into his room and find what I need!</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Yeah... It's funny how these plans always put me in charge of all the action...</m>
+            </dlg>
+            
+            <anim target="CHL" trigger="shrug" face="NEUTRAL" />
+            <dlg char="CHL" track="CHL">
+                <m>Well... I'm the criminal mastermind of the gang...</m>
+                <m>I prepared the plan... Now you execute it!</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I'll see what I can do, okay?</m>
+            </dlg>
+
+            <dlg char="CHL" track="CHL">
+                <m>Cool... I'll be around here... Tell me if you find something in Prescott's room!</m>
+            </dlg>
+
+            <flag name="QUEST:TURF_WAR" bit-on="0" icon="QUEST">Objectives Updated!</flag>
+            <string name="QUEST:TURF_WAR:OBJECTIVE" set="Find Prescott room in the boys dorm" />
+
+            <node-output node="dialog-root" />
+        </n>
+
+        
+        <!--################################################
+            ## dialog-student ##############################
+            ################################################
+        -->
+        <n id="dialog-student">
+            <dlg char="PLAYER" track="PLAYER">
+                <m>You're not a student here, are you?</m>
+            </dlg>
+
+            <anim target="CHL" trigger="shrug" />
+            <dlg char="CHL" track="CHL">
+                <m wait="1">Captain Obvious for the rescue!</m>
+                <m>Yeah... I know most people here... But I'm not a student...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Why isn't somebody as cool as you not going to ${MISC:SCHOOL:NAME}?</m>
+            </dlg>
+
+            <wait />
+            <anim target="CHL" trigger="say-01" face="CUTE" />
+            <dlg char="CHL" track="CHL" >
+                <m>I was way too cool for this school... It's a long story... In actual files here...</m>
+            </dlg>
+            <wait />
+            <anim target="CHL" face="SURPRISED" />
+            <dlg char="CHL" track="CHL" >
+                <m wait="1">Wait... That was... a weird kind of déjà vu...</m>
+            </dlg>
+            <anim target="CHL" face="SIGH" />
+            <dlg char="CHL" track="CHL" >
+                <m wait="1">Creepy...</m>
+            </dlg>
+
+            <anim target="CHL" face="NEUTRAL" />
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--################################################
+            ## dialog-yearbook ##############################
+            ################################################
+        -->
+        <n id="dialog-yearbook">
+            <dlg char="PLAYER" track="PLAYER">
+                <m>So... You're not a student here... But still... </m>
+                <m>You could appear in our yearbook as "friend of the class"...</m>
+                <m>What do you think about posing for a picture?</m>
+            </dlg>
+
+            <anim target="CHL" trigger="shrug" face="DISAPPROVE" />
+            <dlg char="CHL" track="CHL">
+                <m>Dude... The last thing I would want is to be associated to any document produced by this school...</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Maybe just helping me practice by modeling for pictures then?</m>
+            </dlg>
+
+            <wait />
+            <anim target="CHL" trigger="say-01" face="SIGH" />
+            <dlg char="CHL" track="CHL" >
+                <m>Sorry... I see you're in ${CHAR:MAX:NAME}'s photography class, right?</m>
+                <m>But for now... I have exclusivity modeling contract with her...</m>
+            </dlg>
+            
+            <anim target="CHL" face="NEUTRAL" />
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--################################################
+            ## dialog-tattoo ##############################
+            ################################################
+        -->
+        <n id="dialog-tattoo">
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey... You've got some sick ink done on your arm...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="say-01" face="CUTE" />
+            <dlg char="CHL" track="CHL">
+                <m wait="0.5">Yeah... I love it...</m>
+                <m>My mom almost kicked me out of the house the day she saw it...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I bet you hear people making up meanings for the tattoo all the time, don't you?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="CHL" trigger="shrug" face="DISAPPROVE" />
+            <dlg char="CHL" track="CHL">
+                <m wait="0.5">Yes... Urgh... It's so annoying...</m>
+                <m>Can't a girl simply fancy skulls, roses and butterflies for the ahestetics?</m>
+            </dlg>
+            
+            <anim target="CHL" face="NEUTRAL" />
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--################################################
+            ## buy-joint ###################################
+            ################################################
+        -->
+        <n id="buy-joint">
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="14" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-on="14" />
+                    <sys>JOINT\n\n
+                        Smoking a joint will grant you a few Rift Energy points\n\n
+                        You can smoke a joint in your room at the boys dorm
+                    </sys>
+                </then>
+            </if>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>So... About the merchandise you're selling...</m>
+            </dlg>
+            <anim target="CHL" trigger="say-01" />
+            <dlg char="CHL" track="CHL">
+                <m>Of course... This is why I'm here for...</m>
+                <m>Are you interested?</m>
+            </dlg>
+
+            <choice>
+                <c pos="E">
+                    <text>Not right now...</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Maybe later...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="W">
+                    <check-flag flag="ITEM:MONEY" gte="${ITEM:JOINT:PRICE}" />
+                    <text>[Buy Joint $${ITEM:JOINT:PRICE}]</text>
+                    <lock-reason>You need $5 to buy a joint</lock-reason>
+                    <then>
+                        <anim target="CHL" trigger="say-01" />
+                        <dlg char="CHL" track="CHL">
+                            <m>Here you go...</m>
+                        </dlg>
+                        <fade-to-black speed="3" keep="true" />
+                        <flag name="ITEM:MONEY" dec="5" />
+                        <flag name="ITEM:JOINT" inc="1" icon="JOINT">You bought a joint for $${ITEM:JOINT:PRICE}</flag>
+                        <sfx clip="item" />
+                        <fade-to-black speed="-3" />
+                        <dlg char="CHL" track="CHL">
+                            <m>Now... I suggest smoking it in a private safe place, okay?</m>
+                            <m>And remember... If someone catch you with it, you don't know me...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <node-output node="dialog-root" />
+
+        </n>
+
+
+    </nodes>
+</xml-script>

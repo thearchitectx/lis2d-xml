@@ -68,17 +68,12 @@
                     </check-group>
                     <text>Can we talk now?</text>
                 </c>
-                <c pos="W">
+                <c pos="W" out="cleaned-girls-restroom">
                     <check-group op="AND">
-                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="16" />
-                        <check-flag flag="QUEST:PRINCIPAL1" bit-unset="17" />
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="16" /> <!-- (16): Finished cleaning girls restroom -->
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-unset="17" /><!-- (17): Reported to SAM -->
                     </check-group>
-                    <text>I finished cleaning the girl's restroom</text>
-                    <then>
-                        <sys>Main quest content for this version ends here!\n\nRemember to check trophies to track content found\n\nSee you soon!</sys>
-                        <fade-to-black  keep="true"/>
-                        <bootstrap script="title" />
-                    </then>
+                    <text>Girl's restroom is clean</text>
                 </c>
                 <c pos="NW" out="helper">
                     <check-group op="AND">
@@ -517,6 +512,90 @@
             <anim target="SAM" face="NEUTRAL" />
 
             <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## cleaned-girls-restroom ####################################
+            ##############################################################
+        -->
+        <n id="cleaned-girls-restroom">
+            <flag name="QUEST:PRINCIPAL1" bit-on="17" /> <!-- (17): Reported to SAM -->
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey, man... I finished the job at the girl's restroom...</m>
+            </dlg>
+
+            <anim target="SAM" trigger="say-01" face="CUTE" />
+            <dlg char="SAM" track="SAM">
+                <m wait="0.5">>You did? Nice...</m>
+                <m>So how did you feel... getting into that sacred room?</m>
+            </dlg>
+
+            <wait />
+            <anim target="SAM" face="SIGH" />
+            <dlg char="SAM" track="SAM">
+                <m>I mean... That place must be pure magic when it's filled with giggling girls...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="0.5">Can't say 'magic' is the right word, but...</m>
+                <m>From what I've seen... Shit that Science can't explain is actually happening there...</m>
+            </dlg>
+
+            <anim target="SAM" face="CUTE" />
+            <dlg char="SAM" track="SAM">
+                <m>I know... Right?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I don't think you know what I'm talking about...</m>
+            </dlg>
+            
+            <anim target="SAM" trigger="giggle" face="CUTE" />
+            <dlg char="SAM" track="SAM">
+                <m wait="0.5">Whatever, man... What matters is that the job is done...</m>
+                <m>Here... Take this...</m>
+            </dlg>
+            
+            <fade-to-black keep="true" speed="2" />
+            <sfx clip="item" />
+            <fade-to-black speed="-2" />
+            <flag name="ITEM:MONEY" inc="5" icon="MONEY">You won $5</flag>
+            
+            <anim target="SAM" trigger="say-01" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m>The principal opted to use school funds to pay for your work instead of giving you course credits...</m>
+                <m>It seems that asshole doesn't want you succeeding in your academic life and is using every rule in the book to assert that...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="0.5">Five bucks!?! Seriously!?</m>
+                <m>Have you ever heard the concept of minimum wage?</m>
+            </dlg>
+
+            <anim target="SAM" trigger="shrug" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m>That's certainly the bare minimum the principal is allowed to pay for internship duties...</m>
+                <m>You should be glad you're earning anything at all...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Shit... I don't know why I expect more...</m>
+            </dlg>
+            
+            <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Find the boy's dorm and have a good night of sleep" />
+            <flag name="QUEST:PRINCIPAL1" bit-on="17" icon="QUEST">Objectives updated</flag> <!-- (17): Reported to SAM -->
+
+            <anim target="SAM" trigger="say-01" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m>Don't fret, man... At least your tasks are done for today...</m>
+                <m wait="1">You should go chill at the dorm now...</m>
+                <m>Don't forget to come back tomorrow for more exciting quests...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap script="location-restroom-men-01/location" spawn="spawn/middle" />
         </n>
 
         <!--

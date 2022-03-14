@@ -1,0 +1,354 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <bgm volume="0" />
+            <fade-to-black fill="true" speed="3" keep="true" />
+            <bootstrap node="start" />
+        </n>
+
+        <!--################################################
+            ## start ########################################
+            ################################################
+        -->
+        <n id="start">
+            <bgm loop="loop-computer" volume="0.25" />
+            <fade-to-black keep="true" speed="999999" />
+            <load-scene-object key="scene-laptop.prefab" rename="scene" />
+
+            <fade-to-black fill="true" speed="-3" />
+
+            <!-- First time checking computer -->
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="20" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-on="20" />
+                    <dlg char="PLAYER">
+                        <m>Ah... The classic crappy school computer...</m>
+                        <m>Can't barely do anything in it... But at least it's connected to the academic intranet, which can provide me some information...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <node-output node="root-choices" />
+        </n>
+
+        <!--################################################
+            ## root-choices ################################
+            ################################################
+        -->
+        <n id="root-choices">
+            <anim target="scene" trigger="unloaded" />
+            <obj target="scene">
+                <message name="SetTextURL"><string value="about:blank" /></message>
+                <message name="SetTextContentAlign"><string>UpperLeft</string></message>
+                <message name="SetTextContent"><string value="" /></message>
+            </obj>
+            <choice>
+                <c pos="NW" out="duck-duck-go">
+                    <text>https://duckduckgo.com</text>
+                </c>
+                <c pos="W" out="intranet">
+                    <text>http://home.intranet:8080/</text>
+                </c>
+                <c pos="SW" out="jobs">
+                    <text>http://bay-jobs.com</text>
+                </c>
+                <c pos="E">
+                    <text>[LEAVE]</text>
+                    <then>
+                        <bgm volume="0" />
+                        <fade-to-black fill="true" speed="3" keep="true" />
+                        <bootstrap script="location-player-room-01/location" spawn="spawn/window" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+        
+        <!---###################################################### -->
+        <!---### intranet ##################################### -->
+        <!---###################################################### -->
+        <n id="intranet">
+            <anim target="scene" trigger="hourglass" />
+            <wait time="0.5"/>
+            <anim target="scene" trigger="intranet" />
+            <wait time="0.5"/>
+            <obj target="scene">
+                <message name="SetTextURL"><string>http://home.intranet:8080/</string></message>
+                <message name="SetTextContentAlign"><string>UpperCenter</string></message>
+                <message name="SetTextContent"><string><![CDATA[<size=32><b><color=#410000>${MISC:SCHOOL:NAME} Academy</color></b></size>\n\n
+                    Welcome to ${MISC:SCHOOL:NAME} Academy Intranet\n
+                    In this page you can find extensive academic information, rules and regulations of our school. You can now sign in to the network using your provided email address instead of your username. Please start signing in with your email address now, because by the end of this month you will no longer be able to sign in to the educational network.\n\n
+                    <color=blue><b>STAFF DIRECTORY</b></color> # <color=blue><b>PRESCOTT DORMITORY</b></color> # <color=blue><b>WEB MAIL</b></color>]]></string></message>
+            </obj>
+
+            <choice>
+                <c pos="NW">
+                    <text>Staff Directory</text>
+                    <then>
+                        <anim target="scene" trigger="hourglass" />
+                        <wait time="1"/>
+                        <obj target="scene">
+                            <message name="SetTextURL"><string>http://home.intranet:8080/staff</string></message>
+                            <message name="SetTextContentAlign"><string>UpperLeft</string></message>
+                            <message name="SetTextContent"><string><![CDATA[<size=28>UNAUTHORIZED ACCESS</size>
+                                \n\n
+                                This action was monitored and your IP address logged
+                                \n\n
+                                <b>Back</b>]]></string></message>
+                        </obj>
+                        <wait time="1" />
+                        <dlg char="PLAYER">
+                            <m>Yeah... Whatever...</m>
+                        </dlg>
+
+                        <choice><c pos="E" out="intranet"><text>[BACK]</text></c></choice>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>Prescott Dormitory</text>
+                    <then>
+                        <anim target="scene" trigger="hourglass" />
+                        <wait time="1"/>
+                        <obj target="scene">
+                            <message name="SetTextURL"><string>http://home.intranet:8080/dorm</string></message>
+                            <message name="SetTextContentAlign"><string>UpperLeft</string></message>
+                            <message name="SetTextContent"><string><![CDATA[The Prescott Dormitory was generously donated by the Prescott family to ${MISC:SCHOOL:NAME} in 1998. It's a landmark of this school and a symbol of the achievements and success of one of the greatest men born in our town.\n\n
+<b>CURRENT RESIDENTS:</b>\n
+<b>104</b> - <REGISTRATION PENDING>\n
+<b>105</b> - <REGISTRATION PENDING>\n
+<b>106</b> - <REGISTRATION PENDING>\n
+<b>107</b> - ${CHAR:ZAC:NAME}\n
+<b>108</b> - ${CHAR:PLAYER:NAME} S?¬@#§ <color=red><DataCorruptionException at GodClass.FormatName line 7434></color>\n
+<b>109</b> - ${CHAR:WAR:NAME}\n
+<b>110</b> - <REGISTRATION PENDING>\n
+<b>111 - Permanently reserved for the Prescott Family</b>\n
+<b>217</b> - <REGISTRATION PENDING>\n
+<b>218</b> - <REGISTRATION PENDING>\n
+<b>219</b> - ${CHAR:MAX:NAME}\n
+<b>220</b> - ${CHAR:BRK:NAME}\n
+<b>221</b> - ${CHAR:VIC:NAME}\n
+<b>222</b> - ${CHAR:KATE:NAME}\n
+<b>223</b> - ${CHAR:JUL:NAME}\n
+<b>224</b> - ${CHAR:TAY:NAME}\n
+<b>Back</b>
+                            ]]></string></message>
+                        </obj>
+
+                        <wait time="2" />
+                        <if>
+                            <check-group op="AND">
+                                <check-flag flag="QUEST:TURF_WAR" bit-set="0" />
+                                <check-flag flag="QUEST:TURF_WAR" bit-unset="1" />
+                            </check-group>
+                            <then>
+                                <flag name="QUEST:TURF_WAR" bit-on="1" />
+                                <string name="QUEST:TURF_WAR:OBJECTIVE">Search room 111 for evidence against Prescott</string>
+                                <dlg char="PLAYER">
+                                    <m>Hey... There's some useful info...</m>
+                                    <m>It seems if I want to find a Prescott family member here, then room 111 is the one I should check...</m>
+                                    <m>If I want to help ${CHAR:CHL:NAME} then that's the place I need to investigate...</m>
+                                </dlg>
+                            </then>
+                        </if>
+
+                        <choice><c pos="E" out="intranet"><text>[BACK]</text></c></choice>
+                    </then>
+                </c>
+                <c pos="NE" out="mail">
+                    <text>Web Mail</text>
+                </c>
+                <c pos="E" out="root-choices">
+                    <text>[BACK]</text>
+                </c>
+            </choice>
+            
+        </n>
+
+        <!---###################################################### -->
+        <!---### duck-duck-go ##################################### -->
+        <!---###################################################### -->
+        <n id="duck-duck-go">
+            <anim target="scene" trigger="unloaded" />
+            <anim target="scene" trigger="hourglass" />
+            <wait time="1"/>
+            <obj target="scene">
+                <message name="SetTextURL"><string>https://duckduckgo.com</string></message>
+                <message name="SetTextContent"><string><![CDATA[
+                    <size=32>HTTP ERROR 401</size>\n
+                    Only pre-approved access to external websites are allowed from this network
+                ]]></string></message>
+            </obj>
+
+            <wait time="1" />
+
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="21" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-on="21" />
+                    <dlg char="PLAYER">
+                        <m>Denied... Of course...</m>
+                        <m>Feels like living in the Democratic Republic of Winnie the Pooh...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <choice>
+                <c pos="E" out="root-choices">
+                    <text>[BACK]</text>
+                </c>
+            </choice>
+        </n>
+
+        <!---###################################################### -->
+        <!---### jobs ##################################### -->
+        <!---###################################################### -->
+        <n id="jobs">
+            <anim target="scene" trigger="hourglass" />
+            <wait time="0.5"/>
+            <anim target="scene" trigger="jobs" />
+            <wait time="0.5"/>
+            <obj target="scene">
+                <message name="SetTextURL"><string>http://bay-jobs.com/</string></message>
+                <message name="SetTextContentAlign"><string>UpperCenter</string></message>
+                <message name="SetTextContent"><string><![CDATA[<size=32><b><color=#000041>BAY JOBS</color></b></size>\n\n
+                    Under construction!]]></string></message>
+            </obj>
+
+            <choice>
+                <c pos="E" out="root-choices">
+                    <text>[BACK]</text>
+                </c>
+            </choice>
+        </n>
+
+        <!---###################################################### -->
+        <!---### mail ##################################### -->
+        <!---###################################################### -->
+        <n id="mail">
+            <anim target="scene" trigger="hourglass" />
+            <wait time="0.5"/>
+            <anim target="scene" trigger="intranet" />
+            <wait time="0.5"/>
+            <string name="TMP:0" set="\n" />
+            <if>
+                <check-flag flag="QUEST:MEM_CARD" bit-set="23" />
+                <then>
+                    <string name="TMP:0" append="\n- [from: ${CHAR:BRK:NAME} (student-64937@mail.intranet)] &lt;b&gt;&lt;color=blue&gt;thx&lt;/color&gt;&lt;/b&gt;" />
+                </then>
+            </if>
+
+            <obj target="scene">
+                <message name="SetTextURL"><string>http://mail.intranet:8080/~student-69420</string></message>
+                <message name="SetTextContentAlign"><string>UpperLeft</string></message>
+                <message name="SetTextContent"><string><![CDATA[<size=32><b><color=#410000>${MISC:SCHOOL:NAME} Web Mail System</color></b></size>\n\n
+                    <b>[INBOX student-69420@mail.intranet]</b>\n
+                    - [from: (no-reply@sys.intranet)] <b><color=blue>Enrollment notification</color></b>\n
+                    - [from: ${CHAR:JEF:NAME} (staff-7654@mail.intranet)] <b><color=blue>Everyday Heroes</color></b>\n
+                    ${TMP:0}
+                    ]]></string></message>
+            </obj>
+
+            <choice>
+                <c pos="NW">
+                    <text>[Enrollment notification]</text>
+                    <then>
+                        <anim target="scene" trigger="hourglass" />
+                        <wait time="1"/>
+                        <obj target="scene">
+                            <message name="SetTextURL"><string>http://mail.intranet:8080/~student-69420/65765289</string></message>
+                            <message name="SetTextContent"><string><![CDATA[<color=#410000><size=18><b>Enrollment notification</b></size>\n\n
+                                [from: no-reply@sys.intranet]\n
+                                [to: student-69420@mail.intranet]
+                                </color>
+                                \n\n
+                                Your were enrolled in ${MISC:SCHOOL:NAME}'s <b>"General Maintenance Helper"</b> internship program.\n
+                                Daily attendance is mandatory and successfully completing this program is a precondition to academic progression in your course.\n
+                                Seek your internship advisor for further information.\n\n
+
+                                __________________________________________________________\n
+                                This is an automated message. Please, do not reply.\n
+                                ${MISC:SCHOOL:NAME} Academic system
+                                ]]></string></message>
+                        </obj>
+                        <wait time="1.5" />
+                        <dlg char="PLAYER">
+                            <m>Yeah... I know...</m>
+                        </dlg>
+
+                        <choice><c pos="E" out="mail"><text>[BACK]</text></c></choice>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Everyday Heroes]</text>
+                    <then>
+                        <anim target="scene" trigger="hourglass" />
+                        <wait time="1"/>
+                        <obj target="scene">
+                            <message name="SetTextURL"><string>http://mail.intranet:8080/~student-69420/5758788</string></message>
+                            <message name="SetTextContent"><string><![CDATA[<color=#410000><size=18><b>Everyday Heroes</b></size>\n\n
+                                [from: ${CHAR:JEF:NAME} (staff-7654@mail.intranet)] \n
+                                [to: ART-CLASS-GROUP]
+                                </color>
+                                \n\n
+                                Dear Students,\n
+                                Remember this is the last week you have to submit your piece to the Everyday Heroes contest.\n
+                                I truly trust your talent and I'm sure each one of you will do your best.\n\n
+
+                                Regards,\n
+                                ${CHAR:JEF:NAME}\n\n
+
+                                PS: I won't give "private" advice regarding the contest out of class time! Please, don't insist!
+                                ]]></string></message>
+                        </obj>
+
+                        <wait time="1.5" />
+                        <dlg char="PLAYER">
+                            <m>Jeez... Will ${CHAR:VIC:NAME} never leave the man alone?</m>
+                        </dlg>
+
+                        <choice><c pos="E" out="mail"><text>[BACK]</text></c></choice>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>[thx]</text>
+                    <check-flag flag="QUEST:MEM_CARD" bit-set="23" />
+                    <then>
+                        <anim target="scene" trigger="hourglass" />
+                        <wait time="1"/>
+                        <obj target="scene">
+                            <message name="SetTextURL"><string>http://mail.intranet:8080/~student-69420/9434551</string></message>
+                            <message name="SetImageContent"><string value="scene-laptop-pic-brk-01.png" /></message>
+                            <message name="SetTextContent"><string><![CDATA[<color=#410000><size=18><b>thx</b></size>\n\n
+                                [from: ${CHAR:BRK:NAME} (student-64937@mail.intranet)] \n
+                                [to: student-69420@mail.intranet]
+                                </color>
+                                \n\n
+                                ty 4 the help in my 'project'. working on edit now\n
+                                ngl u gave interesting ideas today. may need help again soon\n
+                                ]]></string></message>
+                        </obj>
+
+                        <wait time="1.5" />
+                        <dlg char="PLAYER">
+                            <m>So... She thinks my ideas were 'interesting'...</m>
+                        </dlg>
+
+                        <choice><c pos="E" out="mail"><text>[BACK]</text></c></choice>
+                    </then>
+                </c>
+                <c pos="E" out="intranet">
+                    <text>[BACK]</text>
+                </c>
+            </choice>
+        </n>
+        
+    </nodes>
+</xml-script>

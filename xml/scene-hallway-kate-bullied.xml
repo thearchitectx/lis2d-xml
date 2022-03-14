@@ -118,7 +118,7 @@
             <anim target="scene" trigger="push" />
             <dlg char="TAY" track="scene/track-tay">
                 <m wait="1">Would you!?!?</m>
-                <m wait="0.5">${CHAR:VIC:NAME} wanna see your pathetic face at the party...</m>
+                <m wait="0.5">${CHAR:VIC:NAME} wanna see your sorry ass at the party...</m>
                 <m>I don't know why, but it doesn't matter... If she wants you there, then you'd better be there...</m>
             </dlg>
 

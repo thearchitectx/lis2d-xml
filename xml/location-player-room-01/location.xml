@@ -6,20 +6,21 @@
     <nodes>
         <n id="n1">
             <fade-to-black keep="true" speed="99999" />
-            <bgm loop="loop-urban" as-music="false" volume="0.25" fade-speed="0.5" />
-            
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <load-scene-object key="location-player-room-01.prefab" />
+
             <if>
-                <check-text text="CHAR:JUS:NAME" eq="#EMPTY" />
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="18" />
                 <then>
-                    <string name="CHAR:JUS:NAME" set="Chill Dude"></string>
+                    <anim target="location-player-room-01.prefab" trigger="light-1-instant-on" />
+                    <anim target="location-player-room-01.prefab"><bool name="light-1" value="true" /></anim>
                 </then>
             </if>
 
-            <load-scene-object key="location-administration-01.prefab" />
-
             <fade-to-black speed="-3" fill="true" />
 
-            <autosave label="Administration - Exploring" />
+            <autosave label="Player Room - Exploring" />
 
             <inject node="lib-post-start" />
         </n>

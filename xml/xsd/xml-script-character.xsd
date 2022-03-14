@@ -4,6 +4,7 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="PLAYER" />
             <xs:enumeration value="BRK" />
+            <xs:enumeration value="CHL" />
             <xs:enumeration value="JEF" />
             <xs:enumeration value="VIC" />
             <xs:enumeration value="KATE" />
@@ -11,9 +12,11 @@
             <xs:enumeration value="COU" />
             <xs:enumeration value="JUL" />
             <xs:enumeration value="JUS" />
+            <xs:enumeration value="JOY" />
             <xs:enumeration value="MAX" />
             <xs:enumeration value="PRI" />
             <xs:enumeration value="SAM" />
+            <xs:enumeration value="WAR" />
             <xs:enumeration value="ZAC" />
         </xs:restriction>
     </xs:simpleType>

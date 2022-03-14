@@ -6,6 +6,12 @@
     <trophy id="sunday-school-01" label="Sunday School Reject I" icon="char/KATE.png">
         Take a good picture of her in the hallway 
     </trophy>
+    <trophy id="sunday-school-02" label="Sunday School Reject II" icon="char/KATE.png">
+        Receive service when first meeting her at the diner 
+    </trophy>
+    <trophy id="sunday-school-03" label="Sunday School Reject III" icon="char/KATE.png">
+        Give service when first meeting her at the diner 
+    </trophy>
     <trophy id="birds-are-not-real-01" label="Bird's Aren't Real I" icon="char/BRK.png">
         Find her drone and check what's in the memory card
     </trophy>

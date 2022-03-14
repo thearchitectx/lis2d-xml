@@ -618,6 +618,7 @@
                 <c pos="E">
                     <text>If this is your best pose...</text>
                     <then>
+                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="7" />
                         <dlg char="PLAYER" track="scene/track-player">
                             <m>Well... If this is the is really the pose you want...</m>
                         </dlg>

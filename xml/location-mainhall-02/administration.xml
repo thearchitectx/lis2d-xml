@@ -15,7 +15,7 @@
 
             <sfx clip="door-transition" async="true" />
             <bgm volume="0" />
-            <fade-to-black keep="true" speed="3" />
+            <fade-to-black keep="true" speed="3" fill="true"/>
             <bootstrap script="location-administration-01/location" spawn="spawn/mainhall" />
         </n>
 

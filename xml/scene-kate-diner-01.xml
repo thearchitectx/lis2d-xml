@@ -1,0 +1,1245 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--###############################################
+            ### root ######################################
+            ###############################################-->
+        <n id="root">
+            <fade-to-black keep="true" speed="1000" />
+            
+            <bgm loop="loop-urban" volume="0.25" />
+            
+            <load-scene-object key="scene-kate-diner-01.prefab" rename="scene" />
+            
+            <fade-to-black speed="-0.5" />
+
+            <autosave label="Meeting ${CHAR:KATE:NAME} at the diner" />
+
+            <wait />
+
+            <dlg char="PLAYER">
+                <m wait="1">Okay... I think this is the diner...</m>
+                <m>Feels good to get away from that school for once...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <dlg char="PLAYER">
+                <m>This place seems quite old style...</m>
+                <m>But, yeah... it's kinda cozy...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <dlg char="PLAYER">
+                <m wait="0.5">However... I'm not seeing many people here now...</m>
+                <m wait="1.5">...which usually is not a good sign...</m>
+                <m>Well... What matters now is...</m>
+                <m>Where is ${CHAR:KATE:NAME}?</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <if>
+                <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
+                <then>
+                    <dlg char="PLAYER">
+                        <m>Poor girl always seems so anguished... Needs someone to talk...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="PLAYER">
+                        <m>Can't wait to teach her a thing or two...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <obj target="scene">
+                <outcome clear="true" />
+            </obj>
+
+            <dlg char="PLAYER">
+                <m wait="1">There...</m>
+                <m>I wonder what this is about...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+
+            <dlg char="KATE" track="scene/KATE">
+                <m wait="1">Hey... There you are...</m>
+                <m>Thank you for coming...</m>
+                <m>Sit here, please...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="3" />
+            <bootstrap node="start" />
+        </n>
+
+        <!--###############################################
+            ### start ######################################
+            ###############################################-->
+        <n id="start">
+            <fade-to-black keep="true" speed="1000" />
+            
+            <bgm loop="loop-kate" volume="0.15" />
+            
+            <load-scene-object key="scene-kate-diner-02.prefab" rename="scene" />
+            <proxy target="scene" name="KATE" />
+            
+            <fade-to-black speed="-2" />
+
+            <autosave label="Meeting ${CHAR:KATE:NAME} at the diner" />
+
+            <flag name="CHAR:KATE:DINER1:HEAT" set="10" />
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="CHAR:KATE:DINER1:HEAT" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+            </load-scene-object>
+
+            <wait time="2" />
+            
+            <dlg char="KATE" track="KATE">
+                <m>So...</m>
+            </dlg>
+            <anim target="KATE" face="EMBARRASSED" />
+            <dlg char="KATE" track="KATE">
+                <m wait="1">I... I... uuhh...</m>
+                <m>........</m>
+            </dlg>
+            
+            <wait />
+            <dlg char="PLAYER">
+                <m instant="true">|She seems totally embarrassed to be here with me...|</m>
+                <m instant="true">|It seems she's not used to be alone with a dude outside school...|</m>
+            </dlg>
+
+            <choice id="choice-kate-diner-01-a">
+                <c pos="E">
+                    <text>[Let her try to talk]</text>
+                    <then>
+                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="18" />
+                        <anim target="KATE" idle="UPSET" />
+                        <dlg char="KATE" track="KATE">
+                            <m>I... uuh... I mean...</m>
+                        </dlg>
+                        <anim target="KATE" face="SIGH" />
+                        <dlg char="KATE" track="KATE">
+                            <m wait="1">.......</m>
+                            <m>Oh God... Why did You made me like this?</m>
+                            <m>I... I can't even start a conversation...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <if>
+                            <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:PARAGON}" />
+                            <then>
+                                <dlg char="PLAYER">
+                                    <m wait="0.5">Hey... That's okay...</m>
+                                    <m>I just wanted to let you try to break the ice...</m>
+                                    <m>Sorry for pushing you like that...</m>
+                                </dlg>
+                            </then>
+                            <else>
+                                <dlg char="PLAYER">
+                                    <m wait="0.5">Jeez... You have a long way ahead, girl...</m>
+                                    <m>Bullies would you eat you alive if they could see you now...</m>
+                                </dlg>
+                            </else>
+                        </if>
+                        <anim target="KATE" face="UPSET" />
+                        <dlg char="KATE" track="KATE">
+                            <m>I can't be like this anymore...</m>
+                            <m>But I... I just need a little more time...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Break the ice]</text>
+                    <then>
+                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="19" />
+                        <dlg char="PLAYER">
+                            <m>Is this eatery always empty like this?</m>
+                            <m>I mean... It's kind of a red flag for...  shitty food service...</m>
+                        </dlg>
+                        
+                        <anim target="KATE" face="NEUTRAL" trigger="say-01" />
+                        <flag name="CHAR:KATE:DINER1:HEAT" inc="50" />
+                        <dlg char="KATE" track="KATE">
+                            <m wait="1">Oh... Actually... A lot of town workers come here for breakfast and lunch...</m>
+                            <m wait="0.5">But it's usually empty at this time...</m>
+                        </dlg>
+                        <anim target="KATE" face="CUTE" />
+                        <dlg char="KATE" track="KATE">
+                            <m>It's great when you need a quiet place away from school...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <wait />
+            <anim target="KATE" face="NEUTRAL" idle="NEUTRAL" trigger="say-01" />
+            <dlg char="KATE" track="KATE">
+                <m wait="0.5">Anyways... About what I said when we met outside school...</m>
+                <m>I know for sure that blending in the Vortex Club is the best option I have to make them stop harassing me...</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>You know that's not exactly an easy task, right?</m>
+            </dlg>
+            
+            <anim target="KATE" face="UPSET" trigger="say-01" />
+            <dlg char="KATE" track="KATE">
+                <m wait="1">Yeah... I know... It's a scary move...</m>
+                <m>I'm afraid I'll be just making a fool of myself...</m>
+                <m>I've never been anything like... them...</m>
+            </dlg>
+
+            <choice id="choice-kate-diner-01-b">
+                <c pos="W">
+                    <text>I like you the way you are</text>
+                    <then>
+                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="20" />
+                        <dlg char="PLAYER">
+                            <m>Hey... I like you the way you are...</m>
+                            <m>You're as nice and cool as anyone can be...</m>
+                        </dlg>
+
+                        <flag name="CHAR:KATE:AFFINITY" inc="2" icon="AFFINITY">${CHAR:KATE:NAME} liked that a lot</flag>
+                        <anim target="KATE" face="CUTE" />
+                        <dlg char="KATE" track="KATE">
+                            <m>Oh... That was sweet...</m>
+                        </dlg>
+                        <wait />
+                        <anim target="KATE" trigger="say-01" face="SIGH" />
+                        <dlg char="KATE" track="KATE">
+                            <m>I like being with you, but what I really need now is get rid of my bullying problem...</m>
+                            <m>What I need is a new... me...</m>
+                        </dlg>
+                        <anim target="KATE" face="NEUTRAL" />
+                        <dlg char="KATE" track="KATE">
+                            <m>It won't be easy... But that's my only plan...</m>
+                            <m>Nothing will make me give up of that idea...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>You're on the right track</text>
+                    <then>
+                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="21" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Yep... It's almost common sense...</m>
+                            <m>The more you look and act like the popular girls the more they will respect you...</m>
+                        </dlg>
+                        
+                        <flag name="CHAR:KATE:DINER1:HEAT" inc="50" />
+                        <anim target="KATE" face="CUTE" />
+                        <dlg char="KATE" track="KATE">
+                            <m>You think so!?</m>
+                            <m wait="0.5">That's awesome!</m>
+                            <m>At least now I know I have a chance to escape this hell...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="KATE" trigger="say-01" idle="UPSET" face="EMBARRASSED" />
+            <dlg char="KATE" track="KATE">
+                <m>And... uuuhh... I think I know where I should start...</m>
+                <m wait="0.5">I need to change my looks just a little bit...</m>
+            </dlg>
+            <anim target="KATE" face="NEUTRAL" />
+            <dlg char="KATE" track="KATE">
+                <m>Mother always made me dress like if I were going to the Sunday mass every day...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Well... Can't deny the fully gray attire is kinda heavy handed symbolism...</m>
+            </dlg>
+
+            <anim target="KATE" trigger="say-01" idle="NEUTRAL" face="CUTE" />
+            <dlg char="KATE" track="KATE">
+                <m>And that's why I need your help!!</m>
+                <m>You know how a popular girl look like, right?</m>
+                <m>Would you please help me choose something? Something you think would be appropriate for me to start changing...</m>
+            </dlg>
+            <anim target="KATE" face="NEUTRAL" />
+            <dlg char="KATE" track="KATE">
+                <m>Nothing much exaggerated, of course...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Sure... I've been working on so many weird stuff... Why not a personal stylist now...</m>
+            </dlg>
+
+            <anim target="KATE" trigger="say-01" idle="NEUTRAL" face="CUTE" />
+            <dlg char="KATE" track="KATE">
+                <m>Thank you... Thank you so much... I... I...</m>
+            </dlg>
+
+            <anim target="KATE" trigger="cry" />
+            <dlg char="KATE" track="KATE">
+                <m wait="1">I... still can't believe there's someone actually trying to help me turn the tables...</m>
+                <m>..........</m>
+            </dlg>
+
+            <load-scene-object key="scene-kate-diner-03.prefab" rename="pre-load" active="false" />
+            <wait />
+            <obj target="pre-load" destroy="0" />
+
+            <choice id="choice-kate-diner-01-c">
+                <c pos="E">
+                    <text>[Sit next to her]</text>
+                    <then>
+                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="22" />
+                        <bgm volume="0" />
+                        <fade-to-black speed="1" keep="true" />
+                        <bootstrap node="sit" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>I should go now...</text>
+                    <then>
+                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="23" />
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>I uhh... I should go now...</m>
+                            <m>If you need some time to think about this, then it'd better to take a break now...</m>
+                            <m>Just call me when you're ready, okay?</m>
+                        </dlg>
+
+                        <node-output node="not-busted" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        
+        <!--###############################################
+            ### sit ######################################
+            ###############################################-->
+        <n id="sit">
+            <fade-to-black keep="true" speed="99999" />
+
+            <bgm loop="loop-kate" volume="0.15" />
+            
+            <load-scene-object key="scene-kate-diner-03.prefab" rename="scene" />
+            <proxy target="scene/KATE" name="KATE" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            
+            <fade-to-black speed="-1" />
+
+            <autosave label="Meeting ${CHAR:KATE:NAME} at the diner" />
+
+            <wait />
+
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="CHAR:KATE:DINER1:HEAT" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+            </load-scene-object>
+
+            <flag name="CHAR:KATE:DINER1:HEAT" inc="50"></flag>
+            <anim target="scene"><bool name="look" value="true" /></anim>
+            <if>
+                <!-- (15): Put hand on her leg on campus -->
+                <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="15" />
+                <then>
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Hey... There's no need be so nervous...</m>
+                    </dlg>
+                    <dlg char="KATE" track="KATE">
+                        <m>Wait... That thing you did to me at the campus...</m>
+                        <m>You... You won't do it again, will you?</m>
+                    </dlg>
+                    <anim target="scene"><bool name="look" value="false" /></anim>
+                    <dlg char="KATE" track="KATE">
+                        <m>I... I'm not that kind of girl...</m>
+                    </dlg>
+
+                    <choice id="choice-kate-diner-01-d">
+                        <c pos="NE">
+                            <text>Sorry if that was too much</text>
+                            <then>
+                                <flag name="CHAR:KATE:INTERACTIONS" bit-on="24" />
+                                <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                                <anim target="scene"><bool name="look" value="false" /></anim>
+                                <dlg char="PLAYER" track="PLAYER">
+                                    <m wait="0.5">Hey... Sorry if that was a little too much for you...</m>
+                                    <m>If you don't like anything I'm doing you just have to say it...</m>
+                                    <m>I'm just trying to help any way I can...</m>
+                                </dlg>
+                                <anim target="scene"><bool name="look" value="true" /></anim>
+                                <dlg char="KATE" track="KATE">
+                                    <m wait="1">Oh... Thank you... I guess...</m>
+                                    <m>It was just... so unexpected...</m>
+                                </dlg>
+                            </then>
+                        </c>
+                        <c pos="SE">
+                            <text>I know you liked that</text>
+                            <then>
+                                <flag name="CHAR:KATE:INTERACTIONS" bit-on="25" />
+                                <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                                <anim target="scene"><bool name="look" value="true" /></anim>
+                                <dlg char="PLAYER" track="PLAYER">
+                                    <m wait="0.5">Bullshit... I think you liked me touching your legs way more than you expected...</m>
+                                    <m>And that's why you brought me to an isolated place like this, isn't it?</m>
+                                    <m>It's like you're asking for more, without having to worry about people watching...</m>
+                                </dlg>
+                                <anim target="scene"><bool name="look" value="false" /></anim>
+                                <anim target="scene"><bool name="blush" value="true" /></anim>
+                                <dlg char="KATE" track="KATE">
+                                    <m wait="1">no... i just...</m>
+                                </dlg>
+                                <anim target="scene"><bool name="look" value="true" /></anim>
+                                <dlg char="KATE" track="KATE">
+                                    <m wait="1">that's not why i...</m>
+                                </dlg>
+                                <anim target="scene"><bool name="look" value="false" /></anim>
+                                <dlg char="KATE" track="KATE">
+                                    <m>...........</m>
+                                </dlg>
+                            </then>
+                        </c>
+                    </choice>
+                </then>
+                <else>
+                    <dlg char="PLAYER">
+                        <m>Hey... Don't worry... You're gonna be okay...</m>
+                    </dlg>
+                    <dlg char="KATE" track="KATE">
+                        <m wait="1">You... You have been so nice to me...</m>
+                        <m>I know I'm not exactly an easygoing person...</m>
+                    </dlg>
+                    <anim target="scene"><bool name="look" value="false" /></anim>
+                    <if>
+                        <!-- (16): Hold her hand on campus -->
+                        <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="16" />
+                        <then>
+                            <wait />
+                            <dlg char="KATE" track="KATE">
+                                <m>I liked when you held my hand back there at the campus...</m>
+                                <m>It felt like... like...</m>
+                            </dlg>
+
+                            <choice id="choice-kate-diner-01-e">
+                                <c pos="NE">
+                                    <text>Felt like I care about you?</text>
+                                    <then>
+                                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="26" />
+                                        <anim target="scene"><bool name="look" value="true" /></anim>
+                                        <dlg char="PLAYER">
+                                            <m wait="0.5">Like a care about you?</m>
+                                            <m>If that's what you felt, then you're totally right...</m>
+                                        </dlg>
+                                        
+                                        <anim target="scene"><bool name="look" value="false" /></anim>
+                                        <anim target="scene"><bool name="blush" value="true" /></anim>
+                                        <dlg char="KATE" track="KATE">
+                                            <m wait="1">Oh...... yeah... i...</m>
+                                        </dlg>
+                                        <anim target="scene"><bool name="look" value="true" /></anim>
+                                        <flag name="CHAR:KATE:AFFINITY" inc="1" icon="AFFINITY">${CHAR:KATE:NAME} liked that</flag>
+                                        <dlg char="KATE" track="KATE">
+                                            <m>... I felt that... and it was really nice...</m>
+                                        </dlg>
+                                    </then>
+                                </c>
+                                <c pos="SE">
+                                    <text>Like I'm willing to help...</text>
+                                    <then>
+                                        <flag name="CHAR:KATE:INTERACTIONS" bit-on="27" />
+                                        <anim target="scene"><bool name="look" value="true" /></anim>
+                                        <dlg char="PLAYER">
+                                            <m wait="0.5">Like I'm someone who's truly trying to help, right?</m>
+                                            <m>I just can't stand the way those people treat you...</m>
+                                        </dlg>
+                                        
+                                        <anim target="scene"><bool name="look" value="false" /></anim>
+                                        <dlg char="KATE" track="KATE">
+                                            <m wait="1">Oh... yeah...</m>
+                                            <m>that's... that's what I thought...</m>
+                                        </dlg>
+                                    </then>
+                                </c>
+                            </choice>
+                        </then>
+                    </if>
+
+                </else>
+            </if>
+
+            <wait />
+
+            <anim target="scene"><bool name="look" value="false" /></anim>
+            <dlg char="KATE" track="KATE">
+                <m wait="0.5">I just wish I had the resolve to put this plan in practice...</m>
+                <m>Maybe I'm fooling myself thinking I have the strength to do what I must do...</m>
+            </dlg>
+
+            <wait />
+            <node-output node="escalate-root" />
+        </n>
+
+        <!--###############################################
+            ### escalate-root ######################################
+            ###############################################-->
+        <n id="escalate-root">
+            <choice>
+                <c pos="NW" out="kiss" style="PARAGON">
+                    <text>Believe in yourself</text>
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:KATE:DINER1:HEAT" gte="100" />
+                        <check-flag flag="PLAYER:STAT:PARAGON" gte="4" />
+                    </check-group>
+                    <lock-reason>[Full Heat required] [Paragon +4 required]</lock-reason>
+                </c>
+                <c pos="SW" out="hand-job" style="RENEGADE">
+                    <text>You need a shock treatment</text>
+                    <check-group op="AND">
+                        <check-flag flag="CHAR:KATE:DINER1:HEAT" gte="100" />
+                        <check-flag flag="PLAYER:STAT:RENEGADE" gte="4" />
+                    </check-group>
+                    <lock-reason>[Full Heat required] [Renegade +4 required]</lock-reason>
+                </c>
+                <c pos="E">
+                    <text>Call me when you're ready</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>If you need some time to think about this, then it'd better to take a break now...</m>
+                            <m>Just call me when you're ready, okay?</m>
+                        </dlg>
+
+                        <node-output node="not-busted" />
+                    </then>
+                </c>
+                <c pos="NE" style="RIFT">
+                    <text>[Raise Heat]</text>
+                    <check-flag flag="PLAYER:STAT:RIFT" gte="1" />
+                    <lock-reason>[Not enough Rift Energy]</lock-reason>
+                    <then>
+                        <bgm name="rift-bgm" loop="loop-rumble" as-music="false" volume="0.5" />
+                        <flag name="PLAYER:STAT:RIFT" dec="1" icon="RIFT">Used 1 Rift energy point</flag>
+                        <load-scene-object key="vfx-rift.prefab" />
+                        <wait />
+                        
+                        <dlg char="BRK" track="BRK">
+                            <m>Huh? What's going on?</m>
+                        </dlg>
+                        <wait />
+                        <flag name="CHAR:KATE:DINER1:HEAT" inc="90" />
+                        <flag name="PLAYER:STAT:RIFT" dec="1" />
+                        <dlg char="BRK" track="BRK">
+                            <m>I... I feel... weird...</m>
+                        </dlg>
+
+                        <wait time="1" />
+                        <bgm name="rift-bgm" volume="0" />
+                        <anim target="vfx-rift.prefab">
+                            <bool name="active" value="false" />
+                        </anim>
+                        <wait time="1" />
+                        <node-output node="escalate-root" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--###############################################
+            ### hand-job ######################################
+            ###############################################-->
+        <n id="hand-job">
+            <flag name="CHAR:KATE:INTERACTIONS" bit-on="28" />
+            <obj destroy="0" target="flag-gauge.prefab" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hum... I know what you need now to boost your confidence:</m>
+                <m>A quick shock treatment...</m>
+            </dlg>
+            <anim target="scene"><bool name="look" value="true" /></anim>
+            <dlg char="KATE" track="KATE">
+                <m>Shock... treatment!?!</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Yeah... You'll see...</m>
+                <m>Here... Let me hold your hand...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="look" value="false" /></anim>
+            <dlg char="KATE" track="KATE">
+                <m>my... hand...</m>
+            </dlg>
+            <wait />
+
+            <anim target="scene" trigger="shot-hand" />
+            <dlg char="KATE" track="KATE">
+                <m wait="1">here...</m>
+                <m wait="1">it's...</m>
+                <m>it's okay... i think...</m>
+            </dlg>
+            <wait />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="0.5">Cool... but...</m>
+                <m>You need much more than holding hands to beat your shyness...</m>
+            </dlg>
+            <dlg char="KATE" track="KATE">
+                <m>huh!?!</m>
+            </dlg>
+            
+            <sfx clip="voice-gasp-a" volume="0" />
+            <load-scene-object key="vfx-heat.prefab" active="false" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>I'm talking about this...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="hand-next" />
+            <wait time="0.25" />
+            <obj target="vfx-heat.prefab" active="true" />
+            <sfx clip="voice-gasp-a" />
+            
+            <wait time="1.25" />
+
+            <anim target="scene" trigger="shot-main">
+                <bool name="surprised" value="true" />
+                <bool name="blush" value="true" />
+                <bool name="look" value="false" />
+            </anim>
+            <load-scene-object key="vfx-heat.prefab" />
+            <dlg char="KATE" track="KATE"><m>OH MY GOD...</m></dlg>
+            <anim target="scene"><bool name="look" value="true" /></anim>
+            <dlg char="KATE" track="KATE"><m>what...</m></dlg>
+            <anim target="scene"><bool name="look" value="false" /></anim>
+            <load-scene-object key="vfx-heat.prefab" />
+            <dlg char="KATE" track="KATE"><m>what are you doing!?!?!</m></dlg>
+            <anim target="scene"><bool name="look" value="true" /></anim>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Just what you need...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="look" value="false" /></anim>
+            <dlg char="KATE" track="KATE"><m>but i... but i...</m></dlg>
+            <anim target="scene"><bool name="look" value="true" /></anim>
+            <dlg char="KATE" track="KATE"><m>i... never...</m></dlg>
+
+            <load-scene-object key="vfx-heat.prefab" />
+            <anim target="scene" trigger="shot-hand"></anim>
+            <dlg char="KATE" track="KATE"><m>i never touched... a...</m></dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Don't worry...</m>
+                <m>The first stage is about warming up the subject with some careful massage......</m>
+            </dlg>
+
+            <anim target="scene" trigger="shot-main">
+                <bool name="surprised" value="true" />
+                <bool name="blush" value="true" />
+                <bool name="look" value="true" />
+            </anim>
+            <dlg char="KATE" track="KATE"><m>first stage!?!?!</m></dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Yeah... Let me show you...</m>
+            </dlg>
+
+            <anim target="scene" trigger="shot-hand">
+                <bool name="control-hand" value="true" />
+            </anim>
+
+            <obj target="scene">
+                <outcome clear="true" />
+            </obj>
+
+            <anim target="scene" trigger="shot-under">
+            </anim>
+
+            <dlg char="KATE" track="KATE">
+                <m>please... stop...</m>
+                <m>i... i'm not supposed to do this...</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>You can stop this at any time...</m>
+                <m wait="1">But I don't think you want to...</m>
+                <m>Just check how you are already moving your hand by yourself...</m>
+            </dlg>
+            
+            <wait />
+            <dlg char="KATE" track="KATE">
+                <m wait="1">oh my... i...</m>
+                <m>i... i can... feel... it...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Oh... Do you wanna to really feel it?</m>
+                <m>Okay then... I'll show you...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="shot-main">
+                <bool name="surprised" value="false" />
+                <bool name="blush" value="false" />
+                <bool name="look" value="true" />
+            </anim>
+
+            <dlg char="KATE" track="KATE">
+                <m>Huh!?!...</m>
+                <m>What do you mean with-</m>
+            </dlg>
+
+            
+            <anim target="scene" trigger="shot-main">
+                <bool name="surprised" value="true" />
+                <bool name="blush" value="true" />
+                <bool name="look" value="false" />
+            </anim>
+
+            <sfx clip="voice-gasp-a" async="true" />
+            <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                <message name="GenerateImpulse"><float value="50" /></message>
+            </load-scene-object>
+            <dlg char="KATE" track="KATE">
+                <m>Oh Lord Jesus Christ...</m>
+            </dlg>
+            
+            <wait time="1" />
+            <trophy unlock="sunday-school-02" />
+            
+            <load-scene-object key="scene-kate-diner-04.prefab" active="false" />
+            <proxy clear="true" />
+            <proxy target="scene-kate-diner-04.prefab/PLAYER" name="PLAYER" />
+            <proxy target="scene-kate-diner-04.prefab/KATE" name="KATE" />
+            <obj target="scene" destroy="0" />
+            <obj target="scene-kate-diner-04.prefab" rename="scene" active="true" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey... "Thou shalt not use the lord's name in vain"... Remember?</m>
+            </dlg>
+
+            <dlg char="KATE" track="KATE" >
+                <m wait="1">this... this can't be happening...</m>
+                <m>i... i can't believe i'm... i'm touching a...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">Well... Just touching won't lead us much far...</m>
+                <m>Try this...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Just follow my lead and learn...</m>
+            </dlg>
+            <wait time="2" />
+            <dlg char="KATE" track="KATE" >
+                <m>i... i don't know if a want to learn this...</m>
+            </dlg>
+            
+            <wait time="1" />
+            <wait />
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="0.5">Of course you want...</m>
+                <m>I guarantee you will leave this place much more self-assured after this lesson...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <wait time="0.5" />
+            <obj target="scene/axis-control" active="true" />
+            
+            <obj target="scene">
+                <outcome clear="true" />
+            </obj>
+
+            <obj target="scene/axis-control" active="false" />
+            <anim target="scene" trigger="next" />
+            
+            <wait time="2"/>
+            <anim target="scene" trigger="next" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">And there you go...</m>
+                <m>You're a fast learner, ${CHAR:KATE:NAME}...</m>
+            </dlg>
+
+            <dlg char="KATE" track="KATE" >
+                <m wait="1">please... don't say that...</m>
+                <m>my parents would disown me if they could see me now...</m>
+            </dlg>
+
+            <wait time="1"/>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">Now you just have to work on the pace...</m>
+                <m>You gotta speed up if you wanna see a happy ending...</m>
+            </dlg>
+
+            <wait time="1"/>
+            <dlg char="KATE" track="KATE" >
+                <m>Like...</m>
+            </dlg>
+            <wait time="0.6"/>
+            <anim target="scene" trigger="next" />
+
+            <dlg char="KATE" track="KATE" >
+                <m>Like this?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">Nice...</m>
+                <m>See? You're a natural...</m>
+            </dlg>
+
+            <dlg char="KATE" track="KATE" >
+                <m wait="1">Please... We can't keep doing this...</m>
+                <m>What if someone comes in and see us?</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Well... Final lesson for today is...</m>
+                <m>The faster you do it, the quicker it ends...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <dlg char="KATE" track="KATE" >
+                <m>Oh my... Then I'd better hurry...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Yeah... That's how you do it...</m>
+            </dlg>
+
+            <wait time="3" />
+
+            <load-scene-object key="vfx-heat.prefab" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Shit... Here it comes...</m>
+            </dlg>
+
+            <dlg char="KATE" track="KATE" >
+                <m>Huh!? What is coming!?</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <load-scene-object key="vfx-heat.prefab" />
+            <wait time="0.5" />
+            <load-scene-object key="vfx-heat.prefab" />
+            <anim target="scene" trigger="exp-2" />
+            <sfx clip="voice-gasp-a" />
+            <wait time="0.5" />
+            <load-scene-object key="vfx-heat.prefab" />
+            
+            <obj target="scene">
+                <outcome clear="true" />
+            </obj>
+
+            <flag name="CHAR:KATE:CORRUPTION" inc="3" icon="CORRUPTION">This action affected ${CHAR:KATE:NAME}</flag>
+            <dlg char="KATE" track="KATE" >
+                <m>Oh Jesus...</m>
+                <m>it fell... some...</m>
+                <m>i mean... something fell on my hand...</m>
+            </dlg>
+            
+            <wait />
+            
+            <dlg char="PLAYER" track="PLAYER" >
+                <m>Oh, come on...</m>
+                <m>Your mom might not let you attend sex ed, but I'm sure you know exactly what-</m>
+            </dlg>
+
+            <sfx clip="door-transition" />
+
+            <dlg char="PLAYER" track="PLAYER" >
+                <m>Oh, shit... Someone is coming...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="5" keep="true" />
+            <bootstrap node="busted" />
+        </n>
+
+        <!--###############################################
+        ### kiss ######################################
+        ###############################################-->
+        <n id="kiss">
+            <flag name="CHAR:KATE:INTERACTIONS" bit-on="29" />
+            <obj destroy="0" target="flag-gauge.prefab" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey... You gotta believe in yourself...</m>
+                <m>You're a lovely girl, and you can do whatever you want...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="look" value="true" /></anim>
+            <dlg char="KATE" track="KATE">
+                <m>Oh... Thank you...</m>
+                <m>Why... Why are you so nice to me?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Nah... I'm just kinda cheesy today...</m>
+                <m>I mean... "Believe in yourself"... Sounds like a motivational poster...</m>
+            </dlg>
+
+            <dlg char="KATE" track="KATE">
+                <m>I can do whatever I want?</m>
+            </dlg>
+            <anim target="scene" trigger="main-closer" />
+            <dlg char="KATE" track="KATE">
+                <m>I can do whatever I want?</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Well... The message is more like...</m>
+                <m>You know... Go after whatever you want and... stuff...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="main-closer" />
+            <dlg char="KATE" track="KATE">
+                <m>Well... There's something I want...</m>
+                <m>I'm not sure if I should do...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Huh... Then... Go for it?</m>
+            </dlg>
+
+            <dlg char="KATE" track="KATE">
+                <m>I will...</m>
+            </dlg>
+
+            <anim target="scene" trigger="main-closer" />
+            <fade-to-black speed="1" keep="true" />
+
+            <obj target="scene" destroy="0"></obj>
+
+            <load-scene-object key="scene-kate-diner-05.prefab" rename="scene" />
+            <proxy clear="true" />
+            <proxy target="scene/KATE" name="KATE" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <fade-to-black speed="-1" />
+
+            <wait time="4" />
+
+            <dlg char="KATE" track="KATE">
+                <m wait="2">.......</m>
+                <m>i'm... i'm... sorry...</m>
+            </dlg>
+            
+            <wait />
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="1">sorry?</m>
+                <m>why would you?</m>
+            </dlg>
+            
+            <anim target="scene"><bool name="top-view" value="true"/></anim>
+            <dlg char="KATE" track="KATE">
+                <m>i... i'm usually not bold like this...</m>
+            </dlg>
+            <wait />
+            <dlg char="KATE" track="KATE">
+                <m>but... i've been feeling different since i met you...</m>
+            </dlg>
+            <dlg char="PLAYER" track="PLAYER">
+                <m>That was a nice surprise...</m>
+                <m>And it shows how well you're improving your self-confidence...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="top-view" value="false"/></anim>
+            <dlg char="KATE" track="KATE">
+                <m wait="0.5">it's all...</m>
+                <m wait="0.5">thanks...</m>
+                <m>to you...</m>
+            </dlg>
+
+            <wait time="2" />
+
+            <load-scene-object key="scene-kate-diner-06.prefab" active="false" />
+            <obj target="scene" destroy="0"></obj>
+            <obj target="scene-kate-diner-06.prefab" rename="scene" />
+            <proxy clear="true" />
+            <wait />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+            <proxy name="KATE" target="scene/KATE" />
+
+            <dlg char="KATE" track="KATE">
+                <m wait="2">look... you have to promise...</m>
+                <m>not tell anyone... about this...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Yeah... Of course...</m>
+            </dlg>
+            <anim target="scene" trigger="next" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Let's keep the secret to ourselves...</m>
+            </dlg>
+            <wait />
+            <anim target="scene" ><bool name="control" value="true" /></anim>
+            <wait time="0.5" />
+            <obj target="scene/axis-control" active="true" />
+            <obj target="scene/axis-control/arm-control">
+                <message name="SetTargetDistance"><float value="1" /></message>
+            </obj>
+            <obj target="scene/axis-control/arm-control">
+                <outcome value="TARGET_DISTANCE" clear="true" />
+            </obj>
+            
+            <sfx clip="voice-gasp-a" async="true" />
+            <load-scene-object key="vfx-heat.prefab" />
+            <wait time="0.5" />
+            <dlg char="KATE" track="KATE">
+                <m wait="0.5">wait... i...</m>
+                <m>i don't know if i'm ready for... for this...</m>
+            </dlg>
+            
+            <choice>
+                <c pos="NW">
+                    <text>We can stop here</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Hey... It's okay if you want to stop here...</m>
+                        </dlg>
+                        <flag name="CHAR:KATE:AFFINITY" inc="1" icon="AFFINITY">${CHAR:KATE:NAME} liked that</flag>
+                        <dlg char="KATE" track="KATE">
+                            <m wait="1">oh... i didn't expect you to be so understanding...</m>
+                            <m>I think I had enough emotion for a day...</m>
+                        </dlg>
+
+                        <node-output node="not-busted" />
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>Let's try and see</text>
+                </c>
+            </choice>
+
+            <flag name="CHAR:KATE:INTERACTIONS" bit-on="30" />
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>How would you know if you're ready without trying?</m>
+                <m>Besides... You deserve to relief some of that stress...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="continue-button" value="true" /></anim>
+            <obj target="scene">
+                <outcome clear="true" />
+            </obj>
+
+            <load-scene-object key="scene-kate-diner-07.prefab" active="false"></load-scene-object>
+            <obj target="scene" destroy="0" />
+            <proxy clear="true" />
+            <obj target="scene-kate-diner-07.prefab" rename="scene" active="true" />
+            <wait />
+            <proxy target="scene/KATE" name="KATE" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            
+            <trophy unlock="sunday-school-03" />
+
+            <dlg char="KATE" track="KATE">
+                <m>i... i feel... a little... woozy...</m>
+            </dlg>
+            <wait />
+            
+            <anim target="scene" trigger="next" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>That's a good thing...</m>
+                <m>It means you're finally relaxing...</m>
+            </dlg>
+
+            <dlg char="KATE" track="KATE">
+                <m>but... what... if...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Just try to forget about all your worries for a minute...</m>
+                <m>This moment is all yours...</m>
+            </dlg>
+
+            <load-scene-object key="vfx-heat.prefab" active="false" destroy="1" />
+            <anim target="scene" trigger="next" />
+            <wait time="0.5" />
+            <load-scene-object key="vfx-heat.prefab" />
+            <sfx clip="voice-gasp-a" />
+
+            <wait time="4" />
+
+            <bgm volume="0.1" />
+            <bgm loop="loop-moan-01" name="moan" volume="0.5" />
+
+            <dlg char="KATE" track="KATE">
+                <m wait="1">oh... mygmnnh...</m>
+                <m>i'm... i'mmnngghh...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Shhh... Easy now...</m>
+                <m>Just relax...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="control" value="true" /></anim>
+            <wait />
+            <obj target="scene/axis-control" active="true" />
+            <obj target="scene">
+                <outcome clear="true" />
+            </obj>
+            
+            <obj target="scene/axis-control" active="false" />
+            <anim target="scene"><bool name="control" value="false" /></anim>
+            <wait time="2" />
+            
+            <anim target="scene"><bool name="panty-wet" value="true" /></anim>
+            
+            <wait time="3" />
+
+            <dlg char="KATE" track="KATE">
+                <m wait="1">${CHAR:PLAYER:NAME}... mynnnnggh.... pleashh....</m>
+                <m wait="1">what... is happening...</m>
+                <m>i feel like... like...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m wait="2">Damn... The high moisture down here already tells me how you feel, ${CHAR:KATE:NAME}...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="panty-displace" value="true" /></anim>
+            <wait time="1.2" />
+            <load-scene-object key="vfx-heat.prefab" />
+            <sfx clip="voice-gasp-a" async="true" />
+            
+            <dlg char="KATE" track="KATE">
+                <m wait="1">oh lord...</m>
+                <m>you... you're touching... my... my...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="control" value="true" /></anim>
+            <wait />
+            <obj target="scene/axis-control" active="true" />
+            <obj target="scene">
+                <outcome clear="true" />
+            </obj>
+            
+            <obj target="scene/axis-control" active="false" />
+            <anim target="scene"><bool name="control" value="false" /></anim>
+            <wait time="2" />
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Now let me show you how far this feeling can go...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <wait time="6" />
+
+            <dlg char="KATE" track="KATE">
+                <m wait="1">mmmnggg... i'm...</m>
+                <m wait="1">i... i'm...</m>
+                <m>i'm... going... to...</m>
+            </dlg>
+
+            <anim target="scene" trigger="orgasm" />
+            <wait time="1" />
+            <bgm name="moan" volume="0" />
+            <sfx clip="voice-orgasm-a" />
+
+            <obj target="scene">
+                <outcome clear="true" />
+            </obj>
+
+            <flag name="CHAR:KATE:CORRUPTION" inc="1" icon="CORRUPTION">This action affected ${CHAR:KATE:NAME}</flag>
+
+            <dlg char="KATE" track="KATE">
+                <m wait="1">oh... my... God...</m>
+                <m wait="1">what did...</m>
+                <m>what did just happen to me...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER" >
+                <m>Oh... Come on, $`CHAR:KATE:NAME}...</m>
+                <m>You just experienced an-</m>
+            </dlg>
+
+            <sfx clip="door-transition" />
+
+            <dlg char="PLAYER" track="PLAYER" >
+                <m>Oh, shit... Someone is coming...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="5" keep="true" />
+            <bootstrap node="busted" />
+
+            <node-output node="busted" />
+        </n>
+
+        <!--###########################################
+        ### busted ####################################
+        ###############################################-->
+        <n id="busted">
+            <fade-to-black speed="999999" keep="true" />
+            <load-scene-object key="scene-kate-diner-08.prefab" rename="scene" />
+            <proxy target="scene/JOY" name="JOY" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <proxy target="scene/KATE" name="KATE" />
+            <fade-to-black speed="-5"  />
+            
+            <dlg char="JOY" track="JOY">
+                <m>Hey!! You two!!</m>
+                <m>This is a family place, not an hotel room...</m>
+            </dlg>
+            
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Whatever you say, ma'am...</m>
+            </dlg>
+
+            <dlg char="JOY" track="JOY">
+                <m>God damnit... Will I need to call ${MISC:SCHOOL:NAME} to complaint about their students coming discharge their hormones in my diner!?</m>
+            </dlg>
+
+            <dlg char="KATE" track="KATE">
+                <m>NO!! Please...</m>
+                <m>I'm sorry... I'm so sorry...</m>
+            </dlg>
+
+            <dlg char="JOY" track="JOY">
+                <m>${CHAR:KATE:NAME}!? Is it you!?!</m>
+                <m>You're the last girl I would expect to catch doing such mischief here...</m>
+                <m>Such disappointment...</m>
+            </dlg>
+
+            <dlg char="KATE" track="KATE">
+                <m>I'm sorry...</m>
+                <m>I'm leaving now...</m>
+            </dlg>
+
+            <dlg char="JOY" track="JOY">
+                <m>Yeah... That what you should both do now...</m>
+                <m>Just get out... Go home...</m>
+            </dlg>
+
+            <flag name="CHAR:KATE:INTERACTIONS" bit-on="31" />
+            <sys>
+                Content in this version ends here!!\n\n
+                See you soon!
+            </sys>
+            <fade-to-black speed="0.5" />
+            <bootstrap script="title" />
+        </n>
+
+        <!--###########################################
+        ### not-busted ################################
+        ###############################################-->
+        <n id="not-busted">
+            <bgm volume="0" />
+            <fade-to-black speed="0.25" keep="true" />
+
+            <flag name="CHAR:KATE:INTERACTIONS" bit-on="31" />
+            <sys>
+                Content in this version ends here!!\n\n
+                See you soon!
+            </sys>
+            <fade-to-black speed="0.5" />
+            <bootstrap script="title" />
+        </n>
+
+    </nodes>
+</xml-script>

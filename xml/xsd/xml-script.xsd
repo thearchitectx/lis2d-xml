@@ -71,6 +71,8 @@
             <xs:enumeration value="LOCKPICK" />
             <xs:enumeration value="BUTTERFLY" />
             <xs:enumeration value="AFFINITY" />
+            <xs:enumeration value="JOINT" />
+            <xs:enumeration value="CORRUPTION" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -81,7 +83,11 @@
         <xs:attribute name="value" type="xs:integer" use="required" />
     </xs:complexType>
     <xs:complexType name="string-elem">
-        <xs:attribute name="value" type="xs:string" use="required" />
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="value" type="xs:string" />
+            </xs:extension>
+        </xs:simpleContent>
     </xs:complexType>
     <xs:complexType name="bool-elem">
         <xs:attribute name="value" type="xs:boolean" use="required" />
@@ -182,6 +188,7 @@
                             <xs:attribute name="name" type="string" use="required" />
                             <xs:attribute name="ref" type="xs:boolean" use="optional" />
                             <xs:attribute name="set" type="xs:string"  use="optional" />
+                            <xs:attribute name="append" type="xs:string"  use="optional" />
                             <xs:attribute name="unset" type="xs:boolean"  use="optional" />
                         </xs:extension>
                     </xs:simpleContent>
@@ -194,8 +201,9 @@
             </xs:element>
             <xs:element name="proxy">
                 <xs:complexType>
-                    <xs:attribute name="target" type="xs:string" use="required" />
-                    <xs:attribute name="name" type="xs:string" use="required" />
+                    <xs:attribute name="target" type="xs:string" use="optional" />
+                    <xs:attribute name="name" type="xs:string" use="optional" />
+                    <xs:attribute name="clear" type="xs:boolean" use="optional" />
                 </xs:complexType>
             </xs:element>
             <xs:element name="wait">
@@ -349,17 +357,6 @@
                     </xs:simpleContent>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="rig-track">
-                <xs:complexType>
-                    <xs:attribute name="of" type="character" use="required" />
-                    <xs:attribute name="target" type="xs:string" />
-                    <xs:attribute name="target-transition-speed" type="xs:decimal" />
-                    <xs:attribute name="eye" type="xs:decimal"  />
-                    <xs:attribute name="head" type="xs:decimal"  />
-                    <xs:attribute name="custom" type="xs:decimal"  />
-                    <xs:attribute name="custom-path" type="xs:string"  />
-                </xs:complexType>
-            </xs:element>
             <xs:element name="obj">
                 <xs:complexType>
                     <xs:sequence>
@@ -368,6 +365,7 @@
                     </xs:sequence>
                     <xs:attribute name="target" type="xs:string" use="optional" />
                     <xs:attribute name="target-key" type="prefab" use="optional" />
+                    <xs:attribute name="rename" type="xs:string" use="optional" />
                     <xs:attribute name="active" type="xs:boolean" use="optional" />
                     <xs:attribute name="destroy" type="xs:integer" use="optional" />
                 </xs:complexType>

@@ -48,6 +48,10 @@
             
             <xs:enumeration value="CHAR:KATE:AFFINITY" />
             <!-- Kate affinity score -->
+            <xs:enumeration value="CHAR:KATE:CORRUPTION" />
+            <!-- Kate corruption score -->
+            <xs:enumeration value="CHAR:KATE:DINER1:HEAT" />
+            <!-- Kate diner-01 scene heat score -->
             <xs:enumeration value="CHAR:KATE:INTERACTIONS" />
             <!-- Kate interaction LOG  bits
                 (0): choice CHAR:KATE:CLASSROOM:1 - A
@@ -57,6 +61,33 @@
                 (4): missed paragon interrupt during scene-hallway-kate-bullied
                 (5): interacted after scene-hallway-kate-bullied
                 (6): asked for picture at hallway
+                (7): Missed cheerleader picture
+                (8): choice choice-kate-campus-01: Used 'Sad to see you're still upset'
+                (9): choice choice-kate-campus-01: Used 'Still feeling sorry for yourself?'
+                (10): choice choice-kate-campus-01: Used 'Do those girls never give you a break?'
+                (11): choice choice-kate-campus-01: Used 'Bitches will pay for doing this to you'
+                (12): Asked to sit by her side on campus
+                (13): Sat by her side without asking on campus
+                (14): Didn't sit by jer side on campus
+                (15): Put hand on her leg on campus
+                (16): Hold her hand on campus
+                (17): Finished scene kate-01 at campus
+                (18): choice 'choice-kate-diner-01-a' - Used ([Let her try to talk])
+                (19): choice 'choice-kate-diner-01-a' - Used ([[Break the ice]])
+                (20): choice 'choice-kate-diner-01-b' - Used (I like you the way you are)
+                (21): choice 'choice-kate-diner-01-b' - Used (You're on the right track)
+                (22): choice 'choice-kate-diner-01-c' - Used ([Sit next to her])
+                (23): choice 'choice-kate-diner-01-c' - Used (I should go now...)
+                (24): choice 'choice-kate-diner-01-d' - Used (Sorry if that was too much)
+                (25): choice 'choice-kate-diner-01-d' - Used (I know you liked that)
+                (26): choice 'choice-kate-diner-01-e' - Used (Felt like I care about you?)
+                (26): choice 'choice-kate-diner-01-e' - Used (Felt like I care about you?)
+                (27): choice 'choice-kate-diner-01-e' - Used (Like I'm willing to help...)
+                (28): dinner escalate handjob
+                (29): dinner escalate kiss
+                (30): dinner escalate kiss - went through finger scene
+                (31): finished diner scene
+
             -->
             <xs:enumeration value="CHAR:JUL:INTERACTIONS" />
             <!-- JUL interaction LOG  bits 
@@ -65,6 +96,18 @@
             -->
             
             <xs:enumeration value="CHAR:VIC:AFFINITY" />
+            <xs:enumeration value="CHAR:CHL:INTERACTIONS" />
+            <!--
+                (0): Had first dialog
+                (1): Choice 'choice-chl-intentions-max' - Used (I'd rather not say)
+                (2): Choice 'choice-chl-intentions-max' - Used (Just being friendly)
+                (3): Choice 'choice-chl-intentions-max' - Used (I like her)
+                (4): Choice 'choice-chl-david-01' - Used (He 'lives' with you!?)
+                (5): Choice 'choice-chl-david-01' - Used (He 'lives' with you!?)
+                (6): Choice 'choice-chl-01-root' - Used (Is Business here that easy?)
+                (7): Choice 'choice-chl-01-root' - Used (Are you a student here?)
+                (8): Choice 'choice-chl-01-root' - Used (Picture for the yearbook?)
+            -->
             <xs:enumeration value="CHAR:MAX:AFFINITY" />
             <xs:enumeration value="CHAR:MAX:INTERACTIONS" />
             <!--
@@ -78,8 +121,22 @@
                 (7): Choice 'cheer-max-choice': - used (No need to hide)
                 (8): Choice 'cheer-max-choice': - used (Chill until you feel better)
                 (9): Choice 'cheer-max-choice': - used (You can change)
+                (10): Played scene-max-chl-campus
             -->
             
+            <xs:enumeration value="CHAR:WAR:INTERACTIONS" />
+            <!--
+                (0): met on boys dorm
+                (1): meet on boys dorm interrupt: RENEGADE
+                (2): meet on boys dorm interrupt: PARAGON
+                (3): meet on boys dorm interrupt: TIMED_OUT
+                (4): choice-war-meet-loop - used 'You were friendzoned'
+                (5): choice-war-meet-loop - used 'Why not other girls?'
+                (6): choice-war-meet-loop - used 'Just be more assertive'
+                (7): choice-war-meet-loop - used 'I'm also interested in ${CHAR:MAX:NAME}'
+                (8): choice-war-meet-loop - used 'How does helping you benefits me?'
+            -->
+
             <!-- Kate affinity score -->
             <xs:enumeration value="CHAR:VIC:INTERACTIONS" />
             <!-- VIC interaction LOG bits
@@ -171,14 +228,26 @@
 
             <xs:enumeration value="QUEST:MEM_CARD:HEAT_SCORE" />
 
+            <xs:enumeration value="QUEST:TURF_WAR" />
+            <!-- QUEST:TURF_WAR bits
+                (0) Started
+                (1) Found Nathan room
+            -->
+
             <xs:enumeration value="QUEST:JUL:PHONE" />
             <!-- QUEST:JUL:PHONE bits
                 (0): Started
                 (31): Ended
             -->
 
+            <xs:enumeration value="QUEST:WAR:CUPID" />
+            <!-- QUEST:WAR:CUPID bits
+                (0): Started
+            -->
+
             <xs:enumeration value="ITEM:LOCKERS_KEY" />
             <xs:enumeration value="ITEM:MONEY" />
+            <xs:enumeration value="ITEM:JOINT" />
             <xs:enumeration value="ITEM:LOCKPICK" />
             <xs:enumeration value="ITEM:TREASURE_DETECTOR" />
             <xs:enumeration value="ITEM:BRACELET" />
@@ -193,6 +262,15 @@
                 (11): Lost Money 01 found
                 (12): Lost Money 02 found
                 (13): Lost Money 03 found
+                (14): Viewed joint tutorial
+                (15): location-boys-dorm-01 - light-01 is off
+                (16): location-boys-dorm-02 - light-01 is off
+                (17): location-boys-dorm-02 - light-02 is off
+                (18): location-player-room-01 - light is on
+                (19): First entered player room
+                (20): First checked player laptop
+                (21): (laptop) tried duck-duck-go
+                (22): (first used player room cellphone)
             -->
 
             <xs:enumeration value="FLG:0" />
@@ -210,7 +288,9 @@
             <xs:enumeration value="QUEST:MEM_CARD:OBJECTIVE" />
             <xs:enumeration value="QUEST:MEM_CARD:RETURN_LOCATION" />
             <!-- QUEST:MEM_CARD objective -->
-
+            <xs:enumeration value="QUEST:WAR:CUPID:OBJECTIVE" />
+            
+            <xs:enumeration value="QUEST:TURF_WAR:OBJECTIVE" />
             
             <xs:enumeration value="PICS:VIC:BOOTY" />
             <xs:enumeration value="PICS:KATE:HALLWAY" />

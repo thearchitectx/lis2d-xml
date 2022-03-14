@@ -35,7 +35,7 @@
                 </then>
             </if>
 
-            <fade-to-black speed="-1" />
+            <fade-to-black speed="-3" fill="true" />
 
             <autosave label="Main Hall - Exploring" />
 

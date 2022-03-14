@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="root">
+            <if>
+                <!-- (16): location-boys-dorm-01 - light-01 is off -->
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="16" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-off="16"></flag>
+                    <anim target="location"><bool name="light-1" value="true" /></anim>
+                    <sfx clip="switch" />
+                </then>
+                <else>
+                    <flag name="MISC:ENVIRONMENT" bit-on="16"></flag>
+                    <anim target="location"><bool name="light-1" value="false" /></anim>
+                    <sfx clip="switch" />
+                </else>
+            </if>
+        </n>
+    </nodes>
+</xml-script>
