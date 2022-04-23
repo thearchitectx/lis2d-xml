@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--###############################################
+            ### root ######################################
+            ###############################################-->
+        <n id="root">
+            <bgm volume="0" />
+            <fade-to-black speed="3" fill="true" keep="true" />
+            <bootstrap node="start" />
+        </n>
+
+        <!--###############################################
+            ### start ######################################
+            ###############################################-->
+        <n id="start">
+            <fade-to-black keep="true" speed="99999" />
+            
+            <bgm loop="loop-urban" volume="0.25" />
+            
+            <load-scene-object key="scene-nat-room-investigate-02.prefab" rename="scene" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+            
+            <fade-to-black fill="true" speed="-3" />
+
+            <node-output node="loop" />
+        </n>
+
+        <!--###############################################
+            ### loop ######################################
+            ###############################################-->
+        <n id="loop">
+            <obj target="scene/interactables" active="true">
+                <outcome copy-to="TMP:0" clear="true"  />
+            </obj>
+
+            <obj target="scene/interactables" active="false" />
+
+            <if>
+                <check-text text="TMP:0" eq="MOUSE" />
+                <then>
+                    <anim target="scene" trigger="move" />
+                    <wait time="1" />
+
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="1">Dude has a sick rig resting in a school dorm room...</m>
+                        <m wait="0.5">Unfortunately there's a password prompt...</m>
+                        <m>I wonder what I could discover if I had access to this computer...</m>
+                    </dlg>
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="MAGAZINE" />
+                <then>
+                    <if>
+                        <check-flag flag="QUEST:TURF_WAR" bit-unset="3" />
+                        <then>
+                            <wait time="0.5" />
+                            <dlg char="PLAYER" track="PLAYER">
+                                <m>Now... What's that?</m>
+                            </dlg>
+                            <wait time="1" />
+                            <anim target="scene"><int name="magazine" value="2" /></anim>
+                            <dlg char="PLAYER" track="PLAYER">
+                                <m wait="0.5">Whoa... Check this out...</m>
+                                <m wait="1">An old school printed porn magazine... Does this dude never heard what the internet is for?</m>
+                                <m>Man... Millennials might live in a fucked up economy, but at least we never had to live the awkward experience of having to visit a physical newsstand to acquire fap material...</m>
+                            </dlg>
+                            <anim target="scene"><int name="magazine" value="3" /></anim>
+                            <wait />
+                            <dlg char="PLAYER" track="PLAYER">
+                                <m>But... hey...</m>
+                                <m>There are some peculiar handwritten notes hanging out there...</m>
+                            </dlg>
+                            <anim target="scene"><int name="magazine" value="4" /></anim>
+                            <wait />
+                            <dlg char="PLAYER" track="PLAYER">
+                                <m wait="1">"Hackney - 5g powder - $200"\n"${CHAR:ZAC:NAME} - 2 candy package (deliver on friday)"\n"Chuck - 1 pck of xtc - $70"</m>
+                                <m wait="1">Whoa... Candy... Powder... Our guy is keeping tabs on his clients and their debts...</m>
+                                <m wait="0.5">This might be the kind of incriminating evidence again Prescott that ${CHAR:CHL:NAME} is looking for...</m>
+                                <m>I'd better keep these notes with me...</m>
+                            </dlg>
+        
+                            <flag name="ITEM:NAT_CLIENT_LIST" set="1" icon="QUEST">You found Prescott shady client list</flag>
+                            <flag name="QUEST:TURF_WAR" bit-on="3" />
+                            <string name="QUEST:TURF_WAR:OBJECTIVE" set="Show ${CHAR:CHL:NAME} what you found about Prescott"></string>
+                            <log icon="QUEST">Objectives updated!</log>
+        
+                            <wait time="0.5" />
+                            <anim target="scene"><int name="magazine" value="1" /></anim>
+                            <wait time="1" />
+                            <dlg char="PLAYER" track="PLAYER">
+                                <m>Nice... I should show this evidence to ${CHAR:CHL:NAME}...</m>
+                            </dlg>
+                        </then>
+                        <else>
+                            <anim target="scene"><int name="magazine" value="2" /></anim>
+                            <wait time="1" />
+                            <dlg char="PLAYER" track="PLAYER">
+                                <m wait="1">Hello, Crystal...</m>
+                                <m>Hmm... I wonder if she is a former ${MISC:SCHOOL:NAME} student...</m>
+                            </dlg>
+                            <wait />
+                            <anim target="scene"><int name="magazine" value="1" /></anim>
+                        </else>
+                    </if>
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="LEAVE" />
+                <then>
+                    <wait time="0.25" />
+                    <bgm volume="0"/>
+                    <fade-to-black fill="true" speed="3" keep="true" />
+                    <bootstrap script="location-nat-room-01/location" spawn="spawn/window" />
+                </then>
+            </if>
+
+            <node-output node="loop" />
+
+        </n>
+
+    </nodes>
+</xml-script>

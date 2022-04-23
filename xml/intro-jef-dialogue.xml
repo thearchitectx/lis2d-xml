@@ -26,6 +26,10 @@
             <fade-to-black speed="-1" />
             <autosave label="Classroom - Chat with Mister ${CHAR:JEF:NAME}" />
 
+            <sys>FAST FORWARD\n\n
+                Hold 'X' key at any time to fast-forward animations and skip dialogue
+            </sys>
+
             <flag name="QUEST:INTRO" bit-on="6" />
             <string name="QUEST:INTRO:OBJECTIVE" unset="true" />
             <log icon="QUEST">Objective completed!</log>

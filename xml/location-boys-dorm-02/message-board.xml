@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <wait />
+
+            <choice>
+                <c pos="E">
+                    <text>[Write a message]</text>
+                    <then>
+                        <load-scene-object key="panel-text-input.prefab" >
+                            <message name="SetPrompt"><string value="Message:" /></message>
+                        </load-scene-object>
+            
+                        <obj target="panel-text-input.prefab">
+                            <outcome copy-to="TMP:0" destroy="true" />
+                        </obj>
+
+                        <string name="ARG:0" ref="ARG:0" set="${TMP:0}" />
+
+                        <obj target="text">
+                            <assign name="text"><string value="${TMP:0}" /></assign>
+                        </obj>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Leave]</text>
+                </c>
+            </choice>
+
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+
+    </nodes>
+</xml-script>

@@ -5,4 +5,7 @@
     <item id="LOCKPICK" label="Lockpick" icon="icon-lockpick" price="2">A little tool capable of opening some locks. It's quite frail, so it usually brakes after a single use.</item>
     <item id="BRACELET" label="Bracelet" icon="icon-bracelet" price="10">A girly bracelet</item>
     <item id="JOINT" label="Joint" icon="icon-joint" price="5">A sweetly rolled joint</item>
+    <item id="NAT_CLIENT_LIST" label="Prescott Client List" icon="icon-quest" price="5">A shady list of clients</item>
+    <item id="PERCEPTION_BAND" label="Perception Band" icon="icon-band" price="20">While having the Perception band in your possession, EVERY interactive element that can only be noticed while crouching will periodically glint while you explore an environment</item>
+    <item id="ZAC_PHONE" label="Snatched Phone" icon="icon-quest" price="1">A run of the mill smartphone</item>
 </items>

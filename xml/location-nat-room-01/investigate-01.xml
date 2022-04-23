@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--###############################################
+            ### root ######################################
+            ###############################################-->
+        <n id="root">
+            <bgm volume="0" />
+            <fade-to-black speed="3" fill="true" keep="true" />
+            <bootstrap node="start" />
+        </n>
+
+        <!--###############################################
+            ### start ######################################
+            ###############################################-->
+        <n id="start">
+            <fade-to-black keep="true" speed="99999" />
+            
+            <bgm loop="loop-urban" volume="0.25" />
+            
+            <load-scene-object key="scene-nat-room-investigate-01.prefab" rename="scene" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+
+            <if>
+                <check-flag flag="LOC:NAT:ROOM" bit-set="0" />
+                <then>
+                    <anim target="scene"><bool name="lamp" value="true" /></anim>
+                </then>
+            </if>
+            
+            <fade-to-black fill="true" speed="-3" />
+
+            <node-output node="loop" />
+        </n>
+
+        <!--###############################################
+            ### loop ######################################
+            ###############################################-->
+        <n id="loop">
+            <obj target="scene/interactables" active="true">
+                <outcome copy-to="TMP:0" clear="true"  />
+            </obj>
+
+            <obj target="scene/interactables" active="false" />
+
+            <if>
+                <check-text text="TMP:0" eq="LAMP" />
+                <then>
+                    <inject node="lamp" />
+                </then>
+                <else>
+                    <obj target="scene/cams/${TMP:0}" active="true" />
+                </else>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="PILLS-1" />
+                <then>
+                    <wait time="0.5" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="1">Those look like hardcore prescription drugs...</m>
+                        <m>It seems this dude have some heavy diagnosed issues...</m>
+                    </dlg>
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="PILLS-2" />
+                <then>
+                    <wait time="0.5" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="1">I wonder if he take those pills for actual healing purposes...</m>
+                        <m>Unfortunately this can't be use as incriminating evidence...</m>
+                    </dlg>
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="BOOK" />
+                <then>
+                    <wait time="0.5" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="0.5">Interesting reading...</m>
+                        <m wait="1">An angry management self help book?</m>
+                        <m>Well... At least the dude is trying...</m>
+                    </dlg>
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="PHONES" />
+                <then>
+                    <wait time="0.5" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="1">I think this is one of those four-digit price headphones...</m>
+                        <m>This only proves that the Prescott family is stacking to the ceiling...</m>
+                    </dlg>
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="DRAWERS" />
+                <then>
+                    <wait time="0.5" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Let's check those drawers...</m>
+                    </dlg>
+                    <anim target="scene"><bool name="drawer" value="true" /></anim>
+                    <sfx clip="rummage" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m>Just some smelly clothes in here...</m>
+                    </dlg>
+                    <if>
+                        <!-- (2): location-nat-01 - found lockpick in drawers -->
+                        <check-flag flag="LOC:NAT:ROOM" bit-unset="2" />
+                        <then>
+                            <dlg char="PLAYER" track="PLAYER">
+                                <m>But... hey...</m>
+                            </dlg>
+                            <flag name="LOC:NAT:ROOM" bit-on="2" />
+                            <flag name="ITEM:LOCKPICK" inc="1" icon="LOCKPICK">You found a lockpick</flag>
+                            <dlg char="PLAYER" track="PLAYER">
+                                <m wait="0.5">I also found a lockpick here...</m>
+                                <m wait="0.5">Now this is suspicious... You can't trust people that use those things...</m>
+                                <m>Well... I think he wouldn't mind if I keep this one...</m>
+                            </dlg>
+                        </then>
+                    </if>
+                    <anim target="scene"><bool name="drawer" value="false" /></anim>
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="POSTER" />
+                <then>
+                    <wait time="0.5" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="1">Tumor Dystrophy...</m>
+                        <m>Come on, dude... Now you're trying too hard...</m>
+                    </dlg>
+                </then>
+            </if>
+            <if>
+                <check-text text="TMP:0" eq="FILES" />
+                <then>
+                    <wait time="0.5" />
+                    <dlg char="PLAYER" track="PLAYER">
+                        <m wait="0.5">Looks like one of those files from the administration office...</m>
+                        <m>I wouldn't be surprised if the principal sends him shit like list of answers before tests...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <if>
+                <check-text text="TMP:0" eq="LEAVE" />
+                <then>
+                    <wait time="0.25" />
+                    <bgm volume="0"/>
+                    <fade-to-black fill="true" speed="3" keep="true" />
+                    <bootstrap script="location-nat-room-01/location" spawn="spawn/investigate-01" />
+                </then>
+            </if>
+
+            <obj target="scene/cams/${TMP:0}" active="false" />
+
+            <node-output node="loop" />
+
+        </n>
+
+        <!--###############################################
+            ### lamp ######################################
+            ###############################################-->
+        <n id="lamp">
+            <if>
+                <!-- (0): location-nat-01 - lamp is on -->
+                <check-flag flag="LOC:NAT:ROOM" bit-set="0" />
+                <then>
+                    <flag name="LOC:NAT:ROOM" bit-off="0"></flag>
+                    <anim target="scene"><bool name="lamp" value="false" /></anim>
+                    <sfx clip="switch" />
+                </then>
+                <else>
+                    <flag name="LOC:NAT:ROOM" bit-on="0"></flag>
+                    <anim target="scene"><bool name="lamp" value="true" /></anim>
+                    <sfx clip="switch" />
+                </else>
+            </if>
+        </n>
+
+    </nodes>
+</xml-script>

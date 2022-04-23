@@ -1,0 +1,418 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <fade-to-black fill="true" speed="3" keep="true" />
+            <bgm volume="0" />
+            <bootstrap node="start" />
+        </n>
+        
+        <!--################################################
+            ## start #######################################
+            ################################################
+        -->
+        <n id="start">
+            <fade-to-black keep="true" speed="10000" />
+            <bgm loop="loop-chl" volume="0.25" />
+            <load-scene-object key="shot-campus-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-chl-01.prefab" rename="CHL" />
+            <proxy target="shot/player" name="PLAYER" />
+
+            <obj target="CHL">
+                <message name="StartLeft" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </obj>
+            
+            <fade-to-black speed="-1" />
+            
+            <autosave label="Chatting with ${CHAR:CHL:NAME}" />
+
+            <obj target="PLAYER">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <if>
+                <check-flag flag="QUEST:TURF_WAR" bit-unset="6" />
+                <then>
+                    <flag name="QUEST:TURF_WAR" bit-on="6" />
+                    <node-output node="first-dialog-after-day-passed" />
+                </then>
+            </if>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:TURF_WAR" bit-set="6" />
+                    <check-flag flag="QUEST:TURF_WAR" bit-unset="7" />
+                </check-group>
+                <then>
+                    <dlg char="CHL" track="CHL">
+                        <m>Hey... Don't forget...</m>
+                        <m>You'll need not discover where ${CHAR:NAT:NAME} will meet ${CHAR:ZAC:NAME} and record the transaction!</m>
+                        <m>That's how we will take him down...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <node-output node="dialog-root" />
+        </n>
+        
+        <!--################################################
+            ## first-dialog-after-day-passed ###############
+            ################################################
+        -->
+        <n id="first-dialog-after-day-passed">
+            <dlg char="PLAYER">
+                <m wait="0.5">Hey, ${CHAR:CHL:NAME}...</m>
+                <m>What happened yesterday?</m>
+                <m>I came here but you were gone...</m>
+            </dlg>
+            <wait time="0.5" />
+
+            <anim target="CHL" face="CUTE" />
+            <dlg char="CHL">
+                <m wait="0.5">Hi, dude... You're finally back...</m>
+                <m wait="0.5">You took so long to show up yesterday... I had to bail...</m>
+                <m>I can't risk staying here by the time security staff change shifts...</m>
+            </dlg>
+            <anim target="CHL" trigger="say-01" face="NEUTRAL" />
+            <dlg char="CHL">
+                <m wait="0.5">But... Hey...</m>
+                <m>Did you find anything we can use against ${CHAR:NAT:NAME}?</m>
+                <m>How the detective work went?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Nice and smooth...</m>
+                <m>At least most of it...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="surprised" face="SURPRISED" />
+            <dlg char="CHL">
+                <m>Whoa... You didn't run into any trouble, did you!?</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Don't worry... I handled it...</m>
+                <m>And I found something interesting in his creepy room...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="say-01" face="CUTE" />
+            <dlg char="CHL">
+                <m>Really!?! You're awesome... Let me check it, please...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">It seems to be a client orders list...</m>
+                <m wait="1">I don't think it qualifies as solid evidence... But it's a start...</m>
+            </dlg>
+
+            <flag name="ITEM:NAT_CLIENT_LIST" set="0" icon="QUEST">You gave Client List to ${CHAR:CHL:NAME}</flag>
+            <sfx clip="item" async="true" />
+            <dlg char="PLAYER">
+                <m>Here... Check it out...</m>
+            </dlg>
+            <fade-to-black keep="true" speed="1" />
+            <wait />
+            <fade-to-black speed="-1" />
+
+            <anim target="CHL" trigger="shrug" face="SIGH" />
+            <dlg char="CHL">
+                <m wait="0.5">Sigh...</m>
+                <m>Yeah... I think you're right... This won't serve as evidence by itself...</m>
+            </dlg>
+            <anim target="CHL" face="DISAPPROVE" />
+            <dlg char="CHL">
+                <m>However...</m>
+            </dlg>
+            <wait />
+            <anim target="CHL" trigger="giggle" face="CUTE" />
+            <dlg char="CHL">
+                <m>It shows us the way!!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Oh, boy... I feel another mastermind plan incoming...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="say" face="NEUTRAL" />
+            <dlg char="CHL">
+                <m>Look... The list says ${CHAR:NAT:NAME} will make a delivery of "candy" to ${CHAR:ZAC:NAME} on friday...</m>
+                <m wait="0.5">It's probably the regular supply for the Vortex Club party...</m>
+                <m>So... If you discover where ${CHAR:ZAC:NAME} is going to pick up ${CHAR:NAT:NAME}'s stuff on friday...</m>
+                <m>Then you'll have the chance to sneak into the meeting and record the transaction in video for some true solid evidence!</m>
+            </dlg>
+
+            <anim target="CHL" trigger="say" face="DISAPPROVE" />
+            <dlg char="CHL">
+                <m>Damn... I'm a fucking genius!</m>
+            </dlg>
+
+            <anim target="CHL" face="NEUTRAL" />
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--################################################
+            ## dialog-root #################################
+            ################################################
+        -->
+        <n id="dialog-root">
+            <choice id="choice-chl-02-root">
+                <c pos="NW" out="about-zac">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="0" />
+                    <text>About ${CHAR:ZAC:NAME}</text>
+                </c>
+
+                <c pos="NE" out="about-supplier">
+                    <text>About your supplier</text>
+                </c>
+
+                <c pos="SW" out="buy-joint">
+                    <text>[Buy joint]</text>
+                </c>
+
+                <c pos="E">
+                    <text>See you later</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>See you later...</m>
+                        </dlg>
+                        <bgm volume="0" />
+                        <fade-to-black fill="true" keep="true" speed="3" />
+                        <bootstrap script="location-campus-01/location" spawn="spawn/message-board-1" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--################################################
+            ## about-supplier ##############################
+            ################################################
+        -->
+        <n id="about-supplier">
+            <dlg char="PLAYER">
+                <m>So... I heard you work for a dude called Frank...</m>
+            </dlg>
+
+            <anim target="CHL" face="DISAPPROVE" />
+            <dlg char="CHL">
+                <m wait="0.5">you... heard?</m>
+                <m>I wonder who would give that kind of information... and why you would be interested...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>I'm... just curious...</m>
+                <m>I'm new here, remember?</m>
+                <m>Gotta know all new neighbors...</m>
+            </dlg>
+
+            <anim target="CHL" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="CHL">
+                <m wait="0.5">Hum... Then you check your sources because... you heard wrong...</m>
+                <m>I don't 'work' for Frank... I'm an independent entrepreneur, and he's just a investor and supplier...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Yeah... But I believe in this kind of 'unregulated' market there's a strong commitment between members of the supply chain, right?</m>
+            </dlg>
+            
+            <anim target="CHL" trigger="shrug" face="UPSET" />
+            <dlg char="CHL">
+                <m wait="0.5">You bet... Fucking up with Frank would not be a good idea...</m>
+                <m>Most thugs leave me alone when they know I sell his stuff... But if I don't give him back his cut every single day I'd be in serious trouble...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>I hope you're always careful then...</m>
+            </dlg>
+
+            <anim target="CHL" face="DISAPPROVE" />
+            <dlg char="CHL">
+                <m wait="0.5">Yeah... And I hope you're not trying any funny ideas...</m>
+                <m>Frank already said the school area is mine...</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>Nah... As I said... I'm just curious...</m>
+            </dlg>
+            <anim target="CHL" face="DISAPPROVE" />
+            <dlg char="CHL">
+                <m>Yeah... Sure...</m>
+            </dlg>
+            <wait />
+
+            <dlg char="PLAYER">
+                <m thought="true">She is really suspicious about this</m>
+                <m thought="true">I should ask ${CHAR:MAX:NAME} if I want know more about her supplier routine</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--################################################
+            ## about-zac ##############################
+            ################################################
+        -->
+        <n id="about-zac">
+            <dlg char="PLAYER">
+                <m wait="0.5">So... About this ${CHAR:ZAC:NAME} dude...</m>
+                <m>He is not another wacko gun nut, is he?</m>
+            </dlg>
+
+            <wait time="0.5" />
+
+            <anim target="CHL" trigger="giggle" face="CUTE" />
+            <dlg char="CHL">
+                <m wait="0.5">Ha... That's something you won't need to worry about...</m>
+                <m wait="0.5">${CHAR:ZAC:NAME} couldn't handle a gun without shooting himself in the face... </m>
+                <m>He lacks... you know... gray matter...</m>
+                <m wait="0.5">Lost most of it to the football concussions and to ${CHAR:NAT:NAME}'s 'products'...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Good news then... I guess...</m>
+            </dlg>
+            
+            <anim target="CHL" trigger="say-01" face="NEUTRAL" />
+            <dlg char="CHL">
+                <m wait="0.5">Don't get too optimistic, though...</m>
+                <m>He's the typical football scholarship student that likes to harass weaker students due to his own insecurities...</m>
+            </dlg>
+
+            <wait time="0.5" />
+
+            <dlg char="PLAYER">
+                <m wait="0.5">So we have the psycho evil rich boy... the big bully jock... the punk girl dropout...</m>
+                <m>And I'm starting to feel solid Jimmy Hopkins vibes on me...</m>
+            </dlg>
+            <wait time="0.5" />
+
+            <anim target="CHL" trigger="shrug" face="SIGH" />
+            <dlg char="CHL">
+                <m>I know, right? Archetypes everywhere...</m>
+            </dlg>
+            <wait time="0.5" />
+            
+            <anim target="CHL" trigger="say-01" face="NEUTRAL" />
+            <dlg char="CHL">
+                <m>Anyways... I don't advise a doing a direct approach with ${CHAR:ZAC:NAME}...</m>
+                <m>It might not be good for your health...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Yeah... So what do you suggest?</m>
+            </dlg>
+
+            <anim target="CHL" trigger="say-01" face="NEUTRAL" />
+            <dlg char="CHL">
+                <m>The safest way to get any information about ${CHAR:ZAC:NAME} is through ${CHAR:JUL:NAME}, his girlfriend...</m>
+            </dlg>
+            <if>
+                <check-flag flag="CHAR:JUL:INTERACTIONS" bit-set="0" />
+                <then>
+                    <dlg char="PLAYER">
+                        <m>${CHAR:JUL:NAME}... Must be the girl with the nice ass I saw being groped in that classroom...</m>
+                    </dlg>
+                    <anim target="CHL" trigger="surprised" face="DISAPPROVE" />
+                    <dlg char="CHL">
+                        <m>Huh!?!?!</m>
+                    </dlg>
+                    <dlg char="PLAYER">
+                        <m>Oh... I mean... I...</m>
+                        <m>I think I know who you're talking about...</m>
+                    </dlg>
+                    <dlg char="CHL">
+                        <m>Yeah... Sure...</m>
+                    </dlg>
+                </then>
+            </if>
+            <anim target="CHL" face="NEUTRAL" />
+
+            <dlg char="CHL">
+                <m>She's one of the very few cool members of the Vortex Club...</m>
+                <m wait="1">You should try talking to her... when ${CHAR:ZAC:NAME} is not around, obviously...</m>
+            </dlg>
+
+            <flag name="QUEST:JUL:PHONE" bit-on="0" />
+            <string name="QUEST:TURF_WAR:OBJECTIVE" set="Find when and where ${CHAR:NAT:NAME} will deliver ${CHAR:ZAC:NAME}'s order"></string>
+            <anim target="CHL" trigger="say-01" face="NEUTRAL" />
+            <dlg char="CHL">
+                <m>They're probably hanging at the school hall at this time... I'm sure you'll find a way to get the information from them...</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--################################################
+            ## buy-joint ###################################
+            ################################################
+        -->
+        <n id="buy-joint">
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="14" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-on="14" />
+                    <sys>JOINT\n\n
+                        Smoking a joint will grant you a few Rift Energy points\n\n
+                        You can smoke a joint in your room at the boys dorm
+                    </sys>
+                </then>
+            </if>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>So... About the merchandise you're selling...</m>
+            </dlg>
+            <anim target="CHL" trigger="say-01" />
+            <dlg char="CHL" track="CHL">
+                <m>Of course... This is why I'm here for...</m>
+                <m>Are you interested?</m>
+            </dlg>
+
+            <choice>
+                <c pos="E">
+                    <text>Not right now...</text>
+                    <then>
+                        <dlg char="PLAYER" track="PLAYER">
+                            <m>Maybe later...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="W">
+                    <check-flag flag="ITEM:MONEY" gte="${ITEM:JOINT:PRICE}" />
+                    <text>[Buy Joint $${ITEM:JOINT:PRICE}]</text>
+                    <lock-reason>You need $5 to buy a joint</lock-reason>
+                    <then>
+                        <anim target="CHL" trigger="say-01" />
+                        <dlg char="CHL" track="CHL">
+                            <m>Here you go...</m>
+                        </dlg>
+                        <fade-to-black speed="3" keep="true" />
+                        <flag name="ITEM:MONEY" dec="5" />
+                        <flag name="ITEM:JOINT" inc="1" icon="JOINT">You bought a joint for $${ITEM:JOINT:PRICE}</flag>
+                        <sfx clip="item" />
+                        <fade-to-black speed="-3" />
+                        <dlg char="CHL" track="CHL">
+                            <m>Now... I suggest smoking it in a private safe place, okay?</m>
+                            <m>And remember... If someone catch you with it, you don't know me...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <node-output node="dialog-root" />
+
+        </n>
+    </nodes>
+</xml-script>

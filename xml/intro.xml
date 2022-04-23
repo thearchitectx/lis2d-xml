@@ -25,7 +25,7 @@
             <wait time="3" />
             
             <dlg>
-                <m>zzzzzz...  zzz... zzzzzz...</m>
+                <m thought="true">zzzzzz...  zzz... zzzzzz...</m>
             </dlg>
             
             <wait time="3" />

@@ -1,0 +1,1297 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <fade-to-black speed="1000" keep="true" />
+
+            <bgm loop="loop-jul" volume="0.25"/>
+            <load-scene-object key="scene-jul-science-bj-01.prefab" rename="scene" />
+            <proxy target="scene/JUL" name="JUL" />
+            
+            <fade-to-black speed="-3" />
+
+            <flag name="QUEST:JUL:PHONE:HEAT_SCORE" set="10" />
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="QUEST:JUL:PHONE:HEAT_SCORE" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+            </load-scene-object>
+
+            <autosave label="Chatting with ${CHAR:JUL:NAME} in the science classroom" />
+
+            <node-output node="interactables-loop" />
+        </n>
+        
+        <!--
+            ##############################################################
+            ## interactables-loop ########################################
+            ##############################################################
+        -->
+        <n id="interactables-loop">
+            <anim target="scene"><bool name="look-cam" value="false" /></anim>
+            <obj target="scene/interactables" active="true">
+                <outcome value="TALK" node="loop-01-talk" clear="true" />
+                <outcome value="DOOR" node="loop-01-door" clear="true" />
+                <outcome value="PHONE" node="loop-01-phone" clear="true" />
+                <outcome value="SKIRT" node="loop-01-skirt" clear="true" />
+                <outcome value="RECORDING-LOCATION" node="loop-01-rec-location" clear="true" />
+                <outcome copy-to="TMP:0" clear="true" />
+            </obj>
+
+            <anim target="scene" trigger="${TMP:0}"></anim>
+            <node-output node="interactables-loop" />
+        </n>
+                
+        <!--
+            ########################################################
+            ## loop-01-skirt ########################################
+            ########################################################
+        -->
+        <n id="loop-01-skirt">
+            <obj target="scene/interactables" active="false" />
+            <obj target="scene/cinemachine-skirt" active="true" />
+            <wait time="3" />
+            <obj target="scene/cinemachine-skirt" active="false" />
+            <obj target="scene">
+                <message name="Recenter" broadcast="true" />
+            </obj>
+            <anim target="scene"><bool name="look-cam" value="true" /></anim>
+            <anim target="scene" face="DISAPPROVE"></anim>
+            <dlg char="JUL">
+                <m wait="1">Hey... Eyes up here!</m>
+                <m>Jeez... Don't make me regret this...</m>
+            </dlg>
+            <obj target="scene/interactables/skirt" active="false" />
+            <anim target="scene" face="NEUTRAL"></anim>
+            <node-output node="interactables-loop" />
+        </n>
+        <!--
+            ########################################################
+            ## loop-01-phone ########################################
+            ########################################################
+        -->
+        <n id="loop-01-phone">
+            <obj target="scene/interactables" active="false" />
+            <flag name="QUEST:JUL:PHONE" bit-on="16"></flag>
+            <dlg char="PLAYER">
+                <m>This is ${CHAR:ZAC:NAME}'s phone, right?</m>
+                <m>If you wanna record something for him, why not use his own phone?</m>
+            </dlg>
+            <load-scene-object key="vfx-heat.prefab" />
+            <flag name="QUEST:JUL:PHONE:HEAT_SCORE" inc="15" />
+            <anim target="scene" trigger="say-01" />
+            <anim target="scene"><bool name="look-cam" value="true" /></anim>
+            <dlg char="JUL">
+                <m>Yeah... That's a good idea...</m>
+            </dlg>
+            <anim target="scene" face="DISAPPROVE" />
+            <dlg char="JUL">
+                <m>I could give the phone back to him myself, tell him to watch the video, and never look at his face again...</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="scene" face="NEUTRAL" />
+            <dlg char="JUL">
+                <m wait="0.5">You're on ${CHAR:JEF:NAME}'s photography class, right?</m>
+                <m>Then, please... Find a place with good framing and lightning for... recording...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="phone-a" value="false" /></anim>
+
+            <sfx clip="item" async="true" />
+            <dlg char="JUL">
+                <m>Here... Take the phone...</m>
+            </dlg>
+
+            <node-output node="interactables-loop" />
+        </n>
+
+        <!--
+            ########################################################
+            ## loop-01-rec-location ################################
+            ########################################################
+        -->
+        <n id="loop-01-rec-location">
+            <obj target="scene/interactables" active="false" />
+            <flag name="QUEST:JUL:PHONE" bit-on="16"></flag>
+            <dlg char="PLAYER">
+                <m thought="true">Hum... I'm not sure about lightning and framing...</m>
+                <m thought="true">But I think I could place the phone there and it will record just fine...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="phone-b" value="true" /></anim>
+            <sfx clip="beep" />
+            <dlg char="PLAYER">
+                <m>Here... It's a fine and stable place for recording...</m>
+            </dlg>
+
+            <anim target="scene" trigger="LOOK-A"  />
+            <load-scene-object key="vfx-heat.prefab" />
+            <flag name="QUEST:JUL:PHONE:HEAT_SCORE" inc="15" />
+            <flag name="QUEST:JUL:PHONE" bit-on="17" />
+            <anim target="scene" trigger="say-01" />
+            <anim target="scene"><bool name="look-cam" value="true" /></anim>
+            <dlg char="JUL">
+                <m>Oh... Okay...</m>
+                <m>It seems good enough there...</m>
+            </dlg>
+
+            <node-output node="interactables-loop" />
+        </n>
+
+        <!--
+            ########################################################
+            ## loop-01-door ########################################
+            ########################################################
+        -->
+        <n id="loop-01-door">
+            <obj target="scene/interactables" active="false" />
+            <dlg char="PLAYER">
+                <m wait="0.5">So... Thanks for unlocking the classroom door for me...</m>
+                <m>But... Are you sure you wanna keep it that way while you...</m>
+                <m>you know...</m>
+            </dlg>
+            <anim target="scene" trigger="LOOK-A"></anim>
+            <anim target="scene" face="SIGH"></anim>
+            <dlg char="JUL">
+                <m wait="0.5">Oh my God... Where is my head at?</m>
+                <m>Of course I need to lock the door again...</m>
+            </dlg>
+
+            <fade-to-black keep="true" speed="2" />
+            <wait time="0.5" />
+            <sfx clip="unlock" />
+            <wait time="0.5" />
+            <fade-to-black  speed="-2" />
+
+            <load-scene-object key="vfx-heat.prefab"></load-scene-object>
+            <flag name="QUEST:JUL:PHONE:HEAT_SCORE" inc="30"></flag>
+            <anim target="scene"  trigger="say-01" />
+            <anim target="scene" face="NEUTRAL"></anim>
+            <anim target="scene"><bool name="look-cam" value="true" /></anim>
+            <dlg char="JUL">
+                <m>Done... Thanks for warning me...</m>
+                <m>I'd better stay away from the door now...</m>
+                <m>Sometimes I feel like there's people peeping me through keyholes around here...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>Jeez... What kind of creep would do that, huh?</m>
+            </dlg>
+            <obj target="scene/interactables/door" active="false"></obj>
+            <node-output node="interactables-loop" />
+        </n>
+
+        <!--
+            ########################################################
+            ## loop-01-talk ########################################
+            ########################################################
+        -->
+        <n id="loop-01-talk">
+            <anim target="scene"><bool name="look-cam" value="false" /></anim>
+            <obj target="scene/interactables" active="false" />
+            <choice>
+                <c pos="NE">
+                    <text>Are you sure about this?</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:JUL:PHONE" bit-unset="12" />
+                        <check-flag flag="QUEST:JUL:PHONE" bit-unset="13" />
+                    </check-group>
+                    <then>
+                        <flag name="QUEST:JUL:PHONE" bit-on="12" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Hey... Are you really sure about this plan?</m>
+                            <m>What if ${CHAR:ZAC:NAME} shares the stuff around? Once in the internet, it's there forever...</m>
+                        </dlg>
+                        <flag name="QUEST:JUL:PHONE:HEAT_SCORE" inc="30" />
+                        <load-scene-object key="vfx-heat.prefab" />
+                        <anim target="scene"><bool name="look-cam" value="true" /></anim>
+                        <anim target="scene"  trigger="say-01" />
+                        <dlg char="JUL">
+                            <m>Oh... Thank you for worrying about me...</m>
+                        </dlg>
+                        <anim target="scene" face="SIGH"></anim>
+                        <dlg char="JUL">
+                            <m>That probably shows more care than ${CHAR:ZAC:NAME} ever had...</m>
+                        </dlg>
+                        <anim target="scene" face="NEUTRAL"></anim>
+                        <dlg char="JUL">
+                            <m>But don't worry... I know what I'm doing... And I know damn well that moron...</m>
+                        </dlg>
+                        <anim target="scene" face="DISAPPROVE"></anim>
+                        <dlg char="JUL">
+                            <m wait="1">He will be terrified of any other person seeing he being... as they say... "cucked"...</m>
+                            <m>No... I know exactly what he will do...</m>
+                            <m>He'll watch the video... be shocked... delete it... and...</m>
+                        </dlg>
+                        <anim target="scene"  trigger="say-01" />
+                        <anim target="scene"><bool name="look-cam" value="false" /></anim>
+                        <dlg char="JUL">
+                            <m>...and then he'll look down every time he sees me again walking around this school...</m>
+                        </dlg>
+                        
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>I like your idea of retaliation</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:JUL:PHONE" bit-unset="12" />
+                        <check-flag flag="QUEST:JUL:PHONE" bit-unset="13" />
+                    </check-group>
+                    <then>
+                        <flag name="QUEST:JUL:PHONE" bit-on="13" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">I like your idea of retaliation...</m>
+                            <m>${CHAR:ZAC:NAME} will get what he deserves...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <anim target="scene"  trigger="say-01" />
+                        <anim target="scene" face="DISAPPROVE"></anim>
+                        <anim target="scene"><bool name="look-cam" value="true" /></anim>
+                        <dlg char="JUL">
+                            <m>Yeah... I'm sure that's you giving your most sincere no second intentions advise, right?</m>
+                        </dlg>
+                        <anim target="scene" face="SIGH"></anim>
+                        <dlg char="JUL">
+                            <m>You guys are all the same...</m>
+                        </dlg>
+                        <wait />
+                        <anim target="scene" face="NEUTRAL"></anim>
+                    </then>
+                </c>
+                <c pos="NE">
+                    <text>I won't tell anyone, okay?</text>
+                    <check-group op="AND">
+                        <check-group op="OR">
+                            <check-flag flag="QUEST:JUL:PHONE" bit-set="12" />
+                            <check-flag flag="QUEST:JUL:PHONE" bit-set="13" />
+                        </check-group>
+                        <check-flag flag="QUEST:JUL:PHONE" bit-unset="14" />
+                        <check-flag flag="QUEST:JUL:PHONE" bit-unset="15" />
+                    </check-group>
+                    <then>
+                        <flag name="QUEST:JUL:PHONE" bit-on="14"></flag>
+                        <dlg char="PLAYER">
+                            <m wait="1">Hey... I think I know what you wanted to ask me...</m>
+                            <m wait="1">You wanted to know if I'm going to tell people about this, right?</m>
+                            <m>Well... Don't worry about that...</m>
+                            <m>I'm not the bragging type...</m>
+                        </dlg>
+                        <anim target="scene"  trigger="say-01" />
+                        <anim target="scene" face="DISAPPROVE"></anim>
+                        <anim target="scene"><bool name="look-cam" value="true" /></anim>
+                        <dlg char="JUL">
+                            <m wait="0.5">Urgh... That is not what I'm worried about... Because even if you tell, no one is going to believe...</m>
+                            <m>Just... Whatever... I don't care...</m>
+                        </dlg>
+                        <anim target="scene" face="NEUTRAL"></anim>
+                        <node-output node="interactables-loop" />
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>I'm not dating anyone, okay?</text>
+                    <check-group op="AND">
+                        <check-group op="OR">
+                            <check-flag flag="QUEST:JUL:PHONE" bit-set="12" />
+                            <check-flag flag="QUEST:JUL:PHONE" bit-set="13" />
+                        </check-group>
+                        <check-flag flag="QUEST:JUL:PHONE" bit-unset="14" />
+                        <check-flag flag="QUEST:JUL:PHONE" bit-unset="15" />
+                    </check-group>
+                    <then>
+                        <flag name="QUEST:JUL:PHONE" bit-on="15"></flag>
+                        <dlg char="PLAYER">
+                            <m wait="1">Hey... I think I know what you wanted to ask me...</m>
+                            <m wait="1">You don't wanna be like ${CHAR:VIC:NAME} and do stuff with someone else's boyfriend, right?</m>
+                            <m>Well... I assure you I'm not dating anyone...</m>
+                            <m>I've just arrived in this town, remember?</m>
+                        </dlg>
+                        <anim target="scene"  trigger="say-01" />
+                        <anim target="scene" face="SIGH"></anim>
+                        <anim target="scene"><bool name="look-cam" value="true" /></anim>
+                        <dlg char="JUL">
+                            <m>Hum... You have some skill for reading people, ain't you?</m>
+                        </dlg>
+                        <anim target="scene" face="NEUTRAL"></anim>
+                        <flag name="QUEST:JUL:PHONE:HEAT_SCORE" inc="30" />
+                        <load-scene-object key="vfx-heat.prefab" />
+                        <dlg char="JUL">
+                            <m wait="0.5">Well... I'm glad we're in the same page here...</m>
+                            <m>Thanks for being clear... The last thing I want is to be like that cow ${CHAR:VIC:NAME}...</m>
+                        </dlg>
+                        <node-output node="interactables-loop" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>I'm ready if you are...</text>
+                    <check-group op="AND">
+                        <check-group op="OR">
+                            <check-flag flag="QUEST:JUL:PHONE" bit-set="12" />
+                            <check-flag flag="QUEST:JUL:PHONE" bit-set="13" />
+                        </check-group>
+                        <check-group op="OR">
+                            <check-flag flag="QUEST:JUL:PHONE" bit-set="14" />
+                            <check-flag flag="QUEST:JUL:PHONE" bit-set="15" />
+                        </check-group>
+                    </check-group>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>So... I'm ready to record if you're really willing to go forward with the idea...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <anim target="scene" trigger="say-01"><bool name="look-cam" value="true" /></anim>
+                        <dlg char="JUL">
+                            <m>Oh... I... I am...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <anim target="scene"  face="SIGH" />
+                        <dlg char="JUL">
+                            <m>I guess... there's no reason to stall this anymore...</m>
+                        </dlg>
+                        <anim target="scene" face="UPSET"><bool name="look-cam" value="false" /></anim>
+                        <dlg char="JUL">
+                            <m>I will... take position...</m>
+                        </dlg>
+                        <bgm volume="0" />
+                        <fade-to-black  speed="0.5" keep="true"/>
+                        <wait />
+                        <bootstrap node="bj-start" />
+                    </then>
+                </c>
+                <c pos="W" out="interactables-loop">
+                    <text>[Check around]</text>
+                </c>
+            </choice>
+
+            <wait />
+            <anim target="scene" face="SIGH"></anim>
+            <dlg char="JUL">
+                <m>Sigh... I just wanted to be sure about one thing before accepting your 'help' on pulling this revenge...</m>
+                <m>But it would be a waste of time asking you about it anyways...</m>
+                <m>I'd have no way to know if you're lying...</m>
+            </dlg>
+
+            <anim target="scene" face="NEUTRAL"></anim>
+            <node-output node="interactables-loop" />
+        </n>
+    
+            <!--
+            ########################################################
+            ## bj-start ########################################
+            ########################################################
+        -->
+        <n id="bj-start">
+            <fade-to-black keep="true" speed="9999" />
+            <bgm loop="loop-jul" volume="0.25" />
+            <load-scene-object key="scene-jul-science-bj-02.prefab" rename="scene" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+            <proxy name="JUL" target="scene/JUL" />
+            <fade-to-black speed="-0.5" />
+
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="QUEST:JUL:PHONE:HEAT_SCORE" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+                <message name="SetInstantFill"><bool value="true" /></message>
+            </load-scene-object>
+            <autosave label="Recording ${CHAR:JUL:NAME}'s revenge video" />
+
+            <dlg char="JUL">
+                <m wait="1">Oh, dear... Am I really doing this?</m>
+                <m wait="1">I guess... there's really something weird happening in ${MISC:SCHOOL:NAME}... making us act on our emotions...</m>
+                <m>It doesn't matter now...</m>
+                <m>I won't have peace of mind until I put ${CHAR:ZAC:NAME} in his place...</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER">
+                <m>Film is rolling...</m>
+            </dlg>
+
+            <dlg char="JUL">
+                <m wait="1">Okay...</m>
+                <m wait="0.5">You can...</m>
+                <m>You can come here now...</m>
+            </dlg>
+
+            <anim target="scene" inc="state"></anim>
+            <wait time="2" />
+
+            <dlg char="PLAYER">
+                <m>Gotta say... You chose a nice pose...</m>
+            </dlg>
+
+            <dlg char="JUL">
+                <m wait="0.5">Yeah I'm sure you appreciate...</m>
+                <m>Now just keep it quiet and leave it to me...</m>
+                <m>This is not about you...</m>
+            </dlg>
+
+            
+            <load-scene-object key="scene-jul-science-bj-03.prefab" active="false" />
+            <proxy clear="true" />
+            <wait time="0.25" />
+            <obj target="scene" destroy="0" />
+            <obj target="scene-jul-science-bj-03.prefab" rename="scene-03" active="true" />
+            <load-scene-object key="video-recorder.prefab" />
+            <obj target="video-recorder.prefab/canvas/text-bottom">
+                <assign name="text"><string value="USE MOUSE WHEEL TO ZOOM IN/OUT"></string></assign>
+            </obj>
+            <wait time="1" />
+            <proxy target="scene-03/JUL" name="JUL" />
+            <proxy target="scene-03/PLAYER" name="PLAYER" />
+
+            <anim target="scene-03" trigger="look-phone"></anim>
+            <anim target="scene-03" trigger="exp-disapprove"></anim>
+            <dlg char="JUL">
+                <m wait="0.5">Hello, ${CHAR:ZAC:NAME}...</m>
+                <m wait="1">You might be wondering now what the hell am I doing right now...</m>
+                <m>Well... I found out about your funny relationship with ${CHAR:VIC:NAME}...</m>
+            </dlg>
+            <anim target="scene-03" trigger="blink-closed"></anim>
+            <dlg char="JUL">
+                <m>And how you've been cheating on me with that whore behind my back...</m>
+            </dlg>
+            <anim target="scene-03" trigger="blink-1"></anim>
+            <dlg char="JUL">
+                <m wait="1">So... I'm making this video as a gift to you... and retribution for all the respect and care you showed me...</m>
+            </dlg>
+            <wait />
+            <anim target="scene-03" trigger="exp-neutral"></anim>
+            <anim target="scene-03" trigger="look-player" inc="idle"></anim>
+            <dlg char="JUL">
+                <m wait="0.5">I asked this gentleman here to help me show you...</m>
+                <m>What was supposed to be yours...</m>
+            </dlg>
+            <wait />
+            <anim target="scene-03" trigger="exp-disapprove"></anim>
+            <anim target="scene-03" trigger="look-phone"></anim>
+            <dlg char="JUL">
+                <m>But now all you can do is watch...</m>
+            </dlg>
+            <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                <message name="GenerateImpulse"><float value="25" /></message>
+            </load-scene-object>
+            <anim target="scene-03" trigger="blink-closed"></anim>
+            <dlg char="JUL">
+                <m>YOU FUCKING LOSER!!</m>
+            </dlg>
+            <wait time="2" />
+            <anim target="scene-03" trigger="blink-1"></anim>
+            <dlg char="JUL">
+                <m>Sigh... Now watch carefully, ${CHAR:ZAC:NAME}...</m>
+            </dlg>
+
+            <anim target="scene-03" trigger="exp-neutral"></anim>
+            <anim target="scene-03" trigger="look-player"></anim>
+            <dlg char="JUL">
+                <m wait="0.5">This one is the lucky winner......</m>
+                <m>... much more of a man than you...</m>
+            </dlg>
+            <anim target="scene-03" trigger="exp-disapprove"></anim>
+            <anim target="scene-03" trigger="look-phone"></anim>
+            <dlg char="JUL">
+                <m>... which is not even that much a compliment, I have to say...</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
+                <then>
+                    <load-scene-object key="vfx-auto-dialog-paragon.prefab" />
+                    <dlg char="PLAYER">
+                        <m>Jeez... I know you are pissed, but take it easy...</m>
+                        <m>The dude's mind is already weak... You gonna make him brain-dead like this...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <load-scene-object key="vfx-auto-dialog-renegade.prefab" />
+                    <dlg char="PLAYER">
+                        <m>Woah, damn... That sucks, ain't ${CHAR:ZAC:NAME}?</m>
+                        <m>I can almost hear that annoying asian dude screaming "Emotional Damage"...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <obj target="scene-03/cinemachine-close" active="true" />
+            <anim target="scene-03" trigger="exp-disapprove"></anim>
+            <anim target="scene-03" trigger="look-player"></anim>
+            <dlg char="JUL">
+                <m wait="0.5">Hey... As I said... You can just keep quiet...</m>
+                <m>And show me what you brought for me...</m>
+            </dlg>
+            
+            <anim target="scene-03" inc="idle"></anim>
+            <obj target="scene-03">
+                <outcome clear="true" />
+            </obj>
+            <anim target="scene-03" trigger="exp-shock"></anim>
+            <anim target="scene-03" trigger="look-penis"></anim>
+            
+            <dlg char="JUL">
+                <m wait="1">Oooh...</m>
+                <m wait="0.5">Oh, my...</m>
+                <m>Looks like someone is happy to see me...</m>
+            </dlg>
+            <wait />
+
+            <anim target="scene-03" trigger="exp-shock"></anim>
+            <anim target="scene-03" trigger="look-player"></anim>
+            <dlg char="JUL">
+                <m wait="0.5">You wanna have some fun with the quarterback's girlfriend, don't you?</m>
+                <m>Then let's give him a little show...</m>
+            </dlg>
+
+            <obj target="scene-03/cinemachine-close" active="false" />
+            
+            <anim target="scene-03" trigger="exp-neutral"></anim>
+            <anim target="scene-03" trigger="look-penis"></anim>
+            <anim target="scene-03" inc="idle"></anim>
+            
+            <wait time="10" />
+            
+            <dlg char="PLAYER">
+                <m>Man... I'm starting to really like this school...</m>
+            </dlg>
+
+            <load-scene-object key="scene-jul-science-bj-04.prefab" rename="scene-04" active="false" />
+            <obj target="video-recorder.prefab" active="false" />
+            <obj target="scene-03" active="false" />
+            <obj target="scene-04" active="true" />
+            <wait time="0.7" />
+            <proxy name="JUL" target="scene-04/JUL" clear="true" />
+            <proxy name="PLAYER" target="null" />
+
+
+            <anim target="scene-04" trigger="look-player" />
+            <dlg char="JUL">
+                <m wait="0.5">Oh, you are?</m>
+                <m>I guess ${CHAR:JUL:NAME}'s welcoming committee is a success, then...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Can say for sure I've never been well received like this...</m>
+            </dlg>
+            <wait />
+
+            <anim target="scene-04" trigger="look-phone" />
+
+            <obj target="video-recorder.prefab" active="false" />
+            <obj target="scene-04/cinemachine-eyes" active="false" />
+            
+            <dlg char="JUL">
+                <m wait="0.5">Did you hear that, ${CHAR:ZAC:NAME}?</m>
+                <m>I'm doing a good job!!</m>
+                <m>I bet you are proud of me, aren't you?</m>
+            </dlg>
+            <wait />
+            <anim target="scene-04" trigger="look-penis" />
+            <dlg char="JUL">
+                <m>Now give me a minute and keep watching...</m>
+                <m>I have to keep up with my good work here...</m>
+            </dlg>
+
+            <anim target="scene-04" trigger="look-player" />
+
+            <flag name="FLG:1" set="0" />
+            <node-output node="bj-loop-1" />
+        </n>
+
+        <!--
+            ########################################################
+            ## bj-loop-1 ########################################
+            ########################################################
+        -->
+        <n id="bj-loop-1">
+            <choice>
+                <c pos="W">
+                    <check-flag flag="FLG:1" bit-set="0" />
+                    <text>[POV]</text>
+                    <then>
+                        <obj target="scene-03" active="false" />
+                        <obj target="scene-04" active="true" />
+                        <anim target="scene-04" trigger="look-player" />
+                        <flag name="FLG:1" bit-off="0" />
+                        <node-output node="bj-loop-1" />
+                    </then>
+                </c>
+                <c pos="NW">
+                    <check-flag flag="FLG:1" bit-unset="0" />
+                    <check-flag flag="FLG:1" bit-set="1" />
+                    <text>[Eye Contact]</text>
+                    <then>
+                        <anim target="scene-04" trigger="look-player" />
+                        <flag name="FLG:1" bit-off="1" />
+                        <node-output node="bj-loop-1" />
+                    </then>
+                </c>
+                <c pos="NW">
+                    <check-flag flag="FLG:1" bit-unset="0" />
+                    <check-flag flag="FLG:1" bit-unset="1" />
+                    <text>[Eyes on Target]</text>
+                    <then>
+                        <anim target="scene-04" trigger="look-penis" />
+                        <flag name="FLG:1" bit-on="1" />
+                        <node-output node="bj-loop-1" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Camera View]</text>
+                    <check-flag flag="FLG:1" bit-unset="0" />
+                    <then>
+                        <obj target="scene-03" active="true" />
+                        <obj target="scene-04" active="false" />
+                        <anim target="scene-03" trigger="look-player"><int name="idle" value="4" /></anim>
+                        <flag name="FLG:1" bit-on="0" />
+                        <node-output node="bj-loop-1" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[Hide this]</text>
+                    <then>
+                        <sys simple="true">CLICK TO CONTINUE</sys>
+                        <obj target="scene-03" active="false" />
+                        <obj target="scene-04" active="true" />
+                        <anim target="scene-04" trigger="look-player" />
+
+                        <dlg char="JUL">
+                            <m wait="0.5">I... uuhhh....</m>
+                            <m>I think this is enough, right?</m>
+                        </dlg>
+                        <node-output node="bj-loop-2" />
+
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--
+            ########################################################
+            ## bj-loop-2 ########################################
+            ########################################################
+        -->
+        <n id="bj-loop-2">
+            <choice>
+                <c pos="NW" style="RIFT">
+                    <text>[Raise Heat]</text>
+                    <lock-reason>[Not enough Rift Energy]</lock-reason>
+                    <check-flag flag="PLAYER:STAT:RIFT" gte="1" />
+                    <then>
+                        <bgm name="rift-bgm" loop="loop-rumble" as-music="false" volume="0.5" />
+                        <flag name="PLAYER:STAT:RIFT" dec="1" icon="RIFT">Used 1 Rift energy point</flag>
+                        <load-scene-object key="vfx-rift.prefab" />
+                        <wait />
+                        
+                        <anim target="scene-04" trigger="look-phone"></anim>
+                        <dlg char="JUL">
+                            <m>Oh dear... What's going on now?</m>
+                        </dlg>
+                        <wait />
+                        <anim target="scene-04" trigger="look-player"></anim>
+
+                        <wait />
+                        <flag name="QUEST:JUL:PHONE:HEAT_SCORE" inc="70" />
+                        <flag name="PLAYER:STAT:RIFT" dec="1" />
+                        <dlg char="JUL">
+                            <m>Weird...</m>
+                            <m>I feel a bit... motivated?</m>
+                        </dlg>
+
+                        <wait time="1" />
+                        <bgm name="rift-bgm" volume="0" />
+                        <anim target="vfx-rift.prefab">
+                            <bool name="active" value="false" />
+                        </anim>
+                        <wait time="1" />
+                        <node-output node="bj-loop-2" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>Didn't you want to teach ${CHAR:ZAC:NAME} a lesson?</text>
+                    <check-flag flag="QUEST:JUL:PHONE:HEAT_SCORE" gte="100" />
+                    <lock-reason>[Full HEAT bar required]</lock-reason>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m wait="1">Hey... I thought you wanted teach ${CHAR:ZAC:NAME} a lesson...</m>
+                            <m>But I don't think he would learn much if you stopped here...</m>
+                        </dlg>
+                        
+                        <anim target="scene-04" trigger="look-embarrassed"></anim>
+                        <dlg char="JUL">
+                            <m>Yeah... I... uuhh...</m>
+                            <m>I think that...</m>
+                        </dlg>
+                        <anim target="scene-04" trigger="look-player"></anim>
+                        <dlg char="JUL">
+                            <m>That was my initial plan, but... uuhh...</m>
+                        </dlg>
+                        
+                        <dlg char="PLAYER">
+                            <m wait="1">So why don't you go forward with it...</m>
+                            <m>You won't have another opportunity...</m>
+                        </dlg>
+
+                        <anim target="scene-04" trigger="look-embarrassed"></anim>
+                        <anim target="scene-04" trigger="exp-embarrassed"></anim>
+                        <dlg char="JUL">
+                            <m wait="1">Well... There's something I...</m>
+                            <m wait="0.5">I never did with ${CHAR:ZAC:NAME} and...</m>
+                            <m>I could... uuh... I don't know...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER">
+                            <m wait="1">Well... If you can't, then let's hope this is enough to make ${CHAR:ZAC:NAME} never cheat another girl gain...</m>
+                        </dlg>
+                        <dlg char="JUL">
+                            <m>.........</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>I just thought you were the kind girl that would go wild to reach her goals...</m>
+                        </dlg>
+
+                        <anim target="scene-04" trigger="look-player"></anim>
+                        <anim target="scene-04" trigger="exp-disapprove"></anim>
+                        <dlg char="JUL">
+                            <m wait="1">Well... That's who I am...</m>
+                            <m>You can be sure about that...</m>
+                        </dlg>
+                        
+                        <bgm volume="0" />
+                        <fade-to-black speed="5" keep="true" />
+                        <bootstrap node="bj-escalate" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>If you think it is, it's okay...</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>If you think it is, it's okay...</m>
+                        </dlg>
+                        <dlg char="JUL">
+                            <m>Thank you so much for helping me...</m>
+                        </dlg>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" async="true" />
+                        <wait time="2" />
+                        <sys>This scene continues in next version!</sys>
+                        <wait time="2" />
+                        <bootstrap script="title" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--
+            ########################################################
+            ## bj-escalate ########################################
+            ########################################################
+        -->
+        <n id="bj-escalate">
+            <fade-to-black speed="99999" keep="true" />
+            <bgm loop="loop-jul" volume="0.25" />
+            <load-scene-object key="scene-jul-science-bj-05.prefab" rename="scene" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+            <proxy name="JUL" target="scene/JUL" />
+            <fade-to-black speed="-5" />
+            <autosave label="${CHAR:JUL:NAME} goes wild" />
+            
+            <dlg char="JUL">
+                <m wait="0.5">Okay, buddy... I'm not like those naive girls in your class...</m>
+                <m wait="0.5">And I can notice you trying to manipulate me into giving you a good time...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>I'm just trying to help...</m>
+            </dlg>
+            <dlg char="JUL">
+                <m wait="0.5">Whatever... I don't care...</m>
+                <m wait="0.5">My plan was to give ${CHAR:ZAC:NAME} some deep emotional scars... And that's what I'll do...</m>
+                <m>You said I should go wild?</m>
+            </dlg>
+            <wait />
+            <anim target="scene" trigger="next" />
+
+            <dlg char="JUL">
+                <m>I CAN GO WILD !</m>
+            </dlg>
+            <wait />
+            <dlg char="PLAYER">
+                <m>Nice...</m>
+                <m>Now we're talking...</m>
+            </dlg>
+            <wait />
+            <dlg char="JUL">
+                <m wait="2">Take a good look, ${CHAR:ZAC:NAME}! It's the last time you're going to see them...</m>
+                <m wait="1">You never knew how to  handle them properly anyways...</m>
+                <m>And now I'll show you something really hot...</m>
+            </dlg>
+
+            <proxy clear="true" />
+            <load-scene-object key="scene-jul-science-bj-06.prefab" active="false" />
+            <obj target="scene" destroy="0" />
+            <obj target="scene-jul-science-bj-06.prefab" rename="scene-06"/>
+            <wait time="2" />
+            <proxy target="scene-06/JUL" name="JUL" />
+            <proxy target="scene-06/PLAYER" name="PLAYER" />
+
+            <dlg char="JUL">
+                <m wait="0.5">Listen...</m>
+                <m wait="1">I usually don't go this far the first "date"...</m>
+                <m>But this is a special occasion...</m>
+            </dlg>
+
+            <wait />
+
+            <anim target="scene-06" trigger="shot-b" />
+            <wait time="0.5" />
+            <anim target="scene-06" inc="state" trigger="exp-look-penis" />
+            
+            <dlg char="JUL">
+                <m wait="0.5">Are you seeing this, ${CHAR:ZAC:NAME}?</m>
+                <m wait="2">Look how it's craving for my lips...</m>
+                <m>Well... Let's see how long he can last...</m>
+            </dlg>
+            
+            <anim target="scene-06" inc="state" />
+            <wait time="3" />
+            <bgm name="fellatio" loop="loop-fellatio" volume="0.25" />
+            <anim target="scene-06" trigger="blink-closed" />
+            <wait time="1" />
+            <anim target="scene-06" trigger="shot-c" />
+            <wait time="5" />
+
+            <sfx clip="mmm" async="true" />
+            <dlg char="JUL" track="Neck">
+                <m>MMnhg chmmg thmmm mmm, ${CHAR:ZAC:NAME}mmn?</m>
+            </dlg>
+            
+            <wait />
+
+            <if>
+                <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
+                <then>
+                    <load-scene-object key="vfx-auto-dialog-paragon.prefab"></load-scene-object>
+                    <dlg char="PLAYER">
+                        <m wait="0.5">Hey... I think you already did great on the verbal abuse field...</m>
+                        <m>Try to relax now, okay?</m>
+                    </dlg>
+                </then>
+                <else>
+                    <load-scene-object key="vfx-auto-dialog-renegade.prefab"></load-scene-object>
+                    <dlg char="PLAYER">
+                        <m>Hey... Now that your mouth is full, you should focus more on the action and less on the talking...</m>
+                    </dlg>
+                </else>
+            </if>
+            
+            <sfx clip="mmm" async="true" />
+            <dlg char="JUL">
+                <m>MMnhpf...</m>
+            </dlg>
+
+            <wait time="4" />
+
+            <load-scene-object key="scene-jul-science-bj-07.prefab" rename="scene-07" active="false"></load-scene-object>
+            <obj target="scene-06" active="false"></obj>
+            <obj target="scene-07" active="true"></obj>
+            <proxy clear="true" />
+            <wait time="4" />
+            <proxy name="JUL" target="scene-07/JUL" />
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Damn... You have some nice skill, ${CHAR:JUL:NAME}...</m>
+            </dlg>
+
+            <sfx clip="mmm" async="true" />
+            <dlg char="JUL">
+                <m>MMnhpf...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Yeah... You're totally right...</m>
+            </dlg>
+
+            <wait time="3" />
+            
+            <anim target="scene-07" inc="state" />
+            <wait time="5" />
+
+            <dlg char="PLAYER">
+                <m wait="1">Holly shit...</m>
+                <m>That's some pro moves you have...</m>
+            </dlg>
+
+            <anim target="scene-07" trigger="lick" />
+            <wait time="2" />
+            <dlg char="JUL">
+                <m>Just shut up and let me do my thing, will you?</m>
+            </dlg>
+
+            <wait time="1" />
+
+            <dlg char="PLAYER">
+                <m>Yeah... I think you already forgot about ${CHAR:ZAC:NAME} and is doing because you love it...</m>
+            </dlg>
+            
+            <sfx clip="mmm" async="true" />
+            <dlg char="JUL">
+                <m>MMnhpf...</m>
+            </dlg>
+
+            <flag name="FLG:0" set="0" />
+            <node-output node="bj-loop-3" />
+        </n>
+
+        <!--
+            ########################################################
+            ## bj-loop-3 ########################################
+            ########################################################
+        -->
+        <n id="bj-loop-3">
+            <choice>
+                <c pos="NW">
+                    <text>[Nice and easy]</text>
+                    <check-group op="AND">
+                        <check-flag flag="FLG:0" bit-unset="0" />
+                        <check-flag flag="FLG:0" bit-unset="1" />
+                    </check-group>
+                    <then>
+                        <flag name="FLG:0" bit-on="1" />
+                        <anim target="scene-07"><int name="state" value="1" /></anim>
+                    </then>
+                </c>
+                <c pos="NW">
+                    <text>[Like a Pro]</text>
+                    <check-group op="AND">
+                        <check-flag flag="FLG:0" bit-unset="0" />
+                        <check-flag flag="FLG:0" bit-set="1" />
+                    </check-group>
+                    <then>
+                        <flag name="FLG:0" bit-off="1" />
+                        <anim target="scene-07"><int name="state" value="2" /></anim>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>[Lick]</text>
+                    <check-group op="AND">
+                        <check-flag flag="FLG:0" bit-unset="0" />
+                    </check-group>
+                    <then>
+                        <anim target="scene-07" trigger="lick" />
+                        <wait time="4" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Slap]</text>
+                    <check-group op="AND">
+                        <check-flag flag="FLG:0" bit-unset="0" />
+                    </check-group>
+                    <then>
+                        <anim target="scene-07" trigger="slap" />
+                        <wait time="4" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[Change View]</text>
+                    <check-flag flag="FLG:0" bit-unset="0" />
+                    <then>
+                        <flag name="FLG:0" bit-on="0" />
+                        <flag name="FLG:0" bit-off="1" />
+                        <fade-to-black speed="5" keep="true" />
+                        <obj target="scene-07" active="false"></obj>
+                        <obj target="scene-06" active="true"></obj>
+                        <anim target="scene-06"><int name="state" value="0" /></anim>
+                        <anim target="scene-06" trigger="shot-c" />
+                        <anim target="scene-06" trigger="blink-closed" />
+                        <anim target="scene-06" trigger="exp-look-penis" />
+                        <fade-to-black speed="-1" />
+                    </then>
+                </c>
+                <c pos="NW">
+                    <text>[Nice and easy]</text>
+                    <check-group op="AND">
+                        <check-flag flag="FLG:0" bit-set="0" />
+                        <check-flag flag="FLG:0" bit-set="1" />
+                    </check-group>
+                    <then>
+                        <flag name="FLG:0" bit-off="1" />
+                        <anim target="scene-06"><int name="state" value="3" /></anim>
+                    </then>
+                </c>
+                <c pos="NW">
+                    <text>[Like a Pro]</text>
+                    <check-group op="AND">
+                        <check-flag flag="FLG:0" bit-set="0" />
+                        <check-flag flag="FLG:0" bit-unset="1" />
+                    </check-group>
+                    <then>
+                        <flag name="FLG:0" bit-on="1" />
+                        <anim target="scene-06"><int name="state" value="4" /></anim>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[POV]</text>
+                    <check-flag flag="FLG:0" bit-set="0" />
+                    <then>
+                        <flag name="FLG:0" bit-off="0" />
+                        <flag name="FLG:0" bit-on="1" />
+                        <fade-to-black speed="5" keep="true" />
+                        <obj target="scene-07" active="true"></obj>
+                        <obj target="scene-06" active="false"></obj>
+                        <fade-to-black speed="-1"  />
+                    </then>
+                </c>
+                <c pos="NE">
+                    <text>[Continue Scene]</text>
+                    <then>
+                        <node-output node="bj-final-phase" />
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>[Hide Wheel]</text>
+                    <then>
+                        <sys simple="true">CLICK TO CONTINUE</sys>
+                    </then>
+                </c>
+            </choice>
+            <node-output node="bj-loop-3" />
+        </n>
+    
+                <!--
+            ########################################################
+            ## bj-final-phase ########################################
+            ########################################################
+        -->
+        <n id="bj-final-phase">
+            <fade-to-black speed="5" keep="true" />
+            <obj target="scene-07" active="true"></obj>
+            <anim target="scene-07"><int name="state" value="2" /></anim>
+            <obj target="scene-06" active="false"></obj>
+            <fade-to-black speed="-1"  />
+            <wait />
+
+            <anim target="scene-07" trigger="lick" />
+            <wait time="1.5" />
+            <dlg char="JUL">
+                <m>This... this is so fun...</m>
+            </dlg>
+
+            <wait time="4" />
+
+            <dlg char="PLAYER">
+                <m>Damn, girl... I didn't think I would receive such quality treatment when I woke up today...</m>
+                <m>You're not giving me much breathing space here...</m>
+            </dlg>
+
+            <sfx clip="mmm" async="true" />
+            <dlg char="JUL">
+                <m>mmwait... are yoummnn... popping... alreadmmm?</m>
+            </dlg>
+            <wait time="0.5" />
+            
+
+            <choice>
+                <c pos="NW">
+                    <text>[Tell her it's coming]</text>
+                    <then>
+                        <flag name="QUEST:JUL:PHONE" bit-on="18" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Uuhh... You didn't forgot about why we are here, right?</m>
+                            <m>You know... about your boyfriend?</m>
+                        </dlg>
+
+                        <sfx clip="mmm" async="true" />
+                        <dlg char="JUL">
+                            <m>i'mmmng... mmmmngh...</m>
+                        </dlg>
+
+                        <wait />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Look... You're doing it really good...</m>
+                            <m wait="1">Actually... It's so good that I don't know how long can I hold it...</m>
+                            <m>You're the director of this movie... So you'd better quickly plan how you want it to end...</m>
+                        </dlg>
+
+                        <sfx clip="mmm" async="true" />
+                        <dlg char="JUL">
+                            <m>mmmmngh!!</m>
+                        </dlg>
+
+                        <bgm name="fellatio" volume="0" />
+                        <proxy clear="true" />
+                        <fade-to-black speed="5" keep="true" />
+                        <obj target="scene-07" active="false"></obj>
+                        <obj target="scene-06" active="true"></obj>
+                        <anim target="scene-06"><int name="state" value="0" /></anim>
+                        <anim target="scene-06" trigger="shot-d" />
+                        <fade-to-black speed="-1" />
+                        
+                        <anim target="scene-06" trigger="exp-look-player">
+                            <int name="state" value="6" />
+                        </anim>
+                        <anim target="scene-06" trigger="blink-01" />
+                        <wait />
+                        <proxy name="JUL" target="scene-06/JUL" />
+                        <proxy name="PLAYER" target="scene-06/PLAYER" />
+
+
+                        <dlg char="JUL">
+                            <m wait="1">Sorry... I got... a little distracted...</m>
+                            <m wait="1">But now, mister...</m>
+                            <m>I think wan't some nice make up to look pretty in the camera for ${CHAR:ZAC:NAME}...</m>
+                        </dlg>
+                        <wait />
+
+                        <dlg char="PLAYER">
+                            <m>Wel... If you like the color white, then I'll have some for you very soon...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <dlg char="JUL">
+                            <m>Then let's do it, tiger...</m>
+                        </dlg>
+
+                        <wait />
+                        <sys simple="true">CLICK TO CONTINUE</sys>
+                        
+                        <dlg char="PLAYER">
+                            <m>Oh shit... Your delivery is coming now, lady...</m>
+                        </dlg>
+
+                        <load-scene-object key="vfx-heat.prefab" />
+                        <anim target="scene-06" trigger="cum">
+                            <bool name="drool" value="true" />
+                        </anim>
+                        <wait time="2" />
+                        <load-scene-object key="vfx-heat.prefab" />
+                        <wait time="6" />
+
+                        <trophy unlock="phone-gate-01" />
+                        <dlg char="PLAYER">
+                            <m>Damn... I gotta say...</m>
+                            <m>You look beautiful...</m>
+                        </dlg>
+
+                        <fade-to-black keep="true" speed="0.25" async="true" />
+                        <sys>This scene continues in next version!</sys>
+                        <wait time="3" />
+                        <bootstrap script="title" />
+                    </then>
+                </c>
+                <c pos="SW" style="RENEGADE">
+                    <text>[Take control and go rough]</text>
+                    <lock-reason>[Renegade +8 required]</lock-reason>
+                    <check-flag flag="PLAYER:STAT:RENEGADE" gte="8" />
+                    <then>
+                        <flag name="QUEST:JUL:PHONE" bit-on="19" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Shit... You're really into sucking cock, aren't you?!</m>
+                            <m>I wonder how many times you used some petty excuse to use the "blow the first guy I bump into" idea...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <sfx clip="mmm" async="true" />
+                        <dlg char="JUL">
+                            <m>i'mmmng... mmmnot... mmmmngh...</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Yes, you are... The moment you stuffed your mouth with my meat you forgot about your boyfriend and just couldn't stop, didn't you?</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <dlg char="JUL">
+                            <m>..........</m>
+                        </dlg>
+                        <wait />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">You know what? I have an idea...</m>
+                            <m wait="0.5">I'll give you some training to help you achieve the next level in skill...</m>
+                            <m>I'm sure you'll love it... Get ready...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <sfx clip="mmm" async="true" />
+                        <dlg char="JUL">
+                            <m>mmmmngh!?!?</m>
+                        </dlg>
+
+                        <fade-to-black speed="5" keep="true" />
+                        <obj target="scene-07" active="false"></obj>
+                        <obj target="scene-06" active="true"></obj>
+                        <anim target="scene-06"><int name="state" value="0" /></anim>
+                        <anim target="scene-06" trigger="shot-c" />
+                        <anim target="scene-06" trigger="blink-closed" />
+                        <anim target="scene-06" trigger="exp-look-penis" />
+                        <fade-to-black speed="-1" />
+
+                        <anim target="scene-06">
+                            <int name="state" value="5" />
+                            <bool name="drool" value="true" />
+                        </anim>
+
+                        <wait time="0.5" />
+                        <sfx clip="mmm" async="true" />
+                        <dlg char="JUL">
+                            <m>MMMMNGH!!!!</m>
+                        </dlg>
+                        
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Pretty cool, huh? I bet you never did it like this...</m>
+                            <m>And yet... you're handling it just perfect...</m>
+                        </dlg>
+
+                        <wait />
+
+                        <sfx clip="mmm" async="true" />
+                        <dlg char="JUL">
+                            <m>mmmngh... mmm... mmmngh...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m wait="1">Didn't I tell you'd love it? You're a natural...</m>
+                            <m>You're already holding the gag reflex like an expert...</m>
+                        </dlg>
+
+                        <sfx clip="mmm" async="true" />
+                        <dlg char="JUL">
+                            <m>eeemnn... yeammmngh...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER">
+                            <m>Now hold tight...</m>
+                            <m>I know you're eager for the great finale...</m>
+                        </dlg>
+
+                        <wait />
+                        <sys simple="true">CLICK TO CONTINUE</sys>
+
+                        <dlg char="PLAYER">
+                            <m>Okay, ${CHAR:JUL:NAME}...</m>
+                            <m>Here it goes...</m>
+                            <m>Let's see if you can handle it as good as you're doing it...</m>
+                        </dlg>
+                        
+                        <load-scene-object key="vfx-heat.prefab" />
+                        <bgm name="fellatio" volume="0" />
+                        <anim target="scene-06" trigger="shot-d" />
+                        <anim target="scene-06" trigger="cum"></anim>
+                        <wait time="2" />
+                        <load-scene-object key="vfx-heat.prefab" />
+                        <wait time="6" />
+
+                        <trophy unlock="phone-gate-02" />
+                        <dlg char="PLAYER">
+                            <m>Nice...</m>
+                            <m>That's what I call a finisher...</m>
+                        </dlg>
+
+                        <fade-to-black keep="true" speed="0.25" async="true" />
+                        <sys>This scene continues in next version!</sys>
+                        <wait time="3" />
+                        <bootstrap script="title" />
+                    </then>
+                </c>
+            </choice>
+
+
+        </n>
+    </nodes>
+</xml-script>

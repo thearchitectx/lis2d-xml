@@ -19,6 +19,42 @@
 
             <load-scene-object key="location-restroom-men-01-sam.prefab" parent="location" />
 
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-set="5" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="7" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="8" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="9" />
+                </check-group>
+                <then>
+                    <load-scene-object key="location-restroom-men-01-zac-01.prefab" parent="location" />
+                </then>
+            </if>
+
+            <if>
+                <check-group op="AND">
+                    <check-group op="OR">
+                        <check-flag flag="QUEST:JUL:PHONE" bit-set="7" />
+                        <check-flag flag="QUEST:JUL:PHONE" bit-set="8" />
+                        <check-flag flag="QUEST:JUL:PHONE" bit-set="9" />
+                    </check-group>
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="10" />
+                </check-group>
+                <then>
+                    <load-scene-object key="location-restroom-men-01-phone.prefab" parent="location" />
+                </then>
+            </if>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-set="5" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="6" />
+                </check-group>
+                <then>
+                    <load-scene-object key="location-restroom-men-01-zac-01-sam-trigger.prefab" parent="location" />
+                </then>
+            </if>
+
             <fade-to-black speed="-1" />
 
             <autosave label="Men's Restroom - Exploring" />

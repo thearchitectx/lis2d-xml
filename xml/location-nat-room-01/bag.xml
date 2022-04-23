@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="LOC:NAT:ROOM" bit-unset="3" />
+                    <check-flag flag="LOC:NAT:ROOM" bit-unset="4" />
+                </check-group>
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>Uuhh... I hope I won't find... like... a mutilated dead body in this bag...</m>
+                    </dlg>
+        
+                    <wait time="0.5" />
+                    <sfx clip="rummage" />
+        
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>Hey... I found and old five bucks bill in here...</m>
+                    </dlg>
+        
+                    <choice>
+                        <c pos="NE">
+                            <text>[Take it]</text>
+                            <then>
+                                <sfx clip="item" async="true" />
+                                <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                                <flag name="ITEM:MONEY" inc="5" icon="MONEY">You found $5 bucks</flag>
+                                <flag name="LOC:NAT:ROOM" bit-on="4" />
+                                <dlg char="PLAYER" track="#PlayerTrack">
+                                    <m wait="1">Steal the rich and give to the poor...</m>
+                                    <m>Well... I'm poor, so I'd better keep it...</m>
+                                </dlg>
+                            </then>
+                        </c>
+                        <c pos="SE">
+                            <text>I'm not a thief</text>
+                            <then>
+                                <flag name="LOC:NAT:ROOM" bit-on="3" />
+                                <flag name="PLAYER:STAT:PARAGON" inc="4" icon="PARAGON">Renegade +4</flag>
+                                <dlg char="PLAYER" track="#PlayerTrack">
+                                    <m wait="1">It doesn't matter how dirty this dude is... Taking this money would still be theft...</m>
+                                    <m>And I'm no sneaky thief...</m>
+                                </dlg>
+                            </then>
+                        </c>
+                    </choice>
+                </then>
+                <else>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>I already checked this bag...</m>
+                        <m>I'd better leave it alone...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+    </nodes>
+</xml-script>

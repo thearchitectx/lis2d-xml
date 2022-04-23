@@ -36,19 +36,33 @@
                 </then>
             </if>
 
+            <node-output node="choice-loop" />
+        </n>
+
+        <n id="choice-loop">
             <choice>
                 <c pos="NW">
                     <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="17" />
                     <text>Call Kate</text>
                     <lock-reason>[ NOT FOUND YET ]</lock-reason>
                     <then>
+                        <if>
+                            <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="31" />
+                            <then>
+                                <dlg char="PLAYER">
+                                    <m>After that awkward date, I'd better wait for her to contact me...</m>
+                                </dlg>
+                                <node-output node="choice-loop" />
+                            </then>
+                        </if>
+
                         <dlg char="PLAYER">
                             <m>Kate told me to call her... She probably wants to meet somewhere outside the school...</m>
                             <m>Should I do it now?</m>
                         </dlg>
                         <choice>
                             <c pos="W"><text>[ Call Kate ]</text></c>
-                            <c pos="E" out="start"><text>[ Not now ]</text></c>
+                            <c pos="E" out="choice-loop"><text>[ Not now ]</text></c>
                         </choice>
 
                         <dlg char="PLAYER">

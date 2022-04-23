@@ -72,6 +72,8 @@
             <xs:enumeration value="BUTTERFLY" />
             <xs:enumeration value="AFFINITY" />
             <xs:enumeration value="JOINT" />
+            <xs:enumeration value="BAND" />
+            <xs:enumeration value="CALENDAR" />
             <xs:enumeration value="CORRUPTION" />
         </xs:restriction>
     </xs:simpleType>
@@ -120,6 +122,15 @@
         </xs:choice>
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="broadcast" type="xs:boolean" default="false" />
+    </xs:complexType>
+    <xs:complexType name="object-assign">
+        <xs:choice>
+            <xs:element name="int" minOccurs="0" maxOccurs="unbounded" type="integer-elem"></xs:element>
+            <xs:element name="string" minOccurs="0" maxOccurs="unbounded" type="string-elem"></xs:element>
+            <xs:element name="bool" minOccurs="0" maxOccurs="unbounded" type="bool-elem"></xs:element>
+            <xs:element name="float" minOccurs="0" maxOccurs="unbounded" type="float-elem"></xs:element>
+        </xs:choice>
+        <xs:attribute name="name" type="xs:string" use="required" />
     </xs:complexType>
     <xs:complexType name="object-outcome">
         <xs:attribute name="copy-to" type="xs:string" />
@@ -186,7 +197,7 @@
                     <xs:simpleContent>
                         <xs:extension base="xs:string">
                             <xs:attribute name="name" type="string" use="required" />
-                            <xs:attribute name="ref" type="xs:boolean" use="optional" />
+                            <xs:attribute name="ref" type="xs:string" use="optional" />
                             <xs:attribute name="set" type="xs:string"  use="optional" />
                             <xs:attribute name="append" type="xs:string"  use="optional" />
                             <xs:attribute name="unset" type="xs:boolean"  use="optional" />
@@ -243,7 +254,15 @@
                     <xs:attribute name="waitEndOfClip" type="xs:integer" />
                 </xs:complexType>
             </xs:element>
-            <xs:element name="sys" type="xs:string" />
+            <xs:element name="sys">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="simple" type="xs:boolean" />
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="dlg">
                 <xs:complexType>
                     <xs:sequence maxOccurs="unbounded" minOccurs="1">
@@ -252,7 +271,7 @@
                                 <xs:simpleContent>
                                     <xs:extension base="xs:string">
                                         <xs:attribute name="wait" type="xs:decimal" />
-                                        <xs:attribute name="instant" type="xs:boolean" />
+                                        <xs:attribute name="thought" type="xs:boolean" />
                                     </xs:extension>
                                 </xs:simpleContent>
                             </xs:complexType>
@@ -362,6 +381,7 @@
                     <xs:sequence>
                         <xs:element name="message" minOccurs="0" maxOccurs="unbounded" type="object-message" />
                         <xs:element name="outcome" minOccurs="0" maxOccurs="unbounded" type="object-outcome" />
+                        <xs:element name="assign" minOccurs="0" maxOccurs="unbounded" type="object-assign" />
                     </xs:sequence>
                     <xs:attribute name="target" type="xs:string" use="optional" />
                     <xs:attribute name="target-key" type="prefab" use="optional" />

@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <choice>
+                <c pos="W" style="RIFT">
+                    <check-flag flag="PLAYER:STAT:RIFT" gte="2" />
+                    <text>[Scare him off]</text>
+                    <lock-reason>2 Rift Energy points required</lock-reason>
+                    <then>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true"  />
+                        <bootstrap node="rift-trick" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[Back away silently]</text>
+                    <then>
+                        <bgm volume="0" />
+                        <fade-to-black speed="3" keep="true" fill="true" />
+                        <bootstrap script="location-restroom-men-01/location" spawn="spawn/urinals" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+        
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="rift-trick">
+            <fade-to-black speed="999999" keep="true" />
+            <load-scene-object key="scene-zac-rift-restroom-01.prefab" rename="scene" />
+
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <proxy target="scene/ZAC" name="ZAC" />
+            <fade-to-black speed="-1" />
+            <autosave label="Scaring ${CHAR:ZAC:NAME}" />
+            <wait />
+
+            <dlg char="PLAYER">
+                <m thought="true" wait="1">Jeez... This dude is big...</m>
+                <m thought="true" wait="1">It'd better this Rift thing work well, or else I'll be in serious trouble...</m>
+                <m thought="true">Here goes nothing...</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>Hey, man... I need to tell you something...</m>
+            </dlg>
+
+            <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                <message name="GenerateImpulse"><float value="20" /></message>
+            </load-scene-object>
+            <anim target="scene"><int name="state" value="2" /></anim>
+            <dlg char="ZAC">
+                <m>Huh!?! Who the hell are you?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>It's about your-</m>
+            </dlg>
+
+            <dlg char="ZAC">
+                <m wait="0.5">Well... Look at that... Another lost dork...</m>
+                <m wait="0.5">It seems nobody told who you should respect in this school...</m>
+            </dlg>
+            <anim target="scene"><bool name="zac-punch" value="true" /></anim>
+            <dlg char="ZAC">
+                <m>Bothering me now was a mistake, moron... And you will regret when I-</m>
+            </dlg>
+            
+            <bgm name="rift-bgm" loop="loop-rumble" as-music="false" volume="0.5" />
+            <flag name="PLAYER:STAT:RIFT" dec="1" icon="RIFT">Used 1 Rift energy point</flag>
+            <load-scene-object key="vfx-rift.prefab" />
+            <wait />
+            
+            <dlg char="PLAYER">
+                <m>Dude... I just wanted to warn you about your phone...</m>
+            </dlg>
+            <anim target="scene"><int name="state" value="3" /></anim>
+            <anim target="scene"><bool name="zac-punch" value="false" /></anim>
+            <dlg char="ZAC">
+                <m>Huh!?!?! What's going on!?</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>I can see you have a model 45-T pre-patch phone, with no radiation shield and some serious high frequency leak...</m>
+            </dlg>
+
+            <dlg char="ZAC">
+                <m>Huh!? High what!?! Radiation!?!? Leakage!?!</m>
+            </dlg>
+
+            <bgm name="rift-bgm" volume="0" />
+            <anim target="vfx-rift.prefab">
+                <bool name="active" value="false" />
+            </anim>
+            <obj target="vfx-rift.prefab" destroy="1" />
+
+            <anim target="scene"><int name="state" value="2" /></anim>
+            <dlg char="ZAC">
+                <m>You... You're just trying to trick me with your nerd talk aren't you?</m>
+            </dlg>
+
+            <bgm name="rift-bgm" loop="loop-rumble" as-music="false" volume="0.5" />
+            <flag name="PLAYER:STAT:RIFT" dec="1" icon="RIFT">Used 1 Rift energy point</flag>
+            <load-scene-object key="vfx-rift.prefab" />
+            <wait />
+
+            <dlg char="PLAYER">
+                <m>Dude... It's just a fair advice...</m>
+            </dlg>
+            <anim target="scene"><int name="state" value="3" /></anim>
+            <dlg char="ZAC">
+                <m>What the fuck!?!?!</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>Yeah... Long term exposure to the sinoidal pattern of this phone network particles disrupts your genetic sequences and it...</m>
+                <m>Uuhhh... it shrinks your dick and makes you irreversibly impotent...</m>
+            </dlg>
+
+            <dlg char="ZAC">
+                <m wait="1">Oh my God... It must be true... I feel weird already...</m>
+                <m>Oh no... no... anything but that...</m>
+                <m>I... I have to get rid of this thing...</m>
+            </dlg>
+            <anim target="scene"><int name="state" value="4" /></anim>
+            <dlg char="ZAC">
+                <m>Get out of my way now!!!</m>
+            </dlg>
+
+            <bgm name="rift-bgm" volume="0" />
+            <anim target="vfx-rift.prefab">
+                <bool name="active" value="false" />
+            </anim>
+            <obj target="vfx-rift.prefab" destroy="1" />
+            <wait time="1" />
+            <sfx clip="door-transition" />
+            <wait time="1" />
+
+            <dlg char="PLAYER">
+                <m>Phew... Can't believe that worked...</m>
+                <m>He actually bought all that QAnon bullshit I said...</m>
+            </dlg>
+            <flag name="QUEST:JUL:PHONE" bit-on="9" />
+            <string name="QUEST:JUL:PHONE:OBJECTIVE" set="Find ${CHAR:ZAC:NAME}'s phone in the restroom"></string>
+            <log icon="QUEST">Objectives updated</log>
+
+            <anim target="scene"><int name="state" value="5" /></anim>
+            <dlg char="PLAYER" track="null">
+                <m>Better yet... He just left the phone over there and ran scared...</m>
+                <m>It's an easy target now...</m>
+            </dlg>
+
+            <fade-to-black keep="true" />
+            <bootstrap script="location-restroom-men-01/location" spawn="spawn/urinals" />
+        </n>
+    </nodes>
+</xml-script>

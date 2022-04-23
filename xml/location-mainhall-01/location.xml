@@ -24,6 +24,19 @@
                 </then>
             </if>
 
+            <!-- jul-01 ? -->
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-set="1" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="11" />
+                </check-group>
+                <then>
+                    <load-scene-object key="location-mainhall-01-jul-01.prefab" parent="location">
+                        <message name="FindReferenceBackground"><string value="location"></string></message>
+                    </load-scene-object>
+                </then>
+            </if>
+
             <!-- lost money 02 -->
             <if>
                 <check-flag flag="MISC:ENVIRONMENT" bit-unset="12" />

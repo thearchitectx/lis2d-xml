@@ -1,0 +1,354 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--
+        ###############################################
+        ### start ###############################
+        ###############################################
+        -->
+        <n id="start">
+            <flag name="QUEST:TURF_WAR" bit-on="4" />
+            <fade-to-black speed="999999" keep="true" layer="100" />
+            <bgm loop="loop-urban" as-music="false" volume="0.25" />
+
+            <load-scene-object key="image-viewer.prefab">
+                <message name="SetImage"><string value="location-boys-dorm-02-room-111.png" /></message>
+                <message name="SetImageScale"><float value="1" /></message>
+                <message name="SetReadInput"><bool value="true" /></message>
+            </load-scene-object>
+
+            <fade-to-black fill="true" speed="-1" />
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Damn... Feels good to leave that place...</m>
+                <m wait="1">At least I found what I was looking for...</m>
+                <m>Now let's hope the dude never find out about the little visit I paid to his crib...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <sfx clip="footstep-2" />
+            <sfx clip="footstep-3" />
+            <sfx clip="footstep-2" />
+            <sfx clip="footstep-4" />
+
+            <dlg char="PLAYER">
+                <m>Shit... Someone is coming...</m>
+            </dlg>
+
+            <load-scene-object key="scene-nat-gun-dorm-01.prefab" rename="scene" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <proxy target="scene/NAT" name="NAT" />
+
+            <obj target="image-viewer.prefab" destroy="0" />
+            <wait />
+            
+            <dlg char="PLAYER">
+                <m wait="1">Huh... Hello...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <wait time="0.5" />
+
+            <sfx clip="impact" async="true" />
+            <bgm loop="loop-nat" volume="0.25" />
+            <dlg char="NAT">
+                <m>You little shit! What the fuck are you doing at my door!?!</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>Oh... I... uuhh...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="push" />
+            <dlg char="NAT">
+                <m>You were trying to spy on my stuff, weren't you!?!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Dude... I've just arrived here...</m>
+                <m>Why would I want to snoop into your shit? I don't even know who you are...</m>
+            </dlg>
+
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="His name is:" /></message>
+                <message name="LoadGenerateList"><string value="male-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Nathan" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:NAT:NAME" destroy="true" />
+            </obj>
+
+            <anim target="scene" trigger="push" />
+            <dlg char="NAT">
+                <m>If you're new here then the first thing you should learn is that you don't fuck with ${CHAR:NAT:NAME} Prescott...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">I was just trying to find my room, man...</m>
+                <m wait="1">And... Yeah... I've already heard people saying your name...</m>
+                <m>But now that I can see you side gripping your piece like this, I believe you're real gangsta...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="push" />
+            <dlg char="NAT">
+                <m wait="1">Are you... trying to be funny!?!</m>
+                <m>Do you think I won't pop one inside your smart ass brains just because we are in school grounds?</m>
+                <m>Don't you think I can get away with that?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Easy, dude... I'm sure you can get away with worse stuff...</m>
+                <m>But I don't think I'm worth the amount work needed to cover up such mess...</m>
+                <m>I'm sure you have bigger fish to fry, right?</m>
+            </dlg>
+            
+            <dlg char="NAT">
+                <m>So... My underground reputation precedes me, huh...</m>
+                <m>And here I was thinking my role model student act were good enough...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>It's the gossip, man...</m>
+                <m>People here won't stop talking about-</m>
+            </dlg>
+            <anim target="scene" trigger="push" />
+            <dlg char="NAT">
+                <m wait="1">Jesus Christ... Just shut up...</m>
+                <m>You are annoying!!</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>Just trying help, buddy...</m>
+            </dlg>
+
+            <dlg char="NAT">
+                <m wait="0.5">Oh, really... Then it's your lucky day...</m>
+                <m>Cause I think I could benefit from the 'help' of someone like you...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap node="dialog" />
+        </n>
+
+        <!--
+        ###############################################
+        ### dialog ###############################
+        ###############################################
+        -->
+        <n id="dialog">
+            <fade-to-black keep="true" speed="9999999" />
+            <bgm loop="loop-nat" volume="0.25" />
+            <load-scene-object key="shot-boys-dorm-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-nat-01.prefab" rename="NAT" />
+
+            <obj target="NAT">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="SetParallaxSpeed"><float value="0.4" /></message>
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </obj>
+            
+            <fade-to-black speed="-1" />
+            
+            <!-- <autosave label="Chatting with ${CHAR:MAX:NAME}" /> -->
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+            <proxy target="shot/player" name="PLAYER" />
+
+            <dlg char="NAT">
+                <m>Okay... You're off the hook for now...</m>
+                <m>Because... My business is expanding...</m>
+                <m>And I believe you might have the skill I need for job...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Whoa... From being threatened by a gun to a job interview in a couple of seconds...</m>
+                <m>Guess my chances here are improving...</m>
+            </dlg>
+
+            <anim target="NAT" trigger="say-01" />
+            <dlg char="NAT">
+                <m wait="0.5">Yeah... The way you kept your cool...</m>
+                <m>That's the profile I need in my organization...</m>
+            </dlg>
+            <anim target="NAT" face="DISAPPROVE" />
+            <dlg char="NAT">
+                <m>Despite all the irritating attempts to sound witty...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Attempts!?!? Now I feel attacked...</m>
+            </dlg>
+
+            <anim target="NAT" trigger="say-01" />
+            <dlg char="NAT">
+                <m wait="1">Urgh... Just shut up and listen...</m>
+                <m>I usually can solve all business problems using my own methods... You just experienced how I do it a minute ago...</m>
+                <m>However, some issues require a smoother approach... And that's where I think you can fit...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Well... That's the way I play, but...</m>
+                <m>I'm curious why good ol' intimidation can't always solve the problems in your line of work...</m>
+            </dlg>
+
+            <anim target="NAT" trigger="say-01" face="NEUTRAL" />
+            <dlg char="NAT">
+                <m wait="1">Not always... Like with this punk bitch, for example...</m>
+                <m wait="0.5">She won't stop selling her filthy marihuana in my turf, even after I sent some clear messages about my disapproval...</m>
+                <m>But... Unfortunately I can't use force against her...</m>
+            </dlg>
+
+            <choice>
+                <c pos="NW">
+                    <text>No violence against girls, right?</text>
+                    <then>
+                        <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Oh... I get it...</m>
+                            <m>Violence and intimidation against girl is not cool, right?</m>
+                        </dlg>
+                        <anim target="NAT" trigger="shrug" face="DISAPPROVE" />
+                        <dlg char="NAT">
+                            <m wait="1">It's not about gender, moron... I don't care if it's a girl, child or elder...</m>
+                            <m>If I could, I would teach her a hard lesson just like any anyone else that tries to fuck me...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>Why not? Looks like an easy target.</text>
+                    <then>
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Why not? A single girl looks like an easy target...</m>
+                        </dlg>
+                        <anim target="NAT" trigger="shrug" />
+                        <dlg char="NAT">
+                            <m wait="1">Yeah... That's exactly what I thought at first...</m>
+                            <m>Unfortunately... It's not so simple...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="NAT" trigger="say-01" face="SIGH" />
+            <dlg char="NAT">
+                <m>The problem is... I got the info that she works with motherfucking Frank... The main supplier of the lower districts...</m>
+            </dlg>
+            <wait />
+            <anim target="NAT" face="NEUTRAL" />
+            <dlg char="NAT">
+                <m wait="1">Which means... Fucking her up could lead to a war with him...</m>
+                <m>It's bad for the business... And something my organization is not ready for... yet... </m>
+            </dlg>
+
+            <if>
+                <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
+                <then>
+                    <load-scene-object key="vfx-auto-dialog-paragon.prefab" />
+                    <dlg char="PLAYER">
+                        <m wait="0.5">Why not simply leaver her alone?</m>
+                        <m>You deal "higher value" products, right?</m>
+                        <m>It's unlikely you'll lose any sales to someone dealing harmless weed...</m>
+                    </dlg>
+                    <anim target="NAT" trigger="say-01" face="DISAPPROVE" />
+                    <dlg char="NAT">
+                        <m>This is not how it works, idiot...</m>
+                        <m>Nobody lasts in this business without asserting dominance in your turf...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <load-scene-object key="vfx-auto-dialog-renegade.prefab"></load-scene-object>
+                    <dlg char="PLAYER">
+                        <m wait="0.5">Uhm... But if this supplier somehow cut his ties with her...</m>
+                        <m>The she would be in your hands...</m>
+                    </dlg>
+                    <anim target="NAT" trigger="say-01" face="NEUTRAL" />
+                    <dlg char="NAT">
+                        <m>Exactly... I'm glad you understand my plan...</m>
+                    </dlg>
+                </else>
+            </if>
+            
+            <anim target="NAT" trigger="shrug" face="NEUTRAL" />
+            <dlg char="NAT">
+                <m>In short... I need you to sabotage her operation...</m>
+                <m>If she lose her stash... or get caught by security...</m>
+                <m>That would to piss off Frank without having my name involved...</m>
+                <m>He's soft with girls, but he won't keep people that fuck up in his gang...</m>
+                <m>Without Frank as a supplier,  she'll be an easy prey to play with...</m>
+            </dlg>
+
+            <choice>
+                <c pos="NW">
+                    <text>Reward?</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m wait="0.5">I'm sure there's a reward for a job well done, right?</m>
+                        </dlg>
+                        <anim target="NAT" trigger="say-01" />
+                        <dlg char="NAT">
+                            <m wait="0.5">Don't worry... I value loyalty... You'll be well compensated...</m>
+                            <m>Even better...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>I'll think about it...</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>Well... Uuhh... I'll think about what I can do...</m>
+                        </dlg>
+                        <anim target="NAT" trigger="say-01" face="DISAPPROVE" />
+                        <dlg char="NAT">
+                            <m>I can't wait forever, moron... And I don't give second chances...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="NAT" trigger="shrug" face="NEUTRAL" />
+            <dlg char="NAT">
+                <m wait="1">Complete this job before the next Vortex Club party, and I will grant you access to the VIP lounge...</m>
+                <m>It's always full of wasted girls craving the company of the most valued members of our society...</m>
+                <m>I'm sure it will be an experience you won't forget...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Uhh... okay...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <anim target="NAT" trigger="shrug" face="NEUTRAL" />
+            <dlg char="NAT">
+                <m>Now get out of my way... Try not to bother me until it's done...</m>
+                <m>I expect results... Soon...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <obj target="NAT">
+                <message name="StartCenter" />
+                <message name="EndRight" />
+                <message name="TriggerEnter" />
+            </obj>
+
+            <log icon="QUEST">Objectives updated!</log>
+            <string name="QUEST:TURF_WAR:NAT:OBJECTIVE" set="Find a way to sabotage ${CHAR:CHL:NAME}'s operation"></string>
+            <wait time="2"/>
+            <dlg char="PLAYER">
+                <m>Okay... This turf war thing turned into a Empire vs Stormcloaks situation...</m>
+                <m>Looks like I'll need to choose a side...</m>
+            </dlg>
+
+
+            <fade-to-black speed="0.5" keep="true" />
+            <bootstrap script="location-boys-dorm-02/location" spawn="spawn/nat-room" />
+        </n>
+
+    </nodes>
+</xml-script>

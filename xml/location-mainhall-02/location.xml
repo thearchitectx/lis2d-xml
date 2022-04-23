@@ -35,6 +35,30 @@
                 </then>
             </if>
 
+            <!-- zac-jul-trigger ? -->
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-set="0" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="1" />
+                </check-group>
+                <then>
+                    <load-scene-object key="location-mainhall-02-zac-jul-trigger.prefab" parent="location" />
+                </then>
+            </if>
+
+            <!-- jul-01 ? -->
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-set="1" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="11" />
+                </check-group>
+                <then>
+                    <load-scene-object key="location-mainhall-02-jul-01.prefab" parent="location">
+                        <message name="FindReferenceBackground"><string value="location"></string></message>
+                    </load-scene-object>
+                </then>
+            </if>
+
             <fade-to-black speed="-3" fill="true" />
 
             <autosave label="Main Hall - Exploring" />

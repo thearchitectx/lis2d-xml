@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+            <flag name="QUEST:JUL:PHONE" bit-on="6" />
+
+            <dlg char="SAM">
+                <m>Hey... hey... Where the hell you're going, man?</m>
+            </dlg>
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Huh!?!</m>
+            </dlg>
+
+            <obj target="cam-zac" active="true" />
+            <dlg char="SAM">
+                <m>Can't you see the big dumb quarterback stereotype over there?</m>
+                <m>Believe me... You don't wanna be messing around him...</m>
+            </dlg>
+            
+            <obj target="cam-zac" active="false" />
+
+            <bgm volume="0" />
+            <fade-to-black speed="1" keep="true" />
+
+            <bootstrap node="start" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## start ######################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black speed="10000" keep="true" />
+            <bgm loop="loop-sam" volume="0.15"/>
+            
+            <load-scene-object key="shot-restroom-men-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-sam-01.prefab" rename="SAM" />
+            <proxy target="shot/player" name="PLAYER" />
+            
+            <fade-to-black speed="-1" />
+            <obj target="PLAYER">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>What the hell is he doing?</m>
+            </dlg>
+
+            <anim target="SAM" trigger="shrug" face="NEUTRAL"></anim>
+            <dlg char="SAM">
+                <m wait="0.5">Whatever it is... You should stay away from him...</m>
+                <m wait="0.5">Specially when he comes here for the phone 'business'...</m>
+                <m>It's kind of weird... But it's been happening often lately...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Phone business!?</m>
+            </dlg>
+
+            <anim target="SAM" trigger="say-01" face="DISAPPROVE"></anim>
+            <dlg char="SAM">
+                <m>Yeah, mam... It's always the same disturbing shit...</m>
+                <m>He stands there typing at one word per minute speed...</m>
+                <m>Sometimes he mumbles unintelligible shit...</m>
+            </dlg>
+            <anim target="SAM" face="NEUTRAL"></anim>
+            <dlg char="SAM">
+                <m>After some time... He enters one of the stalls and start making the weirdest noises...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Jeez... He does... what I think he does!?!</m>
+            </dlg>
+            
+            <anim target="SAM" trigger="shrug" face="DISAPPROVE"></anim>
+            <dlg char="SAM">
+                <m>How could I know, man!?!</m>
+                <m>It's already bad enough having to stay here listening that crap...</m>
+            </dlg>
+            
+            <anim target="SAM" face="NEUTRAL"></anim>
+            <dlg char="SAM">
+                <m wait="0.5">But whatever it is... He becomes even more aggressive when someone interrupts him during the routine...</m>
+                <m>That's why you shouldn't come here for a while...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>You've been watching him, right?</m> 
+                <m>Do you have any ideas that could help me snatch his phone?</m>
+            </dlg>
+
+            <anim target="SAM" trigger="surprised" face="DISAPPROVE" />
+            <dlg char="SAM">
+                <m>Take his phone!?!?!</m>
+            </dlg>
+            <wait />
+            <anim target="SAM" face="UPSET" />
+            <dlg char="SAM">
+                <m>Jeez... Whoever gave you this quest doesn't care about your health, man...</m>
+                <m wait="1">Are you sure you wanna do that?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Yep... I accepted the job...</m> 
+                <m>Gotta do it now...</m>
+            </dlg>
+
+            <anim target="SAM" trigger="say-01" face="NEUTRAL" />
+            <dlg char="SAM">
+                <m>Well... Then as your wise sensei...</m>
+                <m>It's my duty to guide you on this matter...</m>
+            </dlg>
+            <anim target="SAM" trigger="say-01" face="SIGH" />
+            <dlg char="SAM">
+                <m wait="1">${CHAR:ZAC:NAME} is strong... But the universe burns like a flame in order to balance itself, ...</m>
+                <m>... and with fire comes disparity... Heat and cold, life and death, and of course, light and dark...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Dude... Cut the crap and tell me what to do...</m> 
+            </dlg>
+
+            <anim target="SAM" trigger="giggle" face="CUTE" />
+            <dlg char="SAM">
+                <m wait="0.5">Ha... Sorry about that... But I must keep practicing my new lines...</m>
+            </dlg>
+            <anim target="SAM"  face="NEUTRAL" />
+            <dlg char="SAM">
+                <m wait="0.5">But what I mean is simple...</m>
+                <m>He's strong, but dumb... How original...</m>
+            </dlg>
+            <wait  time="0.5"/>
+            <dlg char="PLAYER">
+                <m>That's not exactly news...</m>
+                <m>But how could I exploit that?</m>
+            </dlg>
+
+            <anim target="SAM" trigger="say-01" />
+            <dlg char="SAM">
+                <m wait="1">Well... You could tell him something weird about his phone while focusing your rift energy...</m>
+                <m>You know... Vaccines... 5G... Furries... Stupid people like ${CHAR:ZAC:NAME} fear what they don't understand...</m>
+                <m>The rift works great on weak minds... He'll drop the phone and run scared if you succeed...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Seems feasible... But risky...</m>
+            </dlg>
+            
+            <anim target="SAM" trigger="shrug" />
+            <dlg char="SAM">
+                <m wait="1">Well... There's the option to make someone else take all the risks for you...</m>
+                <m wait="1">Because... What this big dude loves more than anything else is to harass weaker kids...</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>Hum...</m>
+            </dlg>
+            
+            <anim target="SAM" trigger="giggle" face="CUTE" />
+            <dlg char="SAM">
+                <m wait="0.5">Yeah, man... Last time a poor fella bumped into ${CHAR:ZAC:NAME} here, he quickly switched to the bully persona and dropped his phone over a sink...</m>
+                <m wait="0.5">I think he has problems concentrating in more than one simple task and doing the tough guy act takes all his available brain processing power...</m>
+                <m>He left the phone hanging there for hours and only came back hours later to pick it up...</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
+                <then>
+                    <load-scene-object key="vfx-auto-dialog-paragon.prefab" />
+                    <dlg char="PLAYER">
+                        <m>Yeah... But I'd need to finding a volunteer to help me on that won't be easy...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <load-scene-object key="vfx-auto-dialog-paragon.prefab" />
+                    <dlg char="PLAYER">
+                        <m>Yeah... I just need to trick some sucker int being the bait...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <anim target="SAM" trigger="shrug" face="NEUTRAL" />
+            <dlg char="SAM">
+                <m wait="0.5">Well... If you need to get your hands on that phone, these are the best options you have...</m>
+                <m>Pick your poison... I can only thank you to get rid of him for me...</m>
+            </dlg>
+
+            <string name="QUEST:JUL:PHONE:OBJECTIVE" set="Use your rift energy or a weak student as a bait to lure ${CHAR:ZAC:NAME} into dropping his phone" ></string>
+            <log icon="QUEST">Objectives updated</log>
+            <anim target="SAM" face="SIGH" />
+            <dlg char="SAM">
+                <m>And I hope the girl that asked you this is hot enough to worth all this trouble...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Yeah... Thanks, or... whatever...</m>
+            </dlg>
+
+            <node-output node="end" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## end ##################################################
+            ##############################################################
+        -->
+        <n id="end">
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap script="location-restroom-men-01/location" spawn="spawn/middle" />
+        </n>
+    </nodes>
+</xml-script>

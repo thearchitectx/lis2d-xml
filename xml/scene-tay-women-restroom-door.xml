@@ -393,8 +393,8 @@
                 </check-group>
                 <then>
                     <flag name="MISC:ENVIRONMENT" bit-on="4" />
-                    <dlg char="PLAYER" track="PLAYER">
-                        <m instant="true">|Hey... That Rift Energy thingy... Maybe I could use it to convince her to leave the door...|</m>
+                    <dlg char="PLAYER">
+                        <m thought="true">Hey... That Rift Energy thingy... Maybe I could use it to convince her to leave the door...</m>
                     </dlg>
                     <wait time="0.5" />
                     <sys>

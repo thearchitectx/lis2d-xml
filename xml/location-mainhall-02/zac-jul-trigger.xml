@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="3" />
+            <bootstrap node="start" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## start ######################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black keep="true" speed="999999" />
+            <bgm loop="loop-jul" volume="0.25"/>
+
+            <load-scene-object key="scene-zac-jul-mainhall-01.prefab" rename="scene" />
+            <proxy name="JUL" target="scene/JUL" />
+            <proxy name="ZAC" target="scene/ZAC" />
+
+            <fade-to-black speed="-0.5" />
+
+            <dlg char="JUL">
+                <m wait="0.5">${CHAR:ZAC:NAME}... Wait...</m>
+                <m>What do you think you are doing?</m>
+            </dlg>
+            <wait />
+            <dlg char="ZAC">
+                <m>Oh come on, ${CHAR:JUL:NAME}...</m>
+                <m>Why do you keep doing this to me?</m>
+            </dlg>
+            <anim target="scene" inc="camera-pos" />
+            <wait time="2" />
+            <dlg char="JUL">
+                <m wait="1">Jesus Christ... You can't be so stupid, ${CHAR:ZAC:NAME}...</m>
+                <m wait="1">Sigh... Actually... I think you can...</m>
+                <m>Don't you see where we are right now!? We'll get in trouble if they catch us behaving like this...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="ZAC">
+                <m>I can't stand just making out anymore... My balls are going to explode...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="JUL">
+                <m>You know how the school staff keep an eye on us during class days...</m>
+                <m>I already told you... Just wait for the weekend when we are free to do whatever we want...</m>
+            </dlg>
+            <anim target="scene" inc="camera-pos" />
+            <wait time="2" />
+            <dlg char="ZAC">
+                <m>Why are you such a tease?</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <anim target="scene"><bool name="jul-sigh" value="true" /></anim>
+            <dlg char="JUL">
+                <m>Urgh... Sometimes I think you don't give a shit about me... All you want is use me to relieve yourself...</m>
+            </dlg>
+            <dlg char="ZAC">
+                <m>Yes... I mean... no... of course I care...</m>
+                <m>All I want is...</m>
+            </dlg>
+            <wait time="1" />
+            <sfx clip="phone-message"  />
+            <anim target="scene">
+                <bool name="zac-phone" value="true" />
+                <bool name="jul-sigh" value="false" />
+            </anim>
+            <dlg char="ZAC">
+                <m>Shit... It's my phone...</m>
+            </dlg>
+            <sfx clip="phone-message"  />
+            <wait time="1" />
+            <dlg char="ZAC">
+                <m>Just a sec... I... I have to check that...</m>
+            </dlg>
+
+            <anim target="scene">
+                <bool name="control" value="true" />
+            </anim>
+            <dlg char="JUL">
+                <m>And now this... You never cared about this phone...</m>
+                <m>Now every time this thing beeps it gets your attention instantly...</m>
+            </dlg>
+
+            <proxy clear="true" />
+            <load-scene-object key="scene-zac-jul-mainhall-02.prefab" active="false" />
+            <obj target="scene" destroy="0"></obj>
+            <obj target="scene-zac-jul-mainhall-02.prefab" active="true" />
+            <obj target="scene-zac-jul-mainhall-02.prefab" rename="scene" />
+            <wait />
+            <proxy name="JUL" target="scene/JUL" />
+            <proxy name="ZAC" target="scene/ZAC" />
+
+            <dlg char="ZAC">
+                <m>I... I am sorry...</m>
+            </dlg>
+
+            <dlg char="JUL">
+                <m>So... What is it this time?</m>
+            </dlg>
+            
+            <dlg char="ZAC">
+                <m>It's, uuhh... nothing...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="JUL">
+                <m>Nothing!?!</m>
+            </dlg>
+            <wait time="0.5" />
+
+            <dlg char="ZAC">
+                <m wait="0.5">It's just... football news and I...</m>
+            </dlg>
+            <anim target="scene" trigger="next" />
+            <dlg char="ZAC">
+                <m>I... need to go to the restroom...</m>
+            </dlg>
+
+            <load-scene-object key="cinemachine-impulse.prefab">
+                <message name="GenerateImpulse"><float value="20" /></message>
+            </load-scene-object>
+
+            <dlg char="JUL">
+                <m>WHAT THE FUCK, ${CHAR:ZAC:NAME}!!</m>
+                <m>Don't take me for an idiot!! I'm not like you!!</m>
+                <m>I'm starting to notice certain a pattern here...</m>
+            </dlg>
+
+            <dlg char="ZAC">
+                <m>I... I don't know what are you talking about...</m>
+                <m>I... I just need to take leak...</m>
+                <m>See you later...</m>
+            </dlg>
+            <anim target="scene" trigger="next" />
+            <dlg char="JUL">
+                <m>Don't you dare-</m>
+            </dlg>
+            
+            <wait time="2" />
+            <dlg char="JUL">
+                <m>You don't wanna play with me, ${CHAR:ZAC:NAME}...</m>
+            </dlg>
+            <anim target="scene" trigger="next" />
+            <dlg char="JUL">
+                <m wait="1">If you're going after some local slut...</m>
+                <m wait="1">I swear to God... If I find out you're cheating on me...</m>
+                <m wait="2">I will... I will...</m>
+                <m wait="1">I will blow the first guy I bump into and take pictures to send you...</m>
+                <m>Then you'll have some real jerk off material to empty your stupid balls...</m>
+            </dlg>
+
+            <wait time="1" />
+
+            <fade-to-black speed="0.5" keep="true" layer="-1" />
+            <bgm volume="0" />
+
+            <dlg char="PLAYER">
+                <m thought="true">Whoa... Some top class information I eavesdropped from here...</m>
+            </dlg>
+
+            <flag name="QUEST:JUL:PHONE" bit-on="1" />
+
+            <bootstrap script="location-mainhall-02/location" spawn="spawn/hallway-corner" />
+        </n>
+    </nodes>
+</xml-script>

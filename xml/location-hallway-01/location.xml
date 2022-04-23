@@ -25,6 +25,16 @@
                 </then>
             </if>
 
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="DAY:CURRENT" gte="2" />
+                    <!-- TODO: <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="9" /> -->
+                </check-group>
+                <then>
+                    <load-scene-object key="location-hallway-01-max-01.prefab" parent="location" />
+                </then>
+            </if>
+
             <fade-to-black speed="-1" />
 
             <autosave label="Hallway - Exploring" />

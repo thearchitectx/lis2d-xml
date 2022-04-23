@@ -13,6 +13,16 @@
                 <message name="SetInputActive"><bool value="false" /></message>
             </obj>
 
+            <if>
+                <check-flag flag="QUEST:JUL:PHONE" bit-set="11" />
+                <then>
+                    <sfx clip="door-transition" async="true"  />
+                    <bgm volume="0" />
+                    <fade-to-black keep="true" fill="true" speed="3" />
+                    <bootstrap script="location-science-classroom-01/location" spawn="spawn/door-front" />
+                </then>
+            </if>
+            
             <dlg char="PLAYER" track="#PlayerTrack">
                 <m>The science classroom is locked... It seems the class finished a while ago and everybody left...</m>
             </dlg>
@@ -20,6 +30,7 @@
             <obj target="#Player">
                 <message name="SetInputActive"><bool value="true" /></message>
             </obj>
+
         </n>
 
 

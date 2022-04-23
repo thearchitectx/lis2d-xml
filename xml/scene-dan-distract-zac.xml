@@ -1,0 +1,240 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--
+        ###############################################
+        ### start ###############################
+        ###############################################
+        -->
+        <n id="start">
+            <fade-to-black speed="999999" keep="true" />
+            <load-scene-object key="scene-dan-distract-zac-01.prefab" rename="scene" />
+
+            <proxy target="scene/DAN" name="DAN" />
+            <bgm loop="loop-dan" volume="0.25" />
+            <fade-to-black speed="-1" />
+            <autosave label="${CHAR:DAN:NAME} distracts ${CHAR:ZAC:NAME}" />
+            <wait />
+
+            <anim target="scene" inc="state" />
+            <sfx clip="door-transition" />
+
+            <if>
+                <check-flag flag="QUEST:JUL:PHONE" bit-set="7" /> <!-- (7): Tricked DAN to distract ZAC -->
+                <then>
+                    <dlg char="DAN">
+                        <m>I can't believe this is happening...</m>
+                        <m>When the school counselor said bullies are just immature people waiting to become aware of their bad behaviour...</m>
+                        <m>...I thought it was just a bullshit excuse for the school's lack of action... But apparently it's true...</m>
+                    </dlg>
+                    <wait />
+                    <anim target="scene"><bool name="right" value="true"/></anim>
+                    <dlg char="DAN">
+                        <m>And there he is... Probably trying to find the words to apologize for all the suffering he caused me...</m>
+                    </dlg>
+                    <anim target="scene"><bool name="right" value="false"/></anim>
+                    <dlg char="DAN">
+                        <m wait="1">But I'll keep the higher moral ground... I'll listen quietly... and I'll forgive...</m>
+                    </dlg>
+                    <wait time="0.5" />
+                    <anim target="scene" inc="state" />
+                    <dlg char="DAN">
+                        <m wait="0.5">This is it... I...</m>
+                        <m wait="0.5">I must keep confident about myself...</m>
+                        <m>This is the happiest day of my life...</m>
+                    </dlg>
+                    <wait time="0.5" />
+                    <anim target="scene" inc="state" />
+                    <dlg char="DAN">
+                        <m>Uuuhh... Hey... it's me...</m>
+                        <m>I heard you wanted to...</m>
+                    </dlg>
+
+                    <load-scene-object key="scene-dan-distract-zac-02.prefab" active="false" />
+                    <obj target="scene" destroy="0" />
+                    <obj target="scene-dan-distract-zac-02.prefab" rename="scene" />
+                    <obj target="scene" active="true" />
+                    <proxy clear="true" />
+                    <wait time="0.05" />
+                    <proxy target="scene/DAN" name="DAN" />
+                    <proxy target="scene/ZAC" name="ZAC" />
+
+                    <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                        <message name="GenerateImpulse"><float value="25" /></message>
+                    </load-scene-object>
+                    <dlg char="ZAC">
+                        <m wait="1">YOU!?!?!</m>
+                        <m wait="0.5">I told you I didn't wanna see your fat face inside this building...</m>
+                        <m>You've just made a big mistake...</m>
+                    </dlg>
+                    
+                    <anim target="scene"><bool name="dan" value="true" /></anim>
+                    <dlg char="DAN">
+                        <m wait="0.5">Wait... wait... but... I...</m>
+                        <m>Someone... someone told me... to come here... because you...  you...</m>
+                    </dlg>
+
+                    <anim target="scene"><bool name="dan" value="false" /></anim>
+                    <dlg char="ZAC">
+                        <m>Someone? You're only supposed to do what I say, remember? You're my bitch...</m>
+                    </dlg>
+                    <wait time="0.5" />
+                    <anim target="scene"><bool name="zac-punch" value="true" /></anim>
+                    <dlg char="ZAC">
+                        <m>That's gonna cost you...</m>
+                    </dlg>
+                    
+                    <anim target="scene"><bool name="zac-punch" value="false" /></anim>
+                    <anim target="scene"><bool name="dan" value="true" /></anim>
+                    <dlg char="DAN">
+                        <m>Oh, no... please... i didn't mean to...</m>
+                    </dlg>
+                    
+                    <anim target="scene"><bool name="dan" value="false" /></anim>
+                    <dlg char="ZAC">
+                        <m>It's too late now...</m>
+                    </dlg>
+                    <wait time="0.5" />
+                    <anim target="scene"><bool name="phone" value="true" /></anim>
+                    <dlg char="ZAC">
+                        <m wait="1">I just need to concentrate in a proper punishment for you...</m>
+                        <m>Let's see...</m>
+                    </dlg>
+                    <anim target="scene"><bool name="phone" value="false" /></anim>
+                    <dlg char="ZAC">
+                        <m wait="1">Maybe spending a couple of hours locked in your own locker might teach you a thing or two...</m>
+                    </dlg>
+                    <anim target="scene"><bool name="zac-punch" value="false" /></anim>
+                    <anim target="scene"><bool name="dan" value="true" /></anim>
+                    <dlg char="DAN">
+                        <m>no... please... not again...</m>
+                    </dlg>
+                    <anim target="scene"><bool name="dan" value="false" /></anim>
+                    <dlg char="ZAC">
+                        <m>Yeah... That's a good one...</m>
+                    </dlg>
+                    <anim target="scene"><bool name="zac-punch" value="true" /></anim>
+                    <dlg char="ZAC">
+                        <m>Let's go... NOW!!</m>
+                    </dlg>
+                    <anim target="scene" trigger="next" />
+                    <fade-to-black keep="true" async="true" speed="0.25" />
+                    <dlg char="DAN">
+                        <m>no... no... noooooooooo.....</m>
+                    </dlg>
+                    <wait  />
+                </then>
+                <else>
+                    <dlg char="DAN">
+                        <m wait="1.5">I... I can't believe I'm doing this...</m>
+                        <m wait="1">I have to be strong... This is what heroes do...</m>
+                        <m>The ends justify the means... I'll finally have a proper lunch today...</m>
+                    </dlg>
+                    <wait />
+                    <anim target="scene"><bool name="right" value="true"/></anim>
+                    <dlg char="DAN">
+                        <m>Oh my God.... There he is...</m>
+                        <m wait="1">What... What the hell am I doing....</m>
+                    </dlg>
+                    <wait />
+                    <anim target="scene"><bool name="right" value="false"/></anim>
+                    <dlg char="DAN">
+                        <m>No... I can't give up... Pain is inevitable... Suffering is optional...</m>
+                    </dlg>
+                    <wait />
+                    <wait time="0.5" />
+                    <anim target="scene" inc="state" />
+                    <dlg char="DAN">
+                        <m wait="1">Just think about the apple pie... Just think about the apple pie...</m>
+                        <m>...........</m>
+                    </dlg>
+                    <wait time="0.5" />
+                    <anim target="scene" inc="state" />
+                    <dlg char="DAN">
+                        <m>Uuuhh... Hey... it's me...</m>
+                        <m>I heard you wanted to...</m>
+                    </dlg>
+
+                    <load-scene-object key="scene-dan-distract-zac-02.prefab" active="false" />
+                    <obj target="scene" destroy="0" />
+                    <obj target="scene-dan-distract-zac-02.prefab" rename="scene" />
+                    <obj target="scene" active="true" />
+                    <proxy clear="true" />
+                    <wait time="0.05" />
+                    <proxy target="scene/DAN" name="DAN" />
+                    <proxy target="scene/ZAC" name="ZAC" />
+
+                    <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                        <message name="GenerateImpulse"><float value="25" /></message>
+                    </load-scene-object>
+                    <dlg char="ZAC">
+                        <m wait="1">YOU!?!?!</m>
+                        <m wait="0.5">I told you I didn't wanna see your fat face inside this building...</m>
+                        <m>You've just made a big mistake...</m>
+                    </dlg>
+                    
+                    <anim target="scene"><bool name="dan" value="true" /></anim>
+                    <dlg char="DAN">
+                        <m>why... can't you just... ignore me... please...</m>
+                    </dlg>
+
+                    <anim target="scene"><bool name="dan" value="false" /></anim>
+                    <dlg char="ZAC">
+                        <m wait="0.5">You came in here by your own will... Knowing what would happen...</m>
+                        <m>Are you some kind of masochist pervert now?</m>
+                    </dlg>
+                    <wait time="0.5" />
+                    <anim target="scene"><bool name="zac-punch" value="true" /></anim>
+                    <dlg char="ZAC">
+                        <m>Because perverts must suffer...</m>
+                    </dlg>
+                    
+                    <anim target="scene"><bool name="zac-punch" value="false" /></anim>
+                    <anim target="scene"><bool name="dan" value="true" /></anim>
+                    <dlg char="DAN">
+                        <m>apple pie... apple pie... apple pie...</m>
+                    </dlg>
+                    
+                    <anim target="scene"><bool name="dan" value="false" /></anim>
+                    <dlg char="ZAC">
+                        <m>Fucking weirdo...</m>
+                    </dlg>
+                    <wait time="0.5" />
+                    <anim target="scene"><bool name="phone" value="true" /></anim>
+                    <dlg char="ZAC">
+                        <m wait="1">I just need to concentrate in a proper punishment for you...</m>
+                        <m>Let's see...</m>
+                    </dlg>
+                    <anim target="scene"><bool name="phone" value="false" /></anim>
+                    <dlg char="ZAC">
+                        <m wait="1">Maybe spending a couple of hours locked in your own locker might teach you a thing or two...</m>
+                    </dlg>
+                    <anim target="scene"><bool name="zac-punch" value="false" /></anim>
+                    <anim target="scene"><bool name="dan" value="true" /></anim>
+                    <dlg char="DAN">
+                        <m>no... please... i can't have my apple pie if i'm locked there...</m>
+                    </dlg>
+                    <anim target="scene"><bool name="dan" value="false" /></anim>
+                    <dlg char="ZAC">
+                        <m>You still have money for food on you!?!</m>
+                    </dlg>
+                    <anim target="scene"><bool name="zac-punch" value="true" /></anim>
+                    <dlg char="ZAC">
+                        <m wait="1">Guess I'll have to take it again!!</m>
+                        <m>Now... Come with me!!</m>
+                    </dlg>
+                    <anim target="scene" trigger="next" />
+                    <fade-to-black keep="true" async="true" speed="0.25" />
+                    <dlg char="DAN">
+                        <m>no... no... noooooooooo.....</m>
+                    </dlg>
+                    <wait  />
+                </else>
+            </if>
+            <bgm volume="0" />
+            <bootstrap script="location-campus-01/location" spawn="spawn/white-tree-1" />
+        </n>
+    </nodes>
+</xml-script>

@@ -1,0 +1,484 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <fade-to-black fill="true" speed="3" keep="true" />
+            <bgm volume="0" />
+            <bootstrap node="start" />
+        </n>
+        
+        <!--################################################
+            ## start #######################################
+            ################################################
+        -->
+        <n id="start">
+            <fade-to-black keep="true" speed="10000" />
+            <bgm loop="loop-dan" volume="0.25" />
+            <load-scene-object key="shot-campus-02.prefab" rename="shot" />
+            <load-scene-object key="shot-char-dan-01.prefab" rename="DAN">
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+            <load-scene-object key="shot-char-dan-01-scared.prefab" rename="DAN-SCARED" active="false">
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+            <proxy target="shot/player" name="PLAYER" />
+            
+            <fade-to-black speed="-3" fill="true" />
+            
+            <autosave label="Chatting with ${CHAR:DAN:NAME}" />
+
+            <obj target="PLAYER">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="CHAR:DAN:INTERACTIONS" bit-unset="0" />
+                    <check-flag flag="CHAR:DAN:INTERACTIONS" bit-unset="1" />
+                </check-group>
+                <then>
+                    <node-output node="first-meet" />
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="QUEST:JUL:PHONE" bit-set="6"/> <!-- (6): Warned by SAM in restroom -->
+                <then>
+                    <dlg char="PLAYER">
+                        <m thought="true">This dude is probably one of ${CHAR:ZAC:NAME}'s preferred 'victims'...</m>
+                        <m thought="true">I wonder if I could convince him to help me...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="PLAYER">
+                        <m wait="1">Uhh... Hello?</m>
+                        <m>..........</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <choice>
+                <c pos="W" out="help-with-zac">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-set="6" />
+                    <text>Gotta ask you something...</text>
+                </c>
+                <c pos="E">
+                    <text>[Back away slowly]</text>
+                </c>
+            </choice>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="0.5" />
+            <bootstrap script="location-campus-01/location" spawn="spawn/white-tree-1" />
+        </n>
+
+        <!--################################################
+            ## first-meet ##################################
+            ################################################
+        -->
+        <n id="first-meet">
+            <dlg char="PLAYER">
+                <m>Hey, what's u-</m>
+            </dlg>
+
+            <obj target="DAN" active="false" />
+            <obj target="DAN-SCARED" active="true" />
+
+            <load-scene-object key="cinemachine-impulse.prefab">
+                <message name="GenerateImpulse"><float value="20" /></message>
+            </load-scene-object>
+
+            <dlg char="DAN"  track="DAN-SCARED">
+                <m wait="0.5">Argh!!... No, no, no... please...</m>
+                <m>I wasn't trying to hide from you guys... I swear!!!</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>Huh!? What the heck are you talking about, dude!?</m>
+            </dlg>
+            
+            <load-scene-object key="panel-text-input.prefab" >
+                <message name="SetPrompt"><string value="His name is:" /></message>
+                <message name="LoadGenerateList"><string value="male-names.txt" /></message>
+                <message name="SetFirstGenerate"><string value="Daniel" /></message>
+            </load-scene-object>
+
+            <obj target="panel-text-input.prefab">
+                <outcome copy-to="CHAR:DAN:NAME" destroy="true" />
+            </obj>
+
+            <dlg char="DAN"  track="DAN-SCARED">
+                <m>You... You're in ${CHAR:ZAC:NAME}'s gang, aren't you!?!</m>
+                <m>I'm sorry... I'm so sorry...  I have my lunch money here... You can keep it...</m>
+                <m>Just don't hurt me... Please...</m>
+            </dlg>
+
+            <choice>
+                <c pos="NW" style="PARAGON">
+                    <check-flag flag="PLAYER:STAT:PARAGON" gte="8" />
+                    <text>Chill out, buddy</text>
+                    <lock-reason>[Paragon +8 required]</lock-reason>
+                    <then>
+                        <flag name="CHAR:DAN:INTERACTIONS" bit-on="0" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Chill out, buddy... I come in peace...</m> 
+                            <m>Can't you even tell who bullies you and who doesn't around here?</m>
+                        </dlg>
+
+                        <obj target="DAN" active="true" />
+                        <obj target="DAN-SCARED" active="false" />
+                        <dlg char="DAN">
+                            <m wait="0.5">Oh... I... I'm sorry...</m>
+                            <m wait="0.5">It's not that I can't tell the difference... It's just...</m>
+                            <m>Most people who approach me in this school have the sole purpose of harassing me... So it's a mechanic reaction...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER">
+                            <m>Jeez... Must be rough, huh...</m>
+                        </dlg>
+
+                        <dlg char="DAN">
+                            <m wait="0.5">Engaging in civilized conversation is such a fresh experience...</m>
+                            <m>I feel the need to reward you...</m>
+                        </dlg>
+                        <wait />
+                        <sfx clip="item" async="true" />
+                        <flag name="ITEM:PERCEPTION_BAND" inc="1" icon="BAND">Received Perception Band!</flag>
+                        <dlg char="DAN">
+                            <m wait="1">Here... Take this...</m>
+                            <m>It might look like useless garbage, but it somehow helps me find all my stuff so frequently thrown in the ground by the bullies...</m>
+                        </dlg>
+
+                        <sys>${ITEM:PERCEPTION_BAND:DESCRIPTION}</sys>
+                        
+                        <dlg char="PLAYER">
+                            <m>Uuhh... Thanks... I guess...</m>
+                        </dlg>
+
+                        <dlg char="DAN">
+                            <m wait="0.5">Now just leave me alone...</m>
+                            <m>I have important research to do... shoo...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER">
+                            <m>Okaaayyy...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW" style="RENEGADE">
+                    <check-flag flag="PLAYER:STAT:RENEGADE" gte="8" />
+                    <text>Yeah! I'm here to collect!</text>
+                    <lock-reason>[Renegade +6 required]</lock-reason>
+                    <then>
+                        <flag name="CHAR:DAN:INTERACTIONS" bit-on="1" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Yep... I'm totally in ${CHAR:ZAC:NAME}'s gang...</m> 
+                            <m>He asked me to come here to collect from you so he can leave you alone for today...</m>
+                        </dlg>
+    
+                        <dlg char="DAN" track="DAN-SCARED">
+                            <m>Here... Take it...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <sfx clip="item" async="true" />
+                        <flag name="ITEM:MONEY" inc="3" icon="MONEY">Received $3 bucks!</flag>
+                        <wait time="0.5" />
+                        <dlg char="DAN" track="DAN-SCARED">
+                            <m>Sorry it's not much.... Someone else already took most of what I had...</m>
+                        </dlg>
+                        
+                        <dlg char="PLAYER">
+                            <m>Sigh... 3 bucks...</m> 
+                        </dlg>
+
+                        <obj target="DAN" active="true" />
+                        <obj target="DAN-SCARED" active="false" />
+
+                        <dlg char="DAN" track="DAN">
+                            <m>I'm free for today, right?</m>
+                            <m>Please... Just let me continue my research, okay?</m>
+                        </dlg>
+
+                        
+                        <dlg char="PLAYER">
+                            <m>Whatever, dude...</m> 
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[Back away slowly]</text>
+                </c>
+            </choice>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="0.5" />
+            <bootstrap script="location-campus-01/location" spawn="spawn/white-tree-1" />
+        </n>
+        
+
+        <!--################################################
+            ## help-with-zac ###############################
+            ################################################
+        -->
+        <n id="help-with-zac">
+            <dlg char="PLAYER">
+                <m>Hey... I need to ask you something...</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="CHAR:DAN:INTERACTIONS" bit-unset="2"/> <!-- (2): First asked about Zac during QUEST:JUL:PHONE -->
+                <then>
+                    <flag name="CHAR:DAN:INTERACTIONS" bit-on="2" />
+                    <anim target="DAN" trigger="surprised" face="SURPRISED" />
+                    <dlg char="DAN">
+                        <m wait="0.5">Huh!?</m>
+                        <m wait="0.5">What do you want!?</m>
+                        <m>Can't you see my life is already miserable enough? Just leave me alone...</m>
+                    </dlg>
+        
+                    <dlg char="PLAYER">
+                        <m wait="0.5">Easy, buddy... It's just a question...</m>
+                        <m>You're friends with ${CHAR:ZAC:NAME}, right?</m>
+                    </dlg>
+        
+                    <anim target="DAN" trigger="surprised" face="DISAPPROVE" />
+                    <dlg char="DAN">
+                        <m wait="0.5">Friends!?! FRIENDS!?! Are you serious!?!</m>
+                        <m wait="0.5">Do you even know what that word means!?!</m>
+                        <m>Or maybe this is another way you people found to mess with me?</m>
+                    </dlg>
+        
+                    <dlg char="PLAYER">
+                        <m wait="0.5">I just wanted to know if-</m>
+                    </dlg>
+        
+                    <anim target="DAN" trigger="surprised" face="DISAPPROVE" />
+                    <dlg char="DAN">
+                        <m>Would a 'friend' harass you each time you meet him!?!</m>
+                        <m>Would a 'friend' take your lunch money just for the pleasure of seeing you starve!?!</m>
+                    </dlg>
+                    <anim target="DAN" trigger="say-01" face="SIGH" />
+                    <dlg char="DAN">
+                        <m>Would a 'friend' willingly make your life hell!?!?!</m>
+                    </dlg>
+                    
+                    <wait />
+                    <dlg char="PLAYER">
+                        <m>I... uuuhh...</m>
+                    </dlg>
+                    
+                    <anim target="DAN" trigger="say-01" face="SIGH" />
+                    <dlg char="DAN">
+                        <m>My... My apologies...</m>
+                    </dlg>
+                    <anim target="DAN" face="NEUTRAL" />
+                    <dlg char="DAN">
+                        <m>They took my money again, so I haven't eaten today... the hunger always make a bit agitated...</m>
+                    </dlg>
+        
+                    <wait time="0.5" />
+                    <dlg char="PLAYER">
+                        <m>It's okay, man... Just try to chill...</m>
+                    </dlg>
+        
+                    <anim target="DAN" trigger="say-01" face="NEUTRAL" />
+                    <dlg char="DAN">
+                        <m wait="0.5">Yeah... I should already be used to this...</m>
+                        <m>I mean... Can one be used to daily starvation?</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <node-output node="help-with-zac-choice" />
+        </n>
+
+        <!--################################################
+            ## help-with-zac-choice ########################
+            ################################################
+        -->
+        <n id="help-with-zac-choice">
+            <choice>
+                <c pos="SW" style="RENEGADE" out="help-with-zac-choice-renegade">
+                    <text>[Lie] ${CHAR:ZAC:NAME} is proposing a truce</text>
+                    <check-flag flag="PLAYER:STAT:RENEGADE" gte="8" />
+                    <lock-reason>[Renegade +8 required]</lock-reason>
+                </c>
+                <c pos="W" out="help-with-zac-choice-bribe">
+                    <text>[Bribe him to help you] ($4)</text>
+                    <check-flag flag="ITEM:MONEY" gte="4" />
+                    <lock-reason>[Bribe him to help you] ($4 required)</lock-reason>
+                </c>
+                <c pos="E">
+                    <text>Talk to you later</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>Just give me a minute...</m>
+                            <m>Talk to you later...</m>
+                        </dlg>
+
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" />
+                        <bootstrap script="location-campus-01/location" spawn="spawn/white-tree-1" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--################################################
+            ## help-with-zac-choice ########################
+            ################################################
+        -->
+        <n id="help-with-zac-choice-renegade">
+            <flag name="QUEST:JUL:PHONE" bit-on="7" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Look... I have great news for you...</m>
+                <m>${CHAR:ZAC:NAME} told me he is waiting you for an important conversation in the restroom...</m>
+                <m>He told me he is willing to apologize for his behaviour...</m>
+            </dlg>
+
+            <anim target="DAN" trigger="surprised" face="SURPRISED"></anim>
+            <dlg char="DAN">
+                <m wait="1">What!? Really!?!</m>
+                <m>He always says I'm not even allowed in the main building after classes...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">He just had a change of heart...</m>
+                <m>Everybody is talking about all the changes in the school lately, don't you know?</m>
+            </dlg>
+            
+            <anim target="DAN" trigger="surprised" face="SURPRISED"></anim>
+            <dlg char="DAN">
+                <m wait="1">Oh my God... I didn't know...</m>
+                <m>I always hoped this would happen one day... but...</m>
+            </dlg>
+            <anim target="DAN" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="DAN">
+                <m wait="0.5">If that gorilla thinks he can just say 'sorry' to fix everything then I...</m>
+                <m>I...</m>
+            </dlg>
+            <wait time="1"/>
+            <anim target="DAN" face="SIGH" />
+            <dlg char="DAN">
+                <m>No... I'm better than this...</m>
+                <m>If his apologies are sincere... Then maybe we can even become friends...</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>So what are you waiting for?</m>
+                <m>He's at the restroom... Go settle your score!</m>
+            </dlg>
+
+            <anim target="DAN" face="NEUTRAL" />
+            <dlg char="DAN">
+                <m>Yes, I will...</m>
+            </dlg>
+            <anim target="DAN" trigger="say-01" face="NEUTRAL" />
+            <dlg char="DAN">
+                <m>Thanks for being the bearer of such good news, buddy...</m>
+            </dlg>
+
+            <obj target="DAN">
+                <message name="StartCenter" />
+                <message name="EndFarRight" />
+                <message name="TriggerEnter" />
+            </obj>
+            <wait />
+
+            <string name="QUEST:JUL:PHONE:OBJECTIVE" set="Pickup ${CHAR:ZAC:NAME}'s phone in the restroom"></string>
+            <log icon="QUEST">Objectives updated</log>
+            <dlg char="PLAYER">
+                <m thought="true">Jeez... I wonder what will happen at the restroom...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap script="scene-dan-distract-zac" />
+        </n>
+
+        
+        <!--################################################
+            ## help-with-zac-choice-bribe ########################
+            ################################################
+        -->
+        <n id="help-with-zac-choice-bribe">
+            <flag name="QUEST:JUL:PHONE" bit-on="8" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Look... I'll be honest with you...</m>
+                <m>${CHAR:ZAC:NAME} is in the restroom now and I need someone to 'distract' him for a few minutes...</m>
+                <m>Would you do that for me if I pay your lunch?</m>
+            </dlg>
+
+            <anim target="DAN" trigger="surprised" face="SURPRISED"></anim>
+            <dlg char="DAN">
+                <m wait="0.5">What!? Do you... do you...</m>
+            </dlg>
+            <anim target="DAN" face="DISAPPROVE"></anim>
+            <dlg char="DAN">
+                <m>Do you really think I would subject myself to be harassed by that gorilla just for a warm plate of food!?!</m>
+                <m>Like... like...</m>
+            </dlg>
+            
+            <anim target="DAN" face="SIGH"></anim>
+            <dlg char="DAN">
+                <m wait="0.5">Like... that delicious cheesesteak they serve at the town diner?</m>
+                <m wait="0.5">Or maybe their sweet apple pie with the best crumb topping in the country?</m>
+                <m>or maybe... maybe...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Dude... You can choose whatever snack you wanna buy with this money...</m>
+                <m wait="0.5">Just say 'Hi' to ${CHAR:ZAC:NAME} for me in the restroom...</m>
+                <m>It can't be that bad... Can it?</m>
+            </dlg>
+
+            <anim target="DAN" trigger="say-01" face="DISAPPROVE"></anim>
+            <dlg char="DAN">
+                <m>It won't be 'bad'... It will be horrible!!</m>
+            </dlg>
+            <anim target="DAN" face="SIGH"></anim>
+            <dlg char="DAN">
+                <m wait="0.5">But... Whatever... Give me the money and I'll do what you want...</m>
+                <m>I can bear anything for a good snack time...</m>
+            </dlg>
+
+            <sfx clip="item" async="true" />
+            <flag name="ITEM:MONEY" dec="4" icon="MONEY">You paid $4 to ${CHAR:DAN:NAME}</flag>
+            <dlg char="PLAYER">
+                <m wait="0.5">Cool... Here it is...</m>
+            </dlg>
+            <wait />
+
+            <anim target="DAN" trigger="say-01" face="SIGH"></anim>
+            <dlg char="DAN">
+                <m>I'll talk to ${CHAR:ZAC:NAME} now... At least I'll be aware that I'm contributing to whatever prank you're planning against him...</m>
+                <m>I'm going to keep the image of the apple pie in my head so I can escape the suffering while I'm with him...</m>
+            </dlg>
+
+            <obj target="DAN">
+                <message name="StartCenter" />
+                <message name="EndFarRight" />
+                <message name="TriggerEnter" />
+            </obj>
+            <wait />
+
+            <string name="QUEST:JUL:PHONE:OBJECTIVE" set="Find ${CHAR:ZAC:NAME}'s phone in the restroom"></string>
+            <log icon="QUEST">Objectives updated</log>
+            <dlg char="PLAYER">
+                <m thought="true">Jeez... I wonder what will happen at the restroom...</m>
+            </dlg>
+
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap script="scene-dan-distract-zac" />
+        </n>
+    </nodes>
+</xml-script>

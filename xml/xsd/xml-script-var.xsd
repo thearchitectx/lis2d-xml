@@ -29,6 +29,8 @@
                 (2): intro-jef-dialog#root answered #dialog-vic-SW
                 (3): intro-jef-dialog#root entered "SW" dialog-kate
                 (4): intro-jef-dialog#root entered "E" dialog-talk
+                (10): Gave BRK deep fake base video on girl's restroom
+                (11): Didn't gave BRK deep fake base video on girl's restroom
             -->
             <xs:enumeration value="CHAR:SAM:INTERACTIONS" />
             <!-- SAM interaction LOG bits
@@ -83,7 +85,7 @@
                 (26): choice 'choice-kate-diner-01-e' - Used (Felt like I care about you?)
                 (26): choice 'choice-kate-diner-01-e' - Used (Felt like I care about you?)
                 (27): choice 'choice-kate-diner-01-e' - Used (Like I'm willing to help...)
-                (28): dinner escalate handjob
+                (28): dinner escalate hand job
                 (29): dinner escalate kiss
                 (30): dinner escalate kiss - went through finger scene
                 (31): finished diner scene
@@ -93,6 +95,8 @@
             <!-- JUL interaction LOG  bits 
                 (0): Watched make-out scene
                 (1): Took picture of make-out scene
+                (2): Choice (jul-01-choice-01): I don't wanna cause you any trouble
+                (3): Choice (jul-01-choice-01): Does he keep you on a leash?
             -->
             
             <xs:enumeration value="CHAR:VIC:AFFINITY" />
@@ -122,6 +126,8 @@
                 (8): Choice 'cheer-max-choice': - used (Chill until you feel better)
                 (9): Choice 'cheer-max-choice': - used (You can change)
                 (10): Played scene-max-chl-campus
+                (11): Choice 'warren-opinion-01' - used (That's a big red flag)
+                (12): Choice 'warren-opinion-01' - used (He was just worried about you)
             -->
             
             <xs:enumeration value="CHAR:WAR:INTERACTIONS" />
@@ -152,7 +158,18 @@
                 (9): scene-vic-leave-classroom interrupt: paragon
                 (10): scene-vic-leave-classroom interrupt: renegade
                 (11): scene-vic-leave-classroom interrupt: none
+                (12): scene-wake-day-02 interrupt paragon
+                (13): scene-wake-day-02 interrupt renegade
             -->
+
+            <xs:enumeration value="CHAR:DAN:INTERACTIONS" />
+            <!-- VIC interaction LOG bits
+                (0): First met choice - 'Chill out'
+                (1): First met choice - 'I'm here to collect!'
+                (2): First asked about Zac during QUEST:JUL:PHONE
+            -->
+
+
             <xs:enumeration value="QUEST:INTRO:COUNT" />
             <!-- QUEST:INTRO picked garbage count -->
             <xs:enumeration value="QUEST:INTRO" />
@@ -185,6 +202,7 @@
                 (15): Collected BANANA PEEL
                 (16): Finished cleaning girls restroom
                 (17): Reported to SAM
+                (18): Slept on bed
                 
             -->
             <xs:enumeration value="QUEST:PRINCIPAL1:GARBAGE_COUNT" />
@@ -231,12 +249,58 @@
             <xs:enumeration value="QUEST:TURF_WAR" />
             <!-- QUEST:TURF_WAR bits
                 (0) Started
-                (1) Found Nathan room
+                (1) Found Nat room
+                (2) Entered Nat Room
+                (3) Found magazine/notes
+                (4) Met NAT
+                (5) Day passed after meeting NAT
+                (6) Met CHL after day passed
+                (7) Acquired info where NAT will meet ZAC
             -->
 
+            <xs:enumeration value="QUEST:MAX:EVERYDAY_HEROES" />
+            <!-- BITWISE:
+                (0) Met on Hallway
+                (1) Asked feeling better
+                (2) Asked about party
+                (3) Asked about warren
+                
+                (bit-4) Must talk to Justin about film
+                (bit-5) Talked with justin about film
+                (bit-6) Found firecrackers
+                (bit-7) Popped firecrackers
+                (bit-8) Got polaroid films
+                (bit-9) Gave films to max
+                (bit-10) Called Max to bedroom
+                (bit-11) Project choice - lonely 
+                (bit-12) Project choice - expose 
+                (bit-13) Project choice - no help 
+            -->
+
+
+            <xs:enumeration value="QUEST:JUL:PHONE:HEAT_SCORE" />
             <xs:enumeration value="QUEST:JUL:PHONE" />
             <!-- QUEST:JUL:PHONE bits
                 (0): Started
+                (1): View start-scene
+                (2): First talked with JUL
+                (3): Asked about zac friday
+                (4): Asked arguing zac
+                (5): JUL asked to recover phone
+                (6): Warned by SAM in restroom
+                (7): Tricked DAN to distract ZAC
+                (8): Bribed DAN to distract ZAC
+                (9): Used Rift energy to get phone
+                (10): Recovered phone
+                (11): Gave phone to JUL
+                (12): scene-jul-science-bj-01: (Are you sure about this?)
+                (13): scene-jul-science-bj-01: (I like your idea of retaliation)
+                (14): scene-jul-science-bj-01: (I won't tell anyone, okay?)
+                (15): scene-jul-science-bj-01: (I'm not dating anyone, okay?)
+                (16): scene-jul-science-bj-01: Took phone from JUL
+                (17): scene-jul-science-bj-01: Place phone for recording
+                (18): went for a nice finisher
+                (19): went for rough finisher
                 (31): Ended
             -->
 
@@ -247,10 +311,13 @@
 
             <xs:enumeration value="ITEM:LOCKERS_KEY" />
             <xs:enumeration value="ITEM:MONEY" />
+            <xs:enumeration value="ITEM:ZAC_PHONE" />
             <xs:enumeration value="ITEM:JOINT" />
             <xs:enumeration value="ITEM:LOCKPICK" />
             <xs:enumeration value="ITEM:TREASURE_DETECTOR" />
             <xs:enumeration value="ITEM:BRACELET" />
+            <xs:enumeration value="ITEM:NAT_CLIENT_LIST" />
+            <xs:enumeration value="ITEM:PERCEPTION_BAND" />
 
             <xs:enumeration value="MISC:ENVIRONMENT" />
             <!-- MISC:ENVIRONMENT bits
@@ -273,11 +340,23 @@
                 (22): (first used player room cellphone)
             -->
 
+            <xs:enumeration value="LOC:NAT:ROOM" />
+            <!-- MISC:ENVIRONMENT bits
+                (0): location-nat-01 - lamp is on
+                (1): location-nat-01 - entered once
+                (2): location-nat-01 - found lockpick in drawers
+                (3): location-nat-01 - left money in bag
+                (4): location-nat-01 - took money in bag
+            -->
+            <xs:enumeration value="MISC:SMOKED_JOINTS" />
+            
             <xs:enumeration value="FLG:0" />
+            <xs:enumeration value="FLG:1" />
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="string">
         <xs:restriction base="xs:string">
+            <xs:enumeration value="DAY:NAME" />
             <xs:enumeration value="QUEST:INTRO:OBJECTIVE" />
             <!-- QUEST:INTRO objective -->
             <xs:enumeration value="QUEST:PRINCIPAL1:OBJECTIVE" />
@@ -289,8 +368,11 @@
             <xs:enumeration value="QUEST:MEM_CARD:RETURN_LOCATION" />
             <!-- QUEST:MEM_CARD objective -->
             <xs:enumeration value="QUEST:WAR:CUPID:OBJECTIVE" />
+            <xs:enumeration value="QUEST:MAX:EVERYDAY_HEROES:OBJECTIVE" />
+            <xs:enumeration value="QUEST:JUL:PHONE:OBJECTIVE" />
             
             <xs:enumeration value="QUEST:TURF_WAR:OBJECTIVE" />
+            <xs:enumeration value="QUEST:TURF_WAR:NAT:OBJECTIVE" />
             
             <xs:enumeration value="PICS:VIC:BOOTY" />
             <xs:enumeration value="PICS:KATE:HALLWAY" />
@@ -301,7 +383,12 @@
             <xs:enumeration value="CHAR:JUS:NAME" />
             <xs:enumeration value="CHAR:PRI:NAME" />
             <xs:enumeration value="CHAR:SAM:NAME" />
+            <xs:enumeration value="CHAR:DAN:NAME" />
             <xs:enumeration value="MISC:SCHOOL:NAME" />
+            <xs:enumeration value="MISC:BOARD:106" />
+            <xs:enumeration value="MISC:BOARD:107" />
+            <xs:enumeration value="MISC:BOARD:108" />
+            <xs:enumeration value="MISC:BOARD:109" />
 
             <xs:enumeration value="SYSTEM:VERSION" />
             <xs:enumeration value="SYSTEM:SCRIPT:PATH" />

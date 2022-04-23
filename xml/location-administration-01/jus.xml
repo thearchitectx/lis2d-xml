@@ -142,6 +142,15 @@
                     <check-flag flag="QUEST:MEM_CARD" bit-unset="6" />
                     <text>About the Principal</text>
                 </c>
+                <c pos="E">
+                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="3" />
+                    <text>Polaroid films?</text>
+                    <then>
+                        <!-- TODO: start here -->
+                        <sys>Progress on this quest is not implemented in this version\n\nTry talking to ${CHAR:CHL:NAME} outside!</sys>
+                        <node-output node="dialog-root" />
+                    </then>
+                </c>
                 <c pos="W">
                     <text>[Leave]</text>
                     <then>

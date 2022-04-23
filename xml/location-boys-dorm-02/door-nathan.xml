@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <include node-prefix="lockpick-">../_lib/lockpick.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <if>
+                <!-- NOT (1) Found Nat room -->
+                <check-flag flag="QUEST:TURF_WAR" bit-unset="1" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>This isn't my room... and the door is well locked...</m>
+                    </dlg>
+
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="true" /></message>
+                    </obj>
+
+                    <script-outcome value="_end" />
+                </then>
+            </if>
+
+            <load-scene-object key="image-viewer.prefab">
+                <message name="SetImage"><string value="location-boys-dorm-02-room-111.png" /></message>
+                <message name="SetImageScale"><float value="1" /></message>
+                <message name="SetReadInput"><bool value="true" /></message>
+            </load-scene-object>
+
+            <if>
+                <!-- NOT (2) Entered Nat Room -->
+                <check-flag flag="QUEST:TURF_WAR" bit-unset="2" />
+                <then>
+                    <dlg char="PLAYER">
+                        <m wait="1">Room 111... This must be the infamous Prescott residence...</m>
+                        <m wait="0.5">Awesome... I have a gun nut psycho living in front of my door...</m>
+                        <m>I need to get into this room and find the evidence ${CHAR:CHL:NAME} asked for...</m>
+                    </dlg>
+
+                    <choice>
+                        <c pos="W">
+                            <text>[Pick lock]</text>
+                            <then>
+                                <if>
+                                    <check-flag flag="ITEM:LOCKPICK" gte="1" />
+                                    <then>
+                                        <dlg char="PLAYER">
+                                            <m>Let's see...</m>
+                                        </dlg>
+                                        <sfx clip="knock-door" />
+                                        <wait />
+                                        <sfx clip="knock-door" async="true" />
+                                        <dlg char="PLAYER">
+                                            <m>Room service!!</m>
+                                        </dlg>
+                                        <wait time="2" />
+                                        <dlg char="PLAYER">
+                                            <m>Yeah... No one is home... The path is clear...</m>
+                                        </dlg>
+                                        <fade-to-black speed="1" layer="10" keep="true"  />
+                                        <bootstrap node="unlock" />
+                                    </then>
+                                    <else>
+                                        <dlg char="PLAYER">
+                                            <m wait="0.5">Shit... I need a lockpick to break in...</m>
+                                            <m>Maybe ${CHAR:JUS:NAME} has still a few left to sell me...</m>
+                                        </dlg>
+                                    </else>
+                                </if>
+                            </then>
+                        </c>
+                        <c pos="E">
+                            <text>[Leave]</text>
+                        </c>
+                    </choice>
+
+                </then>
+            </if>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:TURF_WAR" bit-set="2" />
+                    <check-flag flag="QUEST:TURF_WAR" bit-unset="3" />
+                </check-group>
+                <then>
+                    <dlg char="PLAYER">
+                        <m>Let's try this again...</m>
+                    </dlg>
+                    <sfx clip="door-transition" async="true" />
+                    <fade-to-black keep="true" />
+                    <bootstrap script="location-nat-room-01/location" spawn="spawn/door" />
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="QUEST:TURF_WAR" bit-set="4" />
+                <then>
+                    <dlg char="PLAYER">
+                        <m wait="0.5">It's not safe to get into this room for now...</m>
+                        <m>${CHAR:NAT:NAME} might still be around...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <wait />
+            
+            <obj target="image-viewer.prefab">
+                <message name="FadeAndDestroy" />
+            </obj>
+            <wait />
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+
+        <!--################################################
+            ## unlock ########################################
+            ################################################
+        -->
+        <n id="unlock">
+            <fade-to-black keep="true" speed="999999" />
+
+            <load-scene-object key="lockpick.prefab">
+                <message name="Generate"><float value="6" /></message>
+                <message name="DisableInput" />
+            </load-scene-object>
+
+            <fade-to-black speed="-2" />
+
+            <inject node="lockpick-tutorial" />
+
+            <obj target="lockpick.prefab">
+                <message name="EnableInput" />
+                <outcome copy-to="TMP:0" />
+            </obj>
+
+            <if>
+                <check-text text="TMP:0" eq="UNLOCKED" />
+                <then>
+                    <flag name="ITEM:LOCKPICK" dec="1">Discarded 1 used lockpick</flag>
+                    <flag name="QUEST:TURF_WAR" bit-on="2"></flag>
+                    <dlg char="PLAYER">
+                        <m>Nice... I did it... It's unlocked...</m>
+                    </dlg>
+
+                    <sfx clip="door-transition" async="true" />
+                    <fade-to-black keep="true" />
+                    <bootstrap script="location-nat-room-01/location" spawn="spawn/door" />
+                </then>
+                <else>
+                    <dlg char="PLAYER">
+                        <m>Maybe I should try this later...</m>
+                    </dlg>
+                    <fade-to-black keep="true" />
+                    <bootstrap script="location-boys-dorm-02/location" spawn="spawn/nat-room" />
+                </else>
+            </if>
+
+        </n>
+
+    </nodes>
+</xml-script>

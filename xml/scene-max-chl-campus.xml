@@ -40,11 +40,13 @@
             <if>
                 <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
                 <then>
+                    <load-scene-object key="vfx-auto-dialog-paragon.prefab" />
                     <dlg char="PLAYER"  track="null">
                         <m>It has its bunch of assholes, but also some cool people to know....</m>
                     </dlg>
                 </then>
                 <else>
+                    <load-scene-object key="vfx-auto-dialog-renegade.prefab" />
                     <dlg char="PLAYER" track="null">
                         <m>I'm sure there are still many opportunities to take advantage of here....</m>
                     </dlg>

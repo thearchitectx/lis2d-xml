@@ -10,7 +10,23 @@
 
             <load-scene-object key="location-campus-01.prefab" />
 
-            <load-scene-object key="location-campus-01-chl-01.prefab" />
+            <if>
+                <check-flag flag="QUEST:TURF_WAR" bit-unset="4" /> <!-- (4) Met NAT -->
+                <then>
+                    <load-scene-object key="location-campus-01-chl-01.prefab" />
+                </then>
+                <else>
+                    <if>
+                        <check-flag flag="QUEST:TURF_WAR" bit-unset="5" /> <!-- (5) Day passed after meeting NAT -->
+                        <then>
+                            <load-scene-object key="location-campus-01-chl-01-left.prefab" />
+                        </then>
+                        <else>
+                            <load-scene-object key="location-campus-01-chl-02.prefab" />
+                        </else>
+                    </if>
+                </else>
+            </if>
 
             <if>
                 <check-flag flag="CHAR:KATE:INTERACTIONS" bit-unset="17" /> <!-- Finished scene kate-01 at campus -->
@@ -18,6 +34,24 @@
                     <load-scene-object key="location-campus-01-kate-01.prefab" />
                 </then>
             </if>
+
+            <if>
+                <check-text text="CHAR:DAN:NAME" eq="#EMPTY"/>
+                <then>
+                    <string name="CHAR:DAN:NAME" set="Oblivious Dude"></string>
+                </then>
+            </if>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="7" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="8" />
+                </check-group>
+                <then>
+                    <load-scene-object key="location-campus-01-dan-01.prefab" />
+                </then>
+            </if>
+
 
             <fade-to-black speed="-3" fill="true" />
 

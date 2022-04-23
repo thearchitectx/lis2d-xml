@@ -8,16 +8,152 @@
                 <message name="SetInputActive"><bool value="false" /></message>
             </obj>
 
-            <wait time="0.5" />
+            
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="1" />
+                <then>
+                    <wait time="0.5" />
 
-            <dlg char="JEF" track="track">
-                <m wait="0.5">You should go see the principal now... He's in his office...</m>
-                <m>Just remember to scout possible subjects for our project in the way there...</m>
+                    <dlg char="JEF" track="track">
+                        <m wait="0.5">You should go see the principal now... He's in his office...</m>
+                        <m>Just remember to scout possible subjects for our project in the way there...</m>
+                    </dlg>
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="true" /></message>
+                    </obj>
+                    <script-outcome value="_end" />
+                </then>
+            </if>
+
+            <bootstrap node="dialog-root" />
+        </n>
+
+        <!--
+            ########################################################
+            ## dialog-root ########################################
+            ########################################################
+        -->
+        <n id="dialog-root">
+            <fade-to-black speed="9999" keep="true" />
+            
+            <bgm loop="loop-urban" as-music="false" volume="0.25"/>
+           
+            <load-scene-object key="shot-classroom-01.prefab" rename="shot"  />
+            
+            <load-scene-object key="shot-char-jef-01.prefab" proxy="JEF">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+            <obj target="shot">
+                <message name="Recenter" broadcast="true" />
+            </obj>
+            
+            <proxy target="shot/player" name="PLAYER" />
+            <obj target="PLAYER">
+                <message name="AnimateWeightToCoroutine"><float value="1" /></message>
+            </obj>
+
+            <fade-to-black speed="-1" />
+
+            <autosave label="Classroom - Chatting with Mister ${CHAR:JEF:NAME}" />
+
+            <dlg char="JEF">
+                <m wait="0.5">So... How's our 'project' progressing?</m>
+                <m>Don't forget to come here to report any audiovisual material you produce with our lovely students...</m>
             </dlg>
 
-            <obj target="#Player">
-                <message name="SetInputActive"><bool value="true" /></message>
-            </obj>
+            <node-output node="choices-loop" />
         </n>
+
+
+        <!-- 
+            ######################################################
+            ## choices-loop #####################################
+            ######################################################
+        -->
+        <n id="choices-loop">
+            <choice>
+                <c pos="NW">
+                    <text>[${CHAR:BRK:NAME} on restroom]</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MEM_CARD" bit-set="23" />
+                        <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="10" />
+                        <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="11" />
+                    </check-group>
+                    <then>
+                        <node-output node="brk-deep-fake" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>I should go</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>I should go now...</m>
+                        </dlg>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" />
+                        <bootstrap script="location-classroom-01/location" spawn="spawn/door" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+        <!-- 
+            ######################################################
+            ## brk-deep-fake #####################################
+            ######################################################
+        -->
+        <n id="brk-deep-fake">
+            <dlg char="PLAYER">
+                <m>I had an interesting video recording session with ${CHAR:BRK:NAME} in the girls restroom...</m>
+            </dlg>
+
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF">
+                <m wait="0.5">Interesting... It's that girl from Science class, right?</m>
+                <m>I've heard she talking down Arts before... So proud of her logical reasoning...</m>
+                <m>Any material showing her falling to our primal instincts would be a fine addition to my project...</m>
+            </dlg>
+
+            <choice>
+                <c pos="W">
+                    <text>[Give him the video]</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>I made a copy of the video...</m>
+                            <m>Sending it to you now...</m>
+                        </dlg>
+                        <sfx clip="beep" />
+                        <wait />
+
+                        <flag name="CHAR:JEF:INTERACTIONS" bit-on="10" icon="BUTTERFLY">This choice may influence future events</flag>
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m>Perfect... Keep up the good work...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[Don't give him the video]</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>Sorry, but...</m>
+                            <m>Uuhh... the file was corrupted when I tried to transfer to my phone...</m>
+                        </dlg>
+
+                        <flag name="CHAR:JEF:INTERACTIONS" bit-on="11" icon="BUTTERFLY">This choice may influence future events</flag>
+                        <anim target="JEF" trigger="say-01" face="DISAPPROVE" />
+                        <dlg char="JEF">
+                            <m>Urgh... We missed a good opportunity there, ${CHAR:PLAYER:NAME}...</m>
+                            <m>Try to be more careful next time...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <node-output node="choices-loop" />
+        </n>
+
     </nodes>
 </xml-script>

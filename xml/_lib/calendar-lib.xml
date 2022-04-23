@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <n id="update-day-name">
+            <switch-text flag="DAY:CURRENT" output="DAY:NAME">
+                <case eq="1">Monday</case>
+                <case eq="2">Tuesday</case>
+                <case eq="3">Wednesday</case>
+                <case eq="4">Thursday</case>
+                <case eq="5">Friday</case>
+                <case eq="6">Saturday</case>
+                <case eq="7">Monday</case>
+            </switch-text>
+        </n>
+    </nodes>
+</xml-script>

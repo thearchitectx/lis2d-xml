@@ -150,7 +150,8 @@
                             </check-group>
                             <then>
                                 <flag name="QUEST:TURF_WAR" bit-on="1" />
-                                <string name="QUEST:TURF_WAR:OBJECTIVE">Search room 111 for evidence against Prescott</string>
+                                <string name="QUEST:TURF_WAR:OBJECTIVE" set="Search room 111 for evidence against Prescott"/>
+                                <log icon="QUEST">Objectives Updated!</log>
                                 <dlg char="PLAYER">
                                     <m>Hey... There's some useful info...</m>
                                     <m>It seems if I want to find a Prescott family member here, then room 111 is the one I should check...</m>

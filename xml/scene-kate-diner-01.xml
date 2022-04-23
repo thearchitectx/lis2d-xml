@@ -42,11 +42,13 @@
             <if>
                 <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
                 <then>
+                    <load-scene-object key="vfx-auto-dialog-paragon.prefab" />
                     <dlg char="PLAYER">
                         <m>Poor girl always seems so anguished... Needs someone to talk...</m>
                     </dlg>
                 </then>
                 <else>
+                    <load-scene-object key="vfx-auto-dialog-renegade.prefab" />
                     <dlg char="PLAYER">
                         <m>Can't wait to teach her a thing or two...</m>
                     </dlg>
@@ -109,8 +111,8 @@
             
             <wait />
             <dlg char="PLAYER">
-                <m instant="true">|She seems totally embarrassed to be here with me...|</m>
-                <m instant="true">|It seems she's not used to be alone with a dude outside school...|</m>
+                <m thought="true">She seems totally embarrassed to be here with me...</m>
+                <m thought="true">It seems she's not used to be alone with a dude outside school...</m>
             </dlg>
 
             <choice id="choice-kate-diner-01-a">
@@ -1217,12 +1219,12 @@
             </dlg>
 
             <flag name="CHAR:KATE:INTERACTIONS" bit-on="31" />
-            <sys>
-                Content in this version ends here!!\n\n
-                See you soon!
-            </sys>
-            <fade-to-black speed="0.5" />
-            <bootstrap script="title" />
+            
+            <bgm volume="0" />
+            <fade-to-black speed="0.5" keep="true" />
+            <wait />
+            <sfx clip="bus"  async="false"/>
+            <bootstrap script="location-player-room-01/location" spawn="spawn/door" />
         </n>
 
         <!--###########################################
@@ -1233,12 +1235,11 @@
             <fade-to-black speed="0.25" keep="true" />
 
             <flag name="CHAR:KATE:INTERACTIONS" bit-on="31" />
-            <sys>
-                Content in this version ends here!!\n\n
-                See you soon!
-            </sys>
-            <fade-to-black speed="0.5" />
-            <bootstrap script="title" />
+            <bgm volume="0" />
+            <fade-to-black speed="0.5" keep="true" />
+            <wait />
+            <sfx clip="bus"  async="false"/>
+            <bootstrap script="location-player-room-01/location" spawn="spawn/door" />
         </n>
 
     </nodes>

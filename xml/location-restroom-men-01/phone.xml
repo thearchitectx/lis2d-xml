@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+            
+            <wait time="2" />
+            <bgm volume="0" />
+            <fade-to-black speed="3" fill="true" keep="true" />
+
+            <bootstrap node="start" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## start ######################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black speed="99999" keep="true" />
+            <load-scene-object key="scene-zac-phone-01.prefab" rename="scene" />
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <fade-to-black speed="-3" fill="true" />
+            <autosave label="Messing with ${CHAR:ZAC:NAME}'s phone" />
+
+            <dlg char="PLAYER">
+                <m wait="1">Nice... Everything happened according to plan...</m>
+                <m>I think it's safe to check this phone now...</m>
+            </dlg>
+
+            <wait />
+            <anim target="scene" inc="state" />
+            
+            <dlg char="PLAYER">
+                <m wait="1">Gotcha...</m>
+                <m>I just need to figure how to unlock in and-</m>
+            </dlg>
+
+            <anim target="scene" trigger="click" inc="state" />
+            <wait time="0.5" />
+            <sfx clip="beep"  />
+
+            <dlg char="PLAYER">
+                <m wait="1">Really!? No password? No unlock pattern? Finger print?</m>
+                <m wait="0.5">I think he never imagined someone would be able to snatch his phone...</m>
+                <m wait="1">Or maybe he was just too stupid to set up any security...</m>
+                <m>Well... The information I need must be in the messages app...</m>
+                <m>Let's see who ${CHAR:ZAC:NAME}'s has been texting lately...</m>
+            </dlg>
+
+            <flag name="FLG:0" set="0" />
+            <node-output node="text-root" />
+        </n>
+
+
+        <!--
+            ##############################################################
+            ## text-root ######################################################
+            ##############################################################
+        -->
+        <n id="text-root">
+            <anim target="scene" trigger="click"><int  name="state" value="1"/></anim>
+            <choice>
+                <c pos="NW">
+                    <text>[ Logan ]</text>
+                    <check-flag flag="FLG:0" bit-unset="0" />
+                    <then>
+                        <flag name="FLG:0" bit-on="0" />
+                        <anim target="scene" trigger="click"><int  name="state" value="2"/></anim>
+                        <wait />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Lets see... Here we have...</m>
+                            <m wait="0.5">... lots of friendly insults... endless discussions of football play strategies...</m>
+                            <m wait="0.5">... ways to inflict pain on others without leaving marks...</m>
+                            <m wait="0.5">Nothing interesting in this one...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>[ Local Weather Service ]</text>
+                    <check-flag flag="FLG:0" bit-unset="1" />
+                    <then>
+                        <flag name="FLG:0" bit-on="1" />
+                        <anim target="scene" trigger="click"><int  name="state" value="2"/></anim>
+                        <wait />
+                        <dlg char="PLAYER">
+                            <m>Just some weather forecast alerts here...</m>
+                            <m wait="1">"A major storm appears to be forming on the ocean a few miles away from the town... However, the chance of it reaching the coast is remote so there's no need to be alarmed..."</m>
+                            <m wait="0.5">Phew... God saves the weather service...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="NE">
+                    <text>[ ${CHAR:NAT:NAME} Prescott ]</text>
+                    <check-flag flag="FLG:0" bit-unset="2" />
+                    <then>
+                        <flag name="FLG:0" bit-on="2" />
+                        <anim target="scene" trigger="click"><int  name="state" value="2"/></anim>
+                        <wait />
+                        <dlg char="PLAYER">
+                            <m>Hey... This is it... A conversation with ${CHAR:NAT:NAME}...</m>
+                            <m wait="1">Here it says they will meet on friday... at the alley of the swimming pool building...</m>
+                            <m wait="0.5">Nice... Now if I want to help ${CHAR:CHL:NAME} and screw ${CHAR:NAT:NAME} business, I just need to be there and do some detective proof recording...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>[ ${CHAR:VIC:NAME} ]</text>
+                    <check-flag flag="FLG:0" bit-unset="3" />
+                    <then>
+                        <flag name="FLG:0" bit-on="3" />
+                        <anim target="scene" trigger="click"><int  name="state" value="3"/></anim>
+                        <wait />
+                        <dlg char="PLAYER">
+                            <m wait="1">Whoa... Now this one is promising...</m>
+                            <m wait="0.5">${CHAR:JUL:NAME}'s suspicion was spot on...</m>
+                            <m wait="0.5">There are some incriminating text sessions between ${CHAR:ZAC:NAME} and ${CHAR:VIC:NAME} here...</m>
+                            <m>Including exchange of intimate pictures...</m>
+                        </dlg>
+                        <wait />
+                        <dlg char="VIC" track="scene/VIC">
+                            <m>${CHAR:ZAC:NAME}... All those perverted things you sent me yesterday made me so horny...</m>
+                            <m>When are you going to find some excuses to that silly girlfriend of yours and come visit me in my room?</m>
+                            <m>And don't worry... I already have the cheerleader clothes you asked me to use...</m>
+                        </dlg>
+                        <wait />
+                        <anim target="scene" trigger="click"><int  name="state" value="4"/></anim>
+                        <dlg char="PLAYER">
+                            <m>Check that out... I'd better make a backup copy... Just to make sure evidence won't be lost...</m>
+                            <m wait="1">${CHAR:VIC:NAME} needs to know better about how easily this kind of pic leaks...</m>
+                            <m wait="1">I guess she likes to assert her dominance over the other popular girls by teasing their boyfriends...</m>
+                            <m>Well... A certain girlfriend will certainly be pissed when I give her this phone...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="FLG:0" bit-set="2" />
+                    <check-flag flag="FLG:0" bit-set="3" />
+                </check-group>
+                <then>
+                    <string name="QUEST:JUL:PHONE:OBJECTIVE" set="Give ${CHAR:ZAC:NAME}'s phone to ${CHAR:JUL:NAME}"></string>
+                    <string name="QUEST:TURF_WAR:OBJECTIVE" set="${CHAR:NAT:NAME} will sell his stuff to ${CHAR:ZAC:NAME} on friday outside the swimming pool building. Be there and secretly record the transaction"></string>
+                    <log icon="QUEST">Objectives Updated</log>
+                    <flag name="QUEST:JUL:PHONE" bit-on="10" />
+                    <flag name="ITEM:ZAC_PHONE" set="1"></flag>
+                    <dlg char="PLAYER">
+                        <m wait="0.5">Well... I found what I was looking for...</m>
+                        <m wait="0.5">This phone is a gold mine, but keeping it in my possession is dangerous...</m>
+                        <m wait="0.5">I'd better give it to ${CHAR:JUL:NAME} as she asked...</m>
+                    </dlg>
+
+                    <bgm volume="0" />
+                    <fade-to-black speed="1" keep="true" />
+                    <bootstrap script="location-restroom-men-01/location" spawn="spawn/middle" />
+                </then>
+                <else>
+                    <node-output node="text-root" />
+                </else>
+            </if>
+        </n>
+    </nodes>
+</xml-script>

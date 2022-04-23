@@ -1,0 +1,639 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Hello...</m>
+            </dlg>
+            
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="3" />
+            <bootstrap node="start" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## start ######################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black keep="true" speed="1000" />
+            <load-scene-object key="shot-mainhall-01.prefab" rename="shot" />
+            <fade-to-black speed="-1" />
+            <bgm loop="loop-jul" volume="0.25" />
+
+            <load-scene-object key="shot-char-jul-01.prefab" proxy="JUL">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+            <proxy name="PLAYER" target="shot/player" />
+
+            <autosave label="Main Hall - Chatting with ${CHAR:JUL:NAME}" />
+
+            <if>
+                <check-flag flag="QUEST:JUL:PHONE" bit-unset="2" />
+                <then>
+                    <flag name="QUEST:JUL:PHONE" bit-on="2" />
+                    <node-output node="first-dialog" />
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="QUEST:JUL:PHONE" bit-set="5" />
+                <check-flag flag="QUEST:JUL:PHONE" bit-unset="10" />
+                <then>
+                    <dlg char="JUL">
+                        <m>Hey... Don't forget about ${CHAR:ZAC:NAME}'s phone...</m>
+                        <m>And for the love of God, don't get caught trying to get your hands on it...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## first-dialog ##############################################
+            ##############################################################
+        -->
+        <n id="first-dialog">
+            <dlg char="JUL">
+                <m>Now... You are...</m>
+            </dlg>
+            <wait />
+
+            <anim target="JUL" trigger="surprised" face="SURPRISED" />
+            <dlg char="JUL">
+                <m wait="1">Oh my God... Of course... The transfer student...</m>
+                <m>I was planning to write an article about you...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="1">Like... A news article!?</m>
+                <m>This thing about being famous is going through a whole new level now...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <anim target="JUL" trigger="say-01" face="NEUTRAL" />
+            <dlg char="JUL">
+                <m>Oh... Don't worry... It's not like a gossip tabloid thing...</m>
+                <m>I'm a reporter for the school newspaper...</m>
+                <m>...and it came to my attention that you are the first case in ${MISC:SCHOOL:NAME}'s history of a student being admitted in the course of a school year...</m>
+                <m>The piece I'm writing is about this sudden change in the school policies... and people's behaviour...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Phew... At least it's not about the parallel universe timelines thing...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="surprised" face="SURPRISED" />
+            <dlg char="JUL">
+                <m wait="1">About what!?!</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Uh... It's nothing... I mean... </m>
+                <m>I'm also curious about being an exceptional case here...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="say-01" face="NEUTRAL" />
+            <dlg char="JUL">
+                <m wait="0.5">Yeah... Your case obviously deserves some deeper investigation...</m>
+                <m>So what's your angle? Why are you here? Why do you think such strange events are happening?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            
+            <dlg char="PLAYER">
+                <m wait="0.5">I'm... uuhh... not exactly sure...</m>
+                <m>Maybe the principal accepted me here because of my brilliant record history?</m>
+            </dlg>
+            
+            <anim target="JUL" trigger="shrug" face="SIGH" />
+            <dlg char="JUL">
+                <m wait="1">Sigh... It's okay if you don't wanna leave a statement...</m>
+                <m>But a source gave me access to your educational records...</m>
+            </dlg>
+            <anim target="JUL" face="NEUTRAL" />
+            <dlg char="JUL">
+                <m>And I don't think you're the kind of student Mr ${CHAR:PRI:NAME} would want in his school...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">A "source", huh...</m>
+                <m>Thank you, ${CHAR:BRK:NAME}...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="say-01" />
+            <dlg char="JUL">
+                <m wait="0.5">Yeah, look... You'd better go now...</m>
+                <m wait="0.5">${CHAR:ZAC:NAME} won't like to see you talking to me... And he's always looking for new reasons to bully students...</m>
+            </dlg>
+
+            <choice id="jul-01-choice-01">
+                <c pos="NW">
+                    <text>I don't wanna cause you any trouble</text>
+                    <then>
+                        <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
+                        <flag name="CHAR:JUL:INTERACTIONS" bit-on=""></flag>
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Oh... Okay...</m>
+                            <m>I don't wanna cause any trouble between you and your boyfriend...</m>
+                        </dlg>
+
+                        <anim target="JUL" trigger="shrug" face="SIGH" />
+                        <dlg char="JUL">
+                            <m wait="1">Sigh... What the hell am I even saying?</m>
+                            <m>I can't let him decide who I can talk to or not...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>You let he keep you on a leash?</text>
+                    <then>
+                        <flag name="PLAYER:STAT:RENEGADE" inc="1" icon="RENEGADE">Renegade +1</flag>
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Really!?</m>
+                            <m>You let your boyfriend keep you on a leash like this, and decide who you can talk to or not?</m>
+                            <m>I expected more from a Jessica O'Neil type like you...</m>
+                        </dlg>
+
+                        <anim target="JUL" trigger="surprised" face="DISAPPROVE" />
+                        <dlg char="JUL">
+                            <m wait="1">Huh!?!?</m>
+                            <m>It's... it's not your business... and... and...</m>
+                        </dlg>
+                        <wait time="1" />
+                        <anim target="JUL" trigger="shrug" face="SIGH" />
+                        <dlg char="JUL">
+                            <m wait="1">Sigh...</m>
+                            <m>Damn it... I can't argue when you just state facts like that...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="JUL" face="UPSET" />
+            <dlg char="JUL">
+                <m>Sorry... I know I should be the first one scolding him for that immature behaviour...</m>
+            </dlg>
+            <wait />
+            <anim target="JUL" face="NEUTRAL" />
+            <dlg char="JUL">
+                <m>But I must warn you he has much more muscle power than good judgement...</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## dialog-root ######################################################
+            ##############################################################
+        -->
+        <n id="dialog-root">
+            <choice>
+                <c pos="NW" out="about-zac-friday">
+                    <text>About ${CHAR:ZAC:NAME}'s friday plans...</text>
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="3" />
+                </c>
+
+                <c pos="NW" out="jul-asks-phone">
+                    <text>Let me know if I can help you with anything</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:JUL:PHONE" bit-set="3" />
+                        <check-flag flag="QUEST:JUL:PHONE" bit-set="4" />
+                        <check-flag flag="QUEST:JUL:PHONE" bit-unset="5" />
+                    </check-group>
+                </c>
+
+                <c pos="SW" out="arguing-zac">
+                    <text>Were you arguing with ${CHAR:ZAC:NAME}?</text>
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="4" />
+                </c>
+
+                <c pos="W" out="give-phone">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-set="10" />
+                    <text>Guess what I have in my pocket?</text>
+                </c>
+
+                <c pos="E">
+                    <text>See you later...</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>See you later!</m>
+                        </dlg>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" fill="true" speed="3" />
+                        <bootstrap script="location-mainhall-02/location" spawn="spawn/hallway-corner-2" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+
+        <!--
+            ##############################################################
+            ## give-phone ######################################################
+            ##############################################################
+        -->
+        <n id="give-phone">
+            <dlg char="PLAYER">
+                <m>Guess what I have in my pocket?</m>
+            </dlg>
+            <anim target="JUL" trigger="surprised" face="SURPRISED" />
+            <dlg char="JUL" >
+                <m wait="1">Whoa... Do you really have it!?</m>
+                <m>I can't believe you got ${CHAR:ZAC:NAME}'s phone and came back in one piece...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>Yeah... At least you know how much I risked my neck doing this...</m>
+            </dlg>
+            
+            <anim target="JUL" face="UPSET" />
+            <dlg char="JUL" >
+                <m wait="1">I... I know what I asked was dangerous...</m>
+            </dlg>
+            <wait />
+            <anim target="JUL" face="SIGH" />
+            <dlg char="JUL" >
+                <m>And I'll be honest... I didn't put much stock in you at first...</m>
+            </dlg>
+            <wait />
+            <anim target="JUL" trigger="surprised" face="CUTE" />
+            <dlg char="JUL" >
+                <m>But I'm glad I was wrong!! You're awesome!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>I just hope you know what you're doing...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="shrug" face="NEUTRAL" />
+            <dlg char="JUL">
+                <m wait="0.5">I... I know breaking into someone's privacy is not right...</m>
+                <m>But it doesn't matter now... I'll go crazy if I don't find out what ${CHAR:ZAC:NAME} is up to...</m>
+            </dlg>
+            <anim target="JUL" trigger="say-01" face="NEUTRAL" />
+            <dlg char="JUL">
+                <m>Now give me the phone, please...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Uuhh... Are you sure you wanna see this?</m>
+            </dlg>
+
+            <anim target="JUL" trigger="surprised" face="SURPRISED" />
+            <dlg char="JUL" >
+                <m wait="1">Hey... You... You're scaring me...</m>
+                <m>Whatever it is... I need to see it with my own eyes...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>I feel I'm betraying the bro code doing this, but...</m>
+                <m>Whatever... Here it is...</m>
+            </dlg>
+
+            <fade-to-black keep="true" speed="5" />
+            <sfx clip="item" async="true" />
+            <flag name="ITEM:ZAC_PHONE" set="0" icon="QUEST">Gave ${CHAR:ZAC:NAME}'s phone to ${CHAR:JUL:NAME}</flag>
+            <obj target="shot" active="false"></obj>
+            <obj target="JUL" active="false"></obj>
+            <wait time="0.01" />
+            <load-scene-object key="scene-jul-look-phone.prefab" rename="scene" />
+            <fade-to-black keep="true" speed="-5" />
+            <wait time="0.5" />
+
+            <dlg char="JUL" track="scene">
+                <m>Okay, ${CHAR:JUL:NAME}... Take a deep breath...</m>
+            </dlg>
+            <wait time="0.5"/>
+
+            <anim target="scene" inc="state"></anim>
+            <sfx clip="beep" async="true" />
+            <wait time="0.5"/>
+            <dlg char="JUL" track="scene">
+                <m wait="2">Oh my God... I already asked ${CHAR:ZAC:NAME} to remove that horrible photo of me from his home screen...</m>
+                <m>Whatever... Let's check what's really important...</m>
+            </dlg>
+
+            <wait time="2.5" />
+            <dlg char="JUL" track="scene">
+                <m wait="2">Just the stupid conversations I thought I would find here...</m>
+                <m wait="2">More bullshit here and... ${CHAR:VIC:NAME}?</m>
+                <m>Why the hell would she message ${CHAR:ZAC:NAME} for?</m>
+                <m wait="2">I thought she-</m>
+                <m>........</m>
+            </dlg>
+            
+            <anim target="scene" inc="state"></anim>
+            <wait />
+            <dlg char="JUL" track="scene">
+                <m wait="2">....... you're going to pay for this, ${CHAR:ZAC:NAME}...</m>
+                <m wait="2">no one... no one screws me over like this...</m>
+                <m>And I know a way hit hard your weak ego, you motherfucker...</m>
+            </dlg>
+            
+            <anim target="scene" inc="state"></anim>
+            <wait />
+            <dlg char="PLAYER">
+                <m>Hey... Are you okay?</m>
+            </dlg>
+
+            <fade-to-black keep="true" speed="5" />
+            <obj target="scene" destroy="0"></obj>
+            <wait time="0.01" />
+            <obj target="shot" active="true"></obj>
+            <obj target="JUL" active="true"></obj>
+            <fade-to-black speed="-5" />
+            <anim target="JUL" face="DISAPPROVE" />
+
+            <dlg char="JUL" >
+                <m wait="0.5">You...</m>
+                <m>I... I...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="say-01" />
+            <dlg char="JUL" >
+                <m>I'm going to the Science classroom...</m>
+                <m>I was supposed to investigate a case of chemical material theft for the school newspaper, so the administration gave me the room key...</m>
+                <m>Please... Meet me there...</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER">
+                <m>Uuhh... Okay....</m>
+            </dlg>
+
+            <anim target="JUL" trigger="say-01" face="UPSET" />
+            <dlg char="JUL">
+                <m>I... I will need another... favor... from you...</m>
+                <m>Please... Don't take long...</m>
+            </dlg>
+
+            <obj target="JUL">
+                <message name="StartCenter" />
+                <message name="EndLeft" />
+                <message name="TriggerEnter" />
+            </obj>
+            <wait />
+
+            <flag name="QUEST:JUL:PHONE" bit-on="11" />
+            <string name="QUEST:JUL:PHONE:OBJECTIVE" set="Meet ${CHAR:JUL:NAME} in the Science classroom"></string>
+            <log icon="QUEST">Objectives updated</log>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Sheesh... She looked infuriated...</m>
+                <m>I should visit the Science classroom if I want to know where this will lead to...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black fill="true" speed="3" keep="true" />
+            <bootstrap script="location-mainhall-02/location" spawn="spawn/hallway-corner-2" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## about-zac-friday ##########################################
+            ##############################################################
+         -->
+        <n id="about-zac-friday">
+            <flag name="QUEST:JUL:PHONE" bit-on="3" />
+            <dlg char="PLAYER">
+                <m>So... Do you know where ${CHAR:ZAC:NAME} usually goes on fridays after school?</m>
+            </dlg>
+
+            <anim target="JUL" trigger="say-01"></anim>
+            <dlg char="JUL">
+                <m>You mean where he goes to buy dope for the Vortex Club weekend parties ?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Uhh... Yep...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="shrug" face="SIGH" />
+            <dlg char="JUL">
+                <m>Sigh...</m>
+                <m>You see... Deep down... ${CHAR:ZAC:NAME} is a good guy... </m>
+            </dlg>
+            <anim target="JUL"  face="NEUTRAL" />
+            <dlg char="JUL">
+                <m>But despite the strong arms, he have a very weak personality...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Can't deny it's an unusual combination...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="say-01" face="NEUTRAL" />
+            <dlg char="JUL">
+                <m>Yeah... I mean... Everyone knows he is the one bringing that shit to the parties...</m>
+            </dlg>
+            <anim target="JUL" face="DISAPPROVE" />
+            <dlg char="JUL">
+                <m>His "friends" convinced him that would make him look cool...</m>
+            </dlg>
+            <anim target="JUL" face="SIGH" />
+            <dlg char="JUL">
+                <m>And the idiot can't see that all they want is enjoy the free stuff without the risk of getting caught buying it from ${CHAR:NAT:NAME}...</m>
+            </dlg>
+            <anim target="JUL" face="NEUTRAL" />
+            
+            <dlg char="PLAYER">
+                <m>Yeah, but...</m>
+                <m>Do you know where he'll meet ${CHAR:NAT:NAME} next friday?</m>
+            </dlg>
+
+            <anim target="JUL" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="JUL">
+                <m>Sorry... But this is some quite sensitive information...</m>
+                <m>I don't know what your intentions are... and despite all ${CHAR:ZAC:NAME}'s screw ups...</m>
+                <m>I don't wanna se him in trouble...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Oh... I just want to.... uuuuhh...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="say-01" face="SIGH" />
+            <dlg char="JUL">
+                <m>I don't wanna know, okay?</m>
+                <m>All I need to say is...</m>
+            </dlg>
+            <anim target="JUL" face="UPSET" />
+            <dlg char="JUL">
+                <m>If you care about your future like I do, then I suggest you not messing with any Prescott business...</m>
+                <m>Even I avoid to write anything about that family...</m>
+            </dlg>
+            <wait />
+            
+            <dlg char="PLAYER">
+                <m>Okay... Let's just not talk about this topic...</m>
+            </dlg>
+            <anim target="JUL" face="NEUTRAL" />
+            <wait />
+
+            <dlg char="PLAYER">
+                <m thought="true">She's smart... I don't think I can get that information from her...</m>
+                <m thought="true">I should probably try some other way...</m>
+            </dlg>
+
+            <node-output node="dialog-root" />
+        </n>
+    
+        <!--
+            ##############################################################
+            ## arguing-zac ##########################################
+            ##############################################################
+         -->
+        <n id="arguing-zac">
+            <flag name="QUEST:JUL:PHONE" bit-on="4" />
+            <dlg char="PLAYER">
+                <m>I couldn't help but notice that you were arguing with ${CHAR:ZAC:NAME}...</m>
+                <m>Is everything okay?</m>
+            </dlg>
+
+            <anim target="JUL" trigger="shrug" face="SIGH"></anim>
+            <dlg char="JUL">
+                <m>Look... I would usually say you to mind your own damned business...</m>
+            </dlg>
+
+            <anim target="JUL" face="UPSET" />
+            <dlg char="JUL">
+                <m wait="0.5">But I know I'm the one to blame here...</m>
+                <m wait="0.5">I just can't keep it down when ${CHAR:ZAC:NAME} pisses me off...</m>
+                <m>Now the whole school probably heard me screaming with him...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="shrug" face="SIGH" />
+            <dlg char="JUL">
+                <m>And everybody must be thinking I'm just another Vortex Club spoiled bitch...</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
+                <then>
+                    <load-scene-object key="vfx-auto-dialog-paragon.prefab" />
+                    <dlg char="PLAYER">
+                        <m wait="1">Nah... Everybody loses its cool now and then...</m>
+                        <m>And don't think you're the kind of person who cares about what other think, right?</m>
+                    </dlg>
+                    <anim target="JUL" trigger="say-01" face="CUTE" />
+                    <dlg char="JUL">
+                        <m wait="0.5">Oh, thanks... That was sweet...</m>
+                        <m>I wish there were more students like you here... This shool would definitely improve...</m>
+                    </dlg>
+                    <dlg char="JUL">
+                        <m>But right now, it's much more toxic than it seems... And it contaminated ${CHAR:ZAC:NAME}...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <load-scene-object key="vfx-auto-dialog-renegade.prefab" />
+                    <dlg char="PLAYER">
+                        <m wait="1">I don't think you should take the blame...</m>
+                        <m>That dude is the guilty one for pissing you off... I you shouldn't let it lie...</m>
+                    </dlg>
+                    <anim target="JUL" trigger="say-01" face="DISAPPROVE" />
+                    <dlg char="JUL">
+                        <m>Yeah... Sometimes I ask myself why am I still with him...</m>
+                        <m>And, yes... If he keeps wronging me, I will show him what am I capable of...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <node-output node="dialog-root" />
+        </n>
+   
+        <!--
+            ##############################################################
+            ## jul-asks-phone ##########################################
+            ##############################################################
+         -->
+        <n id="jul-asks-phone">
+            <flag name="QUEST:JUL:PHONE" bit-on="5" />
+
+            <dlg char="PLAYER">
+                <m>Hey... I feel you wanna ask me something...</m>
+                <m>Just let me know if I can help you with anything, okay?</m>
+            </dlg>
+
+            <anim target="JUL" trigger="surprised" face="SURPRISED" />
+            <dlg char="JUL">
+                <m>Oh... Thank God you asked...</m>
+            </dlg>
+            <anim face="UPSET" />
+            <dlg char="JUL">
+                <m>I'm... a bit ashamed of what I'm going to ask...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Don't worry... I doubt it'll be worse than the requests I've been receiving lately...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="say-01" face="NEUTRAL" />
+            <dlg char="JUL">
+                <m wait="0.5">Look... I... want know what's going on with ${CHAR:ZAC:NAME}...</m>
+                <m>And I know where I can find the answer to the mystery...</m>
+            </dlg>
+            <anim target="JUL" face="SIGH" />
+            <dlg char="JUL">
+                <m>His phone...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Uh oh... I sense trouble coming...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="shrug" face="UPSET" />
+            <dlg char="JUL">
+                <m>I... I know what I'll ask is wrongful...</m>
+            </dlg>
+            <anim target="JUL" face="SIGH" />
+            <dlg char="JUL">
+                <m>But if you... somehow... get your hands on his phone...</m>
+                <m>...then bring it to me, okay? I need to check something in it...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Woah... Now that's a dangerous quest...</m>
+            </dlg>
+
+            <anim target="JUL"  face="NEUTRAL" />
+            <dlg char="JUL">
+                <m wait="1">I know... and I don't recommend interacting with him in any way...</m>
+                <m wait="0.5">He's in the restroom now...</m>
+                <m>Please, bring his phone to me as soon as you find it...</m>
+            </dlg>
+
+            <string name="QUEST:JUL:PHONE:OBJECTIVE" set="${CHAR:ZAC:NAME} is in the restroom. Find a way to get your hands on his phone and give it to ${CHAR:JUL:NAME}"></string>
+            <log icon="QUEST">Objectives updated!</log>
+
+            <node-output node="dialog-root" />
+        </n>
+    </nodes>
+</xml-script>

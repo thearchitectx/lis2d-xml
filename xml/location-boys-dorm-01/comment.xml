@@ -16,20 +16,9 @@
             <wait />
 
             <if>
-                <check-text text="ARG:0" eq="POSTER_BELLE" />
-                <then>
-                    <dlg char="PLAYER" track="#PlayerTrack">
-                        <m>There she is... The top genius entrepreneur of our generation...</m>
-                        <m>I'm glad this kind of decoration is allowed here...</m>
-                    </dlg>
-                </then>
-            </if>
-
-            <if>
                 <check-group op="OR">
-                    <check-text text="ARG:0" eq="DOOR_ROOM_106" />
-                    <check-text text="ARG:0" eq="DOOR_ROOM_107" />
-                    <check-text text="ARG:0" eq="DOOR_ROOM_110" />
+                    <check-text text="ARG:0" eq="DOOR_ROOM_104" />
+                    <check-text text="ARG:0" eq="DOOR_ROOM_105" />
                 </check-group>
                 <then>
                     <dlg char="PLAYER" track="#PlayerTrack">
@@ -39,15 +28,14 @@
             </if>
 
             <if>
-                <check-text text="ARG:0" eq="DOOR_ROOM_109" />
+                <check-text text="ARG:0" eq="DOOR_SHOWERS" />
                 <then>
                     <dlg char="PLAYER" track="#PlayerTrack">
-                        <m wait="0.5">This must be ${CHAR:WAR:ROOM}...</m>
-                        <m>I can see he has friends in the arts community...</m>
+                        <m wait="0.5">I don't think it's safe to go into a showers room here...</m>
+                        <m>School life and prison life has so much in common...</m>
                     </dlg>
                 </then>
             </if>
-            
 
             <obj target="#Player">
                 <message name="SetInputActive"><bool value="true" /></message>

@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+            <wait />
+            <bgm volume="0" />
+            <fade-to-black speed="3" fill="true" keep="true" />
+
+            <bootstrap node="start" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## start #####################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black speed="1000" keep="true" />
+
+            <bgm loop="loop-jul" volume="0.25"/>
+            <load-scene-object key="shot-science-classroom-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-jul-01.prefab"  proxy="JUL">
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+
+            <proxy target="shot/player" name="PLAYER" />
+            <obj target="PLAYER">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <fade-to-black speed="-1" />
+
+            <anim target="JUL" face="DISAPPROVE" />
+            <dlg char="JUL">
+                <m wait="0.5">There you are...</m>
+                <m>I was starting to wonder if you would really come...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Did I took so long?</m>
+                <m>I'm not used to the weird pace of time around here...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <anim target="JUL" trigger="say-01" look="RIGHT" />
+            <dlg char="JUL">
+                <m wait="0.5">Look... I'm going to be straight here...</m>
+            </dlg>
+            <anim target="JUL"  face="SIGH" look="NEUTRAL" />
+            <dlg char="JUL">
+                <m>You saw that shit in ${CHAR:ZAC:NAME}'s phone, didn't you?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">I saw... some stuff...</m>
+                <m>Are you talking about... something specific?</m>
+            </dlg>
+
+            <anim target="JUL" trigger="surprised" face="DISAPPROVE" />
+            <dlg char="JUL">
+                <m wait="0.5">Urgh... Don't try to sweetening it for me...</m>
+                <m>You know I'm talking about how ${CHAR:ZAC:NAME} has been exchanging nudes and plans with that bitch ${CHAR:VIC:NAME}...</m>
+            </dlg>
+            <anim target="JUL" face="UPSET" />
+            <dlg char="JUL">
+                <m>He is... He is cheating on me with that pompous whore...</m>
+                <m>I can't believe that asshole did that to me...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Yeah... Can't deny... The evidence is pretty solid...</m>
+            </dlg>
+
+            <wait />
+            <anim target="JUL" trigger="say-01" face="DISAPPROVE" look="RIGHT" />
+            <dlg char="JUL">
+                <m wait="0.5">But he is going to pay for what he did to me...</m>
+            </dlg>
+            <anim target="JUL" look="NEUTRAL" />
+            <dlg char="JUL">
+                <m>And I know the most brutal way to hurt that kind of fragile masculinity...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>I... uuhh... wonder what is you plan...</m>
+            </dlg>
+
+            <anim target="JUL" trigger="say-01" />
+            <dlg char="JUL">
+                <m>You do... Really?</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="JUL" look="RIGHT" />
+            <dlg char="JUL">
+                <m>Well... If ${CHAR:ZAC:NAME} likes to watch ${MISC:SCHOOL:NAME} girls in dirty scenes...</m>
+                <m>...then I'll record one for him... right here...</m>
+                <m>...starring me... and someone else...</m>
+            </dlg>
+            <anim target="JUL" look="LEFT" />
+            <dlg char="JUL">
+                <m>That will teach him what happen to cheaters...</m>
+            </dlg>
+            <wait />
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>By someone else... I believe you mean me, right?</m>
+            </dlg>
+
+            <anim target="JUL" trigger="shrug" look="NEUTRAL" face="UPSET" />
+            <dlg char="JUL">
+                <m wait="1">Yeah...</m>
+                <m wait="1">If you agree, of course...</m>
+                <m>It's just a quick recording...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="0.5" keep="true" />
+            <bootstrap script="scene-jul-science-bj-01" />
+        </n>
+
+    </nodes>
+</xml-script>

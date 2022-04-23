@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <sfx clip="door-transition" async="true" />
+            <bgm volume="0" />
+            <fade-to-black fill="true" speed="3" keep="true" />
+
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:TURF_WAR" bit-set="3" />
+                    <check-flag flag="QUEST:TURF_WAR" bit-unset="4" />
+                </check-group>
+                <then>
+                    <bootstrap script="scene-nat-gun-dorm" />
+                </then>
+            </if>
+            
+            <bootstrap script="location-boys-dorm-02/location" spawn="spawn/nat-room" />
+        </n>
+    </nodes>
+</xml-script>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="n1">
+            <fade-to-black keep="true" speed="99999" />
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <load-scene-object key="location-nat-room-01.prefab" rename="location" />
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <if>
+                <check-flag flag="LOC:NAT:ROOM" bit-set="0" />
+                <then>
+                    <anim target="location"><bool name="lamp" value="true" /></anim>
+                </then>
+            </if>
+
+            <fade-to-black speed="-3" fill="true" />
+
+            <autosave label="Prescott Room - Exploring" />
+
+            <inject node="lib-post-start" />
+
+            <if>
+                <!-- (1): location-nat-01 - first time here -->
+                <check-flag flag="LOC:NAT:ROOM" bit-unset="1" />
+                <then>
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="false" /></message>
+                    </obj>
+                    <flag name="LOC:NAT:ROOM" bit-on="1" />
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m wait="0.5">Jeez... Looks like someone went the extra mile to create a creepy atmosphere in this place...</m>
+                        <m wait="1">If that's the case, then... Congratulations, dude... You succeeded...</m>
+                        <m>Well... I should be able to find the evidence ${CHAR:CHL:NAME} needs around here...</m>
+                    </dlg>
+                    <string name="QUEST:TURF_WAR:OBJECTIVE" set="Find evidence against Prescott somewhere in his room"></string>
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="true" /></message>
+                    </obj>
+                </then>
+            </if>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+    </nodes>
+</xml-script>

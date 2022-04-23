@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="n1">
+            <fade-to-black keep="true" speed="1000" />
+            <bgm loop="loop-urban" as-music="false" volume="0.25" fade-speed="0.5" />
+            
+            <load-scene-object key="location-science-classroom-01.prefab" rename="location"/>
+
+            <!-- jul-01 ? -->
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-set="11" />
+                    <!-- TODO: Add remove check -->
+                </check-group>
+                <then>
+                    <load-scene-object key="location-science-classroom-01-jul-02.prefab" parent="location" />
+                </then>
+            </if>
+
+            <!-- lost money 02 -->
+            <if>
+                <check-flag flag="MISC:ENVIRONMENT" bit-unset="13" />
+                <then>
+                    <load-scene-object key="location-science-classroom-01-lost-money-03.prefab" parent="location" />
+                </then>
+            </if>
+
+            <fade-to-black speed="-3" fill="true" />
+
+            <autosave label="Main Hall - Exploring" />
+
+            <inject node="lib-post-start" />
+        </n>
+    </nodes>
+</xml-script>

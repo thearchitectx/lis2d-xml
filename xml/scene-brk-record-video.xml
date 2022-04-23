@@ -45,11 +45,13 @@
             <if>
                 <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
                 <then>
+                    <load-scene-object key="vfx-auto-dialog-paragon.prefab" />
                     <dlg char="PLAYER" track="PLAYER">
                         <m wait="0.5">You're not getting cold feet, are you?</m>
                     </dlg>
                 </then>
                 <else>
+                    <load-scene-object key="vfx-auto-dialog-renegade.prefab" />
                     <dlg char="PLAYER" track="PLAYER">
                         <m wait="0.5">Are you sure wasting time with your chit-chat while we're both here is a good idea?</m>
                     </dlg>
@@ -349,8 +351,8 @@
             <obj target="scene/interactables" active="false" />
 
             <dlg char="PLAYER"  track="null">
-                <m instant="true">|It's a soap dispenser...|</m>
-                <m instant="true">|Can't see how it could help me now...|</m>
+                <m thought="true">It's a soap dispenser...</m>
+                <m thought="true">Can't see how it could help me now...</m>
             </dlg>
             <node-output node="loop-01" />
         </n>
@@ -745,6 +747,11 @@
                         <m>You're almost learning the moves...</m>
                     </dlg>
 
+                    <sys>
+                        During some scenes, you'll be able to control the action as long as you want\n\n
+                        Use the *CONTINUE* button in the right bottom corner of the screen to proceed
+                    </sys>
+
                     <obj target="scene/PLAYER/axis-control" active="true">
                         <outcome value="CONTINUE" copy-to="TMP:0" clear="true" />
                     </obj>
@@ -982,7 +989,8 @@
                 
             <sys>
                 Some of your characters responses will be dynamically based on the current PARAGON / RENEGADE balance\n\n
-                Teach him to be a dick and he will learn! Show him the nice path and he will follow!
+                Teach him to be a dick and he will learn! Show him the nice path and he will follow!\n\n
+                The screen will flash in blue/red tint when a dialog line is determined by your current balance\n\n
             </sys>
                 
             <dlg char="BRK" track="BRK">
@@ -997,6 +1005,7 @@
             <if>
                 <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
                 <then>
+                    <load-scene-object key="vfx-auto-dialog-paragon.prefab" />
                     <dlg char="PLAYER" track="PLAYER">
                         <m>Hey... Don't fret...</m>
                         <m>No one knows you're here... and it's for a greater good, right?</m>
@@ -1007,6 +1016,7 @@
                     </dlg>
                 </then>
                 <else>
+                    <load-scene-object key="vfx-auto-dialog-renegade.prefab" />
                     <dlg char="PLAYER" track="PLAYER">
                         <m>I tell you what you're doing...</m>
                         <m>You're being groped in a restroom by a dude you've just met and loving the heat you're feeling...</m>

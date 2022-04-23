@@ -114,7 +114,7 @@
             </dlg>
 
             <dlg char="JEF" track="scene/track-jef">
-                <m instant="true">|Sigh... What did I do to deserve this...|</m>
+                <m>Sigh... What did I do to deserve this...</m>
             </dlg>
 
             <sys>
@@ -416,8 +416,8 @@
                     <check-flag flag="CHAR:VIC:INTERACTIONS" bit-set="8" />
                 </check-group>
                 <then>
-                    <dlg char="PLAYER" track="scene/track-player">
-                        <m instant="true">|She will not be happy if I bother her again... I'd better leave her alone for now...|</m>
+                    <dlg char="PLAYER">
+                        <m thought="true">She will not be happy if I bother her again... I'd better leave her alone for now...</m>
                     </dlg>
                     <node-output node="interactables" />
                 </then>
@@ -540,9 +540,9 @@
                     <check-flag flag="CHAR:VIC:INTERACTIONS" bit-set="6" />
                 </check-group>
                 <then>
-                    <dlg char="PLAYER" track="scene/track-player">
-                        <m instant="true">|I messed around enough back there... She might be on alert now...|</m>
-                        <m instant="true">|I'd better keep my distance...|</m>
+                    <dlg char="PLAYER">
+                        <m thought="true">I messed around enough back there... She might be on alert now...</m>
+                        <m thought="true">I'd better keep my distance...</m>
                     </dlg>
 
                     <node-output node="interactables" />

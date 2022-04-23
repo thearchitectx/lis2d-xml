@@ -2,7 +2,7 @@
 <xml-script
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
-    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <include node-prefix="calendar-">../_lib/calendar-lib.xml</include>
     <nodes>
         <!--################################################
             ## root ########################################
@@ -24,9 +24,95 @@
                 </then>
             </if>
 
+            <sys>
+                Sleeping on your bed will advance the story to the next day and recover one Rift Energy point\n\n
+                Some quests can only start or progress after days have passed\n\n
+                However, your time in this world might be limited. So avoid putting off for tomorrow what you can do today.
+            </sys>
+
+            <choice>
+                <c pos="E">
+                    <text>[Sleep]</text>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Well... I think it's time to hit the hay...</m>
+                        </dlg>
+
+                        <obj target="camera-sleep" active="true" />
+                        
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" speed="0.5" layer="-1" />
+                        <bootstrap node="sleep" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Leave]</text>
+                </c>
+            </choice>
+
             <obj target="#Player">
                 <message name="SetInputActive"><bool value="true" /></message>
             </obj>
+        </n>
+
+        <n id="sleep">
+            <fade-to-black speed="99999" keep="true" layer="-1" />
+            <bgm loop="loop-rumble" volume="0.5" fade-speed="0.5" />
+            <wait time="3" />
+
+            <dlg char="PLAYER">
+                <m>zzzz... zzz... zzz...</m>
+            </dlg>
+
+            <flag name="DAY:CURRENT" inc="1" />
+            <inject node="calendar-update-day-name" />
+            
+            <log icon="CALENDAR">It's ${DAY:NAME}!</log>
+            <flag name="PLAYER:STAT:RIFT" inc="1" icon="RIFT">Recovered 1 Rift energy point</flag>
+            <dlg  char="PLAYER">
+                <m>.......</m>
+            </dlg>
+            
+            <bgm volume="0" />
+            <wait time="3" />
+
+            <!-- DAY TRANSITION PROCESSING -->
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="18" />
+                <then>
+                    <string name="QUEST:PRINCIPAL1:OBJECTIVE" unset="true" />
+                    <flag name="QUEST:PRINCIPAL1" bit-on="18" />
+                </then>
+            </if>
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:TURF_WAR" bit-set="4" /> <!-- (4) Met NAT -->
+                    <check-flag flag="QUEST:TURF_WAR" bit-unset="5" /> <!-- (4) Day passed after met NAT -->
+                </check-group>
+                <then>
+                    <flag name="QUEST:TURF_WAR" bit-on="5" />
+                </then>
+            </if>
+            <!-- DAY TRANSITION PROCESSING -->
+
+            
+            <if>
+                <check-flag flag="DAY:CURRENT" eq="2" />
+                <then>
+                    <bootstrap script="scene-wake-day-02" />
+                </then>
+                <else>
+                    <sys>
+                        You shouldn't be sleeping now...\n\n
+                        Day 3 not implemented yet!
+                    </sys>
+                    <bootstrap script="title" />
+                </else>
+            </if>
+            
+            <bgm  volume="0" />
+            <fade-to-black speed="3" fill="true" keep="true" />
+            <bootstrap script="location-classroom-01/location" spawn="spawn/player-chair" />
         </n>
     </nodes>
 </xml-script>

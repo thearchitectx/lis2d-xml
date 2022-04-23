@@ -83,6 +83,16 @@
                     </check-group>
                     <text>You have a 'job' for me?</text>
                 </c>
+                <c pos="NW" out="helper">
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="18" /> <!-- (18): Slept on bed after finishing quest PRINCIPAL1 -->
+                    </check-group>
+                    <text>Assignment for today?</text>
+                    <then>
+                        <sys>Not implemented yet!</sys>
+                        <node-output node="dialog-root" />
+                    </then>
+                </c>
                 <c pos="SW" out="two-girls">
                     <check-group op="AND">
                         <check-flag flag="CHAR:SAM:INTERACTIONS" bit-set="1" /> <!-- (1): Had dialog after meeting principal -->

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <n id="root">
+            <if>
+                <!-- (0): location-nat-01 - lamp is on -->
+                <check-flag flag="LOC:NAT:ROOM" bit-set="0" />
+                <then>
+                    <flag name="LOC:NAT:ROOM" bit-off="0"></flag>
+                    <anim target="location"><bool name="lamp" value="false" /></anim>
+                    <sfx clip="switch" />
+                </then>
+                <else>
+                    <flag name="LOC:NAT:ROOM" bit-on="0"></flag>
+                    <anim target="location"><bool name="lamp" value="true" /></anim>
+                    <sfx clip="switch" />
+                </else>
+            </if>
+        </n>
+    </nodes>
+</xml-script>

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <fade-to-black fill="true" speed="3" keep="true" />
+            <bgm volume="0" />
+            <bootstrap node="start" />
+        </n>
+        
+        <!--################################################
+            ## start #######################################
+            ################################################
+        -->
+        <n id="start">
+            <fade-to-black keep="true" speed="10000" />
+            <bgm loop="loop-urban-outside" volume="0.25" />
+            <load-scene-object key="location-campus-01-chl-01-left-scene.prefab" rename="scene" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <proxy target="scene/CHL" name="CHL" />
+
+            <fade-to-black speed="-3" fill="true"/>
+
+            <obj target="PLAYER">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <dlg char="PLAYER">
+                <m>${CHAR:CHL:NAME} is not here...</m>
+                <m>Looks like she left a note...</m>
+            </dlg>
+
+            <dlg char="CHL">
+                <m>Hello kids... My shift is over for today... I'll be back tomorrow with some nice merchandise for you... Regards, ${CHAR:CHL:NAME}...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Well... Guess I'll have to meet her tomorrow then...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black fill="true" speed="3" keep="true" />
+            <bootstrap script="location-campus-01/location" spawn="spawn/post-1" />
+        </n>
+
+
+    </nodes>
+</xml-script>

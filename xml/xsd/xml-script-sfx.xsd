@@ -4,9 +4,14 @@
     <xs:restriction base="xs:string">
             <xs:enumeration value="cymbal" />
             <xs:enumeration value="explosion" />
+            <xs:enumeration value="footstep-1" />
+            <xs:enumeration value="footstep-2" />
+            <xs:enumeration value="footstep-3" />
+            <xs:enumeration value="footstep-4" />
             <xs:enumeration value="swoosh" />
             <xs:enumeration value="impact" />
             <xs:enumeration value="item" />
+            <xs:enumeration value="light-joint" />
             <xs:enumeration value="beep" />
             <xs:enumeration value="bus" />
             <xs:enumeration value="knock-door" />
@@ -14,6 +19,8 @@
             <xs:enumeration value="interrupt-renegade" />
             <xs:enumeration value="door-transition" />
             <xs:enumeration value="switch" />
+            <xs:enumeration value="mmm" />
+            <xs:enumeration value="phone-message" />
             <xs:enumeration value="phone-call-tone" />
             <xs:enumeration value="phone-pickup" />
             <xs:enumeration value="voice-gasp-a" />
@@ -35,8 +42,11 @@
             <xs:enumeration value="loop-chl" />
             <xs:enumeration value="loop-jul" />
             <xs:enumeration value="loop-jus" />
+            <xs:enumeration value="loop-fellatio" />
+            <xs:enumeration value="loop-dan" />
             <xs:enumeration value="loop-kate" />
             <xs:enumeration value="loop-max" />
+            <xs:enumeration value="loop-nat" />
             <xs:enumeration value="loop-pri" />
             <xs:enumeration value="loop-rumble" />
             <xs:enumeration value="loop-sam" />

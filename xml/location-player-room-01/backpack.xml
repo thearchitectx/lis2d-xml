@@ -9,15 +9,71 @@
             ################################################
         -->
         <n id="root">
-            <obj target="#Player">
-                <message name="SetInputActive"><bool value="false" /></message>
-            </obj>
+            <bgm volume="0" />
+            <fade-to-black fill="true" keep="true" speed="3" />
+            <bootstrap node="start" />
+        </n>
+        
+        <!--################################################
+            ## start ########################################
+            ################################################
+        -->
+        <n id="start">
+            <fade-to-black keep="true" speed="999999" />
+            <bgm loop="loop-urban" volume="0.25" />
+            <load-scene-object key="location-player-room-01-backpack.prefab" rename="scene" />
+            <fade-to-black speed="-3" fill="true" />
 
-            <sys>Not implemented yet!</sys>
+            <choice>
+                <c pos="W">
+                    <check-flag flag="ITEM:JOINT" gte="1" />
+                    <text>[Smoke joint]</text>
+                    <lock-reason>[Joint required]</lock-reason>
+                    <then>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Okay... It's time to relax...</m>
+                        </dlg>
 
-            <obj target="#Player">
-                <message name="SetInputActive"><bool value="true" /></message>
-            </obj>
+                        <wait time="1" />
+                        <sfx clip="light-joint" async="true" />
+                        <flag name="ITEM:JOINT" dec="1" icon="JOINT">Used 1 joint</flag>
+                        <flag name="MISC:SMOKED_JOINTS" inc="1" />
+                        <wait time="1" />
+                        <anim target="scene"><bool name="smoke" value="true" /></anim>
+                        <wait time="2" />
+                        
+                        <load-scene-object key="vfx-rift.prefab" />
+                        
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m wait="1">Whoa...</m>
+                            <m>Jesus Christ... What the fuck did they put in this thing?</m>
+                        </dlg>
+                        
+                        <wait time="2" />
+                        
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>Well... In moments like this, I usually quote the Postal dude...</m>
+                        </dlg>
+                        
+                        <anim target="scene"><bool name="smoke" value="false" /></anim>
+                        <anim target="vfx-rift.prefab"><bool name="active" value="false" /></anim>
+
+                        <flag name="PLAYER:STAT:RIFT" inc="2" icon="RIFT">Recovered 2 Rift energy points</flag>
+                        <dlg char="PLAYER" track="#PlayerTrack">
+                            <m>This can't be good for me, but I feel great...</m>
+                        </dlg>
+
+                        <obj target="vfx-rift.prefab" destroy="0" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[Leave]</text>
+                </c>
+            </choice>
+
+            <bgm volume="0" />
+            <fade-to-black fill="true" speed="3" keep="true" />
+            <bootstrap script="location-player-room-01/location" spawn="spawn/backpack" />
         </n>
     </nodes>
 </xml-script>

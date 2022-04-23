@@ -1,0 +1,512 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+                <message name="WarpTo"><string value="player-max-pos" /></message>
+            </obj>
+            
+            <wait time="2" />
+            <dlg char="MAX">
+                <m>...............</m>
+            </dlg>
+            <wait />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m wait="1">${CHAR:MAX:NAME}?</m>
+                <m>Earth calling ${CHAR:MAX:NAME}... Earth calling ${CHAR:MAX:NAME}...</m>
+                <m>Are you there?</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="3" fill="true" keep="true" />
+            <bootstrap node="start" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## start #####################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black speed="1000" keep="true" />
+
+            <bgm loop="loop-max" volume="0.25"/>
+            <load-scene-object key="shot-hallway-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-max-01.prefab"  proxy="MAX">
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+
+            <proxy target="shot/player" name="PLAYER" />
+
+            <obj target="PLAYER">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <fade-to-black speed="-1" />
+            
+            <if>
+                <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="0" />
+                <then>
+                    <node-output node="first-dialog" />
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="3" />
+                <then>
+                    <dlg char="MAX">
+                        <m>So... Had any luck finding the films?</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <node-output node="root-choices" />
+        </n>
+
+        <!-- 
+            #########################################################
+            ## first-dialog #########################################
+            #########################################################
+        -->
+        <n id="first-dialog">
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="0" />
+            <anim target="MAX" idle="NEUTRAL" face="NEUTRAL" />
+            <dlg char="MAX">
+                <m wait="1">Oh... Hi ${CHAR:PLAYER:NAME}...</m>
+                <m>Sorry... I was a bit distracted...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>We finally meet in a normal location...</m>
+                <m>I mean... Not in the girl's restroom...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="say-01"></anim>
+            <dlg char="MAX">
+                <m wait="0.5">Yeah... I usually chill here a bit after class...</m>
+                <m>You know... Trying to not look like a total loser...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Jeez... I also dig some self-deprecation... But take it easy, okay?</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="CHAR:MAX:INTERACTIONS" bit-set="9" />
+                <then>
+                    <anim target="MAX" face="UPSET" idle="UPSET" />
+                    <dlg char="MAX">
+                        <m wait="0.5">Yeah... I...</m>
+                        <m wait="0.5">Yeah... I used to think I'm ok with the way I am...</m>
+                        <m wait="0.5">But I've been thinking about what you told me yesterday...</m>
+                        <m>Maybe being so insecure is actually affecting my art...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <anim target="MAX" face="CUTE" trigger="" />
+                    <dlg char="MAX">
+                        <m wait="0.5">Nah... Don't worry...</m>
+                        <m wait="0.5">You remembered me yesterday how I should stop caring about what people think of me... and just be myself...</m>
+                        <m wait="0.5">That was good advice...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <dlg char="PLAYER">
+                <m>Well... You're the one who summoned me upon this world...</m>
+                <m>The least I can do help you in any way I can...</m>
+            </dlg>
+
+            <node-output node="root-choices" />
+        </n>
+
+        <!-- 
+            #########################################################
+            ## root-choices #########################################
+            #########################################################
+        -->
+        <n id="root-choices">
+            <choice>
+                <c pos="NW" out="feel-better">
+                    <text>Feeling better today?</text>
+                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="1" />
+                </c>
+                <c pos="NW" out="about-party">
+                    <text>About the apocalypse party...</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="1" />
+                        <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="2" />
+                    </check-group>
+                </c>
+                <c pos="W" out="met-war">
+                    <text>I met ${CHAR:WAR:NAME} yesterday...</text>
+                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="3" />
+                </c>
+                <!-- <c out="films">
+                    <text>Hey... I found some films for your old school camera...</text>
+                    <check-flag flag="QUEST_MAX_PHOTOGRAPHY_CONTEST" bit-set="8" />
+                </c> -->
+                <c pos="E">
+                    <text>See later, okay?</text>
+                    <then>
+                        <bgm volume="0" />
+                        <fade-to-black speed="3" fill="true" keep="true" />
+                        <bootstrap script="location-hallway-01/location" spawn="spawn/classroom-103" />
+                    </then>
+                </c> 
+            </choice>
+
+            <node-output node="root-choices" />
+        </n>
+
+        <!-- 
+            #########################################################
+            ## feel-better ##########################################
+            #########################################################
+        -->
+        <n id="feel-better">
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="1" />
+            <dlg char="PLAYER">
+                <m>So... Are you feeling better today?</m>
+            </dlg>
+
+            <anim target="MAX" idle="NEUTRAL" face="NEUTRAL" trigger="say-01" />
+            <dlg char="MAX">
+                <m wait="1">Oh... much better... Thanks...</m>
+                <m>I don't fell weak anymore since I stopped trying to... you know... do the 'time power' thing...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Yeah... Doing that light show again would not be a good idea...</m>
+                <m>I feel like you could really mess up this world...</m>
+            </dlg>
+
+            <anim target="MAX" idle="UPSET" face="SIGH" trigger="shrug" />
+            <dlg char="MAX">
+                <m>Unfortunately... I think I already did that...</m>
+            </dlg>
+            <wait />
+            
+            <anim target="MAX" idle="UPSET" face="UPSET" look="RIGHT" />
+            <dlg char="MAX">
+                <m wait="0.5">This world still looks the same, but...</m>
+                <m>I've been noticing more and more of these strange differences...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Like what?</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <anim target="MAX" idle="NEUTRAL" face="NEUTRAL" look="NEUTRAL" />
+            <dlg char="MAX">
+                <m>I mean... I just received an invitation to next Vortex Club party...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Oh... I heard about that party...</m>
+                <m>How could it be a bad thing?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="MAX" idle="NEUTRAL" trigger="say-01" face="NEUTRAL" />
+            <dlg char="MAX">
+                <m wait="0.5">Well... They used to be super selective about people joining their meetings...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Yeah... Word is that Vortex is some kind of assholes club...</m>
+            </dlg>
+
+            <anim target="MAX" idle="UPSET" face="UPSET" />
+            <dlg char="MAX">
+                <m>But it seems the whole school is being invited to the next one...</m>
+                <m>This never happened before...</m>
+            </dlg>
+
+            <anim target="MAX" face="SIGH" />
+            <dlg char="MAX">
+                <m>And I and feel a strange vibe every time I think about it...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>Hum... Like ${CHAR:VIC:NAME} planning to play evil pranks on people who are not in her club?</m>
+            </dlg>
+
+            <anim target="MAX" idle="NEUTRAL" face="UPSET" />
+            <dlg char="MAX">
+                <m>Yeah... But not just... that...</m>
+                <m>I fell like... some kind of space-time vortex will open at that party...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>That... doesn't sound good...</m>
+            </dlg>
+
+            <anim target="MAX" idle="NEUTRAL" face="UPSET" trigger="shrug" />
+            <dlg char="MAX">
+                <m>Or maybe it's just my imagination...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>Let's hope that's the case...</m>
+            </dlg>
+
+            <node-output node="root-choices" />
+        </n>
+
+        <!-- 
+            #########################################################
+            ## about-party ##########################################
+            #########################################################
+        -->
+        <n id="about-party">
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="2" />
+            <dlg char="PLAYER">
+                <m>So... The apocalypse party... When is it going to happen?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="MAX" trigger="shrug" face="DISAPPROVE" />
+            <dlg char="MAX">
+                <m wait="0.5">They always throw their parties on friday night... at the swimming pool area...</m>
+                <m>Although I think mixing lots of people, lots of alcohol and a big 7ft deep pool is a dangerous combination...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="1">I bet there will be probably to much heavier stuff than alcohol there...</m>
+                <m>I wonder if I'll be invited too...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="MAX" trigger="say-01" face="NEUTRAL" />
+            <dlg char="MAX">
+                <m wait="0.5">Didn't you check you school e-mail today before coming to class?</m>
+                <m>That's how they send the invitation...</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m wait="0.5">Uuuhh... It's hard to explain, but...</m>
+                <m>My 'productive' day only starts when the classes end...</m>
+                <m>So I'll have to check my mail later...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="giggle" face="CUTE" />
+            <dlg char="MAX">
+                <m wait="0.5">Ha! I know what you mean...</m>
+                <m>${CHAR:CHL:NAME} used to be just like that before dropping out school...</m>
+            </dlg>
+
+            <node-output node="root-choices" />
+        </n>
+
+        <!-- 
+            #########################################################
+            ## met-war ##########################################
+            #########################################################
+        -->
+        <n id="met-war">
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="3" />
+            <dlg char="PLAYER">
+                <m>So... I met this dude called ${CHAR:WAR:NAME} yesterday...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="shrug" idle="UPSET" face="UPSET" look="RIGHT"></anim>
+            <dlg char="MAX">
+                <m>Oh... Him...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>Yeah... I have a hunch he's the one you were trying to 'avoid' in the restroom yesterday...</m>
+            </dlg>
+
+            <anim target="MAX" face="NEUTRAL" look="NEUTRAL"></anim>
+            <dlg char="MAX">
+                <m>Look... He's a good guy... We were always chatting between classes and...</m>
+                <m>... I always had fun spending time with him...</m>
+            </dlg>
+            <anim target="MAX" face="UPSET" />
+            <dlg char="MAX">
+                <m wait="0.5">But... lately... he's been acting a bit... too intense...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>'too intense' is a nice euphemism...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="surprised" idle="NEUTRAL" face="NEUTRAL" />
+            <dlg char="MAX">
+                <m wait="0.5">Don't get me wrong... I...</m>
+                <m wait="1">I just think he's also being affected by the changes in this world...</m>
+                <m>It's not just the way he talked to me yesterday...</m>
+                <m>But today, I... I...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="shrug" idle="UPSET" face="UPSET" />
+            <dlg char="MAX">
+                <m>I was putting makeup on my room... when I went near my window and noticed him...</m>
+                <m>... hiding behind a bush... trying to peep inside my room...</m>
+            </dlg>
+
+            <choice id="warren-opinion-01">
+                <c pos="W">
+                    <text>That's a big red flag</text>
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="11" icon="BUTTERFLY">This choice may influence future events</flag>
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Jeez... I don't wanna scare you, but... that's a big red flag...</m>
+                            <m>It's how every stalker begins to creep up on people they're obsessed with...</m>
+                        </dlg>
+                        <anim target="MAX" trigger="surprised" idle="UPSET" face="UPSET" />
+                        <dlg char="MAX">
+                            <m wait="1">Oh my God... Are you sure!?</m>
+                            <m>He used to be such a nice person...</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Maybe he was always like that but you never noticed...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>He was just worried about you</text>
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="12" icon="BUTTERFLY">This choice may influence future events</flag>
+                        <dlg char="PLAYER">
+                            <m>Look... You were sick yesterday and he told me how much he was concerned about your health...</m>
+                            <m>He probably just wanted to make sure you were felling fine...</m>
+                        </dlg>
+                        <anim target="MAX" trigger="surprised" idle="NEUTRAL" face="SURPRISED" />
+                        <dlg char="MAX">
+                            <m wait="1">Oh, no... He was just checking if I was okay!?</m>
+                            <m>Are you sure about that...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m>Yeah... The dude obviously cares a lot about you...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <anim target="MAX" trigger="say-01" idle="UPSET" face="SIGH" />
+                        <dlg char="MAX">
+                            <m wait="1">Of course... ${CHAR:WAR:NAME} would never wrong me... I'm the one who hurts him...</m>
+                        </dlg>
+                        <wait />
+                        <anim target="MAX" trigger="say-01" idle="NEUTRAL" face="CUTE" />
+                        <dlg char="MAX">
+                            <m>He's one of the few here who understands me here...</m>
+                            <m>I'm such an idiot...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <anim target="MAX" trigger="shrug" idle="NEUTRAL" face="SIGH" />
+            <dlg char="MAX">
+                <m wait="0.5">To make things worse... Seeing ${CHAR:WAR:NAME} startled me so hard that I tossed away my makeup kit...</m>
+            </dlg>
+            <anim target="MAX" face="UPSET" look="RIGHT" />
+            <dlg char="MAX">
+                <m>The kit hit my wall and messed it up with stains of every of color in existence...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Well... That could have ended much worse...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="surprised" look="NEUTRAL" />
+            <dlg char="MAX">
+                <m>But it is already bad!!</m>
+                <m>I had plans to use my room wall as background for the Art class picture contest!!</m>
+            </dlg>
+            <anim target="MAX" face="SIGH" />
+            <dlg char="MAX">
+                <m>But now the wall is ruined...</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>You mean Mr ${CHAR:JEF:NAME}'s photo contest? The heroes thing?</m>
+            </dlg>
+            
+            <anim target="MAX" trigger="say-01" face="NEUTRAL" />
+            <dlg char="MAX">
+                <m wait="0.5">Yeah... My room wall gets some cool natural light at this time of the day...</m>
+                <m>And I have this collection of pictures I planned to hang on there...</m>
+                <m>Photos of common people... doing their daily task... the true everyday heros...</m>
+                <m>I planned to take a selfie of me admiring the heroes on my wall and-</m>
+            </dlg>
+            <anim target="MAX" trigger="shrug" face="SIGH" />
+            <dlg char="MAX">
+                <m wait="0.5">Well... It doesn't matter anymore...</m>
+                <m>I made that huge mess and can't use the wall anymore...</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER">
+                <m>Hey... I think the sunlight hits my room at the same angle as yours...</m>
+                <m>I could borrow you my wall if you want to...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="surprised" face="SURPRISED" />
+            <dlg char="MAX">
+                <m wait="0.5">Oh my God... Of course... That would work!!</m>
+                <m>Would you let me use your room wall to stage my picture?</m>
+                <m>I swear I won't bother for more than a few minutes!!</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Of course...</m>
+                <m>My room is a mess... But I think the wall is clean enough for you to use...</m>
+            </dlg>
+
+            <anim target="MAX" face="CUTE" />
+            <dlg char="MAX">
+                <m>Yes, I want! Thank you!</m>
+            </dlg>
+            
+            <anim target="MAX" trigger="shrug" face="SIGH" />
+            <dlg char="MAX">
+                <m wait="1">However... There is another problem...</m>
+                <m>I crumpled my last my polaroid films when I tried to hide from ${CHAR:WAR:NAME} under my bed...</m>
+            </dlg>
+            <anim target="MAX" trigger="shrug" face="UPSET" />
+            <dlg char="MAX">
+                <m>My ability to screw up everything has no limits...</m>
+            </dlg>
+            <wait />
+
+            <dlg char="PLAYER">
+                <m>Shit... I don't think you'll find any place selling polaroids in a small town like this...</m>
+                <m>Have you tried buying them on-line?</m>
+            </dlg>
+
+            <anim target="MAX" trigger="shrug" face="SIGH" />
+            <dlg char="MAX">
+                <m wait="0.5">I did...</m>
+                <m>But they won't arrive until next week... when the contest is already over...</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>Well... I could ask ${CHAR:JUS:NAME}...</m>
+                <m>He has a stock of "unusual" stuff in his secret shop... and polaroid films are as unusual as it gets...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="surprised" face="CUTE" />
+            <dlg char="MAX">
+                <m>Really!? That's amazing... Would you please check if he have some spare for me?</m>
+                <m wait="1">I'll be waiting here...</m>
+                <m>Please, come back as soon as you have any idea where we can find more film!</m>
+            </dlg>
+
+            <string name="QUEST:MAX:EVERYDAY_HEROES:OBJECTIVE" set="Ask ${CHAR:JUS:NAME} about polaroid films for ${CHAR:MAX:NAME}" />
+            <log icon="QUEST">Objectives updated</log>
+
+            <node-output node="root-choices" />
+        </n>
+    </nodes>
+</xml-script>

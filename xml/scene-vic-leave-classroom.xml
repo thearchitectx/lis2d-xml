@@ -116,7 +116,7 @@
             
             <anim target="scene" trigger="next" />
             <dlg char="VIC" track="scene/track-vic">
-                <m instant="true">|I gotta keep cool... I just need need to take a deep breath and ...|</m>
+                <m>I gotta keep cool... I just need need to take a deep breath and...</m>
             </dlg>
             <wait />
             
