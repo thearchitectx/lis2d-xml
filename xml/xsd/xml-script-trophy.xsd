@@ -9,6 +9,8 @@
             <xs:enumeration value="birds-are-not-real-01" />
             <xs:enumeration value="birds-are-not-real-02" />
             <xs:enumeration value="polaroid-fever-01" />
+            <xs:enumeration value="polaroid-fever-02" />
+            <xs:enumeration value="polaroid-fever-03" />
             <xs:enumeration value="phone-gate-01" />
             <xs:enumeration value="phone-gate-02" />
         </xs:restriction>

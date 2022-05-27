@@ -128,6 +128,12 @@
                 (10): Played scene-max-chl-campus
                 (11): Choice 'warren-opinion-01' - used (That's a big red flag)
                 (12): Choice 'warren-opinion-01' - used (He was just worried about you)
+                (13): Choice 'warren-opinion-02' - used (You should avoid ${CHAR:WAR:NAME} for some time)
+                (14): Choice 'warren-opinion-02' - used (He cares about you)
+
+                (13): Choice 'hallway-01-max-01' - used (Making you happy worthed it)
+                (14): Choice 'hallway-01-max-01' - used (Nothing serious)
+                (15): Choice 'hallway-01-max-01' - used (Nothing serious)
             -->
             
             <xs:enumeration value="CHAR:WAR:INTERACTIONS" />
@@ -258,23 +264,24 @@
                 (7) Acquired info where NAT will meet ZAC
             -->
 
+            <xs:enumeration value="QUEST:MAX:EVERYDAY_HEROES:HEAT_SCORE" />
             <xs:enumeration value="QUEST:MAX:EVERYDAY_HEROES" />
             <!-- BITWISE:
                 (0) Met on Hallway
                 (1) Asked feeling better
                 (2) Asked about party
                 (3) Asked about warren
-                
-                (bit-4) Must talk to Justin about film
-                (bit-5) Talked with justin about film
-                (bit-6) Found firecrackers
-                (bit-7) Popped firecrackers
-                (bit-8) Got polaroid films
-                (bit-9) Gave films to max
-                (bit-10) Called Max to bedroom
-                (bit-11) Project choice - lonely 
-                (bit-12) Project choice - expose 
-                (bit-13) Project choice - no help 
+                (4) Asked JUS about films
+                (5) Found firecrackers
+                (6) Used firecrackers
+                (7) Got films from JUS
+                (8) Gave films to MAX
+                (9)  SELFIES - Selfies express your loneliness
+                (10) SELFIES - Selfies are about self-exposure
+                (11) Didn't took any pic
+                (12) Took wholesome pic
+                (13) Took sexy pic and brought her to bed
+                (14) Kissed her
             -->
 
 
@@ -301,7 +308,9 @@
                 (17): scene-jul-science-bj-01: Place phone for recording
                 (18): went for a nice finisher
                 (19): went for rough finisher
-                (31): Ended
+                (20): didn't escalate do blowjob
+                (21): left science room
+                (22): left hallway (ended)
             -->
 
             <xs:enumeration value="QUEST:WAR:CUPID" />
@@ -318,6 +327,8 @@
             <xs:enumeration value="ITEM:BRACELET" />
             <xs:enumeration value="ITEM:NAT_CLIENT_LIST" />
             <xs:enumeration value="ITEM:PERCEPTION_BAND" />
+            <xs:enumeration value="ITEM:FIRECRACKERS" />
+            <xs:enumeration value="ITEM:POLAROIDS" />
 
             <xs:enumeration value="MISC:ENVIRONMENT" />
             <!-- MISC:ENVIRONMENT bits
@@ -384,6 +395,7 @@
             <xs:enumeration value="CHAR:PRI:NAME" />
             <xs:enumeration value="CHAR:SAM:NAME" />
             <xs:enumeration value="CHAR:DAN:NAME" />
+            <xs:enumeration value="CHAR:DAV:NAME" />
             <xs:enumeration value="MISC:SCHOOL:NAME" />
             <xs:enumeration value="MISC:BOARD:106" />
             <xs:enumeration value="MISC:BOARD:107" />

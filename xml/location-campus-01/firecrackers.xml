@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <wait />
+            <dlg char="PLAYER">
+                <m>Here it is... I found the damned thing...</m>
+            </dlg>
+            <wait time="0.5" />
+            <sfx clip="item" async="true" />
+            <obj target="sprite" active="false"></obj>
+
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="5" />
+            <flag name="ITEM:FIRECRACKERS" set="1" />
+            <string name="QUEST:MAX:EVERYDAY_HEROES:OBJECTIVE" set="Tell ${CHAR:JUS:NAME} you found firecrackers"></string>
+            <log icon="QUEST">Objectives updated</log>
+
+            <dlg char="PLAYER">
+                <m>I should tell ${CHAR:JUS:NAME} I found the firecrackers he talked about...</m>
+            </dlg>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+
+            <script-outcome value="_destroyParent" />
+        </n>
+        
+    </nodes>
+</xml-script>

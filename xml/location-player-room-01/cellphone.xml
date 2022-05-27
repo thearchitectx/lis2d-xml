@@ -39,34 +39,38 @@
             <node-output node="choice-loop" />
         </n>
 
+        <!--################################################
+            ## choice-loop #################################
+            ################################################
+        -->
         <n id="choice-loop">
             <choice>
                 <c pos="NW">
                     <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="17" />
-                    <text>Call Kate</text>
+                    <text>Call ${CHAR:KATE:NAME}</text>
                     <lock-reason>[ NOT FOUND YET ]</lock-reason>
                     <then>
                         <if>
                             <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="31" />
                             <then>
                                 <dlg char="PLAYER">
-                                    <m>After that awkward date, I'd better wait for her to contact me...</m>
+                                    <m thought="true">After that awkward date, I'd better wait for her to contact me...</m>
                                 </dlg>
                                 <node-output node="choice-loop" />
                             </then>
                         </if>
 
                         <dlg char="PLAYER">
-                            <m>Kate told me to call her... She probably wants to meet somewhere outside the school...</m>
-                            <m>Should I do it now?</m>
+                            <m thought="true">Kate told me to call her... She probably wants to meet somewhere outside the school...</m>
+                            <m thought="true">Should I do it now?</m>
                         </dlg>
                         <choice>
-                            <c pos="W"><text>[ Call Kate ]</text></c>
+                            <c pos="W"><text>[ Call ${CHAR:KATE:NAME} ]</text></c>
                             <c pos="E" out="choice-loop"><text>[ Not now ]</text></c>
                         </choice>
 
                         <dlg char="PLAYER">
-                            <m>Let's do this...</m>
+                            <m thought="true">Let's do this...</m>
                         </dlg>
 
                         <wait time="1" />
@@ -118,6 +122,71 @@
                     </then>
                 </c>
 
+                <c pos="NE">
+                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="8" />
+                    <text>Call ${CHAR:MAX:NAME}</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m thought="true">Max told me to call her...</m>
+                            <m thought="true">She needs to use my room to stage her photo project...</m>
+                            <m thought="true">Should I do it now?</m>
+                        </dlg>
+                        <choice>
+                            <c pos="W"><text>[ Call ${CHAR:MAX:NAME} ]</text></c>
+                            <c pos="E" out="choice-loop"><text>[ Not now ]</text></c>
+                        </choice>
+
+                        <dlg char="PLAYER">
+                            <m>Let's do this...</m>
+                        </dlg>
+
+                        <wait time="1" />
+                        
+                        <anim target="scene" trigger="max" />
+                        <sfx clip="phone-call-tone" async="false" />
+                        <wait time="0.5" />
+                        <sfx clip="phone-call-tone" async="false" />
+                        <sfx clip="phone-pickup" async="false" />
+
+                        <dlg char="MAX" track="scene/track">
+                            <m>Hello...</m>
+                        </dlg>
+                        
+                        <dlg char="PLAYER">
+                            <m>Hey... It's me...</m>
+                        </dlg>
+
+                        <dlg char="MAX" track="scene/track">
+                            <m wait="0.5">Oh... Hi, ${CHAR:PLAYER:NAME}...</m>
+                            <m>I have everything ready for the project!</m>
+                            <m>Can I come in now?</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        
+                        <dlg char="PLAYER">
+                            <m>Sure... It's room 108...</m>
+                        </dlg>
+                        <wait time="0.5" />
+
+                        <dlg char="MAX" track="scene/track">
+                            <m>Awesome! I'll be there in a couple of minutes...</m>
+                        </dlg>
+
+                        <sfx clip="phone-pickup" async="false" />
+
+                        <anim target="scene" trigger="off" />
+                        <wait time="1" />
+
+                        <dlg char="PLAYER">
+                            <m>Shit... Not enough time to clean the mess here...</m>
+                        </dlg>
+                        
+                        <bgm volume="0" fade-speed="0.5" />
+                        <fade-to-black keep="true" speed="0.5" />
+
+                        <bootstrap script="scene-max-heroes-01" />
+                    </then>
+                </c>
                 <c pos="E">
                     <text>[LEAVE]</text>
                     <then>

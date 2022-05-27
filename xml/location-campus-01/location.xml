@@ -52,6 +52,15 @@
                 </then>
             </if>
 
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="4" />
+                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="5" />
+                </check-group>
+                <then>
+                    <load-scene-object key="location-campus-01-firecrackers.prefab" />
+                </then>
+            </if>
 
             <fade-to-black speed="-3" fill="true" />
 

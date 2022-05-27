@@ -21,8 +21,11 @@
     <trophy id="polaroid-fever-01" label="Polaroid Fever I" icon="char/MAX.png">
         Discover why you're here
     </trophy>
-    <trophy id="polaroid-fever-01" label="Polaroid Fever I" icon="char/MAX.png">
-        Discover why you're here
+    <trophy id="polaroid-fever-02" label="Polaroid Fever II" icon="char/MAX.png">
+        Help her submit a wholesome picture to the contest
+    </trophy>
+    <trophy id="polaroid-fever-03" label="Polaroid Fever II" icon="char/MAX.png">
+        Help her submit a sexy picture to the contest
     </trophy>
     <trophy id="phone-gate-01" label="Phonegate I" icon="char/JUL.png">
         Help her with doing the make up

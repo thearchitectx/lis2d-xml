@@ -14,7 +14,7 @@
             <if>
                 <check-group op="AND">
                     <check-flag flag="QUEST:JUL:PHONE" bit-set="11" />
-                    <!-- TODO: Add remove check -->
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="21" />
                 </check-group>
                 <then>
                     <load-scene-object key="location-science-classroom-01-jul-02.prefab" parent="location" />

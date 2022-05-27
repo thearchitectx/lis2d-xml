@@ -12,19 +12,17 @@
             ##############################################################
         -->
         <n id="root">
-            <string name="QUEST:MEM_CARD:RETURN_LOCATION" set="${ARG:0}" />
-
             <obj target="#Player">
                 <message name="SetInputActive"><bool value="false" /></message>
             </obj>
 
-            <dlg char="PLAYER" track="#PlayerTrack">
-                <m>What's up, dude...</m>
+            <dlg char="DAV">
+                <m>Back off, kid... I'm on duty here...</m>
             </dlg>
             
-            <bgm volume="0" />
-            <fade-to-black keep="true" speed="3" />
-            <bootstrap node="start" />
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
         </n>
 
         <!--
@@ -61,7 +59,7 @@
             <if>
                 <check-group op="AND">
                     <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="4" />
-                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="5" />
+                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="6" />
                 </check-group>
                 <then>
                     <anim target="JUS" trigger="say-01"></anim>
@@ -71,27 +69,7 @@
                     </dlg>
                 </then>
             </if>
-
-            <if>
-                <check-group op="AND">
-                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="5" />
-                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="6" />
-                </check-group>
-                <then>
-                    <node-output node="found-firecrackers" />
-                </then>
-            </if>
-        
-            <if>
-                <check-group op="AND">
-                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="6" />
-                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="7" />
-                </check-group>
-                <then>
-                    <node-output node="used-firecrackers" />
-                </then>
-            </if>
-
+          
             <node-output node="dialog-root" />
         </n>
 
@@ -434,7 +412,7 @@
 
             <anim target="JUS" face="SIGH" />
             <dlg char="JUS">
-                <m>Unfortunately... I don't have any films in my stash...</m>
+                <m>Unfortunately... I don't have films any in my stash...</m>
             </dlg>
             <wait time="0.5" />
             <anim target="JUS" face="NEUTRAL" trigger="say-01" />
@@ -555,7 +533,7 @@
                         
                         <anim target="JUS" trigger="say-01" />
                         <dlg char="JUS">
-                            <m wait="0.5">We need to trigger his paranoia like... lighting firecrackers to make some loud popping noises outside...</m>
+                            <m wait="0.5">We need to trigger his paranoia like... making some loud popping noises outside...</m>
                             <m>I bet he'll think they're gun shots and go nuts... The man dreams to be a hero...</m>
                         </dlg>
                     </then>
@@ -575,7 +553,7 @@
 
                         <anim target="JUS" trigger="say-01" />
                         <dlg char="JUS">
-                            <m wait="0.5">We need to trigger his paranoia like... lighting firecrackers to make some loud popping noises outside...</m>
+                            <m wait="0.5">We need to trigger his paranoia like... making some loud popping noises outside...</m>
                             <m>I bet he'll think they're gun shots and go nuts... The man dreams to be a hero...</m>
                         </dlg>
                     </then>
@@ -606,11 +584,11 @@
             
             <anim target="JUS" trigger="say-01"  />
             <dlg char="JUS">
-                <m wait="0.5">Well... I saw some nerds carrying firecrackers around the campus area yesterday for a stupid Science project...</m>
+                <m wait="0.5">Well... Some nerds carrying using firecrackers around the campus area yesterday for a stupid Science project...</m>
             </dlg>
             <anim target="JUS" face="SIGH" />
             <dlg char="JUS">
-                <m>I bet those clumsy dudes dropped some unused ones before leaving... You should try to find a few out there...</m>
+                <m>I bet those clumsy dudes left some unused ones before leaving... You should try to find a few out there...</m>
             </dlg>
             <anim target="JUS" face="NEUTRAL" />
             <wait time="0.5" />
@@ -667,116 +645,7 @@
                 <m>It's gonna be hilarious...</m>
             </dlg>
 
-            <node-output node="dialog-root" />
             
-        </n>
-    
-        <!--
-            ##############################################################
-            ## found-firecrackers ########################################
-            ##############################################################
-        -->
-        <n id="found-firecrackers">
-            <dlg char="PLAYER">
-                <m>Look... I found the firecrackers!</m>
-            </dlg>
-
-            <anim target="JUS" trigger="surprised" />
-            <dlg char="JUS">
-                <m wait="1">You did!?! Awesome!!</m>
-                <m wait="0.5">Now... Find a place to light the thing then let the rest to me...</m>
-                <m>I'll get the films for you...</m>
-            </dlg>
-
-            <dlg char="PLAYER">
-                <m>Okay... Let's do this...</m>
-            </dlg>
-
-            <obj target="JUS">
-                <message name="StartCenter" />
-                <message name="EndRight" />
-                <message name="TriggerEnter" />
-                <message name="FindReferenceBackground"><string value="shot" /></message>
-            </obj>
-            <obj target="PLAYER">
-                <message name="AnimateWeightTo"><float value="0" /></message>
-            </obj>
-
-            <bgm volume="0" />
-            <fade-to-black speed="0.5" keep="true" />
-            <bootstrap script="scene-dav-firecrackers-01" />
-        </n>
-
-        <!--
-            ##############################################################
-            ## used-firecrackers ########################################
-            ##############################################################
-        -->
-        <n id="used-firecrackers">
-            <dlg char="PLAYER">
-                <m>So... How did it go?</m>
-            </dlg>
-
-            <anim target="JUS" trigger="surprised" />
-            <dlg char="JUS">
-                <m wait="1">Dude... That was... epic...</m>
-                <m>That psycho is probably busting all doors of the building right now looking for the ghost school shooter...</m>
-            </dlg>
-            <wait time="0.5" />
-            <dlg char="PLAYER">
-                <m>Shit... That was probably scary...</m>
-            </dlg>
-
-            <anim target="JUS" trigger="say-01" />
-            <dlg char="JUS">
-                <m>Nah... It was the funniest day at work ever...</m>
-            </dlg>
-
-
-            <wait time="0.5" />
-            <dlg char="PLAYER">
-                <m>Cool, but... Did you find the films?</m>
-            </dlg>
-
-            <anim target="JUS" trigger="say-01" />
-            <dlg char="JUS">
-                <m>Sure... I got them...</m>
-            </dlg>
-
-            <wait time="0.5" />
-            <load-scene-object key="image-viewer.prefab">
-                <message name="SetImage"><string value="icon-polaroid" /></message>
-                <message name="SetImageScale"><float value="0.2" /></message>
-            </load-scene-object>
-
-            <dlg char="JUS" track="null">
-                <m>I didn't know how much of it you needed, so a grabbed a whole pack...</m>
-            </dlg>
-            
-            <wait time="0.5" />
-            <obj target="image-viewer.prefab" destroy="0" />
-            <sfx clip="item" async="true" />
-
-            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="7" />
-            <flag name="ITEM:POLAROIDS" set="1" />
-            <string name="QUEST:MAX:EVERYDAY_HEROES:OBJECTIVE" set="Give Polaroid films to ${CHAR:MAX:NAME}" />
-            <log icon="QUEST">Received Polaroid films!</log>
-            <log icon="QUEST">Objectives updated</log>
-
-            <wait time="0.5" />
-            <dlg char="PLAYER">
-                <m>Awesome... Thanks, man!</m>
-            </dlg>
-
-            <wait />
-            <dlg char="JUS">
-                <m>Now you'd better stay away from this room for a while...</m>
-                <m>The dude might come back any time now and will suspect of our plan if he find you came here during the 'incident'...</m>
-            </dlg>
-
-            <bgm volume="0" />
-            <fade-to-black keep="true" />
-            <bootstrap script="location-administration-01/location" spawn="spawn/middle" />
         </n>
     </nodes>
 

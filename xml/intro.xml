@@ -206,9 +206,8 @@
 
             <sys>
                 Press *ESC* to pause the game and check stats, objectives, items and manage save games\n\n
-                This game saves your progress often and *automatically*.\n\n
-                If you wish to keep a *copy* of the latest game state (AKA save scum), just *SWITCH* to an empty slot\n\n
-                The current active save slot is displayed during autosave and flashes in the SAVES screen
+                This game saves your progress often and *automatically* in the "autosave" slot.\n\n
+                You can make copies of your autosave current state to empty slots
             </sys>
 
             <fade-to-black keep="true" />

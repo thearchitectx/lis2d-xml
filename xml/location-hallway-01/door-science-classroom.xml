@@ -13,6 +13,25 @@
                 <message name="SetInputActive"><bool value="false" /></message>
             </obj>
 
+            <!-- Left jul:phone quest but not left the hallway -->
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-set="21" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="22" />
+                </check-group>
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>${CHAR:JUL:NAME} asked me to leave...</m>
+                        <m>I shouldn't bother her again for now...</m>
+                    </dlg>
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="true" /></message>
+                    </obj>
+                    <script-outcome value="_end" />
+                </then>
+            </if>
+
+            <!-- The door is open due to QUEST:JUL:PHONE state  -->
             <if>
                 <check-flag flag="QUEST:JUL:PHONE" bit-set="11" />
                 <then>
@@ -32,7 +51,6 @@
             </obj>
 
         </n>
-
 
     </nodes>
 </xml-script>

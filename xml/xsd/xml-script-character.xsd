@@ -6,6 +6,7 @@
             <xs:enumeration value="BRK" />
             <xs:enumeration value="CHL" />
             <xs:enumeration value="DAN" />
+            <xs:enumeration value="DAV" />
             <xs:enumeration value="JEF" />
             <xs:enumeration value="VIC" />
             <xs:enumeration value="KATE" />

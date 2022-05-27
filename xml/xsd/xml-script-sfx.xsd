@@ -19,7 +19,9 @@
             <xs:enumeration value="interrupt-renegade" />
             <xs:enumeration value="door-transition" />
             <xs:enumeration value="switch" />
+            <xs:enumeration value="metal-click" />
             <xs:enumeration value="mmm" />
+            <xs:enumeration value="snap" />
             <xs:enumeration value="phone-message" />
             <xs:enumeration value="phone-call-tone" />
             <xs:enumeration value="phone-pickup" />

@@ -15,7 +15,26 @@
                 </then>
             </if>
 
-            <load-scene-object key="location-administration-01.prefab" />
+            <load-scene-object key="location-administration-01.prefab" rename="location" />
+
+            <if>
+                <check-text text="CHAR:DAV:NAME" eq="#EMPTY" />
+                <then>
+                    <string name="CHAR:DAV:NAME" set="Security Guy"></string>
+                </then>
+            </if>
+
+            <!-- DAV-01 -->
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="0" />
+                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="6" />
+                </check-group>
+                <then>
+                    <load-scene-object key="location-administration-01-dav-01.prefab" parent="location" />
+                    <obj target="location/perceptibles/investigation-area" active="false" />
+                </then>
+            </if>
 
             <fade-to-black speed="-3" fill="true" />
 

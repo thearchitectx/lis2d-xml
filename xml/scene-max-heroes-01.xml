@@ -1,0 +1,1808 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <fade-to-black keep="true" speed="999999" layer="-1" />
+            <wait time="3" />
+            <sfx clip="knock-door" />
+            <dlg char="MAX">
+                <m>Hi, ${CHAR:PLAYER:NAME}...</m>
+                <m>It's me... ${CHAR:MAX:NAME}...</m>
+            </dlg>
+            <wait time="2" />
+            <sfx clip="door-transition" />
+            <wait time="1" />
+
+            <load-scene-object key="shot-player-room-01.prefab" rename="shot"  />
+            <fade-to-black speed="-1" />
+            <proxy name="PLAYER" target="shot/PLAYER" />
+            <bgm loop="loop-max" volume="0.25" />
+
+            <load-scene-object key="shot-char-max-01.prefab" proxy="MAX">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+            <obj target="PLAYER">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <autosave label="Chatting with ${CHAR:MAX:NAME}" />
+            <dlg char="MAX">
+                <m wait="0.5">Hello... Here I am...</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>Whoa... That was fast...</m>
+            </dlg>
+
+            <anim target="MAX" trigger="say-01" />
+            <dlg char="MAX">
+                <m>Oh... I'd be here even sooner if I hadn't bumped into ${CHAR:WAR:NAME} on my way here...</m>
+            </dlg>
+            <anim target="MAX" face="UPSET"  trigger="shrug" />
+            <dlg char="MAX">
+                <m wait="0.5">He... held me back for a minute...</m>
+                <m wait="0.5">${CHAR:WAR:NAME} seemed quite upset about me coming into your room by myself...</m>
+            </dlg>
+            <anim target="MAX" face="SIGH" idle="UPSET" />
+            <dlg char="MAX">
+                <m wait="0.5">I don't know what's wrong with him lately...</m>
+            </dlg>
+
+            <choice id="warren-opinion-02">
+                <c pos="W">
+                    <text>You should avoid ${CHAR:WAR:NAME} for some time</text>
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="13" icon="BUTTERFLY">This choice may influence future events</flag>
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Jeez... This is seriously worrisome...</m>
+                            <m wait="0.5">You should try to avoid him from now on...</m>
+                            <m>We never know what this kind of behaviour can evolve to...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <anim target="MAX" face="UPSET" />
+                        <dlg char="MAX">
+                            <m>I... I don't know...</m>
+                            <m>Maybe I should indeed...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>${CHAR:WAR:NAME} cares about you</text>
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="14" icon="BUTTERFLY">This choice may influence future events</flag>
+                        <dlg char="PLAYER">
+                            <m>He's probably just worried about your safety walking alone around here...</m>
+                            <m wait="0.5">There are some creepy dudes living in this dorm, you know...</m>
+                            <m>It's just a clear sign of how much he cares about you...</m>
+                        </dlg>
+                        <anim target="MAX" face="SURPRISED" trigger="surprised" />
+                        <dlg char="MAX">
+                            <m>Oh... I... I never thought that would be the case...</m>
+                            <m>I'm such a fool... Thinking wrong about one of the few people who cares about me...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <wait />
+            <dlg char="PLAYER">
+                <m>Anyways... Welcome to my crib...</m>
+            </dlg>
+
+            <anim target="MAX" idle="NEUTRAL" face="CUTE" trigger="say-01"></anim>
+            <dlg char="MAX">
+                <m wait="1">Yeah... Thanks a lot for letting me use your room!</m>
+                <m wait="0.5">To think I had already given up on this project when I left class today...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Is this mess of a room worth for your picture idea?</m>
+            </dlg>
+
+            <anim target="MAX" face="NEUTRAL" trigger="shrug"/>
+            <dlg char="MAX">
+                <m>Yeah... It kinda looks like my own room here...</m>
+            </dlg>
+            <anim target="MAX" look="RIGHT"/>
+            <dlg char="MAX">
+                <m>I mean... The decoration is a bit different...</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="MAX" look="LEFT"/>
+            <dlg char="MAX">
+                <m>But... Yeah... It feels familiar...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <anim target="MAX" look="NEUTRAL"/>
+            <dlg char="PLAYER">
+                <m>Then make yourself at home...</m>
+            </dlg>
+
+            <anim target="MAX" face="EMBARRASSED" trigger="shrug"/>
+            <dlg char="MAX">
+                <m wait="0.5">Well... I... uuh...</m>
+                <m>I'm not used to be alone with a guy in his room...</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="CHAR:MAX:INTERACTIONS" bit-set="9" /> <!-- (9): Choice 'cheer-max-choice': - used (You can change) -->
+                <then>
+                    <wait time="1" />
+                    <anim target="MAX" face="SIGH" />
+                    <dlg char="MAX">
+                        <m>But... I gotta stop acting like a loser...</m>
+                    </dlg>
+                    <wait time="1" />
+                    <anim target="MAX" face="NEUTRAL" />
+                    <dlg char="MAX">
+                        <m wait="0.5">You showed me that if I to get rid of the quirky loner image, then I should be used to this kind of scenario...</m>
+                        <m>You're helping feel more confident...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <anim target="MAX" idle="UPSET" />
+                    <dlg char="MAX">
+                        <m wait="1">.......</m>
+                        <m wait="0.5">Oh God... I'm showing my standard embarrassed loser face now, ain't I?</m>
+                    </dlg>
+                    
+                    <if>
+                        <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
+                        <then>
+                            <load-scene-object key="vfx-auto-dialog-paragon.prefab" />
+                            <dlg char="PLAYER">
+                                <m>Nah... I'd call it the standard ${CHAR:MAX:NAME} cute face...</m>
+                            </dlg>
+                        </then>
+                        <else>
+                            <load-scene-object key="vfx-auto-dialog-renegade.prefab" />
+                            <dlg char="PLAYER">
+                                <m>Yep... It's hilarious... I love it...</m>
+                            </dlg>
+                        </else>
+                    </if>
+
+                    <if>
+                        <check-flag flag="CHAR:MAX:AFFINITY" gte="5" />
+                        <then>
+                            <log><![CDATA[Affinity check 5+ (<color=green>yep!</color>)]]></log>
+                            <anim target="MAX" idle="NEUTRAL" face="DISAPPROVE" trigger="surprised" />
+                            <dlg char="MAX">
+                                <m>Oh, please... Now you're totally teasing me...</m>
+                            </dlg>
+                            <anim target="MAX" idle="NEUTRAL" face="CUTE" />
+                            <dlg char="MAX">
+                                <m>It's funny how...</m>
+                                <m>... we are different, but also have so much in common...</m>
+                                <m>It's really easy to chill when you're around...</m>
+                                <m>I like chatting with you...</m>
+                            </dlg>
+                            <wait />
+                        </then>
+                        <else>
+                            <log><![CDATA[Affinity check 5+ (<color=red>nope!</color>)]]></log>
+                            <anim target="MAX" trigger="surprised" />
+                            <dlg char="MAX">
+                                <m>What!?</m>
+                                <m>No... It's not... I...</m>
+                            </dlg>
+                            <wait />
+                            <anim target="MAX" face="SIGH" />
+                            <dlg char="MAX">
+                                <m>I just need some time to snap out of it...</m>
+                            </dlg>
+                            <wait />
+                        </else>
+                    </if>
+                </else>
+            </if>
+
+            <anim target="MAX" face="NEUTRAL" idle="NEUTRAL" look="NEUTRAL" trigger="say-01" />
+            <dlg char="MAX">
+                <m>Now... I think we can get started, right?</m>
+                <m>I brought my set of pictures and some basic lightning props...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <fade-to-black speed="5" keep="true" />
+            <load-scene-object key="shot-char-max-01-back.prefab" rename="MAX-BACK">
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+            <obj target="MAX" active="false" />
+            <fade-to-black speed="-5" />
+            <dlg char="MAX" track="MAX-BACK">
+                <m wait="1">My idea is to set them up over that wall...</m>
+                <m wait="0.5">You have some uhh... interesting posters over there...</m>
+                <m>I hope you don't mind me removing them for a few minutes...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>No problem... I have no idea how my stuff ended up here anyways...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <fade-to-black speed="5" keep="true" />
+            <obj target="MAX" active="true" />
+            <obj target="MAX-BACK" active="false"  />
+            <fade-to-black speed="-5" />
+            
+            <anim target="MAX" trigger="shrug" face="SIGH"></anim>
+            <dlg char="MAX">
+                <m>Yeah my old powers were much stranger than I thought...</m>
+            </dlg>
+            <wait />
+            <anim target="MAX" trigger="say-01" face="CUTE"></anim>
+            <dlg char="MAX">
+                <m>Anyways... I promise to put everything exactly where it was when I finish...</m>
+            </dlg>
+            <wait time="0.5" />
+
+            <anim target="MAX" trigger="say-01" face="NEUTRAL"></anim>
+            <dlg char="MAX">
+                <m>Now I just need to find a place for the camera and prepare the set...</m>
+            </dlg>
+
+            <fade-to-black speed="1" keep="true" />
+            <wait />
+            <bgm volume="0" />
+            <sfx clip="rummage" />
+            <bootstrap node="prepare-set" />
+        </n>
+
+        <!--################################################
+            ## prepare-set #################################
+            ################################################
+        -->
+        <n id="prepare-set">
+            <fade-to-black keep="true" speed="99990" />
+            <bgm loop="loop-max" volume="0.25" />
+            <load-scene-object key="scene-max-heroes-01.prefab" rename="scene" />
+            <proxy name="MAX" target="scene/MAX" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+            <fade-to-black speed="-1" />
+
+            <dlg char="MAX">
+                <m wait="1">And done...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Looks cool...</m>
+                <m>Who are those pics of?</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m wait="0.5">I took all these pictures of regular people... doing their daily tasks...</m>
+                <m wait="0.5">The ones I think are true "everyday heroes"...</m>
+                <m wait="0.5">Then... I can take some kind of selfie with all of them in the background...</m>
+                <m wait="0.5">But... uuhh...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="scene" trigger="next" />
+
+            <dlg char="MAX">
+                <m wait="1">Sigh... This... This is such a stupid idea...</m>
+                <m>I... I should just throw all this stuff away...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Huh!? What are you talking about?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m wait="1">I've seen people taking such cool pictures...</m>
+                <m>And by the few ones I saw being submitted to the contest...</m>
+                <m>I should just avoid the embarrassment of trying...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Oh, come on... You're kidding, right?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m wait="1">I... I'll just look stupid in the picture as always...</m>
+                <m>And the truth is...</m>
+                <m wait="1">I'm just a crappy artist...</m>
+                <m>I... don't even...</m>
+            </dlg>
+
+            <load-scene-object key="scene-max-heroes-02.prefab" active="false" />
+            <proxy clear="true" />
+            <wait time="0.25" />
+            <obj target="scene" destroy="0" />
+            <obj target="scene-max-heroes-02.prefab" rename="scene" active="true" />
+            <wait time="0.25" />
+            <proxy name="MAX" target="scene/MAX" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+            <anim target="scene"><bool name="eyes-open" value="false" /></anim>
+
+            <dlg char="MAX">
+                <m>I don't even know why I keep using the selfie theme as a poor excuse for style...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="eyes-open" value="false" /></anim>
+            <wait time="2" />
+
+            <choice>
+                <c pos="NW" style="PARAGON">
+                    <text>Selfies express your loneliness</text>
+                    <lock-reason>[Paragon +8 required]</lock-reason>
+                    <check-flag flag="PLAYER:STAT:PARAGON" gte="8" />
+                    <then>
+                        <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="9" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Hey... I think I get your style...</m>
+                            <m>I mean... You're always so alone on those selfies...</m>
+                        </dlg>
+                        <anim target="scene"><bool name="arm" value="true" /></anim>
+                        <dlg char="PLAYER">
+                            <m>It seems to me that you're trying to show the world through the lens of your loneliness...</m>
+                        </dlg>
+                        <anim target="scene"><bool name="eyes-open" value="true" /></anim>
+                        <dlg char="MAX">
+                            <m>Oh... I... I...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m>It's a nice style...</m>
+                            <m>Melancholy is fuel for many cool artists...</m>
+                        </dlg>
+
+                        <flag name="CHAR:MAX:AFFINITY" inc="2" icon="AFFINITY">${CHAR:MAX:NAME} liked that</flag>
+                        <dlg char="MAX">
+                            <m wait="1">............</m>
+                            <m>You... You're one of the very few that really understands me...</m>
+                        </dlg>
+
+                        <wait time="1" />
+                        <dlg char="PLAYER">
+                            <m>Look... If you wanna try subvert the style for once, you could try having someone in the frame with you...</m>
+                            <m>I think it would match well the whole heroes thing...</m>
+                        </dlg>
+                        
+                        <wait time="0.5" />
+                        <dlg char="MAX">
+                            <m>Would you... Would you really do that for me?</m>
+                        </dlg>
+
+                        <wait time="1" />
+                        <dlg char="PLAYER">
+                            <m>Of course I'd do...</m>
+                        </dlg>
+                        
+                        <wait time="1" />
+                        <dlg char="MAX">
+                            <m wait="1">Thank you...</m>
+                            <m>Now I think I can have a good picture for the contest...</m>
+                        </dlg>
+
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" />
+                        <bootstrap node="start-paragon" />
+                    </then>
+                </c>
+                <c pos="SW" style="RENEGADE">
+                    <text>Selfies are about self-exposure</text>
+                    <lock-reason>[Renegade +6 required]</lock-reason>
+                    <check-flag flag="PLAYER:STAT:RENEGADE" gte="6" />
+                    <then>
+                        <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="10" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Your style is pretty obvious to me...</m>
+                            <m wait="0.5">It's all about your image...</m>
+                            <m>Selfies are a manifestation of your inner desire to expose yourself to the world...</m>
+                        </dlg>
+
+                        <anim target="scene"><bool name="eyes-open" value="true" /></anim>
+                        <dlg char="MAX">
+                            <m>I... I don't think it's about that...</m>
+                        </dlg>
+                        <wait />
+                        
+                        <choice>
+                            <c pos="NW">
+                                <text>Yesterday I told you can change</text>
+                                <lock-reason>Yesterday I told you can change</lock-reason>
+                                <check-flag flag="CHAR:MAX:INTERACTIONS" bit-set="9" /> <!-- (9): Choice 'cheer-max-choice': - used (You can change) -->
+                                <then>
+                                    <dlg char="PLAYER">
+                                        <m>Are you sure you're not lying to yourself?</m>
+                                    </dlg>
+                                    <wait time="0.5"/>
+                                    <anim target="scene"><bool name="eyes-open" value="false" /></anim>
+                                    <dlg char="MAX">
+                                        <m>I... I don't-</m>
+                                    </dlg>
+                                    <dlg char="PLAYER">
+                                        <m>Remember yesterday when I told you can change?</m>
+                                    </dlg>
+                                    <anim target="scene">
+                                        <bool name="eyes-open" value="true" />
+                                        <bool name="look-away" value="true" />
+                                    </anim>
+                                    <dlg char="MAX">
+                                        <m>You... You were trying to-</m>
+                                    </dlg>
+                                    <anim target="scene"><bool name="blush" value="true" /></anim>
+                                    <dlg char="PLAYER">
+                                        <m>I was just trying to help... as I am now...</m>
+                                    </dlg>
+                                    <anim target="scene"><bool name="eyes-open" value="false" /></anim>
+                                    <dlg char="MAX">
+                                        <m>Are you... really?</m>
+                                    </dlg>
+                                </then>
+                            </c>
+                            <c pos="SW" style="RIFT">
+                                <text>You're lying to yourself</text>
+                                <lock-reason>1 Rift Energy point required</lock-reason>
+                                <check-flag flag="PLAYER:STAT:RIFT" gte="1" />
+                                <then>
+                                    <bgm name="rift-bgm" loop="loop-rumble" as-music="false" volume="0.5" />
+                                    <flag name="PLAYER:STAT:RIFT" dec="1" icon="RIFT">Used 1 Rift energy point</flag>
+                                    <load-scene-object key="vfx-rift.prefab" />
+                                    <wait />
+                                    <anim target="scene">
+                                        <bool name="look-away" value="true" />
+                                    </anim>
+                                    <dlg char="MAX">
+                                        <m>wait... what is...</m>
+                                        <m>i can fell the-</m>
+                                    </dlg>
+                                    <anim target="scene">
+                                        <bool name="look-away" value="false" />
+                                    </anim>
+                                    <dlg char="PLAYER">
+                                        <m wait="1">Listen... You're lying to yourself...</m>
+                                        <m>You wanna try something different...</m>
+                                        <m>But you're just too insecure to admit...</m>
+                                    </dlg>
+
+                                    <anim target="scene">
+                                        <bool name="eyes-open" value="true" />
+                                        <bool name="look-away" value="true" />
+                                        <bool name="blush" value="true" />
+                                    </anim>
+                                    <dlg char="MAX">
+                                        <m wait="1">Oh... maybe... maybe I am...</m>
+                                        <m>You are... just trying to help me... right?</m>
+                                    </dlg>
+
+                                    <wait time="1" />
+                                    <bgm name="rift-bgm" volume="0" />
+                                    <anim target="vfx-rift.prefab">
+                                        <bool name="active" value="false" />
+                                    </anim>
+                                </then>
+                            </c>
+                            <c pos="E">
+                                <text>Guess I can't help you then</text>
+                                <then>
+                                    <node-output node="cant-help" />
+                                </then>
+                            </c>
+                        </choice>
+
+                        <dlg char="PLAYER">
+                            <m wait="1">Of course I am...</m>
+                            <m>Look... You clearly have a self-esteem issue...</m>
+                        </dlg>
+                        <anim target="scene">
+                            <bool name="eyes-open" value="true" />
+                            <bool name="look-away" value="false" />
+                        </anim>
+                        <dlg char="MAX">
+                            <m>That's... one way of putting it...</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>I just don't wanna to see you being held back by that...</m>
+                            <m>I'm pretty sure if you try taking a bolder picture of yourself, things will start changing for the better...</m>
+                        </dlg>
+                        <anim target="scene">
+                            <bool name="eyes-open" value="false" />
+                        </anim>
+                        <dlg char="MAX">
+                            <m wait="1">..........</m>
+                            <m wait="1">maybe...</m>
+                            <m>i could try... once...</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Good...</m>
+                            <m>That's the attitude you need...</m>
+                        </dlg>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" speed="4" />
+                        <bootstrap node="start-renegade" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>Can't help with that</text>
+                    <then>
+                        <node-output node="cant-help" />
+                    </then>
+                </c>
+            </choice>
+
+        </n>
+
+        <!--################################################
+            ## cant-help ###################################
+            ################################################
+        -->
+        <n id="cant-help">
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="11" />
+            <dlg char="PLAYER">
+                <m>Sorry... But if you don't know what your style it's about, then I don't see any way to help you here...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m>Don't worry... I..</m>
+                <m>I don't care about that stupid contest anyway...</m>
+                <m wait="1">Thank you, but...</m>
+                <m>I should go back to my room now...</m>
+            </dlg>
+            <wait />
+            <sys>Continues on next version!</sys>
+            <fade-to-black keep="true" speed="0.25" />
+            <bootstrap script="title" />
+        </n>
+
+        <!--################################################
+            ## start-renegade ##############################
+            ################################################
+        -->
+        <n id="start-renegade">
+            <bgm loop="loop-max" volume="0.25" />
+            <fade-to-black keep="true" speed="99999" />
+            <load-scene-object key="scene-max-heroes-09.prefab" rename="scene" />
+            <proxy name="MAX" target="scene/MAX" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+            <fade-to-black speed="-4" />
+            <autosave label="Helping ${CHAR:MAX:NAME} take a bold picture" />
+
+            <dlg char="MAX">
+                <m wait="0.5">I... I just...</m>
+                <m>I'm don't know what I'm supposed to do...</m>
+            </dlg>
+            <wait />
+            <sfx clip="swoosh" async="true" />
+            <anim target="scene" trigger="next-shot-1"></anim>
+            <dlg char="PLAYER">
+                <m wait="0.5">Don't worry, girl...</m>
+                <m>I'm here to help, remember?</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m wait="0.5">But... What...</m>
+                <m>What are you going to-</m>
+            </dlg>
+            <anim target="scene" trigger="next-shot-1"></anim>
+            <anim target="scene"><bool name="eyes-down" value="true" /></anim>
+            <dlg char="PLAYER">
+                <m wait="0.5">I'm just gonna help you get out of your shell...</m>
+                <m>...and take an amazing picture for your contest...</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m wait="0.5">i... i...</m>
+                <m>......</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>There... Just relax now...</m>
+            </dlg>
+
+            <obj target="scene/axis-control-1" active="true" />
+            <anim target="scene" trigger="next-shot-1"></anim>
+            <obj target="scene/axis-control-1/control" >
+                <outcome value="END" clear="true" />
+            </obj>
+
+            <obj target="scene/axis-control-1" active="false" />
+
+            <wait time="0.5" />
+            <anim target="scene"><bool name="eyes-down" value="false" /></anim>
+            <dlg char="PLAYER">
+                <m>See? It wasn't that hard...</m>
+            </dlg>
+            <dlg char="MAX">
+                <m wait="0.5">it's... okay... i guess...</m>
+                <m>it's enough to-</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m wait="0.5">Enough?</m>
+                <m>I think we need more than that to a make true artistic statement...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="eyes-down" value="true" /></anim>
+            <dlg char="MAX">
+                <m wait="0.5">mm... more?</m>
+                <m>but... what could else...</m>
+            </dlg>
+
+            <anim target="scene"><int name="cam" value="2" /></anim>
+            <dlg char="PLAYER">
+                <m>Don't you realize?</m>
+                <m>You live in a chrysalis...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m>a chrysalis...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="scene" trigger="next-shot-2" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Yeah... There's a beautiful version of you... dormant...</m>
+                <m>...ready to know the world...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m wait="0.5">i remember...</m>
+                <m>the butterfly...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Yeah... Just let me help it break free...</m>
+            </dlg>
+            <dlg char="MAX">
+                <m>..........</m>
+            </dlg>
+
+            <obj target="scene/axis-control-2" active="true" />
+            <anim target="scene" trigger="next-shot-2"></anim>
+            <obj target="scene/axis-control-2/control" >
+                <outcome value="END" clear="true" />
+            </obj>
+
+            <obj target="scene/axis-control-2" active="false" />
+            <anim target="scene" trigger="next-shot-2"></anim>
+
+            <dlg char="MAX">
+                <m wait="1">......</m>
+                <m wait="1">...... am i...</m>
+                <m wait="1">am i... pretty?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Bet your ass you are...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m>i... i can't believe i'm doing this...</m>
+                <m wait="0.5">but... it's...</m>
+                <m>it's for Art...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="1">it's all for your self improvement...</m>
+                <m wait="1">just try to not thinking much about it...</m>
+                <m>Now we can keep going...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next-shot-2"></anim>
+            <wait time="3" />
+
+            <dlg char="MAX">
+                <m wait="1">wait... wait... please...</m>
+                <m>i... i'm not ready to go that far...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Sigh... Okay...</m>
+                <m>This might be enough... For your contest picture, at least...</m>
+            </dlg>
+            <wait />
+            
+            <anim target="scene"><int name="cam" value="1" /></anim>
+            <anim target="scene"><bool name="eyes-down" value="false" /></anim>
+            <dlg char="MAX">
+                <m wait="1">yeah... i...</m>
+                <m>i think i-</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">yeah... whatever you say...</m>
+                <m>Just let me be your coach for this picture...</m>
+                <m>You won't regret...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m>okay... i guess...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Great...</m>
+                <m>So get on my bed...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="eyes-down" value="true" /></anim>
+            <dlg char="MAX">
+                <m>your... bed!?!?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Yeah... I want you to make a sexy pose there next to your heroes...</m>
+                <m>Come... I'll help you...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="2" />
+            <bootstrap node="start-renegade-2" />
+        </n>
+
+        <!--################################################
+            ## start-renegade-2 ############################
+            ################################################
+        -->
+        <n id="start-renegade-2">
+            <fade-to-black  keep="true" speed="99999999" layer="-1" />
+            <bgm loop="loop-max" volume="0.25" />
+            <load-scene-object key="scene-max-heroes-10.prefab" rename="scene"></load-scene-object>
+            <proxy name="MAX" target="scene/MAX" />
+
+            <sfx clip="rummage"  />
+            <dlg char="MAX">
+                <m>like this?</m>
+            </dlg>
+
+            <fade-to-black speed="-1" />
+
+            <dlg char="PLAYER">
+                <m>Nice... This one is awesome...</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m>are... are you sure?</m>
+                <m>i don't know if this is appropriate... for the contest...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>Totally...</m>
+                <m>I guarantee you this will be Mr ${CHAR:JEF:NAME} favorite picture...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m wait="2">oh my.........</m>
+                <m>then... snap it with my camera... please...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>I got it...</m>
+            </dlg>
+
+            <sys simple="true">CLICK TO TAKE THE PICTURE</sys>
+
+            <sfx clip="snap" />
+
+            <dlg char="PLAYER">
+                <m>Done it...</m>
+            </dlg>
+
+            <trophy unlock="polaroid-fever-03" />
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="13" />
+
+            <dlg char="MAX">
+                <m>is it... good?</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>Let me check...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <trophy unlock="sunday-school-03" />
+            <wait time="2" />
+
+            <dlg char="PLAYER">
+                <m>Uhm... There's room for improvement in the panties department...</m>
+                <m>I mean... Classic whities are too far on the cute-sexy spectrum...</m>
+                <m>We can work on that for the next photo shooting session...</m>
+                <m>But anyway... I think we have a killer pic here...</m>
+            </dlg>
+
+            <dlg char="MAX" track="null">
+                <m>Can I... see it?</m>
+            </dlg>
+
+            <wait />
+            <fade-to-black keep="true" speed="4" />
+            <obj target="scene" destroy="0" />
+            <proxy clear="true" />
+            <load-scene-object key="scene-max-heroes-11.prefab" rename="scene"/>
+            <wait time="0.1" />
+            <proxy target="scene/MAX" name="MAX" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <fade-to-black speed="-4" />
+
+            <dlg char="PLAYER">
+                <m>Sure... Check it out...</m>
+            </dlg>
+            <anim target="scene" trigger="say-01" />
+
+            <dlg char="MAX">
+                <m wait="1">Oh my God...</m>
+                <m>I... I can't submit this picture to the contest...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Huh!? Why the hell not?</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="scene" trigger="say-01" />
+            <dlg char="MAX">
+                <m wait="1">People will see me... like this...</m>
+                <m>I look so... so...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <dlg char="PLAYER">
+                <m>Come on... You simply look stunning...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m wait="1">Do you...</m>
+                <m>Do you really think so?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="1">Of course I do...</m>
+                <m wait="0.5">Believe it... Mr ${CHAR:JEF:NAME} will definitely love this pic... and all your classmates will be jealous of you...</m>
+                <m>You should start being more proud of yourself... The more I look under your hipster cosplay, the more I realize how hot you are...</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m wait="1">i... i am?</m>
+                <m wait="1">Then... maybe...</m>
+                <m>Maybe I should submit this picture, right?</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <dlg char="PLAYER">
+                <m>That's a wise a decision...</m>
+                <m>You'll see how your Art will start improving from now on...</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m>it's all... thanks... to you...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>my pleasure...</m>
+                <m>it's good to know you wanna keep learning...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m>keep... learning?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>yeah...</m>
+                <m>let me show you a little more now...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+            <dlg char="MAX" ttl="3">
+                <m>wait... i...</m>
+            </dlg>
+            <wait time="3" />
+
+            <fade-to-black keep="true" speed="1" />
+            <bgm  volume="0"/>
+            <wait time="0.5" />
+            <bootstrap node="start-renegade-3" />
+        </n>
+
+        <!--################################################
+            ## start-renegade-3 ############################
+            ################################################
+        -->
+        <n id="start-renegade-3">
+            <fade-to-black  keep="true" speed="99999999" layer="-1" />
+            <bgm loop="loop-max" volume="0.25" />
+            <load-scene-object key="scene-max-heroes-12.prefab" rename="scene"></load-scene-object>
+            <proxy name="MAX" target="scene/MAX" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+            <fade-to-black  speed="-1"  />
+
+            <autosave label="Bringing ${CHAR:MAX:NAME} to bed" />
+
+            <anim target="scene" trigger="say-01" />
+            <dlg char="MAX">
+                <m>oh my god...</m>
+                <m>what's happening to me...</m>
+            </dlg>
+            <wait />
+            <anim target="scene" look="RIGHT" />
+            <dlg char="MAX">
+                <m>i... i barely know you and yet...</m>
+                <m>i took off my clothes... and lied here... and-</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m wait="1">Hey... Didn't you witness what you can do when you stop worrying about what's right and wrong?</m>
+                <m>You've just took the picture that will win the contest...</m>
+                <m wait="1">And everybody will praise you as the great artist you are...</m>
+                <m>That's what you wanted, right?</m>
+            </dlg>
+
+            
+            <anim target="scene" face="SIGH" trigger="say-01" />
+            <dlg char="MAX">
+                <m wait="1">yes... i want...</m>
+                <m>it's just... i'm usually not like... this...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Yeah... I know you're scared...</m>
+                <m>Don't worry... I'll go easy on you today...</m>
+            </dlg>
+
+            <anim target="scene" face="NEUTRAL" look="NEUTRAL" trigger="say-01" />
+            <dlg char="MAX">
+                <m wait="1">go... easy?</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>Yeah... I've been directing your scene until this moment...</m>
+                <m>Now I want you to do next move...</m>
+            </dlg>
+
+            <anim target="scene" look="RIGHT" trigger="say-01" />
+            <dlg char="MAX">
+                <m wait="1">what do you... mean?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>You know what I mean...</m>
+                <m wait="0.5">You still need to free your inner strength...</m>
+                <m>If you wanna improve even more, then show me some initiative...</m>
+            </dlg>
+
+            <anim target="scene" trigger="say-01" />
+            <dlg char="MAX">
+                <m wait="1">I...</m>
+                <m>I don't...</m>
+            </dlg>
+            <wait />
+            <anim target="scene" face="SIGH" />
+            <dlg char="MAX">
+                <m>.............</m>
+            </dlg>
+            <wait />
+            
+            <anim target="scene" face="EMBARRASSED" look="NEUTRAL"><bool name="shirt-up" value="true" /></anim>
+            <wait time="2" />
+
+            <dlg char="PLAYER">
+                <m>Yeah... That's what I'm talking about...</m>
+            </dlg>
+            <wait />
+            <anim target="scene" trigger="say-01" />
+            <dlg char="MAX">
+                <m wait="0.5">i... i'm sorry...</m>
+                <m>i wish i was like the other girls... more... curvy...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m wait="0.5">Hey... I already told you gotta work on your self-esteem, girl...</m>
+                <m>Believe me... You're hot as hell...</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="scene" face="UPSET" look="NEUTRAL" />
+            <dlg char="MAX">
+                <m>am i?</m>
+                <m>really?</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Totally... 'Thicc' might be the trend lately, but slender also rocks in my book...</m>
+                <m>I can almost see Riley when I look at your body...</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="scene" face="NEUTRAL" look="RIGHT" />
+            <dlg char="MAX">
+                <m>who?</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m wait="1">Uuh... Nevermind...</m>
+                <m>Let's just check how sensitive you are...</m>
+            </dlg>
+
+            <anim target="scene" face="EMBARRASSED" inc="state" />
+            <wait time="1" />
+            <sfx clip="voice-gasp-a" />
+            <bgm name="moan" loop="loop-moan-01" volume="0.5" />
+            <wait time="0.5" />
+            <anim target="scene" trigger="say-01" />
+
+            <dlg char="MAX">
+                <m wait="6">oh my....</m>
+                <m>this is... happening....</m>
+                <m>this is really happening...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="1">Yep...</m>
+                <m>And I think you're enjoying a lot...</m>
+            </dlg>
+            <wait time="2" />
+            
+            <dlg char="MAX">
+                <m wait="1">you....</m>
+                <m>you're such a bad influence...</m>
+            </dlg>
+
+            <wait time="1" />
+            <dlg char="PLAYER">
+                <m wait="1">Ha... Funny how that sounded like you trying to dirty talk...</m>
+                <m>Gotta say... You have a long way to improve on that...</m>
+            </dlg>
+
+            <anim target="scene" trigger="say-01" />
+            <dlg char="MAX">
+                <m wait="1">what? no... i...</m>
+                <m>i was... just saying...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Don't worry...</m>
+                <m>You don't need to say anything to increase the temperature here...</m>
+                <m>Just check what you did to me...</m>
+            </dlg>
+
+            <anim target="scene" inc="state"/>
+            <wait />
+            <anim target="scene" trigger="say-01">
+                <bool name="penis" value="true" />
+            </anim>
+            <sfx clip="voice-gasp-a" />
+            <bgm name="moan" volume="0"/>
+
+            <dlg char="MAX">
+                <m>wait... i...</m>
+                <m>i can't...</m>
+                <m>not this...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Of course you can...</m>
+                <m wait="0.5">You already got this far...</m>
+                <m>You wanna show yourself that you can do what want...</m>
+                <m>And doing this is the key to start growing your self confidence...</m>
+            </dlg>
+
+            <wait />
+            <dlg char="MAX">
+                <m>but i... i...</m>
+            </dlg>
+            <wait />
+            <anim target="scene" face="SIGH"></anim>
+            <dlg char="MAX">
+                <m>...........</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Here... Let me help you...</m>
+            </dlg>
+            
+            <anim target="scene" inc="state"/>
+            <wait />
+            <sfx clip="voice-gasp-a" />
+            <wait />
+            <dlg char="PLAYER">
+                <m wait="1">There...</m>
+                <m>See? It's not a big deal...</m>
+                <m wait="1">Soon you'll be used to do this...</m>
+                <m>Just handle the package with with care...</m>
+            </dlg>
+            <wait />
+            <dlg char="MAX">
+                <m>...........</m>
+            </dlg>
+            <wait time="2" />
+            <dlg char="PLAYER">
+                <m>Good... You know what to do now...</m>
+            </dlg>
+            <anim target="scene" inc="state"/>
+            <wait time="2" />
+            <anim target="scene" look="RIGHT"></anim>
+            <bgm name="moan" loop="loop-moan-01" volume="0.25"/>
+            <dlg char="PLAYER">
+                <m>Good girl...</m>
+            </dlg>
+            <wait time="6" />
+            <node-output node="start-renegade-loop" />
+        </n>
+
+        <!--################################################
+            ## start-renegade-loop #########################
+            ################################################
+        -->
+        <n id="start-renegade-loop">
+            <choice>
+                <c pos="NW">
+                    <text>[ Left ]</text>
+                    <then>
+                        <anim target="scene"><int name="state" value="6" /></anim>
+                        <node-output node="start-renegade-loop" />
+                    </then>
+                </c>
+                <c pos="NE">
+                    <text>[ Right ]</text>
+                    <then>
+                        <anim target="scene"><int name="state" value="5" /></anim>
+                        <node-output node="start-renegade-loop" />
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>[ Hide ]</text>
+                    <then>
+                        <sys simple="true">CLICK TO CONTINUE</sys>
+                        <node-output node="start-renegade-loop" />
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>[ Continue ]</text>
+                    <then>
+                        <node-output node="start-renegade-4" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--################################################
+            ## start-renegade-loop #########################
+            ################################################
+        -->
+        <n id="start-renegade-4">
+            <dlg char="MAX">
+                <m>i...</m>
+                <m>i need to go back to my room...</m>
+                <m>it's getting late...</m>
+            </dlg>
+            <wait />
+            <dlg char="PLAYER">
+                <m>Okay... Let's end this session with a high note, okay?</m>
+            </dlg>
+            <dlg char="MAX">
+                <m>but... what... i...</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>I know you can do it...</m>
+                <m>I'll give you some real motivation...</m>
+            </dlg>
+
+            <anim target="scene" ><int name="state" value="7" /></anim>
+            <wait />
+            <anim target="scene"  face="EMBARRASSED"><int name="look" value="2" /></anim>
+            <dlg char="MAX">
+                <m>ohmnng.....</m>
+            </dlg>
+            <wait time="3" />
+            <dlg char="PLAYER">
+                <m>You're having some real fun, aren't you?</m>
+            </dlg>
+            <dlg char="MAX">
+                <m>mmmmnno..... imngh... mmnn...</m>
+            </dlg>
+            <anim target="scene"><bool name="soak" value="true" /></anim>
+            <dlg char="PLAYER">
+                <m wait="2">Yeah... The moisture down here says otherwise...</m>
+                <m>Come on... Give it to me...</m>
+            </dlg>
+
+            <wait time="3" />
+
+            <sys simple="true">CLICK TO CONTINUE</sys>
+
+            <load-scene-object key="vfx-heat.prefab"></load-scene-object>
+            <dlg char="PLAYER">
+                <m>Shiiit... Here it comes.....</m>
+            </dlg>
+            
+            <load-scene-object key="scene-max-heroes-13.prefab" active="false"></load-scene-object>
+            <proxy clear="true" />
+            <wait time="0.1" />
+            <obj target="scene" destroy="0" />
+            <obj target="scene-max-heroes-13.prefab" rename="scene" active="true" />
+            <wait time="0.1" />
+            <proxy target="scene/MAX" name="MAX" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+
+            <bgm name="moan" volume="0"/>
+            <bgm volume="0.2"/>
+            <load-scene-object key="vfx-heat.prefab"></load-scene-object>
+            <wait />
+            <load-scene-object key="vfx-heat.prefab"></load-scene-object>
+            <wait />
+            <load-scene-object key="vfx-heat.prefab"></load-scene-object>
+            
+            <obj target="scene">
+                <outcome clear="true" />
+            </obj>
+
+            <dlg char="PLAYER">
+                <m>Phew... You did great, ${CHAR:MAX:NAME}...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m wait="0.5">Oh my God...</m>
+                <m wait="0.5">There's so... much...</m>
+                <m>How... How am I gonna come out like this?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Don't worry... Just try to wipe some of it then cover it with your shirt...</m>
+                <m>Surely no one will notice...</m>
+            </dlg>
+
+            <wait time="1" />
+            <dlg char="MAX">
+                <m wait="0.5">Jesus Christ... this... this went way too far...</m>
+                <m>I... I must to go back to my room, now...</m>
+            </dlg>
+
+            <wait time="2" />
+
+            <sys>Continues on next version!</sys>
+            <fade-to-black keep="true" speed="0.25"/>
+            <bootstrap script="title" />
+
+            <!-- <dlg char="MAX">
+                <m wait="0.5">Jesus Christ... This went too far, I...</m>
+                <m>I... I must to go back to my room, now...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Sure... Don't forget your stuff...</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m>Yeah... Thanks... I guess...</m>
+            </dlg> -->
+        </n>
+
+        <!--################################################
+            ## start-paragon #################################
+            ################################################
+        -->
+        <n id="start-paragon">
+            <fade-to-black keep="true" speed="99990" />
+            <bgm loop="loop-max" volume="0.25" />
+            <load-scene-object key="scene-max-heroes-03.prefab" rename="scene" />
+            <proxy name="MAX" target="scene/MAX" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+            <fade-to-black speed="-1" />
+
+            <autosave label="Helping ${CHAR:MAX:NAME} with the picture contest" />
+            
+            <dlg char="MAX" track="null">
+                <m wait="1">Okay... I think that's a great place for my camera...</m>
+                <m>I just need to set up the auto shoot timer...</m>
+            </dlg>
+            <sfx clip="metal-click" />
+            <dlg char="MAX" track="null">
+                <m>And now we can take position...</m>
+            </dlg>
+
+            <wait />
+            <anim target="scene"><bool name="camera" value="false"></bool></anim>
+            <wait />
+
+            <dlg char="PLAYER">
+                <m>So...</m>
+                <m>Is it ready?</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m wait="0.5">Yeah... Everything is... perfect...</m>
+                <m>We just need to wait the snap timer...</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m wait="0.5">Cool...</m>
+                <m wait="0.5">Should I make... I don't know...</m>
+                <m>Some kind of pose?</m>
+            </dlg>
+            
+            <dlg char="MAX">
+                <m wait="0.5">Don't worry...</m>
+                <m wait="1">I want it to come naturally...</m>
+                <m>... and capture how I feel...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="scene" trigger="next"></anim>
+            <dlg char="MAX">
+                <m>.........</m>
+            </dlg>
+
+            <wait time="3" />
+            <sfx clip="snap" />
+            <wait time="3" />
+
+            <dlg char="PLAYER">
+                <m wait="0.5">So...</m>
+                <m>Aren't you curious to see the picture you camera shot?</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m>Oh...</m>
+                <m wait="1">Yeah... I...</m>
+                <m wait="0.5">I almost forgot...</m>
+                <m>Let's see...</m>
+            </dlg>
+
+            <wait />
+            <anim target="scene"><bool name="snap" value="true"></bool></anim>
+            <trophy unlock="polaroid-fever-02" />
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="12" />
+            <wait />
+
+            <dlg char="MAX" track="null">
+                <m wait="1">Woah...</m>
+                <m wait="1">I like it... A lot...</m>
+                <m  wait="1">It has a warm tone...</m>
+            </dlg>
+
+            <load-scene-object key="scene-max-heroes-04.prefab" rename="scene-04" active="false" />
+            <proxy clear="true" />
+            <wait time="0.25" />
+            <obj target="scene" destroy="0"></obj>
+            <obj target="scene-04" rename="scene" active="true"></obj>
+            <wait time="0.25" />
+            <proxy target="scene/MAX" name="MAX" />
+            <proxy target="scene/PLAYER" name="PLAYER" />
+
+            <dlg char="MAX">
+                <m wait="1">...and emits a hopeful feeling...</m>
+                <m wait="1">.........</m>
+                <m>I... I've never taken a picture like this...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Well... I think you have some solid submission material for your contest here...</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m>Thank you so much, ${CHAR:PLAYER:NAME}...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Don't worry... I won't charge you my regular modeling fee...</m>
+            </dlg>
+            
+            <anim target="scene" trigger="next" />
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m wait="1">I wouldn't be able to do this without your support...</m>
+                <m>.........</m>
+            </dlg>
+
+            <choice>
+                <c pos="E">
+                    <text>[Get closer] [${CHAR:MAX:NAME} AFFINITY 5+]</text>
+                    <check-flag flag="CHAR:MAX:AFFINITY" gte="5" />
+                    <lock-reason>[Get closer] [${CHAR:MAX:NAME} AFFINITY 5+ REQUIRED]</lock-reason>
+                    <then>
+                        <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="14" />
+                        <anim target="scene" trigger="next" />
+                        <wait time="1" />
+                        <dlg char="PLAYER">
+                            <m>Hey... You've been through a lot lately...</m>
+                            <m>And I'll keep helping you as much as I can...</m>
+                        </dlg>
+                        <wait />
+                        <dlg char="MAX">
+                            <m wait="1">I... I'm kinda glad I messed time and space like that...</m>
+                            <m>Because... It allow me to meet you...</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Just for relax for a bit, okay...</m>
+                        </dlg>
+                        <dlg char="MAX">
+                            <m>Yeah... I... I...</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Come here...</m>
+                        </dlg>
+
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" speed="4" />
+                        <bootstrap node="kiss" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Say goodbye]</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>Well... I guess you should be tired from all that work...</m>
+                            <m>I won't hold you here anymore...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <dlg char="MAX">
+                            <m>Yeah... I... I should go now...</m>
+                            <m wait="1">Thanks again...</m>
+                            <m>See you tomorrow...</m>
+                        </dlg>
+
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" speed="0.25" />
+                        <sys>Continues next version!</sys>
+                        <bootstrap script="title" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--################################################
+            ## kiss ########################################
+            ################################################-->
+        <n id="kiss">
+            <bgm loop="loop-max" volume="0.25" />
+            <fade-to-black keep="true" speed="9999" />
+            <load-scene-object key="scene-max-heroes-05.prefab" rename="scene-05" />
+            <fade-to-black speed="-4" />
+            <proxy target="scene-05/MAX" name="MAX" />
+            <proxy target="scene-05/PLAYER" name="PLAYER" />
+
+            <autosave label="Helping ${CHAR:MAX:NAME} with the picture contest" />
+
+            <wait time="6" />
+            <dlg char="MAX">
+                <m wait="2">Oh...</m>
+                <m wait="1">${CHAR:PLAYER:NAME}...</m>
+                <m>I... I...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Hey... Just try to chill for a minute, okay...</m>
+            </dlg>
+
+            <wait time="5" />
+
+            <load-scene-object key="scene-max-heroes-06.prefab" rename="scene-06" active="false" />
+            <obj target="scene-05" active="false"></obj>
+            <obj target="scene-06" active="true"></obj>
+
+            <dlg char="MAX" track="scene-06/MAX">
+                <m wait="1">${CHAR:PLAYER:NAME}...</m>
+                <m>I... I don't know if this is right...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="scene-06/PLAYER">
+                <m>What do you even mean?</m>
+            </dlg>
+
+            <wait time="1" />
+            <dlg char="MAX" track="scene-06/MAX">
+                <m>The way... all this... started...</m>
+                <m>what if... what if...</m>
+            </dlg>
+            
+            <wait/>
+            <anim target="scene-06"><int name="face" value="0" /></anim>
+            <dlg char="PLAYER" track="scene-06/PLAYER">
+                <m wait="2">${CHAR:MAX:NAME}... You should try worrying less about everything...</m>
+                <m>Let me try make you relax, okay?</m>
+            </dlg>
+            
+            <anim target="scene-06"><bool name="grope" value="true" /></anim>
+            <wait />
+            <obj target="scene-06/axis-control" active="true"></obj>
+            <wait time="5" />
+
+            <anim target="scene-06"><int name="face" value="1" /></anim>
+            <wait time="0.25" />
+            <anim target="scene-06"><int name="face" value="2" /></anim>
+
+            <dlg char="MAX" track="scene-06/MAX">
+                <m>Oh my...</m>
+                <m>${CHAR:PLAYER:NAME}... what... what are you...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="scene-06/PLAYER">
+                <m>I'm just trying to make you forget your problems for a moment...</m>
+                <m>You deserve a break...</m>
+            </dlg>
+
+            <wait time="2" />
+            <dlg char="MAX" track="scene-06/MAX">
+                <m wait="1">maybe...</m>
+            </dlg>
+            <anim target="scene-06"><int name="face" value="1" /></anim>
+            <dlg char="MAX" track="scene-06/MAX">
+                <m>maybe I...</m>
+            </dlg>
+            <wait />
+
+            <anim target="scene-06"><int name="face" value="0" /></anim>
+
+            <dlg char="MAX" track="scene-06/MAX">
+                <m>.........</m>
+            </dlg>
+
+            <node-output node="kiss-loop-1" />
+        </n>
+
+         <!--###############################################
+            ## kiss-loop-1 #################################
+            ################################################-->
+        <n id="kiss-loop-1">
+            <choice>
+                <c pos="NW">
+                    <text>[Kissing]</text>
+                    <then>
+                        <obj target="scene-05" active="true"></obj>
+                        <obj target="scene-06" active="false"></obj>
+                        <node-output node="kiss-loop-1" />
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>[Groping]</text>
+                    <then>
+                        <obj target="scene-05" active="false"></obj>
+                        <obj target="scene-06" active="true"></obj>
+                        <wait time="1" />
+                        <anim target="scene-06">
+                            <int name="face" value="0" />
+                            <bool name="grope" value="true" />
+                        </anim>
+                        <node-output node="kiss-loop-1" />
+                    </then>
+                </c>
+                <c pos="NE">
+                    <text>[Hide]</text>
+                    <then>
+                        <sys simple="true">CLICK TO CONTINUE</sys>
+                        <node-output node="kiss-loop-1" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[Continue]</text>
+                    <then>
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" speed="4" />
+                        <bootstrap node="kiss-2" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+        <!--###############################################
+            ## kiss-2 #####################################
+            ################################################-->
+        <n id="kiss-2">
+            <bgm loop="loop-max" volume="0.25" />
+            <fade-to-black keep="true" speed="99999" />
+            <load-scene-object key="scene-max-heroes-07.prefab" rename="scene" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+            <proxy name="MAX" target="scene/MAX" />
+            <fade-to-black speed="-4" />
+
+            <dlg char="MAX">
+                <m wait="2">${CHAR:PLAYER:NAME}..........</m>
+                <m>i... i need to... go....</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Why would you want to leave already?</m>
+                <m>Are you not enjoying the moment?</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m wait="1">I am... </m>
+                <m>but... it's... getting late...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next" />
+
+            <dlg char="PLAYER">
+                <m wait="1">Well...</m>
+                <m>Then let's make the best of the time we still have...</m>
+            </dlg>
+
+            <obj target="scene/axis-control" active="true" />
+            <anim target="scene" trigger="next" />
+            <obj target="scene/axis-control/arm">
+                <outcome value="END" clear="true" />
+            </obj>
+
+            <obj target="scene/axis-control" active="false"></obj>
+            <anim target="scene" trigger="next" />
+
+            <bgm name="moan" loop="loop-moan-01" volume="0.25"/>
+            <dlg char="MAX">
+                <m>${CHAR:PLAYER:NAME}...</m>
+            </dlg>
+
+            <load-scene-object key="scene-max-heroes-08.prefab" rename="scene-08" />
+            <obj target="scene" destroy="0"></obj>
+            <obj target="scene-08" rename="scene" active="true"></obj>
+            <proxy clear="true" />
+            <wait time="0.5" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+            <proxy name="MAX" target="scene/MAX" />
+
+            <dlg char="MAX">
+                <m wait="1">${CHAR:PLAYER:NAME}...</m>
+                <m wait="1">this...</m>
+                <m>this... is... is....</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>I hope you're trying to say this feels good...</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m>I'm... not... used... to...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next"></anim>
+
+            <wait time="2" />
+            <sfx clip="voice-gasp-a" />
+            <dlg char="MAX">
+                <m>mmmmngh...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>There... Now I know you're feeling good...</m>
+            </dlg>
+
+            <wait time="6" />
+            <anim target="scene"><int name="control" value="1" /></anim>
+            <wait />
+            <obj target="scene/axis-control" active="true"></obj>
+            <flag name="FLG:0" set="1"></flag>
+            <flag name="FLG:1" set="1"></flag>
+            <node-output node="kiss-loop-2" />
+        </n>
+
+         <!--###############################################
+            ## kiss-loop-2 #################################
+            ################################################-->
+            <n id="kiss-loop-2">
+                <choice>
+                    <c pos="NW">
+                        <text>[Toggle Grope]</text>
+                        <then>
+                            <if>
+                                <check-flag flag="FLG:0" eq="1" />
+                                <then>
+                                    <anim target="scene"><int name="control" value="2" /></anim>
+                                    <flag name="FLG:0" set="2"></flag>
+                                </then>
+                                <else>
+                                    <anim target="scene"><int name="control" value="1" /></anim>
+                                    <flag name="FLG:0" set="1"></flag>
+                                </else>
+                            </if>
+                            <node-output node="kiss-loop-2" />
+                        </then>
+                    </c>
+                    <c pos="SW">
+                        <text>[Toggle Zoom]</text>
+                        <then>
+                            <if>
+                                <check-flag flag="FLG:1" eq="1" />
+                                <then>
+                                    <obj target="scene/cinemachine-close-top" active="true"></obj>
+                                    <flag name="FLG:1" set="2"></flag>
+                                </then>
+                                <else>
+                                    <obj target="scene/cinemachine-close-top" active="false"></obj>
+                                    <flag name="FLG:1" set="1"></flag>
+                                </else>
+                            </if>
+                            <node-output node="kiss-loop-2" />
+                        </then>
+                    </c>
+                    <c pos="W">
+                        <text>[Hide]</text>
+                        <then>
+                            <sys simple="true">CLICK TO CONTINUE</sys>
+                            <node-output node="kiss-loop-2" />
+                        </then>
+                    </c>
+                    <c pos="E">
+                        <text>[Continue]</text>
+                        <then>
+                            <dlg char="MAX">
+                                <m>${CHAR:PLAYER:NAME}....</m>
+                                <m>I... I'm sorry...</m>
+                            </dlg>
+                            <dlg char="PLAYER">
+                                <m>Sorry? For what?</m>
+                            </dlg>
+                            <bgm name="moan" volume="0" />
+                            <fade-to-black keep="true" speed="3" layer="-1" />
+                            <dlg char="MAX">
+                                <m>Sorry, I....</m>
+                                <m>I can't...</m>
+                            </dlg>
+                            <bgm volume="0" />
+                            <wait />
+                            <bootstrap node="kiss-3" />
+                        </then>
+                    </c>
+                </choice>
+            </n>
+
+            <!--###############################################
+            ## kiss-3 #####################################
+            ################################################-->
+        <n id="kiss-3">
+            <load-scene-object key="shot-player-room-01.prefab" rename="shot"  />
+            <fade-to-black speed="-1" />
+            <proxy name="PLAYER" target="shot/PLAYER" />
+            <bgm loop="loop-max" volume="0.25" />
+
+            <load-scene-object key="shot-char-max-01.prefab" proxy="MAX">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </load-scene-object>
+            <obj target="PLAYER">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <anim target="MAX" face="UPSET" idle="UPSET" />
+            <dlg char="MAX">
+                <m>I... I can't...</m>
+                <m>It's just... wrong....</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>I don't get it...</m>
+                <m>What's could ever be wrong about this?</m>
+            </dlg>
+
+            <dlg char="MAX">
+                <m>I... I'll explain later...</m>
+                <m>I... just need to go now...</m>
+            </dlg>
+            <obj target="MAX">
+                <message name="StartCenter" />
+                <message name="EndRight" />
+                <message name="TriggerEnter" />
+            </obj>
+            <dlg char="MAX">
+                <m>I'm sorry...</m>
+            </dlg>
+            <wait />
+
+            <dlg char="PLAYER">
+                <m>Damn...</m>
+                <m>What the hell happened?</m>
+            </dlg>
+            <wait />
+            <sys>Continues next version!</sys>
+            <fade-to-black keep="true" />
+            <bootstrap script="title" />
+        </n>
+    </nodes>
+
+</xml-script>

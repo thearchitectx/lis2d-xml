@@ -10,6 +10,7 @@
             <xs:enumeration value="cinemachine-impulse.prefab" />
             <xs:enumeration value="panel-text-input.prefab" />
             <xs:enumeration value="location-administration-01.prefab" />
+            <xs:enumeration value="location-administration-01-dav-01.prefab" />
             <xs:enumeration value="location-boys-dorm-01.prefab" />
             <xs:enumeration value="location-boys-dorm-01-war-meet.prefab" />
             <xs:enumeration value="location-boys-dorm-02.prefab" />
@@ -20,6 +21,7 @@
             <xs:enumeration value="location-campus-01-chl-01-left-scene.prefab" />
             <xs:enumeration value="location-campus-01-kate-01.prefab" />
             <xs:enumeration value="location-campus-01-dan-01.prefab" />
+            <xs:enumeration value="location-campus-01-firecrackers.prefab" />
             <xs:enumeration value="location-classroom-01.prefab" />
             <xs:enumeration value="location-classroom-01-jef-vic.prefab" />
             <xs:enumeration value="location-classroom-01-jef.prefab" />
@@ -73,6 +75,8 @@
             <xs:enumeration value="scene-administration-prank.prefab" />
             <xs:enumeration value="scene-administration-investigate-01.prefab" />
             <xs:enumeration value="scene-administration-investigate-02.prefab" />
+            <xs:enumeration value="scene-dav-administration-01.prefab" />
+            <xs:enumeration value="scene-dav-firecracker-01.prefab" />
             <xs:enumeration value="scene-jef-vic-classroom.prefab" />
             <xs:enumeration value="scene-vic-leave-classroom.prefab" />
             <xs:enumeration value="scene-dan-distract-zac-01.prefab" />
@@ -101,6 +105,20 @@
             <xs:enumeration value="scene-jul-science-bj-05.prefab" />
             <xs:enumeration value="scene-jul-science-bj-06.prefab" />
             <xs:enumeration value="scene-jul-science-bj-07.prefab" />
+            <xs:enumeration value="scene-jul-science-bj-08.prefab" />
+            <xs:enumeration value="scene-max-heroes-01.prefab" />
+            <xs:enumeration value="scene-max-heroes-02.prefab" />
+            <xs:enumeration value="scene-max-heroes-03.prefab" />
+            <xs:enumeration value="scene-max-heroes-04.prefab" />
+            <xs:enumeration value="scene-max-heroes-05.prefab" />
+            <xs:enumeration value="scene-max-heroes-06.prefab" />
+            <xs:enumeration value="scene-max-heroes-07.prefab" />
+            <xs:enumeration value="scene-max-heroes-08.prefab" />
+            <xs:enumeration value="scene-max-heroes-09.prefab" />
+            <xs:enumeration value="scene-max-heroes-10.prefab" />
+            <xs:enumeration value="scene-max-heroes-11.prefab" />
+            <xs:enumeration value="scene-max-heroes-12.prefab" />
+            <xs:enumeration value="scene-max-heroes-13.prefab" />
             <xs:enumeration value="scene-max-chl-campus.prefab" />
             <xs:enumeration value="scene-max-restroom-01.prefab" />
             <xs:enumeration value="scene-max-restroom-02.prefab" />
@@ -131,6 +149,7 @@
             <xs:enumeration value="shot-mainhall-01.prefab" />
             <xs:enumeration value="shot-mainhall-02.prefab" />
             <xs:enumeration value="shot-mainhall-03.prefab" />
+            <xs:enumeration value="shot-player-room-01.prefab" />
             <xs:enumeration value="shot-restroom-men-01.prefab" />
             <xs:enumeration value="shot-restroom-women-01.prefab" />
             <xs:enumeration value="shot-science-classroom-01.prefab" />
@@ -144,6 +163,7 @@
             <xs:enumeration value="shot-char-jul-01.prefab" />
             <xs:enumeration value="shot-char-jus-01.prefab" />
             <xs:enumeration value="shot-char-max-01.prefab" />
+            <xs:enumeration value="shot-char-max-01-back.prefab" />
             <xs:enumeration value="shot-char-nat-01.prefab" />
             <xs:enumeration value="shot-char-sam-01.prefab" />
             <xs:enumeration value="shot-char-tay-01.prefab" />

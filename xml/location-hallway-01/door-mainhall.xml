@@ -17,6 +17,16 @@
             <bgm volume="0" />
             <fade-to-black keep="true" speed="3" />
 
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:JUL:PHONE" bit-set="21" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="22" />
+                </check-group>
+                <then>
+                    <flag name="QUEST:JUL:PHONE" bit-on="22"></flag>
+                </then>
+            </if>
+            
             <bootstrap script="location-mainhall-01/location" spawn="spawn/hallway" />
         </n>
 

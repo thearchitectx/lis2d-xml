@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## n1 ########################################################
+            ##############################################################
+        -->
+        <n id="n1">
+            <fade-to-black keep="true" speed="999999" />
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="6" />
+            <flag name="ITEM:FIRECRACKERS" set="0" />
+
+            <bgm loop="loop-urban" volume="0.25" fade-speed="0.5" />
+            <load-scene-object key="scene-dav-administration-01.prefab"  />
+            <fade-to-black speed="-0.25" />
+            <autosave label="Luring ${CHAR:DAV:NAME} out of the administration office" />
+            
+            <dlg char="DAV">
+                <m>Damn it... Guarding this door leaves the school without any proper surveillance...</m>
+                <m>But those were my orders... And a soldier must respect the chain of command...</m>
+            </dlg>
+
+
+            <fade-to-black speed="3" keep="true" />
+            <obj target="scene-dav-administration-01.prefab" destroy="0"></obj>
+            <load-scene-object key="scene-dav-firecracker-01.prefab" rename="scene" />
+            <fade-to-black speed="-3"    />
+
+            <sfx clip="item" async="true" />
+            
+            
+
+            <dlg char="PLAYER">
+                <m wait="1">Okay... I think this is a good spot...</m>
+                <m>I can light these babies and run away to the restroom...</m>
+                <m wait="1">I just hope this wacky plan works...</m>
+                <m>Well... Here goes nothing...</m>
+            </dlg>
+
+            <wait />
+            <fade-to-black speed="4" keep="true" />
+            <anim target="scene" trigger="next"></anim>
+            <wait time="0.25" />
+            <fade-to-black speed="-4" />
+
+            <wait />
+            <dlg char="PLAYER">
+                <m>Damn... This is going to be loud...</m>
+                <m>I'd better bail now!!</m>
+            </dlg>
+
+            <anim target="scene" trigger="next"></anim>
+            
+            <obj target="scene">
+                <outcome />
+            </obj>
+            
+            <dlg char="DAV">
+                <m wait="1">What the hell is this sound...</m>
+                <m wait="1">Oh my God... It's happening... It's really happening...</m>
+                <m>This is it... I gotta do something... now...</m>
+            </dlg>
+
+            <anim target="scene" trigger="next"></anim>
+
+            <dlg char="DAV">
+                <m wait="0.5">EVERYBODY CALM DOWN!!</m>
+                <m>DUCK AND COVER!!</m>
+                <m>I'LL HANDLE IT!!</m>
+            </dlg>
+
+            <load-scene-object key="cinemachine-impulse.prefab">
+                <message name="GenerateImpulse"><float value="25" /></message>
+            </load-scene-object>
+
+            <sfx clip="impact" async="true" />
+            <anim target="scene" trigger="next"></anim>
+            
+            <string name="QUEST:MAX:EVERYDAY_HEROES:OBJECTIVE" set="Check if ${CHAR:JUS:NAME} found the films" />
+            <log icon="QUEST">Objectives updated</log>
+
+            <dlg char="DAV">
+                <m wait="1">THIS IS MY SCHOOL, MOTHERFUCKER!!</m>
+                <m wait="1">NO WACKO SHOOTER WILL DEFILE IT WHILE I AM HERE!!</m>
+                <m>YOU BETTER BE READY!! GOD IS WAITING FOR YOUR JUDGEMENT!!</m>
+            </dlg>
+            
+            <sfx clip="swoosh" async="true" />
+            <anim target="scene" trigger="next"></anim>
+            <wait />
+
+
+            <bgm volume="0" />
+            <fade-to-black speed="0.25" keep="true" />
+            <bootstrap script="location-restroom-men-01/location" spawn="spawn/urinals" />
+        </n>
+    </nodes>
+</xml-script>

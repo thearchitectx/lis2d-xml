@@ -766,18 +766,23 @@
                 <c pos="E">
                     <text>If you think it is, it's okay...</text>
                     <then>
+                        <flag name="QUEST:JUL:PHONE" bit-on="20" />
+                        <flag name="QUEST:JUL:PHONE" bit-on="21" />
                         <dlg char="PLAYER">
                             <m>If you think it is, it's okay...</m>
                         </dlg>
                         <dlg char="JUL">
+                            <m wait="1">Awesome...</m>
+                            <m>You can leave now... I need a minute to recompose myself...</m>
                             <m>Thank you so much for helping me...</m>
                         </dlg>
+
+                        <log icon="QUEST">Objectives updated</log>
+                        <string name="QUEST:JUL:PHONE:OBJECTIVE" unset="true" />
+
                         <bgm volume="0" />
-                        <fade-to-black keep="true" async="true" />
-                        <wait time="2" />
-                        <sys>This scene continues in next version!</sys>
-                        <wait time="2" />
-                        <bootstrap script="title" />
+                        <fade-to-black speed="0.25" keep="true" />
+                        <bootstrap script="location-hallway-01/location" spawn="spawn/science-classroom" />
                     </then>
                 </c>
             </choice>
@@ -1172,10 +1177,15 @@
                             <m>You look beautiful...</m>
                         </dlg>
 
-                        <fade-to-black keep="true" speed="0.25" async="true" />
-                        <sys>This scene continues in next version!</sys>
-                        <wait time="3" />
-                        <bootstrap script="title" />
+                        <wait />
+
+                        <dlg char="JUL">
+                            <m>...........</m>
+                        </dlg>
+
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" speed="2" />
+                        <bootstrap node="bj-final-phase-2" />
                     </then>
                 </c>
                 <c pos="SW" style="RENEGADE">
@@ -1219,7 +1229,10 @@
                         <anim target="scene-06" trigger="shot-c" />
                         <anim target="scene-06" trigger="blink-closed" />
                         <anim target="scene-06" trigger="exp-look-penis" />
+                        <proxy clear="true" />
                         <fade-to-black speed="-1" />
+                        <proxy target="scene-06/JUL" name="JUL" />
+                        <proxy target="scene-06/PLAYER" name="PLAYER" />
 
                         <anim target="scene-06">
                             <int name="state" value="5" />
@@ -1283,15 +1296,130 @@
                             <m>That's what I call a finisher...</m>
                         </dlg>
 
-                        <fade-to-black keep="true" speed="0.25" async="true" />
-                        <sys>This scene continues in next version!</sys>
-                        <wait time="3" />
-                        <bootstrap script="title" />
+                        <wait />
+                        
+                        <dlg char="JUL">
+                            <m>.........</m>
+                            <m>oh...... my......</m>
+                        </dlg>
+                        
+                        <dlg char="PLAYER">
+                            <m>You should take some deep breaths now...</m>
+                            <m>You probably need it...</m>
+                        </dlg>
+
+                        <wait />
+
+                        <dlg char="JUL">
+                            <m wait="1">did.........</m>
+                            <m>did... you......</m>
+                        </dlg>
+
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" speed="2" />
+                        <bootstrap node="bj-final-phase-2" />
                     </then>
                 </c>
             </choice>
+        </n>
+        
+        <!--
+            ########################################################
+            ## bj-final-phase-2 ####################################
+            ########################################################
+        -->
+        <n id="bj-final-phase-2">
+            <bgm loop="loop-urban" volume="0.25" />
+            <fade-to-black speed="99999" keep="true" />
+            <load-scene-object key="scene-jul-science-bj-08.prefab" rename="scene" />
+            <load-scene-object key="video-recorder.prefab"></load-scene-object>
+            <proxy target="scene/PLAYER" name="PLAYER" />
+            <proxy target="scene/JUL" name="JUL" />
+            <if>
+                <check-flag flag="QUEST:JUL:PHONE" bit-set="19" />
+                <then>
+                    <anim target="scene" trigger="renegade"></anim>
+                    <fade-to-black speed="-3" />
+                    <dlg char="JUL">
+                        <m wait="1">Did you liked that, ${CHAR:ZAC:NAME}?</m>
+                        <m wait="1">Did you see what he did to me?</m>
+                        <m wait="0.5">Even when he treated me like a cheap whore... it was still better than any time I've been with you...</m>
+                        <m wait="0.5">...because he at least was being HONEST... something you never learned...</m>
+                    </dlg>
 
+                    <wait time="0.5"/>
+                    <dlg char="PLAYER">
+                        <m>My pleasure...</m>
+                        <m>No need to-...</m>
+                    </dlg>
 
+                    <anim target="scene"><bool name="look" value="true" /></anim>
+                    <dlg char="JUL">
+                        <m>You're courting danger, boy... Playtime is over...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <anim target="scene" trigger="paragon"></anim>
+                    <fade-to-black speed="-3" />
+                    <dlg char="JUL">
+                        <m wait="0.5">So... What do you think, ${CHAR:ZAC:NAME}?</m>
+                        <m wait="1">Do I look pretty to you?</m>
+                        <m wait="1">See what you lost for being impatient and a FUCKING CHEATER?</m>
+                        <m>Even though I don't think you would have the same competence of my buddy here...</m>
+                    </dlg>
+
+                    <wait time="0.5"/>
+                    <dlg char="PLAYER">
+                        <m>Well... Thanks...</m>
+                        <m>But I just st-</m>
+                    </dlg>
+
+                    <anim target="scene"><bool name="look" value="true" /></anim>
+                    <dlg char="JUL">
+                        <m>Hey... Don't feel flattered...</m>
+                        <m>Any moron can be more competent than ${CHAR:ZAC:NAME}...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <wait time="1"/>
+            <dlg char="JUL">
+                <m>You should just leave now...</m>
+                <m>You already served your purpose...</m>
+            </dlg>
+
+            <wait time="0.5"/>
+            <dlg char="PLAYER">
+                <m wait="0.5">Damn... I feel used...</m>
+                <m>It's awesome!</m>
+            </dlg>
+            
+            <dlg char="JUL">
+                <m>Just leave me alone for a minute...</m>
+                <m>I need time to... put myself together...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Okay... See ya...</m>
+            </dlg>
+            <anim target="scene" trigger="next"></anim>
+            <wait />
+            <anim target="scene"><bool name="look" value="false" /></anim>
+
+            <dlg char="JUL">
+                <m wait="0.5">Yeah... I just need to recompose myself the bare minimum and go back to you, ${CHAR:ZAC:NAME}...</m>
+                <m>I should give your stupid phone back...</m>
+                <m wait="0.5">I'll give you a goodbye kiss with these lips you just saw doing some hard work...</m>
+                <m>and never look at your face again!!</m>
+            </dlg>
+
+            <log icon="QUEST">Objectives updated</log>
+            <string name="QUEST:JUL:PHONE:OBJECTIVE" unset="true" />
+            <flag name="QUEST:JUL:PHONE" bit-on="21" />
+
+            <bgm volume="0" />
+            <fade-to-black speed="0.25" keep="true" />
+            <bootstrap script="location-hallway-01/location" spawn="spawn/science-classroom" />
         </n>
     </nodes>
 </xml-script>

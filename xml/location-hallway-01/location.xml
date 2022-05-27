@@ -28,7 +28,7 @@
             <if>
                 <check-group op="AND">
                     <check-flag flag="DAY:CURRENT" gte="2" />
-                    <!-- TODO: <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="9" /> -->
+                    <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="8" />
                 </check-group>
                 <then>
                     <load-scene-object key="location-hallway-01-max-01.prefab" parent="location" />

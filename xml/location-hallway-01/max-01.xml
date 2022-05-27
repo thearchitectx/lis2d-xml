@@ -14,16 +14,21 @@
                 <message name="WarpTo"><string value="player-max-pos" /></message>
             </obj>
             
-            <wait time="2" />
-            <dlg char="MAX">
-                <m>...............</m>
-            </dlg>
-            <wait />
-            <dlg char="PLAYER" track="#PlayerTrack">
-                <m wait="1">${CHAR:MAX:NAME}?</m>
-                <m>Earth calling ${CHAR:MAX:NAME}... Earth calling ${CHAR:MAX:NAME}...</m>
-                <m>Are you there?</m>
-            </dlg>
+            <if>
+                <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="0" />
+                <then>
+                    <wait time="2" />
+                    <dlg char="MAX">
+                        <m>...............</m>
+                    </dlg>
+                    <wait />
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m wait="1">${CHAR:MAX:NAME}?</m>
+                        <m>Earth calling ${CHAR:MAX:NAME}... Earth calling ${CHAR:MAX:NAME}...</m>
+                        <m>Are you there?</m>
+                    </dlg>
+                </then>
+            </if>
 
             <bgm volume="0" />
             <fade-to-black speed="3" fill="true" keep="true" />
@@ -150,13 +155,19 @@
                     <text>I met ${CHAR:WAR:NAME} yesterday...</text>
                     <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="3" />
                 </c>
-                <!-- <c out="films">
-                    <text>Hey... I found some films for your old school camera...</text>
-                    <check-flag flag="QUEST_MAX_PHOTOGRAPHY_CONTEST" bit-set="8" />
-                </c> -->
+                <c pos="NE" out="films">
+                    <text>I found some films for you</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="7" />
+                        <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-unset="8" />
+                    </check-group>
+                </c>
                 <c pos="E">
-                    <text>See later, okay?</text>
+                    <text>See you later, okay?</text>
                     <then>
+                        <dlg char="PLAYER">
+                            <m>See you later, okay?</m>
+                        </dlg>
                         <bgm volume="0" />
                         <fade-to-black speed="3" fill="true" keep="true" />
                         <bootstrap script="location-hallway-01/location" spawn="spawn/classroom-103" />
@@ -508,5 +519,157 @@
 
             <node-output node="root-choices" />
         </n>
+    
+        <!-- 
+            #########################################################
+            ## films ################################################
+            #########################################################
+        -->
+        <n id="films">
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="1" />
+            <dlg char="PLAYER">
+                <m>Hey... I found some films for your old school camera...</m>
+            </dlg>
+
+            <anim target="MAX" idle="NEUTRAL" face="SURPRISED" trigger="surprised" />
+            <dlg char="MAX">
+                <m>Whoa... You actually did it!?</m>
+            </dlg>
+
+            <anim target="MAX" face="CUTE" />
+            <dlg char="MAX">
+                <m>I can't believe it!</m>
+                <m>You're awesome!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Piece of cake...</m>
+                <m>Here... You can have them</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <fade-to-black speed="4" keep="true" />
+            <sfx clip="item" />
+            <flag name="ITEM:POLAROIDS" set="0" />
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="8" />
+            <log icon="QUEST">You gave Polaroid films to ${CHAR:MAX:NAME}</log>
+            <fade-to-black speed="-4" />
+            <wait time="1" />
+            
+            <anim target="MAX" idle="NEUTRAL" face="SURPRISED" trigger="surprised" />
+            <dlg char="MAX">
+                <m wait="0.5">This... is a LOT of film...</m>
+                <m>I mean...</m>
+            </dlg>
+            <anim target="MAX" idle="UPSET" face="UPSET" />
+            <wait time="0.5" />
+            <dlg char="MAX">
+                <m wait="0.5">Thanks, but...</m>
+                <m>I just hope you didn't break any rule to get your hands on a pack like this...</m>
+            </dlg>
+
+            <choice id="hallway-01-max-01">
+                <c pos="NW" style="PARAGON">
+                    <check-flag flag="PLAYER:STAT:PARAGON" gte="7" />
+                    <text>Making you happy worthed it</text>
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="13"></flag>
+                        <dlg char="PLAYER">
+                            <m wait="0.6">Don't worry... I did nothing too serious...</m>
+                            <m>You can be sure seeing you happy again totally worthed it...</m>
+                        </dlg>
+                        <flag name="CHAR:MAX:AFFINITY" inc="1" icon="AFFINITY">${CHAR:MAX:NAME} liked that</flag>
+                        <anim target="MAX" idle="NEUTRAL" face="CUTE" trigger="say-01" />
+                        <dlg char="MAX">
+                            <m wait="1">Oh my God... You're seriously spoiling me...</m>
+                            <m>But, hey... Today I learned being spoiled is awesome...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>You'd better not know</text>
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="14"></flag>
+                        <dlg char="PLAYER">
+                            <m>Well... If you're worried about that then it's better simply not say anything</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <anim target="MAX" idle="NEUTRAL" face="CUTE" trigger="say-01" />
+                        <dlg char="MAX">
+                            <m wait="1">Oh my God... You're seriously spoiling me...</m>
+                            <m>But, hey... I'm now learning that being spoiled is awesome...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW" style="RENEGADE">
+                    <text>Breaking rules is rewarding</text>
+                    <check-flag flag="PLAYER:STAT:PARAGON" gte="5" />
+                    <then>
+                        <flag name="CHAR:MAX:INTERACTIONS" bit-on="15"></flag>
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Of course I broke several rules...</m>
+                            <m wait="1">Those films don't grow on trees and are definitely not free...</m>
+                            <m wait="0.5">See how cool are the rewards of being a little naughty?</m>
+                        </dlg>
+                        <anim target="MAX" idle="UPSET" face="UPSET" trigger="shrug" />
+                        <dlg char="MAX">
+                            <m wait="0.5">Well... Having a free stock of film enough for months is great, but...</m>
+                            <m>I don't know if I shouldn't accept this...</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Don't worry...</m>
+                            <m wait="0.5">It stays between us, okay?</m>
+                        </dlg>
+                        <anim target="MAX" idle="UPSET" face="SIGH" />
+                        <dlg char="MAX">
+                            <m wait="1">Okay... I... I won't tell.. I...</m>
+                            <m>Thanks...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <wait />
+            <dlg char="PLAYER">
+                <m>So... Another mission accomplished, then... </m>
+            </dlg>
+
+            <anim target="MAX" idle="NEUTRAL" face="NEUTRAL" trigger="say-01" />
+            <dlg char="MAX">
+                <m>Well... I still need to take the picture...</m>
+                <m>We can still setup the scenery in your room, right?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Sure... Anytime...</m>
+            </dlg>
+
+            <string name="QUEST:MAX:EVERYDAY_HEROES:OBJECTIVE" set="Go to your room and call ${CHAR:MAX:NAME} for the picture session" />
+            <log icon="QUEST">Objective updated</log>
+            <anim target="MAX" idle="NEUTRAL" face="CUTE" trigger="say-01" />
+            <dlg char="MAX">
+                <m wait="0.5">Awesome... I'm going to prepare my gear now...</m>
+                <m>Call me when you have the room available, okay? I'll be waiting!</m>
+            </dlg>
+
+            <obj target="MAX">
+                <message name="StartCenter" />
+                <message name="EndRight" />
+                <message name="TriggerEnter" />
+            </obj>
+            
+            <wait />
+
+            <dlg char="PLAYER">
+                <m thought="true">I should call her as soon as I have a chance...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="3" fill="true" keep="true" />
+            <bootstrap script="location-hallway-01/location" spawn="spawn/classroom-103" />
+        </n>
+
+
     </nodes>
 </xml-script>
