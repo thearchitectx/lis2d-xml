@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <!--################################################
+            ## root ########################################
+            ################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <choice>
+                <c pos="NE">
+                    <text>[Enter boys dorm]</text>
+                    <then>
+                        <fade-to-black fill="true" speed="3" keep="true" />
+                        <bgm volume="0" />
+                        <sfx clip="door-transition"  />
+                        <bootstrap script="location-boys-dorm-01/location" spawn="spawn/door-campus" />
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>[Enter girls dorm]</text>
+                    <then>
+                        <if>
+                            <check-flag flag="QUEST:PRINCIPAL1" bit-unset="19" /> <!-- (19): Asked SAM about second assignment -->
+                            <then>
+                                <dlg char="PLAYER"  track="#PlayerTrack">
+                                    <m>Nope... Breaking into the girls dorm now would put me in serious trouble...</m>
+                                </dlg>
+                                <node-output node="root" />
+                            </then>
+                        </if>
+                        <if>
+                            <check-group op="AND">
+                                <check-flag flag="QUEST:PRINCIPAL1" bit-set="19" /> <!-- (19): Asked SAM about second assignment -->
+                                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="20" /> <!-- (20): First entered girls dorm -->
+                            </check-group>
+                            <then>
+                                <flag name="QUEST:PRINCIPAL1" bit-on="20" />
+                                <dlg char="PLAYER" track="#PlayerTrack">
+                                    <m>Well... At least I have now an official excuse to visit the girls dorm...</m>
+                                </dlg>
+                            </then>
+                        </if>
+
+                        <fade-to-black fill="true" speed="3" keep="true" />
+                        <bgm volume="0" />
+                        <sfx clip="door-transition" />
+                        <bootstrap script="location-girls-dorm-01/location" spawn="spawn/door-campus" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Back]</text>
+                    <then>
+                        <obj target="#Player">
+                            <message name="SetInputActive"><bool value="true" /></message>
+                        </obj>
+                    </then>
+                </c>
+            </choice>
+        </n>
+    </nodes>
+</xml-script>

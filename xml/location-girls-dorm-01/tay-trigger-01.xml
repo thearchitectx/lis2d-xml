@@ -1,0 +1,294 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="root">
+            <obj target="#Player"><message name="SetInputActive"><bool value="false" /></message></obj>
+            
+            <dlg char="PLAYER">
+                <m thought="true" wait="1">Hey... Is that...</m>
+                <m thought="true">What the hell is ${CHAR:TAY:NAME} doing?</m>
+            </dlg>
+
+            <wait />
+
+            <dlg char="TAY">
+                <m font-size="12">Come on...</m>
+                <m font-size="12">Move a little more to the right...</m>
+                <m font-size="12">So I can see you...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Uuhh... ${CHAR:TAY:NAME}?</m>
+            </dlg>
+
+            <dlg char="TAY">
+                <m>Huh!?!?!</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="2" keep="true" />
+            <bootstrap node="scene" />
+        </n>
+
+        <!-- 
+            ###############################################
+            ## scene     ###################################
+            ###############################################
+        -->
+        <n id="scene">
+            <fade-to-black speed="9999999" keep="true" />
+            <bgm loop="loop-tay" volume="0.25" />
+            <load-scene-object key="shot-girls-dorm-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-tay-01.prefab" rename="TAY" />
+            
+            <proxy target="shot/player" name="PLAYER" />
+
+            <obj target="TAY">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </obj>
+
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <anim target="TAY" face="SURPRISED" />
+
+            <fade-to-black speed="-1" />
+            <autosave label="Chatting with ${CHAR:TAY:NAME}" />
+
+            <dlg char="TAY">
+                <m>Oh my God...</m>
+                <m>Don't... scare me... like that...</m>
+            </dlg>
+            <wait time="0.5" />
+
+            <dlg char="PLAYER">
+                <m wait="0.5">I wasn't trying to scare you...</m>
+                <m>I was just surprised I found you yet again sitting at the door of a restroom...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="TAY" trigger="say-01" face="UPSET" look="RIGHT" />
+            <dlg char="TAY">
+                <m>I... wasn't...</m>
+                <m>I... didn't...</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="PLAYER:STAT:PARAGON" gte="${PLAYER:STAT:RENEGADE}" />
+                <then>
+                    <load-scene-object key="vfx-auto-dialog-paragon.prefab" />
+                    <dlg char="PLAYER">
+                        <m wait="0.5">Look... Sorry about that, okay?</m>
+                        <m>I didn't mean to pry into... whatever business you were doing...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <load-scene-object key="vfx-auto-dialog-renegade.prefab" />
+                    <dlg char="PLAYER">
+                        <m wait="0.5">No wonder you were scared...</m>
+                        <m>You were trying to have a peek on someone into that restroom and I caught you red handed...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <if>
+                <check-flag flag="QUEST:KATE:FASHION" bit-set="1" />
+                <then>
+                    <wait time="0.5" />
+                    <dlg char="PLAYER">
+                        <m>It just makes you accusing me of peeping into ${CHAR:KATE:NAME}'s room sound a bit hypocritical, doesn't?</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <anim target="TAY" trigger="surprised" face="SURPRISED" look="NEUTRAL" />
+            <dlg char="TAY">
+                <m>I wasn't trying to peep...</m>
+                <m>I was just... trying to find ${CHAR:COU:NAME}...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Of course... ${CHAR:COU:NAME}...</m>
+                <m>I see your relationship with her is still on the same page, right?</m>
+            </dlg>
+
+            <anim target="TAY" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="TAY">
+                <m>Hey... You'd better don't start...</m>
+                <m>And don't even think about telling anyone about... us!</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m wait="0.5">Take a chill pill, ${CHAR:TAY:NAME}...</m>
+                <m>By the way you've been behaving... I wouldn't even have to say anything for people to start noticing...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="TAY" trigger="shrug" face="SIGH" />
+            <dlg char="TAY">
+                <m>Sigh... I... I know...</m>
+            </dlg>
+            <anim target="TAY" face="UPSET" look="RIGHT" />
+            <dlg char="TAY">
+                <m>I just can't control myself anymore...</m>
+                <m>I don't know what to do...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Well... They say the quickest way to control a burning desire is to fulfill it...</m>
+            </dlg>
+
+            <anim target="TAY" look="NEUTRAL" />
+            <dlg char="TAY">
+                <m>As if it were so easy...</m>
+                <m>${CHAR:COU:NAME} seems always living in his own happy little world of movies and gossip...</m>
+            </dlg>
+            <anim target="TAY" look="RIGHT" />
+            <dlg char="TAY">
+                <m>I think she doesn't even grasp the concept that I could be... interested in her...</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER">
+                <m>Well... What if you tried a not so direct approach...</m>
+            </dlg>
+            
+            <wait />
+            <anim target="TAY" trigger="say-01" face="NEUTRAL" look="NEUTRAL" />
+            <dlg char="TAY">
+                <m>What... do you mean?</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Like... Make a fake account in a messenger app and start texting her anonymously...</m>
+                <m>You know... play the secret admirer...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="say-01" look="RIGHT" />
+            <dlg char="TAY">
+                <m wait="0.5">Secret admirer...</m>
+                <m>Like... One of those 80's movies ${CHAR:COU:NAME} is always talking about?</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m wait="0.5">Exactly...</m>
+                <m wait="0.5">I have a hunch she would love to receive a surprise love 'letter'...</m>
+                <m>Using 21st century technology, of course...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="surprised" face="SURPRISED" look="NEUTRAL" />
+            <dlg char="TAY">
+                <m>Wait a minute... So I could say to her everything I wanna say...</m>
+                <m>... without she even knowing it's me?</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Not only that... But if you win her over some chat sessions...</m>
+                <m>Then it's gonna pretty easy to proceed to the next level...</m>
+            </dlg>
+
+            <anim target="TAY"  face="NEUTRAL"  look="RIGHT" />
+            <dlg char="TAY">
+                <m>The next... level?</m>
+            </dlg>
+            
+            <dlg char="PLAYER">
+                <m>You know... Asking her on some kind of date and... making a surprise reveal...</m>
+            </dlg>
+
+            <wait />
+            <anim target="TAY" look="NEUTRAL" face="SIGH" />
+            <dlg char="TAY">
+                <m wait="1">.........</m>
+                <m>i'm not much of a fan of texting, but...</m>
+            </dlg>
+            <anim target="TAY" trigger="shrug" face="CUTE" />
+            <dlg char="TAY">
+                <m wait="1">that might actually work...</m>
+                <m>${CHAR:COU:NAME} loves this mystery stuff...</m>
+            </dlg>
+            <wait time="1" />
+            <anim target="TAY" face="UPSET" />
+            <dlg char="TAY">
+                <m wait="0.5">I... just need to learn how to make the fake account thing...</m>
+                <m>I'm not exactly a tech savvy person...</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>I could quickly do it for you...</m>
+                <m>I just need you to let me use your phone for a minute...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="surprised" face="SURPRISED" />
+            <dlg char="TAY">
+                <m wait="0.5">You can?</m>
+                <m>Oh my God, of course...</m>
+            </dlg>
+            <anim target="TAY" face="NEUTRAL" />
+            <dlg char="TAY">
+                <m>Here... Take my phone and do it for me... Please...</m>
+            </dlg>
+
+            <fade-to-black keep="true" speed="2" layer="-1"  />
+            <wait time="0.5" />
+            <sfx clip="beep" />
+            <dlg char="PLAYER">
+                <m>Okay...</m>
+                <m wait="0.5">Let's set your new user name to... @urs3cr3tadmirer</m>
+            </dlg>
+            <sfx clip="phone-message" />
+            <sfx clip="beep" />
+            <dlg char="PLAYER">
+                <m>And... done!</m>
+            </dlg>
+            <fade-to-black  speed="-2"  />
+
+            <anim target="TAY" face="SURPRISED" trigger="surprised" />
+            <dlg char="TAY">
+                <m>That's it!?</m>
+            </dlg>
+            <anim target="TAY" face="CUTE" />
+            <dlg char="TAY">
+                <m>Oh my God... Thank you so much!</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Happy to help...</m>
+            </dlg>
+
+            <anim target="TAY" trigger="say-01" />
+            <dlg char="TAY">
+                <m>I'd better go to my room now and start thinking what I'll gonna send her!</m>
+            </dlg>
+            
+            <obj target="TAY">
+                <message name="StartCenter" />
+                <message name="EndRight" />
+                <message name="TriggerEnter" />
+            </obj>
+            <dlg char="TAY">
+                <m>Bye!</m>
+            </dlg>
+
+            <wait time="2" />
+            <dlg char="PLAYER">
+                <m thought="true" wait="1">She didn't seem to mind me keeping the account password...</m>
+                <m thought="true">People should really worry more about their tech security...</m>
+                <m thought="true">Well... That might be useful later...</m>
+            </dlg>
+
+            <flag name="QUEST:TAY:COU:DATE" bit-on="0" />
+            <fade-to-black keep="true" />
+            <bootstrap script="location-girls-dorm-01/location" spawn="spawn/restroom" />
+        </n>
+
+    </nodes>
+</xml-script>

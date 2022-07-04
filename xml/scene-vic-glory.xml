@@ -1,0 +1,1758 @@
+<?xml version="1.0"?>
+<xml-script xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xsd/xml-script.xsd">
+    <nodes>
+        <!--###############################################
+            ### root ######################################
+            ###############################################-->
+        <n id="root">
+            <fade-to-black keep="true" speed="1000" />
+
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <load-scene-object key="scene-kate-diner-01.prefab" rename="scene" />
+
+            <fade-to-black speed="-0.5" />
+
+            <autosave label="Meeting ${CHAR:VIC:NAME} at the diner" />
+
+            <wait />
+            <if>
+                <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="31" />
+                <then>
+                    <dlg char="PLAYER">
+                        <m wait="1" thought="true">Here we are again...</m>
+                        <m thought="true">Didn't think I would be back here so soon...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="PLAYER">
+                        <m wait="1" thought="true">Okay... This is the diner...</m>
+                        <m thought="true">It's always good to get away from that school for a while...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <anim target="scene" trigger="next" />
+
+            <wait time="2" />
+            
+            <if>
+                <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="31" />
+                <then>
+                    <if>
+                        <check-group op="OR">
+                            <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="28" />
+                            <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="30" />
+                        </check-group>
+                        <then>
+                            <dlg char="PLAYER">
+                                <m wait="1" thought="true">I hope not to bump into that buzzkill lady again...</m>
+                                <m thought="true">I had enough awkward lecturing last time...</m>
+                            </dlg>
+                        </then>
+                        <else>
+                            <dlg char="PLAYER">
+                                <m wait="1" thought="true">The place is still empty...</m>
+                                <m thought="true">I wonder if people actually come to have a snack here...</m>
+                            </dlg>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <dlg char="PLAYER">
+                        <m wait="1" thought="true">.........</m>
+                        <m thought="true">Feels like a fifties' movie in here...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <anim target="scene" trigger="next" />
+            
+            <dlg char="PLAYER">
+                <m wait="1" thought="true">Now... Where is ${CHAR:VIC:NAME}?</m>
+                <m thought="true" wait="0.5">I hope she didn't give up...</m>
+                <m thought="true">I didn't take that long to arrive here, did I?</m>
+            </dlg>
+
+            <wait time="1" />
+
+            <dlg char="VIC" track="scene/VIC">
+                <m>Hey... There you are!</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="2" />
+            <bootstrap node="dialog-1" />
+        </n>
+
+        <!--###############################################
+            ### dialog-1 ######################################
+            ###############################################-->
+        <n id="dialog-1">
+            <fade-to-black speed="9999999" keep="true" />
+            <bgm loop="loop-vic" volume="0.25" />
+            <load-scene-object key="shot-diner-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-vic-01.prefab" rename="VIC" />
+            
+            <proxy target="shot/player" name="PLAYER" />
+            
+            <obj target="VIC">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </obj>
+
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+            <anim target="VIC" face="DISAPPROVE" />
+            <fade-to-black speed="-1" />
+
+            <autosave label="Chatting with ${CHAR:VIC:NAME}" />
+            <dlg char="VIC">
+                <m>Hey! I told you to not make me wait, didn't I?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Sorry... But I had to take the bus to come here...</m>
+                <m>I'm pretty sure it can't compete with your private driver...</m>
+            </dlg>
+            
+            <anim target="VIC" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="VIC">
+                <m wait="0.5">Spare me of your excuses...</m>
+                <m>I just want to know why the hell you're here...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Pretty simple...</m>
+                <m>You can't just wait for Mr ${CHAR:JEF:NAME} here...</m>
+                <m>He's smart, and will bail as soon as he sees you...</m>
+            </dlg>
+
+            <anim target="VIC" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="VIC">
+                <m>Duh... Then I wait for him in the restroom...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>And how will you know when he's the one entering there?</m>
+                <m wait="0.5">The place is public... Anyone can come in...</m>
+                <m>You wanna be sure you'll 'collect material' from the right person, don't you?</m>
+            </dlg>
+
+            <anim target="VIC" trigger="surprised" face="UPSET" />
+            <dlg char="VIC">
+                <m>Oh... I...</m>
+                <m>...didn't think about that detail...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Exactly... That's why you'll need a pair of eyes out here...</m>
+                <m>I can text you from outside to confirm if he's the one with you...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="VIC" trigger="shrug" face="UPSET" />
+            <dlg char="VIC">
+                <m wait="0.5">Well... Maybe you really need to be around...</m>
+                <m>but...</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="VIC" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="VIC">
+                <m>You said this was supposed to be easy and simple!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">I don't think I ever used those words to describe the plan...</m>
+                <m>You were the one overly confident since the beginning...</m>
+            </dlg>
+
+            <anim target="VIC" look="LEFT" />
+            <dlg char="VIC">
+                <m>Well, you...</m>
+                <m>The way you explained it...</m>
+                <m>It sounded simple enough...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Don't worry...</m>
+                <m wait="0.5">I'm here to... manage your work...</m>
+            </dlg>
+            <anim target="VIC" trigger="say-01" look="NEUTRAL" />
+            <dlg char="VIC">
+                <m>What the hell is that supposed to mean?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Uuh... Nothing...</m>
+                <m wait="0.5">It's just...</m>
+                <m wait="0.5">You should know you can't just call me once our 'target' enters the restroom...</m>
+                <m>Talking is against the glory hole etiquette...</m>
+            </dlg>
+
+            <anim target="VIC" trigger="surprised" face="EMBARRASSED" />
+            <dlg char="VIC">
+                <m>Oh my God...</m>
+            </dlg>
+            <anim target="VIC" look="LEFT" />
+            <dlg char="VIC">
+                <m>Don't say those words out loud here!!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Just saying... Mr ${CHAR:JEF:NAME} will recognize your voice if you say anything...</m>
+                <m wait="1">So it's a good idea to keep your mouth shut while in there...</m>
+                <m>I mean...</m>
+                <m>You can open your mouth, but... not to speak...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="VIC" look="NEUTRAL" face="DISAPPROVE" />
+            <dlg char="VIC">
+                <m>Urgh... You are the one who needs to shut the fuck up, smart ass...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Look... You shouldn't waste any more time and get into the restroom...</m>
+                <m>I will remotely assist you with doing some reconnaissance...</m>
+                <m>And trying to find a recording spot...</m>
+            </dlg>
+
+            <anim target="VIC" trigger="surprised" face="UPSET" />
+            <dlg char="VIC">
+                <m wait="1">Get in there?</m>
+                <m wait="1">Like... now?</m>
+                <m>Where is it?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Come... I show you...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" speed="1" />
+            <bootstrap node="dialog-2" />
+        </n>
+
+        <!--###############################################
+            ### dialog-2 ######################################
+            ###############################################-->
+        <n id="dialog-2">
+            <fade-to-black speed="9999999" keep="true" />
+            <bgm loop="loop-vic" volume="0.25" />
+            <load-scene-object key="shot-diner-02.prefab" rename="shot" />
+            
+            <proxy target="shot/player" name="PLAYER" />
+            <fade-to-black speed="-1" />
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <dlg char="PLAYER">
+                <m wait="0.5">Here it is...</m>
+                <m>Where the magic happens...</m>
+            </dlg>
+
+            <load-scene-object key="shot-char-vic-01.prefab" rename="VIC" active="false" />
+            <obj target="VIC" active="true">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </obj>
+
+            <anim target="VIC" face="DISAPPROVE" />
+            <dlg char="VIC">
+                <m wait="1">Unisex restroom... disgusting...</m>
+                <m>How can people support the existence of these things!?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">I don't think it's some political statement in this case here...</m>
+                <m>It's just a simple matter of lack of space...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="VIC" trigger="say-01" face="UPSET" />
+            <dlg char="VIC">
+                <m wait="1">And... Should I...</m>
+                <m>Should I enter it now!?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Of course...</m>
+                <m wait="0.5">Mr ${CHAR:JEF:NAME} might arrive any time now...</m>
+                <m>We can't let him see you...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="VIC" trigger="shrug" face="SIGH" />
+            <dlg char="VIC">
+                <m wait="1">Sigh... I just have to keep in mind...</m>
+                <m>I'm doing this for my career...</m>
+                <m>Once I win the contest, I'll have a spot on Mr ${CHAR:JEF:NAME} exhibition...</m>
+            </dlg>
+
+            <anim target="VIC" face="NEUTRAL" look="LEFT" />
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="1">Yeah... Whatever helps you sleep at night...</m>
+                <m>Now get in and call me...</m>
+            </dlg>
+
+            <anim target="VIC" trigger="shrug" face="NEUTRAL" look="NEUTRAL" />
+            <dlg char="VIC">
+                <m>Okay... Here I come...</m>
+            </dlg>
+
+            <obj target="VIC">
+                <message name="StartCenter" />
+                <message name="EndRight" />
+                <message name="TriggerEnter" />
+            </obj>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <sfx clip="door-transition" async="false" />
+            <bootstrap script="location-diner-restroom-01/location" spawn="spawn/door" />
+        </n>
+    
+        <!--###############################################
+            ### vic-waits #################################
+            ###############################################-->
+        <n id="vic-waits">
+            <fade-to-black keep="true" speed="99999" />
+            <bgm loop="loop-urban" />
+            <load-scene-object key="scene-vic-glory-01.prefab" rename="scene" />
+            <fade-to-black speed="-1" />
+            <autosave label="Starting ${CHAR:VIC:NAME}'s plan" />
+
+            <dlg char="PLAYER">
+                <m thought="true">Well... She's ready...</m>
+            </dlg>
+            <wait time="0.5" />
+            <if>
+                <check-flag flag="QUEST:VIC:GLORY" bit-set="2" />
+                <then>
+                    <dlg char="PLAYER">
+                        <m thought="true" wait="1">... and doesn't suspect I warned Mr ${CHAR:JEF:NAME} about her plan...</m>
+                        <m thought="true">I just need to find out how I will-</m>
+                    </dlg>
+                    <sfx clip="door-transition" />
+                    <dlg char="PLAYER">
+                        <m thought="true">Huh?</m>
+                    </dlg>
+                    <sfx clip="swoosh" async="true" />
+                    <anim target="scene" ><bool name="trucker" value="true" /></anim>
+                    <wait />
+                    <dlg char="PLAYER">
+                        <m thought="true">Well... Looks like people actually come here for a snack...</m>
+                        <m thought="true">I thought I would never-</m>
+                    </dlg>
+
+                    <sfx clip="door-transition" />
+                    <sfx clip="swoosh" async="true" />
+                    <anim target="scene" ><bool name="daniel" value="true" /></anim>
+                    <wait time="0.5" />
+
+                    <sfx clip="door-transition" />
+                    <sfx clip="swoosh" async="true" />
+                    <anim target="scene" ><bool name="trevor" value="true" /></anim>
+
+                    <wait />
+                    <dlg char="PLAYER">
+                        <m thought="true" wait="0.5">Whoa... This place got full of people really quick today...</m>
+                        <m thought="true" wait="1">At least... The more people come here, the less likely that angry lady is to notice me...</m>
+                        <m thought="true" wait="0.5">Better yet...</m>
+                        <m thought="true">This unexpected crowd gives me options on how to proceed with ${CHAR:VIC:NAME}...</m>
+                    </dlg>
+
+                    <anim target="scene"><bool name="door" value="true" /></anim>
+                    <dlg char="PLAYER">
+                        <m thought="true" wait="0.5">I could get into the restroom myself...</m>
+                        <m thought="true" wait="0.5">Play Mr ${CHAR:JEF:NAME}'s "part" and secretly have a good time with her...</m>
+                        <m thought="true">I'd just need to remember to snatch the camera before leaving...</m>
+                    </dlg>
+
+                    <wait />
+                    <anim target="scene"><bool name="door" value="false" /></anim>
+                    <dlg char="PLAYER">
+                        <m thought="true" wait="0.5">Or maybe do something way more twisted to ${CHAR:VIC:NAME} and make some buck...</m>
+                        <m thought="true" wait="1">I could play the glory hole pimp and sell her "services" to these dudes without she even knowing...</m>
+                        <m thought="true">She's totally obsessed with that picture contest and could be easily tricked to do it with anyone that goes into the restroom now...</m>
+                        <m thought="true">That would really mess her up, though...</m>
+                    </dlg>
+                    <wait />
+                    <dlg char="PLAYER">
+                        <m thought="true" wait="0.5">Well... I don't have much time...</m>
+                        <m thought="true">Gotta decide what to do now...</m>
+                    </dlg>
+
+                    <sys>
+                        The path to [Sell ${CHAR:VIC:NAME}'s services] is not available in this version\n\n
+                        Make sure to create a save copy at this point if you want to check it on next version! 
+                    </sys>
+
+                    <choice>
+                        <c pos="W">
+                            <text>[Play Mr ${CHAR:JEF:NAME} part]</text>
+                            <then>
+                                <flag name="QUEST:VIC:GLORY" bit-on="10"></flag>
+                                <anim target="scene"><bool name="door" value="true" /></anim>
+                                <dlg char="PLAYER">
+                                    <m thought="true" wait="0.5">Nah... Doing it myself is already twisted enough...</m>
+                                    <m thought="true">I should text her to warn 'Mr ${CHAR:JEF:NAME}' is coming...</m>
+                                </dlg>
+                                <bgm volume="0" />
+                                <fade-to-black keep="true" />
+                                <bootstrap node="play-mr-jefferson" />
+                            </then>
+                        </c>
+                        <c pos="E">
+                            <text>[Sell ${CHAR:VIC:NAME}'s services]</text>
+                            <check-flag flag="DAY:CURRENT" eq="9999" />
+                            <lock-reason>[Sell ${CHAR:VIC:NAME}'s services]</lock-reason>
+                            <then>
+                                <flag name="QUEST:VIC:GLORY" bit-on="9"></flag>
+                                <!-- <dlg char="PLAYER">
+                                    <m thought="true" wait="0.5">Nah... Doing it myself is already twisted enough...</m>
+                                    <m thought="true">I should text her to warn 'Mr ${CHAR:JEF:NAME}' is coming...</m>
+                                </dlg> -->
+                            </then>
+                        </c>
+                    </choice>
+                </then>
+                <else>
+                    <dlg char="PLAYER">
+                        <m wait="1" thought="true">Now all I need is wait for her 'prey'...</m>
+                        <m thought="true">I wonder how long it will take until-</m>
+                    </dlg>
+                    <wait />
+                    <sfx clip="door-transition" />
+
+                    <dlg char="PLAYER">
+                        <m thought="true">Nice... Just in time...</m>
+                    </dlg>
+
+                    <bgm volume="0" />
+                    <fade-to-black keep="true" />
+                    <bootstrap node="jef-dialog" />
+                </else>
+            </if>
+        </n>
+        
+        <!--###############################################
+            ### jef-dialog #################################
+            ###############################################-->
+        <n id="jef-dialog">
+            <fade-to-black speed="9999999" keep="true" />
+            <bgm loop="loop-urban" volume="0.25" />
+            <load-scene-object key="shot-diner-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-jef-01.prefab" rename="JEF" />
+            
+            <proxy target="shot/player" name="PLAYER" />
+            
+            <obj target="JEF">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </obj>
+
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+
+            <fade-to-black speed="-1" />
+
+            <dlg char="PLAYER">
+                <m>Hey! Mr ${CHAR:JEF:NAME}...</m>
+                <m>Nice to see you...</m>
+            </dlg>
+            
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF">
+                <m wait="0.5">Oh... Hello, ${CHAR:PLAYER:NAME}...</m>
+                <m>It's... curious... to meet you here...</m>
+            </dlg>
+            <wait time="0.5" />
+            
+            <dlg char="PLAYER">
+                <m wait="0.5">Yeah... Stressful school days, you know...</m>
+                <m wait="0.5">Sometimes you need to go out... clear your head...</m>
+                <m>All work and no fun makes ${CHAR:PLAYER:NAME} a dull boy...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF">
+                <m wait="0.5">Yeah... I know exactly what you mean...</m>
+                <m>That's why I decided to come here...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Oh, man... You're really lucky...</m>
+                <m>The service here today is more awesome than usual...</m>
+                <m>We have a hot young rookie working right now...</m>
+                <m>And she can't wait to show off her impressive set of skills...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="JEF" trigger="shrug" />
+            <dlg char="JEF">
+                <m>I, uuh...</m>
+                <m>I don't see anyone serving behind the counter...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Come on, Mr ${CHAR:JEF:NAME}...</m>
+                <m wait="1">You know I'm not talking about people serving food here...</m>
+                <m>The star here today is the girl 'serving' in the restroom, remember?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF">
+                <m wait="0.5">Yeah... I thought...</m>
+                <m>I thought I could try that service for once...</m>
+                <m>I'm really sick of dealing with school politics all day... I need some... entertainment...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Well... You arrived at the best time possible!</m>
+                <m>The diner is empty... No one will even know you were here...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF">
+                <m wait="0.5">You know what... Screw it...</m>
+                <m>I'll throw caution to the wind today...</m>
+                <m>I'm going in the restroom right now and check if the five-star service you're selling is real...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>You won't regret...</m>
+            </dlg>
+
+            <obj target="JEF">
+                <message name="StartCenter" />
+                <message name="EndFarLeft" />
+                <message name="TriggerEnter" />
+            </obj>
+
+            <wait time="1" />
+            <dlg char="PLAYER">
+                <m>This is it...</m>
+                <m>I'd better warn ${CHAR:VIC:NAME}...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap script="scene-vic-glory-jef" />
+        </n>
+        
+
+        <!--###############################################
+            ### play-mr-jefferson #########################
+            ###############################################-->
+            <n id="play-mr-jefferson">
+                <fade-to-black speed="9999999" keep="true" layer="-1" />
+                <bgm loop="loop-urban" volume="0.25" />
+                <load-scene-object key="scene-vic-glory-phone.prefab" rename="scene" />
+                <proxy name="VIC" target="scene/VIC" />
+                <proxy name="PLAYER" target="scene/PLAYER" />
+
+                <sfx clip="phone-vibrate" />
+                <dlg char="VIC">
+                    <m>Huh? Someone is texting me...</m>
+                </dlg>
+                <sfx clip="phone-vibrate" />
+                
+                <fade-to-black fill="true" speed="-3" />
+                <autosave label="Playing as Mr ${CHAR:JEF:NAME}" />
+                <dlg char="PLAYER">
+                    <m font-color="#d5d5d5" font="1">it's me... ${CHAR:PLAYER:NAME}!</m>
+                    <m font-color="#d5d5d5" font="1">target spotted! he is here!</m>
+                </dlg>
+
+                <dlg char="VIC">
+                    <m thought="true" wait="0.5">It's working... Mr ${CHAR:JEF:NAME} really came...</m>
+                    <m thought="true" wait="0.5">It seems ${CHAR:PLAYER:NAME} is actually a competent henchman...</m>
+                    <m thought="true">I'd better ask him for more information...</m>
+                </dlg>
+
+                <wait time="1" />
+                <sfx clip="phone-type-message" async="true" />
+                <wait time="2" />
+                <anim target="scene"><bool name="msg-player" value="false" /></anim>
+                <dlg char="VIC">
+                    <m font-color="#68b3f7" font="1">omg... what now?</m>
+                    <m font-color="#68b3f7" font="1">do u think he'll come to the restroom?</m>
+                </dlg>
+                
+                <wait />
+                <sfx clip="phone-vibrate" async="true" />
+                <anim target="scene"><bool name="msg-player" value="true" /></anim>
+                <dlg char="PLAYER">
+                    <m font-color="#d5d5d5" font="1">yep</m>
+                    <m font-color="#d5d5d5" font="1">he's going in right now!</m>
+                </dlg>
+
+                <dlg char="VIC">
+                    <m thought="true">Now!? I didn't expect he would just-</m>
+                </dlg>
+
+                <sfx clip="door-transition" />
+
+                <dlg char="VIC">
+                    <m thought="true">Oh shit... It must be him!</m>
+                    <m thought="true">Looks like Mr ${CHAR:JEF:NAME} is really eager for this...</m>
+                </dlg>
+
+                <wait time="1" />
+                <sfx clip="phone-type-message" async="true" />
+                <wait time="2" />
+                <anim target="scene"><bool name="msg-player" value="false" /></anim>
+                <dlg char="VIC">
+                    <m font-color="#68b3f7" font="1">he's here!!!!</m>
+                    <m font-color="#68b3f7" font="1">what should i do now!?!</m>
+                </dlg>
+
+                <wait />
+                <sfx clip="phone-vibrate" async="true" />
+                <anim target="scene"><bool name="msg-player" value="true" /></anim>
+                <dlg char="PLAYER">
+                    <m font-color="#d5d5d5" font="1">just wait a few seconds</m>
+                    <m font-color="#d5d5d5" font="1">i'm pretty sure you'll know what to do</m>
+                </dlg>
+
+                <bgm volume="0" />
+                <fade-to-black speed="2" keep="true" />
+                <obj target="scene" destroy="0"></obj>
+                <proxy clear="true" />
+                <wait time="0.05" />
+                <load-scene-object key="scene-vic-glory-02.prefab" rename="scene">
+                    <message name="SetReadInput" broadcast="true" ><bool value="false" /></message>
+                </load-scene-object>
+                <anim target="scene" trigger="client-sprite-payer"></anim>
+                <proxy name="VIC" target="scene/VIC" />
+
+                <bgm loop="loop-breath-1" />
+                <fade-to-black speed="-2" />
+
+                <wait />
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Oh God... This is really happening...</m>
+                    <m thought="true">I gotta keep calm...</m>
+                </dlg>
+                <obj target="scene">
+                    <message name="Recenter" broadcast="true" />
+                </obj>
+                <wait time="2" />
+                <obj target="scene">
+                    <message name="SetReadInput" broadcast="true" ><bool value="true" /></message>
+                </obj>
+
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Just need to remember...</m>
+                    <m thought="true" wait="1">I'm doing this to win the contest...</m>
+                    <m thought="true" wait="1">And no one will know...</m>
+                    <m thought="true">No one will ever know...</m>
+                </dlg>
+
+                <sfx clip="swoosh" />
+
+                <obj target="scene/left" active="true"></obj>
+
+                <wait />
+
+                <dlg char="PLAYER">
+                    <m thought="true" wait="1">Oh, man... She doesn't have a clue...</m>
+                    <m thought="true" wait="1">That's greed for you, I guess...</m>
+                    <m thought="true" wait="0.5">Well... She already told I shouldn't make her wait, so...</m>
+                </dlg>
+                
+                <obj target="scene/left" active="false"></obj>
+                <sfx clip="unzip" />
+                
+                <dlg char="VIC">
+                    <m thought="true" wait="0.5">Huh? What was that?</m>
+                    <m thought="true">Is he already going to...</m>
+                </dlg>
+
+                <obj target="scene/left" active="true"></obj>
+                <dlg char="PLAYER">
+                    <m thought="true">Let's meet the high society of this town...</m>
+                </dlg>
+                
+                <anim target="scene"><int name="client" value="2" /></anim>
+                <wait time="0.7" />
+                <obj target="scene/left" active="false"></obj>
+                <anim target="scene">
+                    <bool name="penis" value="true" />
+                </anim>
+                <wait time="0.5" />
+                <anim target="scene" trigger="surprised" face="SURPRISED" />
+                <wait time="0.2" />
+                <sfx clip="voice-gasp-a" />
+
+                <dlg char="VIC">
+                    <m thought="true" wait="1">What the...</m>
+                    <m thought="true" wait="1">Oh my God... There it is...</m>
+                    <m thought="true" wait="0.5">I didn't know it would happen so fast here...</m>
+                    <m thought="true" wait="0.5">I don't know if I can do it...</m>
+                </dlg>
+                <wait time="1.5" />
+                <sfx clip="phone-vibrate" />
+
+                <proxy clear="true" />
+                <fade-to-black speed="4" keep="true" />
+                <obj target="scene" active="false"></obj>
+                <load-scene-object key="scene-vic-glory-phone.prefab" rename="scene-phone" />
+                <proxy target="scene-phone/VIC" name="VIC" />
+                <proxy target="scene-phone/PLAYER" name="PLAYER" />
+                <fade-to-black speed="-4" />
+
+                <anim target="scene-phone"><bool name="msg-player" value="true" /></anim>
+                <dlg char="PLAYER">
+                    <m font-color="#d5d5d5" font="1">so... what are you waiting for?</m>
+                    <m font-color="#d5d5d5" font="1">don't freeze now!</m>
+                </dlg>
+
+                <sfx clip="phone-type-message" async="true" />
+                <wait time="2" />
+                <anim target="scene-phone"><bool name="msg-player" value="false" /></anim>
+                <dlg char="VIC">
+                    <m font-color="#68b3f7" font="1">what!? how do you know i didn't 'start' yet?</m>
+                </dlg>
+
+                <wait />
+                <anim target="scene-phone"><bool name="msg-player" value="true" /></anim>
+                <sfx clip="phone-vibrate" />
+                <dlg char="PLAYER">
+                    <m font-color="#d5d5d5" font="1">i just had a felling you'd have second thoughts!</m>
+                    <m font-color="#d5d5d5" font="1">you should know he'll leave if no one appear to serve him!</m>
+                </dlg>
+
+                <sfx clip="phone-type-message" async="true" />
+                <wait time="2" />
+                <anim target="scene-phone"><bool name="msg-player" value="false" /></anim>
+                <dlg char="VIC">
+                    <m font-color="#68b3f7" font="1">okay... i'll... do it now...</m>
+                </dlg>
+
+                <wait />
+
+                <proxy clear="true" />
+                <fade-to-black speed="4" keep="true" />
+                <obj target="scene-phone" destroy="0"></obj>
+                <obj target="scene" active="true"></obj>
+                <anim target="scene">
+                    <int name="client" value="2" />
+                    <int name="vic" value="2" />
+                </anim>
+                <fade-to-black speed="-4" />
+
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Ok, Mr ${CHAR:JEF:NAME}...</m>
+                    <m thought="true">Let's see if you enjoy my touch...</m>
+                </dlg>
+
+                <anim target="scene"><int name="vic" value="3" /></anim>
+                <wait time="10" />
+                
+                <obj target="scene/left" active="true"></obj>
+                
+                <dlg char="PLAYER">
+                    <m thought="true">Nice... I didn't expect to have the rich spoiled girl of the town touching my dick when I woke up today...</m>
+                    <m thought="true">But I really hope that she's just trying to warm me up with this lousy service...</m>
+                </dlg>
+                <wait />
+                
+                <obj target="scene/left" active="false"></obj>
+                <wait />
+
+                <anim target="scene"><int name="vic" value="4" /></anim>
+
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Oh...</m>
+                    <m thought="true" wait="2">Did I do that?</m>
+                    <m thought="true" wait="2">Guess it means ${CHAR:JEF:NAME} liked it, right?</m>
+                    <m thought="true">Well, I... I should keep going, then...</m>
+                </dlg>
+
+                <anim target="scene"><int name="vic" value="5" /></anim>
+                <wait time="3" />
+                <dlg char="VIC">
+                    <m thought="true" wait="0.5">Oh, my...</m>
+                    <m thought="true" wait="8">I'm really doing it...</m>
+                    <m thought="true">I hope you're enjoying, Mr ${CHAR:JEF:NAME}...</m>
+                </dlg>
+
+                <flag name="FLG:0" set="0"></flag>
+                <node-output node="play-mr-jefferson-2" />
+            </n>
+
+            <!--###############################################
+            ### play-mr-jefferson-2 #########################
+            ###############################################-->
+            <n id="play-mr-jefferson-2">
+                <choice>
+                    <c pos="W">
+                        <check-flag flag="FLG:0" eq="0" />
+                        <text>[Faster]</text>
+                        <then>
+                            <anim target="scene" speed="2"></anim>
+                            <flag name="FLG:0" set="1"></flag>
+                            <node-output node="play-mr-jefferson-2" />
+                        </then>
+                    </c>
+                    <c pos="W">
+                        <check-flag flag="FLG:0" eq="1" />
+                        <text>[Slower]</text>
+                        <then>
+                            <anim target="scene" speed="1"></anim>
+                            <flag name="FLG:0" set="0"></flag>
+                            <node-output node="play-mr-jefferson-2" />
+                        </then>
+                    </c>
+                    <c pos="E">
+                        <text>[Continue]</text>
+                    </c>
+                    <c pos="SE">
+                        <text>[Hide]</text>
+                        <then>
+                            <sys simple="true">CLICK TO CONTINUE</sys>
+                            <node-output node="play-mr-jefferson-2" />
+                        </then>
+                    </c>
+                </choice>
+                <wait />
+                <anim target="scene" speed="2"></anim>
+
+                <obj target="scene/left" active="true"></obj>
+                <dlg char="PLAYER">
+                    <m thought="true">That feels good, ${CHAR:VIC:NAME}...</m>
+                    <m thought="true">But working on a glory hole is not so simple as you might be thinking...</m>
+                </dlg>
+                <wait />
+                <obj target="scene/left" active="false"></obj>
+                <wait />
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Come on, Mr ${CHAR:JEF:NAME}...</m>
+                    <m thought="true">Why are you holding yourself and-</m>
+                </dlg>
+
+                <sfx clip="phone-vibrate" />
+                <dlg char="VIC">
+                    <m thought="true">Again!?</m>
+                </dlg>
+
+                <proxy clear="true" />
+                <fade-to-black speed="4" keep="true" />
+                <obj target="scene" active="false"></obj>
+                <load-scene-object key="scene-vic-glory-phone.prefab" rename="scene-phone" />
+                <proxy target="scene-phone/VIC" name="VIC" />
+                <proxy target="scene-phone/PLAYER" name="PLAYER" />
+                <sfx clip="phone-vibrate" />
+                <fade-to-black speed="-4" />
+
+                <anim target="scene-phone"><bool name="msg-player" value="true" /></anim>
+                <dlg char="PLAYER">
+                    <m font-color="#d5d5d5" font="1">sorry for breaking your concentration, but i remembered to send an important reminder</m>
+                    <m font-color="#d5d5d5" font="1">clients expect much more than simple 'handiwork' when they go to places like this</m>
+                    <m font-color="#d5d5d5" font="1">some lip service will be certainly required</m>
+                    <m font-color="#d5d5d5" font="1">and if he is demanding, then get ready to perform the FULL service</m>
+                </dlg>
+
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Shit... I was hoping I wouldn't need to... go much further...</m>
+                    <m thought="true">But if it's what need to be done, then...</m>
+                </dlg>
+
+                <bgm volume="0" />
+                <fade-to-black speed="3" keep="true" />
+                <bootstrap node="play-mr-jefferson-3" />
+            </n>
+
+            <!--###############################################
+            ### play-mr-jefferson-3 #########################
+            ###############################################-->
+            <n id="play-mr-jefferson-3">
+                <fade-to-black keep="true" speed="999999" />
+                <bgm loop="loop-urban" name="loop-urban" volume="0.25" />
+                <bgm loop="loop-breath-1" name="loop-breath-1" />
+                <load-scene-object key="scene-vic-glory-03.prefab" rename="scene"></load-scene-object>
+                <fade-to-black speed="-3" />
+
+                <autosave label="At the glory hole with ${CHAR:VIC:NAME}" />
+
+                <wait />
+                <dlg char="VIC">
+                    <m thought="true" wait="1">I was naive thinking this would be a quick and easy task...</m>
+                    <m thought="true" wait="1">But now I have to... use my mouth...</m>
+                    <m thought="true" wait="1">At least it's totally private here...</m>
+                </dlg>
+
+                <anim target="scene" inc="step" />
+                <wait />
+                <dlg char="VIC">
+                    <m thought="true">Oh God... Am I really going suck on this thing?</m>
+                    <m thought="true">... in a public restroom...</m>
+                    <m thought="true">... like a cheap slut?</m>
+                </dlg>
+
+                <anim target="scene"><bool name="left" value="true" /></anim>
+                <dlg char="PLAYER">
+                    <m thought="true" wait="1">Come on, ${CHAR:VIC:NAME}...</m>
+                    <m thought="true" wait="0.5">I can feel your breath...</m>
+                    <m thought="true">Stop thinking... Just do it...</m>
+                </dlg>
+
+                <wait time="0.5" />
+
+                <anim target="scene"><bool name="left" value="false" /></anim>
+
+                <wait />
+                <anim target="scene" trigger="blam"></anim>
+                <wait time="0.6" />
+                <anim target="scene" trigger="blam"></anim>
+
+                <dlg char="VIC">
+                    <m thought="true" wait="0.5">Oh, no... I think Mr ${CHAR:JEF:NAME} is getting impatient...</m>
+                    <m thought="true" wait="0.5">I'd better just do it...</m>
+                </dlg>
+
+                <anim target="scene" inc="step"><int name="exp" value="2" /></anim>
+                
+                <wait time="8" />
+                
+                <anim target="scene"><int name="exp" value="1" /></anim>
+                <dlg char="VIC">
+                    <m thought="true" wait="2">So... This is what Mr ${CHAR:JEF:NAME} taste like...</m>
+                    <m thought="true" wait="1">It's... not that bad...</m>
+                </dlg>
+
+                <wait time="0.5" />
+
+                <anim target="scene"><bool name="left" value="true" /></anim>
+                <dlg char="PLAYER">
+                    <m thought="true" wait="1">This is really nice and everything, ${CHAR:VIC:NAME}...</m>
+                    <m thought="true" wait="0.5">But you can do much better than that...</m>
+                    <m thought="true">Come on... It's time to work out your jaw muscles...</m>
+                </dlg>
+
+                <wait time="0.5" />
+                <anim target="scene"><bool name="left" value="false" /></anim>
+                <wait />
+                <anim target="scene" trigger="blam"></anim>
+                <wait time="0.6" />
+                <anim target="scene" trigger="blam"></anim>
+
+                <dlg char="VIC">
+                    <m thought="true" wait="1">okay... okay... I get it...</m>
+                    <m thought="true" wait="1">I'll make you stop knocking now, Mr ${CHAR:JEF:NAME}...</m>
+                    <m thought="true" wait="1">Let's see how much you can last...</m>
+                </dlg>
+
+                <bgm name="loop-breath-1" volume="0" />
+                <anim target="scene" inc="step"><int name="exp" value="2" /></anim>
+                <wait time="10" />
+
+                <anim target="scene"><bool name="left" value="true" /></anim>
+                <dlg char="PLAYER">
+                    <m thought="true" wait="1">Yeah... Now we're talking...</m>
+                </dlg>
+
+                <wait time="0.5" />
+                <anim target="scene"><bool name="left" value="false" /></anim>
+                <wait />
+
+                <anim target="scene"><int name="exp" value="1" /></anim>
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Oh... Mr ${CHAR:JEF:NAME}...</m>
+                    <m thought="true" wait="3">Why did you have to be so stubborn?</m>
+                    <m thought="true" wait="3">We could be doing this since our first class...</m>
+                    <m thought="true">And I know you'd love it...</m>
+                </dlg>
+
+                <anim target="scene" inc="step"><int name="exp" value="2" /></anim>
+                <wait time="10" />
+
+                <anim target="scene"><bool name="left" value="true" /></anim>
+                <dlg char="PLAYER">
+                    <m thought="true" wait="1">Oh, boy... Looks like she is really motivated now...</m>
+                    <m thought="true">I hope she managed to install the ceiling camera properly...</m>
+                </dlg>
+
+                <fade-to-black keep="true" speed="4" />
+                <load-scene-object key="scene-vic-glory-04.prefab" rename="scene-04"></load-scene-object>
+                <anim target="scene-04" trigger="client-sprite-player"></anim>
+                <load-scene-object key="video-recorder.prefab"></load-scene-object>
+                <fade-to-black speed="-4" />
+                <wait />
+
+                <dlg char="PLAYER">
+                    <m thought="true">It must be capturing some awesome images now...</m>
+                </dlg>
+
+                <wait time="6" />
+
+                <anim target="scene"><bool name="left" value="false" /></anim>
+                <flag name="FLG:0" set="0" />
+
+                <node-output node="play-mr-jefferson-4" />
+            </n>
+
+            <!--###############################################
+            ### play-mr-jefferson-4 #########################
+            ###############################################-->
+            <n id="play-mr-jefferson-4">
+                <choice>
+                    <c pos="NW">
+                        <text>[Deeper]</text>
+                        <then>
+                            <flag name="FLG:0" set="1" />
+                            <obj target="scene-04" destroy="0"></obj>
+                            <obj target="video-recorder.prefab" destroy="0"></obj>
+                            <anim target="scene">
+                                <int name="exp" value="2" />
+                                <int name="step" value="5" />
+                                <bool name="drool" value="true" />
+                            </anim>
+                        </then>
+                    </c>
+                    <c pos="W">
+                        <text>[Tip]</text>
+                        <then>
+                            <flag name="FLG:0" set="1" />
+                            <obj target="scene-04" destroy="0"></obj>
+                            <obj target="video-recorder.prefab" destroy="0"></obj>
+                            <anim target="scene">
+                                <int name="exp" value="1" />
+                                <int name="step" value="4" />
+                                <bool name="drool" value="false" />
+                            </anim>
+                        </then>
+                    </c>
+                    <c pos="SW">
+                        <text>[Lick]</text>
+                        <then>
+                            <flag name="FLG:0" set="1" />
+                            <obj target="scene-04" destroy="0"></obj>
+                            <obj target="video-recorder.prefab" destroy="0"></obj>
+                            <anim target="scene">
+                                <int name="exp" value="1" />
+                                <int name="step" value="3" />
+                                <bool name="drool" value="false" />
+                            </anim>
+                        </then>
+                    </c>
+                    <c pos="NE">
+                        <text>[Camera View]</text>
+                        <check-flag flag="FLG:0" eq="1" />
+                        <then>
+                            <flag name="FLG:0" set="0" />
+                            <fade-to-black keep="true" speed="4" />
+                            <load-scene-object key="scene-vic-glory-04.prefab" rename="scene-04"></load-scene-object>
+                            <anim target="scene-04" trigger="client-sprite-player"></anim>
+                            <load-scene-object key="video-recorder.prefab"></load-scene-object>
+                            <fade-to-black keep="true" speed="-4" />
+                        </then>
+                    </c>
+                    <c pos="E">
+                        <text>[Hide]</text>
+                        <then>
+                            <sys simple="true">CLICK TO CONTINUE</sys>
+                        </then>
+                    </c>
+                    <c pos="SE" out="play-mr-jefferson-5">
+                        <text>[Continue]</text>
+                    </c>
+                </choice>
+
+                <node-output node="play-mr-jefferson-4" />
+            </n>
+
+            <!--###############################################
+            ### play-mr-jefferson-5 #########################
+            ###############################################-->
+            <n id="play-mr-jefferson-5">
+                <load-scene-object key="flag-gauge.prefab">
+                    <message name="SetFlag"><string value="QUEST:VIC:GLORY:HEAT_SCORE" /></message>
+                    <message name="SetLabel"><string value="HEAT" /></message>
+                </load-scene-object>
+
+                <obj target="scene-04" destroy="0"></obj>
+                <obj target="video-recorder.prefab" destroy="0"></obj>
+                <anim target="scene">
+                    <int name="exp" value="2" />
+                    <int name="step" value="5" />
+                    <bool name="drool" value="true" />
+                </anim>
+                <wait time="3" />
+                
+                <dlg char="VIC">
+                    <m thought="true" wait="2">Oh, jeez...</m>
+                    <m thought="true" wait="1">I can't believe I'm slurping and drooling over Mr ${CHAR:JEF:NAME}'s cock like some mindless whore...</m>
+                </dlg>
+                <if>
+                    <check-flag flag="QUEST:VIC:GLORY:HEAT_SCORE" gte="100" />
+                    <then>
+                        <dlg char="VIC">
+                            <m thought="true">I should be ashamed, but...</m>
+                            <m thought="true">This place is not so bad after all...</m>
+                            <m thought="true">When you're sure no one can see you... it's good to let yourself go...</m>
+                        </dlg>
+                    </then>
+                </if>
+
+                <wait />
+                <dlg char="VIC">
+                    <m thought="true" wait="1">but...</m>
+                    <m thought="true" wait="2">It seems he's holding himself...</m>
+                    <m thought="true">What are you doing Mr ${CHAR:JEF:NAME}...</m>
+                    <m thought="true">Just give me the fluid samples I need...</m>
+                </dlg>
+
+                <wait />
+                <node-output node="play-mr-jefferson-6" />
+            </n>
+
+            <!--###############################################
+            ### play-mr-jefferson-6 #########################
+            ###############################################-->
+            <n id="play-mr-jefferson-6">
+                <choice>
+                    <c pos="E">
+                        <text>[Demand full service]</text>
+                        <check-flag flag="QUEST:VIC:GLORY:HEAT_SCORE" gte="100" />
+                        <lock-reason>[Full HEAT required]</lock-reason>
+                        <then>
+                            <flag name="QUEST:VIC:GLORY" bit-on="11"></flag>
+                            <obj target="flag-gauge.prefab" destroy="0"></obj>
+                            <anim target="scene"><bool name="left" value="true" /></anim>
+                            <dlg char="PLAYER">
+                                <m thought="true" wait="1">Damn... I feel she's having a good time here...</m>
+                                <m thought="true">I think she would even go for the full service if I ask now...</m>
+                            </dlg>
+                            <wait />
+                            <anim target="scene"><bool name="left" value="false" /></anim>
+                            
+                            <wait time="1" />
+                            <dlg char="VIC">
+                                <m thought="true">Come on, Mr ${CHAR:JEF:NAME}...</m>
+                                <m thought="true">Why are you-</m>
+                            </dlg>
+                            
+                            <anim target="scene" trigger="blam"></anim>
+                            <wait time="0.6" />
+                            <anim target="scene" trigger="blam"></anim>
+
+                            <anim target="scene">
+                                <int name="exp" value="1" />
+                                <int name="step" value="3" />
+                                <bool name="drool" value="false" />
+                            </anim>
+
+                            <dlg char="VIC">
+                                <m thought="true" wait="1">What!?!?</m>
+                                <m thought="true">He... can't be serious...</m>
+                            </dlg>
+
+                            <anim target="scene" trigger="blam"></anim>
+                            <wait time="0.6" />
+                            <anim target="scene" trigger="blam"></anim>
+
+                            <dlg char="VIC">
+                                <m thought="true" wait="1">${CHAR:PLAYER:NAME} talked about 'full service'...</m>
+                                <m thought="true" >Does Mr ${CHAR:JEF:NAME} really want me to... to...</m>
+                            </dlg>
+                            
+                            <anim target="scene" trigger="blam"></anim>
+                            <wait time="0.6" />
+                            <anim target="scene" trigger="blam"></anim>
+                            
+                            <dlg char="VIC">
+                                <m thought="true" wait="1">Jesus Christ...</m>
+                                <m thought="true" wait="2">He really wants to... go inside me...</m>
+                                <m thought="true">I... I've come too far to give up now...</m>
+                            </dlg>
+
+                            <bgm volume="0" />
+                            <fade-to-black keep="true" />
+                            <bootstrap node="play-mr-jefferson-7" />
+                        </then>
+                    </c>
+                    <c pos="NE" style="RIFT">
+                        <text>[Raise Heat]</text>
+                        <lock-reason>[Not enough Rift Energy]</lock-reason>
+                        <check-flag flag="PLAYER:STAT:RIFT" gte="1" />
+                        <then>
+                            <bgm name="rift-bgm" loop="loop-rumble" volume="0.5" />
+                            <flag name="PLAYER:STAT:RIFT" dec="1" icon="RIFT">Used 1 Rift energy point</flag>
+                            <load-scene-object key="vfx-rift.prefab" />
+                            <wait />
+                            
+                            <dlg char="VIC">
+                                <m thought="true">Huh!?</m>
+                            </dlg>
+                            <wait time="2"/>
+
+                            <flag name="QUEST:VIC:GLORY:HEAT_SCORE" inc="70" />
+                            <flag name="PLAYER:STAT:RIFT" dec="1" />
+                            <dlg char="VIC">
+                                <m thought="true">Did it suddenly get hotter in here?</m>
+                            </dlg>
+
+                            <wait time="1" />
+                            <bgm name="rift-bgm" volume="0" />
+                            <anim target="vfx-rift.prefab">
+                                <bool name="active" value="false" />
+                            </anim>
+                            <wait time="1" />
+                            <node-output node="play-mr-jefferson-6" />
+                        </then>
+                    </c>
+                    <c pos="NW">
+                        <text>[Give her some DNA now]</text>
+                        <then>
+                            <obj target="flag-gauge.prefab" destroy="0"></obj>
+                            <anim target="scene"><bool name="left" value="true" /></anim>
+                            <dlg char="PLAYER">
+                                <m thought="true" wait="1">Well... If she wants so bad me to cum on her face, then let's not disappoint her...</m>
+                            </dlg>
+                            <wait />
+                            <anim target="scene"><bool name="left" value="false" /></anim>
+                            <fade-to-black keep="true" />
+                            <bootstrap node="play-mr-jefferson-9" />
+                        </then>
+                    </c>
+                </choice>
+            </n>
+
+            <!--###############################################
+            ### play-mr-jefferson-7 #########################
+            ###############################################-->
+            <n id="play-mr-jefferson-7">
+                <fade-to-black speed="99999" keep="true" />
+                <bgm loop="loop-urban" volume="0.25" />
+                <load-scene-object key="scene-vic-glory-panties.prefab" rename="scene"></load-scene-object>
+                <fade-to-black speed="-1" />
+                <wait />
+                <autosave label="At the glory hole with ${CHAR:VIC:NAME}" />
+
+                <dlg char="VIC">
+                    <m thought="true">Okay, Mr ${CHAR:JEF:NAME}...</m>
+                </dlg>
+                
+                <anim target="scene" inc="step"></anim>
+                <wait time="2" />
+
+                <dlg char="VIC">
+                    <m thought="true">Do you want some love?</m>
+                </dlg>
+
+                <anim target="scene" inc="step"></anim>
+                <wait time="5" />
+
+                <dlg char="VIC">
+                    <m thought="true">I'll give you some love...</m>
+                </dlg>
+
+                <fade-to-black keep="true" speed="3" />
+                <obj target="scene" destroy="0"></obj>
+                <bgm loop="loop-breath-1" name="loop-breath-1" />
+                <load-scene-object key="scene-vic-glory-05.prefab" rename="scene"></load-scene-object>
+                <fade-to-black keep="true" speed="-3" />
+
+                <wait />
+                <dlg char="VIC">
+                    <m thought="true" wait="0.5">Oh, God... This is it...</m>
+                    <m thought="true" wait="0.5">I'm going have sex with Mr ${CHAR:JEF:NAME}...</m>
+                    <m thought="true" wait="0.5">right here... in the Two Wales restroom...</m>
+                </dlg>
+
+                <obj target="scene/left" active="true"></obj>
+
+                <dlg char="PLAYER">
+                    <m thought="true" wait="1">Oh, man...</m>
+                    <m thought="true" wait="1">She really fell for it...</m>
+                    <m thought="true">I sense incoming pussy...</m>
+                </dlg>
+                <wait />
+
+                <obj target="scene/left" active="false"></obj>
+
+                <fade-to-black keep="true" speed="4" />
+                <obj target="scene" destroy="0"></obj>
+                <load-scene-object key="scene-vic-glory-06.prefab" rename="scene"></load-scene-object>
+                <fade-to-black keep="true" speed="-3" />
+
+                <dlg char="VIC">
+                    <m thought="true" wait="3">I can do this... I can do this...</m>
+                    <m thought="true" wait="1">I just need to make him finish quick...</m>
+                </dlg>
+                <wait />
+                <obj target="scene/right" active="false"></obj>
+
+                <wait time="2" />
+                <dlg char="VIC">
+                    <m thought="true" wait="1">I... I can't believe I'm trading my dignity for my career...</m>
+                    <m thought="true" wait="2">But... It doesn't matter... No one will never know...</m>
+                    <m thought="true">I gotta... try...</m>
+                </dlg>
+
+                <anim target="scene" inc="step"></anim>
+                <wait time="2" />
+                <sfx clip="voice-gasp-a" />
+                <wait time="5" />
+                
+                <obj target="scene/right" active="true"></obj>
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Oh God... He's touching me...</m>
+                    <m thought="true">Mr ${CHAR:JEF:NAME} is really touching me...</m>
+                </dlg>
+
+                <obj target="scene/right" active="false"></obj>
+                <obj target="scene/left" active="true"></obj>
+
+                <dlg char="PLAYER">
+                    <m thought="true" wait="1">Oh shit...</m>
+                    <m thought="true">This is going way better than I expected...</m>
+                </dlg>
+
+                <obj target="scene/left" active="false"></obj>
+
+                <obj target="scene/right" active="true"></obj>
+                <dlg char="VIC">
+                    <m thought="true" wait="1">I... just...</m>
+                    <m thought="true" wait="1">I... just have to...</m>
+                </dlg>
+                <wait />
+
+                <obj target="scene/right" active="false"></obj>
+                <dlg char="VIC">
+                    <m thought="true" wait="1">I just have to... push it in...</m>
+                    <m thought="true">just... push...</m>
+                </dlg>
+
+                <wait />
+                <anim target="scene" inc="step"></anim>
+                <wait time="2.6" />
+
+                <sfx clip="moan-1" />
+                <wait time="3" />
+                <dlg char="VIC">
+                    <m thought="true" wait="3">He is... inside me...</m>
+                </dlg>
+                
+                <wait time="1" />
+                <obj target="scene/right" active="true"></obj>
+                <dlg char="VIC">
+                    <m thought="true" wait="2">Oh God... I can feel Mr ${CHAR:JEF:NAME} inside me...</m>
+                    <m thought="true" wait="1">I... really did it...</m>
+                    <m thought="true">He is... He is...</m>
+                </dlg>
+
+                <obj target="scene/right" active="false"></obj>
+                <obj target="scene/left" active="true"></obj>
+
+                <dlg char="PLAYER">
+                    <m thought="true" wait="1">Niiice... Tight and warm...</m>
+                    <m thought="true" wait="1">I can say that I'm literally 'in' the Vortex Club now...</m>
+                    <m thought="true" wait="1">Now come on, ${CHAR:VIC:NAME}...</m>
+                    <m thought="true">Ride me...</m>
+                </dlg>
+
+                <obj target="scene/left" active="false"></obj>
+                <obj target="scene/right" active="true"></obj>
+                <dlg char="VIC">
+                    <m thought="true" wait="1">I... I gotta focus...</m>
+                    <m thought="true" wait="2">I'm here to collect the evidence...</m>
+                    <m thought="true">So I'll give him what he wants...</m>
+                </dlg>
+
+                <obj target="scene/right" active="false"></obj>
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Here we go...</m>
+                </dlg>
+
+                <anim target="scene" inc="step"></anim>
+                <bgm name="loop-breath-1" volume="0" />
+                <wait />
+
+                <bgm loop="loop-moan-01" name="loop-moan-01" />
+                <wait time="8" />
+
+                <fade-to-black speed="5" keep="true" />
+                <obj target="scene" active="false" />
+                <load-scene-object key="scene-vic-glory-05.prefab" rename="scene-05"></load-scene-object>
+                <anim target="scene-05">
+                    <bool name="instant" value="true"></bool>
+                </anim>
+                <anim target="scene-05">
+                    <int name="step" value="2"></int>
+                </anim>
+                <fade-to-black speed="-5" />
+
+                <wait />
+                <dlg char="VIC">
+                    <m thought="true" wait="3">Oh... my... nngh...</m>
+                    <m thought="true" wait="3">This...... is..... so....</m>
+                    <m thought="true" wait="1">Mr... ${CHAR:JEF:NAME}...... you...... dirty..... old.... man.....</m>
+                    <m thought="true">treating me... like a... like a...</m>
+                </dlg>
+
+                <obj target="scene-05/left" active="true" ></obj>
+                <dlg char="PLAYER">
+                    <m thought="true" wait="1">Oh man... I'm screwing the school's alfa bitch...</m>
+                    <m thought="true" wait="1">Not bad after only two days of classes, right?</m>
+                    <m thought="true" wait="1">Well... She might not be aware I'm the one doing her, but...</m>
+                    <m thought="true">As the meme says... Doesn't matter, had sex...</m>
+                </dlg>
+
+                <flag name="FLG:0" set="0"></flag>
+                <flag name="FLG:1" set="0"></flag>
+                <flag name="FLG:2" set="0"></flag>
+                <obj target="scene-05/left" active="false" ></obj>
+
+                <node-output node="play-mr-jefferson-8" />
+            </n>
+
+            <!--###############################################
+            ### play-mr-jefferson-8 #########################
+            ###############################################-->
+            <n id="play-mr-jefferson-8">
+                <choice>
+                    <c pos="NW">
+                        <text>[Closer]</text>
+                        <check-flag flag="FLG:0" eq="0" />
+                        <then>
+                            <fade-to-black keep="true" speed="5" />
+                            <obj target="scene" active="true"></obj>
+                            <obj target="scene-05" active="false"></obj>
+                            <anim target="scene" speed="1">
+                                <int name="step" value="4"></int>
+                                <bool name="instant" value="true"></bool>
+                            </anim>
+                            <flag name="FLG:0" set="1"></flag>
+                            <flag name="FLG:1" set="0"></flag>
+                            <flag name="FLG:2" set="0"></flag>
+                            <fade-to-black speed="-5" />
+                            <node-output node="play-mr-jefferson-8" />
+                        </then>
+                    </c>
+                    <c pos="NW">
+                        <text>[Farther]</text>
+                        <check-flag flag="FLG:0" eq="1" />
+                        <then>
+                            <fade-to-black keep="true" speed="5" />
+                            <obj target="scene" active="false"></obj>
+                            <obj target="scene-05" active="true"></obj>
+                            <flag name="FLG:0" set="0"></flag>
+                            <flag name="FLG:1" set="0"></flag>
+                            <anim target="scene-05" speed="1">
+                                <bool name="instant" value="true"></bool>
+                            </anim>
+                            <anim target="scene-05">
+                                <int name="step" value="2"></int>
+                            </anim>
+                            <fade-to-black speed="-5" />
+                            <node-output node="play-mr-jefferson-8" />
+                        </then>
+                    </c>
+                    <c pos="W">
+                        <text>[Tease]</text>
+                        <check-flag flag="FLG:0" eq="1" />
+                        <check-flag flag="FLG:1" eq="0" />
+                        <then>
+                            <flag name="FLG:1" set="1"></flag>
+                            <anim target="scene">
+                                <int name="step" value="2"></int>
+                                <bool name="instant" value="false"></bool>
+                            </anim>
+                            <node-output node="play-mr-jefferson-8" />
+                        </then>
+                    </c>
+                    <c pos="SW">
+                        <text>[Pop in/out]</text>
+                        <check-flag flag="FLG:0" eq="1" />
+                        <check-flag flag="FLG:1" eq="0" />
+                        <then>
+                            <flag name="FLG:1" set="1"></flag>
+                            <anim target="scene">
+                                <int name="step" value="5"></int>
+                                <bool name="instant" value="false"></bool>
+                            </anim>
+                            <node-output node="play-mr-jefferson-8" />
+                        </then>
+                    </c>
+                    <c pos="SW">
+                        <text>[Pump]</text>
+                        <check-flag flag="FLG:0" eq="1" />
+                        <check-flag flag="FLG:1" eq="1" />
+                        <then>
+                            <flag name="FLG:1" set="0"></flag>
+                            <anim target="scene">
+                                <int name="step" value="4"></int>
+                                <bool name="instant" value="false"></bool>
+                            </anim>
+                            <node-output node="play-mr-jefferson-8" />
+                        </then>
+                    </c>
+                    <c pos="NE">
+                        <text>[Faster]</text>
+                        <check-flag flag="FLG:2" eq="0" />
+                        <then>
+                            <flag name="FLG:2" set="1"></flag>
+                            <anim target="scene-05" speed="1.5" />
+                            <anim target="scene" speed="1.5" />
+                            <node-output node="play-mr-jefferson-8" />
+                        </then>
+                    </c>
+                    <c pos="NE">
+                        <text>[Slower]</text>
+                        <check-flag flag="FLG:2" eq="1" />
+                        <then>
+                            <flag name="FLG:2" set="0"></flag>
+                            <anim target="scene-05" speed="1" />
+                            <anim target="scene" speed="1" />
+                            <node-output node="play-mr-jefferson-8" />
+                        </then>
+                    </c>
+                    <c pos="E">
+                        <text>[Continue]</text>
+                    </c>
+                    <c pos="SE">
+                        <text>[Hide]</text>
+                        <then>
+                            <sys simple="true">CLICK TO CONTINUE</sys>
+                            <node-output node="play-mr-jefferson-8" />
+                        </then>
+                    </c>
+                </choice>
+
+                <if>
+                    <check-flag flag="FLG:0" eq="1" />
+                    <then>
+                        <fade-to-black keep="true" speed="5" />
+                            <obj target="scene" active="false"></obj>
+                            <obj target="scene-05" active="true"></obj>
+                            <flag name="FLG:0" set="0"></flag>
+                            <flag name="FLG:1" set="0"></flag>
+                            <anim target="scene-05" speed="1"><bool name="instant" value="true"></bool></anim>
+                            <anim target="scene-05"><int name="step" value="2"></int></anim>
+                            <fade-to-black speed="-5" />
+                    </then>
+                </if>
+
+                <wait />
+                
+                <load-scene-object key="vfx-heat.prefab"></load-scene-object>
+                <sfx clip="moan-1" async="true" />
+                <dlg char="VIC" track="scene-05/VIC">
+                    <m font-size="22">mmmmmnngghh...</m>
+                </dlg>
+
+                <wait />
+                <dlg char="VIC">
+                    <m thought="true" wait="1">oh no... i can't... moan... out loud... like that...</m>
+                    <m thought="true" wait="2">Mr ${CHAR:JEF:NAME}... can... recognize... my voice...</m>
+                    <m thought="true" wait="2">need to... hold myself... together...</m>
+                    <m thought="true" wait="1">but this... is... so intense... feels... so...</m>
+                    <m thought="true">feels... so...</m>
+                    <m thought="true">goommmnnnnnhh...</m>
+                </dlg>
+
+                <bgm name="loop-moan-01" volume="0" />
+                <anim target="scene-05"><int name="step" value="3"></int></anim>
+                <sfx clip="voice-orgasm-a" async="true" />
+                <wait time="6" />
+                <bgm loop="loop-breath-1" name="loop-breath-1" />
+                <wait time="3" />
+
+                <obj target="scene-05/left" active="true"></obj>
+
+                <dlg char="PLAYER">
+                    <m thought="true" wait="1">Holy shit... She just came on my dick...</m>
+                    <m thought="true" wait="2">I wonder if she would be so mad now if she ever discovers who made her feel so good...</m>
+                </dlg>
+
+                <obj target="scene-05/left" active="false"></obj>
+
+                <dlg char="VIC">
+                    <m thought="true" wait="1">how... how could I have an orgasm in a place like this?</m>
+                    <m thought="true" wait="2">I just hope Mr ${CHAR:JEF:NAME} didn't hear me...</m>
+                    <m thought="true">I... could get used to meet him like this though...</m>
+                </dlg>
+
+                <anim target="scene-05"><int name="step" value="2"></int></anim>
+                <dlg char="VIC">
+                    <m thought="true" wait="1">and i can't stop now...</m>
+                    <m thought="true">still need... my fluid sample...</m>
+                </dlg>
+
+                <wait time="4" />
+                <obj target="scene-05/left" active="true"></obj>
+
+                <dlg char="PLAYER">
+                    <m thought="true" wait="2">Oh boy...</m>
+                    <m thought="true" wait="3">That climax made her even more warm and slippery...</m>
+                    <m thought="true">And I think it's my turn now...</m>
+                </dlg>
+
+                <obj target="scene-05/left" active="false"></obj>
+                <wait time="2" />
+                
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Oh my God... I can feel him twitching...</m>
+                    <m thought="true" wait="1">I think he's about to pop!</m>
+                    <m thought="true">Gotta get back to my position... Can't let him do it inside me...</m>
+                </dlg>
+
+                <bgm volume="0" />
+                <bgm name="loop-breath-1" volume="0" />
+                <fade-to-black speed="4" async="true" />
+                <bootstrap node="play-mr-jefferson-9" />
+            </n>
+
+            <!--###############################################
+            ### play-mr-jefferson-9 #########################
+            ###############################################-->
+            <n id="play-mr-jefferson-9">
+                <fade-to-black speed="99999" keep="true" />
+                <bgm loop="loop-urban" volume="0.25" />
+                <bgm loop="loop-breath-1" name="loop-breath-1" />
+                <load-scene-object key="scene-vic-glory-03.prefab" rename="scene"></load-scene-object>
+                <anim target="scene"><int name="step" value="6"></int></anim>
+                <fade-to-black speed="-4" />
+
+                <autosave label="At the glory hole with ${CHAR:VIC:NAME}" />
+
+                <wait />
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Come on, Mr ${CHAR:JEF:NAME}...</m>
+                    <m thought="true" wait="1">This is the part where you produce some sweet evidence of our 'encounter'...</m>
+                    <m thought="true">...stop holding yourself... give it to me...</m>
+                </dlg>
+
+                <wait />
+
+                <anim target="scene"><bool name="left" value="true" /></anim>
+                <dlg char="PLAYER">
+                    <m thought="true" wait="1">Oh shit...</m>
+                    <m thought="true" wait="1">Did you want some DNA samples, ${CHAR:VIC:NAME}?</m>
+                    <m thought="true">Here... comes... a lot... for you...</m>
+                </dlg>
+
+                <anim target="scene"><bool name="left" value="false" /></anim>
+                <wait />
+
+                <obj target="scene">
+                    <message name="Recenter" broadcast="true" />
+                </obj>
+
+                <anim target="scene">
+                    <int name="step" value="7" />
+                </anim>
+
+                <wait />
+                <anim target="scene" waitEndOfClip="0">
+                    <int name="exp" value="2" />
+                </anim>
+                
+
+                <anim target="scene">
+                    <int name="exp" value="1" />
+                </anim>
+
+                <trophy unlock="paths-of-glory-01" />
+
+                <dlg char="VIC">
+                    <m thought="true" wait="1">Oh my God... Mr ${CHAR:JEF:NAME}...</m>
+                    <m thought="true" wait="3">He... He just covered me with... with his...</m>
+                    <m thought="true" wait="1">Well... At least I got some on my clothes...</m>
+                    <m thought="true">That will be enough to make him submit to my demands...</m>
+                </dlg>
+
+                <wait />
+                <anim target="scene"><bool name="left" value="true" /></anim>
+
+                <dlg char="PLAYER">
+                    <m thought="true" wait="2">Damn... That felt good...</m>
+                    <m thought="true">But it's a shame I couldn't see much of ${CHAR:VIC:NAME} quivering all over my cock...</m>
+                </dlg>
+
+                <wait time="2" />
+
+                <fade-to-black keep="true" speed="4" />
+                <load-scene-object key="scene-vic-glory-04.prefab" rename="scene-04"></load-scene-object>
+                <anim target="scene-04" trigger="client-sprite-player"></anim>
+                <load-scene-object key="video-recorder.prefab"></load-scene-object>
+                <anim target="scene-04" inc="step"></anim>
+                <fade-to-black speed="-4" />
+
+                <dlg char="PLAYER">
+                    <m thought="true" wait="3">Wait... Actually, I can...</m>
+                    <m thought="true" wait="1">I just need to snatch her camera's memory card now while she still recovering...</m>
+                    <m thought="true">She will never know I was the one giving her the D...</m>
+                </dlg>
+
+                <obj target="scene-04" destroy="0"></obj>
+                <obj target="video-recorder.prefab" destroy="0"></obj>
+
+                <dlg char="PLAYER">
+                    <m thought="true">And I'll have another nice video in my collection...</m>
+                </dlg>
+
+                <anim target="scene"><bool name="left" value="false" /></anim>
+                <wait />
+                
+                <anim target="scene" waitEndOfClip="0">
+                    <int name="step" value="8" />
+                </anim>
+                <wait time="0.5" />
+                
+                
+                <dlg char="VIC">
+                    <m thought="true" wait="2">Wait... Where are you going...</m>
+                    <m thought="true" wait="2">Oh...</m>
+                    <m thought="true" wait="1">I think that's how it works here...</m>
+                    <m thought="true" wait="2">He just uses me and go away...</m>
+                    <m thought="true">Well... At least I got what I wanted when I came here...</m>
+                    <m thought="true">Tomorrow we'll have a very interesting conversation, Mr ${CHAR:JEF:NAME}...</m>
+                </dlg>
+
+                <wait />
+                <sys>CONTINUES NEXT VERSION!</sys>
+                <bgm volume="0" />
+                <bgm name="loop-breath-1" volume="0" />
+                <fade-to-black keep="true" speed="0.5" />
+
+                <bootstrap script="title" />
+            </n>
+            
+            
+    </nodes>
+</xml-script>

@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="root">
+            <fade-to-black keep="true" speed="99999" />
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <load-scene-object key="location-diner-restroom-01.prefab" rename="location" />
+            <obj target="location/perceptibles" active="false" />
+            <obj target="#Player">
+                <message name="LookRight"></message>
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <fade-to-black speed="-3" fill="true" />
+
+            <autosave label="Diner Restroom - Exploring" />
+
+            <inject node="lib-post-start" />
+
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="QUEST:VIC:GLORY:HEAT_SCORE" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+            </load-scene-object>
+
+            <if>
+                <check-flag flag="QUEST:VIC:GLORY" bit-unset="4" />
+                <then>
+                    <flag name="QUEST:VIC:GLORY:HEAT_SCORE" set="10" />
+                    <flag name="QUEST:VIC:GLORY" bit-on="4"></flag>
+                    
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="false" /></message>
+                    </obj>
+
+                    <dlg char="VIC" track="#PlayerTrack">
+                        <m wait="1">Oh God...</m>
+                        <m>I'm actually here...</m>
+                        <m>What the hell am I doing in this place?</m>
+                    </dlg>
+                    
+                    <wait time="0.5" />
+                    <sfx clip="radio" async="true" />
+                    <dlg char="PLAYER">
+                        <m font-style="Italic" font-color="grey">Hey... ${CHAR:VIC:NAME}...</m>
+                        <m font-style="Italic" font-color="grey">Can you hear me?</m>
+                    </dlg>
+        
+                    <wait time="0.5" />
+                    <dlg char="VIC" track="#PlayerTrack">
+                        <m wait="0.5">I made the call, dummy... and I have my earbuds...</m>
+                        <m>Of course I can hear you...</m>
+                    </dlg>
+                    
+                    <wait time="0.5" />
+                    <sfx clip="radio" async="true" />
+                    <dlg char="PLAYER">
+                        <m font-style="Italic" font-color="grey">Just checking if the comms are working...</m>
+                        <m font-style="Italic" font-color="grey">We don't have much time now...</m>
+                    </dlg>
+                    
+                    <wait time="0.5" />
+                    <dlg char="VIC" track="#PlayerTrack">
+                        <m wait="0.5">What the hell are those stupid noises you're making?</m>
+                        <m>We're in a cellphone call... not some long range radio...</m>
+                    </dlg>
+                    
+                    <wait time="0.5" />
+                    <sfx clip="radio" async="true" />
+                    <dlg char="PLAYER">
+                        <m font-style="Italic" font-color="grey">Oups... Sorry...</m>
+                        <m font-style="Italic" font-color="grey">The idea of remotely aiding you somehow feels... nostalgic...</m>
+                    </dlg>
+        
+                    <wait time="1" />
+                    <dlg char="VIC" track="#PlayerTrack">
+                        <m wait="0.5">Urgh... This place stinks...</m>
+                        <m>I don't know if I have the guts to go on with this plan...</m>
+                    </dlg>
+        
+                    <wait time="0.5" />
+                    <dlg char="PLAYER">
+                        <m font-style="Italic" font-color="grey">Of course you can...</m>
+                        <m font-style="Italic" font-color="grey">Just walk around and tell me what you see...</m>
+                    </dlg>
+
+                </then>
+            </if>
+
+            <wait time="0.5"/>
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+            <obj target="location/perceptibles" active="true" />
+            
+        </n>
+
+    </nodes>
+</xml-script>

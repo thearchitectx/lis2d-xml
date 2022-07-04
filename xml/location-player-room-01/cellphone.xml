@@ -47,14 +47,32 @@
             <choice>
                 <c pos="NW">
                     <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="17" />
-                    <text>Call ${CHAR:KATE:NAME}</text>
+                    <text>[Call ${CHAR:KATE:NAME}]</text>
                     <lock-reason>[ NOT FOUND YET ]</lock-reason>
                     <then>
                         <if>
-                            <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="31" />
+                            <check-group op="AND">
+                                <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="31" /> <!-- (31): finished diner scene -->
+                                <check-flag flag="QUEST:KATE:FASHION" bit-unset="0" /> <!-- (0): Started -->
+                            </check-group>
                             <then>
                                 <dlg char="PLAYER">
                                     <m thought="true">After that awkward date, I'd better wait for her to contact me...</m>
+                                </dlg>
+                                <node-output node="choice-loop" />
+                            </then>
+                        </if>
+
+                        <if>
+                            <check-group op="AND">
+                                <check-flag flag="CHAR:KATE:INTERACTIONS" bit-set="31" /> <!-- (31): finished diner scene -->
+                                <check-flag flag="QUEST:KATE:FASHION" bit-set="0" /> <!-- (0): Started -->
+                                <check-flag flag="DAY:CURRENT" lte="3" /> <!-- Not yet wednesday -->
+                            </check-group>
+                            <then>
+                                <dlg char="PLAYER">
+                                    <m thought="true">${CHAR:KATE:NAME} asked me to call her tomorrow after class...</m>
+                                    <m thought="true">I'd better wait a little more then...</m>
                                 </dlg>
                                 <node-output node="choice-loop" />
                             </then>
@@ -124,10 +142,21 @@
 
                 <c pos="NE">
                     <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="8" />
-                    <text>Call ${CHAR:MAX:NAME}</text>
+                    <text>[Call ${CHAR:MAX:NAME}]</text>
                     <then>
+                        <if>
+                            <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="15" />
+                            <then>
+                                <dlg char="PLAYER">
+                                    <m thought="true">After that photo shooting, I'd better way her contact me...</m>
+                                </dlg>
+                                <bgm volume="0" />
+                                <fade-to-black fill="true" keep="true" speed="3" />
+                                <bootstrap script="location-player-room-01/location" spawn="spawn/phone" />
+                            </then>
+                        </if>
                         <dlg char="PLAYER">
-                            <m thought="true">Max told me to call her...</m>
+                            <m thought="true">${CHAR:MAX:NAME} told me to call her...</m>
                             <m thought="true">She needs to use my room to stage her photo project...</m>
                             <m thought="true">Should I do it now?</m>
                         </dlg>
@@ -185,6 +214,95 @@
                         <fade-to-black keep="true" speed="0.5" />
 
                         <bootstrap script="scene-max-heroes-01" />
+                    </then>
+                </c>
+                <c pos="W">
+                    <check-flag flag="QUEST:VIC:GLORY" bit-set="1" />
+                    <text>[Call ${CHAR:VIC:NAME}]</text>
+                    <then>
+                        <!-- TODO: Not call check -->
+                        <dlg char="PLAYER">
+                            <m thought="true">Okay... ${CHAR:VIC:NAME} asked to call her when the way is clear to our glorious plan...</m>
+                            <m thought="true">Should I do it now?</m>
+                        </dlg>
+                        <choice>
+                            <c pos="W"><text>[ Call ${CHAR:VIC:NAME} ]</text></c>
+                            <c pos="E" out="choice-loop"><text>[ Not now ]</text></c>
+                        </choice>
+
+                        <dlg char="PLAYER">
+                            <m>Let's see where this will lead to...</m>
+                        </dlg>
+
+                        <wait time="1" />
+                        
+                        <anim target="scene" trigger="vic" />
+                        <sfx clip="phone-call-tone" async="false" />
+                        <wait time="0.5" />
+                        <sfx clip="phone-call-tone" async="false" />
+                        <sfx clip="phone-pickup" async="false" />
+
+                        <dlg char="VIC" track="scene/track">
+                            <m>Finally!</m>
+                            <m>Why did you take so long?</m>
+                        </dlg>
+
+                        <dlg char="PLAYER">
+                            <m>Hello, ${CHAR:VIC:NAME}...</m>
+                        </dlg>
+                        
+                        <dlg char="VIC" track="scene/track">
+                            <m>So... Did you managed to convince Mr ${CHAR:JEF:NAME}?</m>
+                            <m>Should I go there now?</m>
+                        </dlg>
+                        
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Easy there, girl...</m>
+                            <m wait="0.5">Mr ${CHAR:JEF:NAME} bought my story... He is definitely going to the diner later...</m>
+                            <m>We can talk about the plan when we meet there...</m>
+                        </dlg>
+                        
+                        <dlg char="VIC" track="scene/track">
+                            <m wait="0.5">Meet there?</m>
+                            <m>Why the hell would I need you in the diner for?</m>
+                        </dlg>
+                        
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Because you'll gonna need some external support to make this plan work...</m>
+                            <m>Like... We can't be sure about the exact time when-</m>
+                        </dlg>
+                        <dlg char="VIC" track="scene/track">
+                            <m wait="0.5">Blah, blah, blah... Whatever...</m>
+                            <m wait="0.5">I'm not stupid, buddy... I can do this by myself...</m>
+                            <m>But if you want so much, I concede you the right to meet me in the Two Wales...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">I'm honored by your generosity, your highness...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="VIC" track="scene/track">
+                            <m>Yeah... I'm leaving now...</m>
+                            <m>And you'd better don't make me wait you there!</m>
+                        </dlg>
+
+                        <sfx clip="phone-pickup" async="false" />
+                        <anim target="scene" trigger="off" />
+                        <wait time="1.5" />
+
+                        <dlg char="PLAYER">
+                            <m thought="true">Well... It's time to hit the road again...</m>
+                        </dlg>
+                        
+                        <bgm volume="0" fade-speed="0.5" />
+                        <fade-to-black keep="true" speed="0.5" />
+                        <sfx clip="bus"  async="false"/>
+
+                        <bootstrap script="scene-vic-glory" />
                     </then>
                 </c>
                 <c pos="E">

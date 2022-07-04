@@ -10,9 +10,17 @@
             <fade-to-black keep="true" />
             <load-scene-object key="location-classroom-01.prefab" />
 
-            <load-scene-object key="location-classroom-01-jef.prefab" parent="location-classroom-01.prefab">
-                <message name="FindReferenceBackground"><string value="location-classroom-01.prefab" /></message>
-            </load-scene-object>
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:VIC:GLORY" bit-unset="3" />
+                    <!-- TODO: Add come back check -->
+                </check-group>
+                <then>
+                    <load-scene-object key="location-classroom-01-jef.prefab" parent="location-classroom-01.prefab">
+                        <message name="FindReferenceBackground"><string value="location-classroom-01.prefab" /></message>
+                    </load-scene-object>
+                </then>
+            </if>
 
             <fade-to-black speed="-1" />
 

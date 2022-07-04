@@ -54,9 +54,12 @@
             <xs:enumeration value="RENEGADE" />
         </xs:restriction>
     </xs:simpleType>
-    <xs:simpleType name="studio-token-category">
+    <xs:simpleType name="fontStyle">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="BASIC" />
+            <xs:enumeration value="Normal" />
+            <xs:enumeration value="Bold" />
+            <xs:enumeration value="Italic" />
+            <xs:enumeration value="BoldAndItalic" />
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="ui-icon">
@@ -75,6 +78,7 @@
             <xs:enumeration value="BAND" />
             <xs:enumeration value="CALENDAR" />
             <xs:enumeration value="CORRUPTION" />
+            <xs:enumeration value="MIND" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -169,6 +173,7 @@
                     <xs:attribute name="rename" type="xs:string" use="optional" />
                     <xs:attribute name="parent" type="xs:string" use="optional" />
                     <xs:attribute name="active" type="xs:boolean" use="optional" />
+                    <xs:attribute name="y-pos" type="xs:decimal" use="optional" />
                     <xs:attribute name="ignore-if-exists" type="xs:boolean" use="optional" />
                     <xs:attribute name="destroy" type="xs:decimal" use="optional" />
                     <xs:attribute name="world-position-stays" type="xs:boolean" use="optional" />
@@ -252,6 +257,7 @@
                     <xs:attribute name="trigger" type="xs:string" />
                     <xs:attribute name="inc" type="xs:string" />
                     <xs:attribute name="waitEndOfClip" type="xs:integer" />
+                    <xs:attribute name="speed" type="xs:float" />
                 </xs:complexType>
             </xs:element>
             <xs:element name="sys">
@@ -272,6 +278,10 @@
                                     <xs:extension base="xs:string">
                                         <xs:attribute name="wait" type="xs:decimal" />
                                         <xs:attribute name="thought" type="xs:boolean" />
+                                        <xs:attribute name="font-size" type="xs:int" />
+                                        <xs:attribute name="font-color" type="xs:string" />
+                                        <xs:attribute name="font-style" type="fontStyle" />
+                                        <xs:attribute name="font" type="xs:int" />
                                     </xs:extension>
                                 </xs:simpleContent>
                             </xs:complexType>

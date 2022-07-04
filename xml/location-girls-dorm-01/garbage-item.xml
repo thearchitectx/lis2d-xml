@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <n id="n1">
+            <obj target="#Player"><message name="SetInputActive"><bool value="false" /></message></obj>
+            
+            <wait time="0.5" />
+            <choice>
+                <c out="n1-clean" pos="E"><text>[Collect ${ARG:1}]</text></c>
+                <c out="leave" pos="W"><text>[Leave]</text></c>
+            </choice>
+        </n>
+        
+        <n id="leave">
+            <obj target="#Player"><message name="SetInputActive"><bool value="true" /></message></obj>
+        </n>
+
+        <n id="n1-clean">
+            <if>
+                <check-text text="ARG:0" eq="BOTTLE" />
+                <then>
+                    <flag name="QUEST:PRINCIPAL1" bit-on="21" />
+                </then>
+            </if>
+            <if>
+                <check-text text="ARG:0" eq="NAPKIN" />
+                <then>
+                    <flag name="QUEST:PRINCIPAL1" bit-on="22" />
+                </then>
+            </if>
+            <if>
+                <check-text text="ARG:0" eq="CAN" />
+                <then>
+                    <flag name="QUEST:PRINCIPAL1" bit-on="23" />
+                </then>
+            </if>
+            <if>
+                <check-text text="ARG:0" eq="BANANA" />
+                <then>
+                    <flag name="QUEST:PRINCIPAL1" bit-on="24" />
+                </then>
+            </if>
+
+            <flag name="QUEST:PRINCIPAL1:GARBAGE_COUNT_GIRLS_DORM" inc="1" />
+
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1:GARBAGE_COUNT_GIRLS_DORM" eq="1" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>Even the 'magical place' is littered with garbage shit...</m>
+                    </dlg>
+                    <log icon="QUEST">Collected *${QUEST:PRINCIPAL1:GARBAGE_COUNT_GIRLS_DORM}* of *4* pieces of garbage</log>
+                    <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Collect more trash in the girls dorm" />
+                </then>
+            </if>
+            
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1:GARBAGE_COUNT_GIRLS_DORM" eq="2" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>Jeez... These girls are nasty...</m>
+                    </dlg>
+                    <log icon="QUEST">Collected *${QUEST:PRINCIPAL1:GARBAGE_COUNT_GIRLS_DORM}* of *4* pieces of garbage</log>
+                    <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Collect more trash in the girls dorm" />
+                </then>
+            </if>
+            
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1:GARBAGE_COUNT_GIRLS_DORM" eq="3" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>More shit to clean up...</m>
+                    </dlg>
+                    <log icon="QUEST">Collected *${QUEST:PRINCIPAL1:GARBAGE_COUNT_GIRLS_DORM}* of *4* pieces of garbage</log>
+                    <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Collect more trash in the girls dorm" />
+                </then>
+            </if>
+
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1:GARBAGE_COUNT_GIRLS_DORM" eq="4" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m>I hope this is the last one...</m>
+                        <m>I should report to ${CHAR:SAM:NAME} now...</m>
+                    </dlg>
+
+                    <flag name="QUEST:PRINCIPAL1" bit-on="25" />
+                    <log icon="QUEST">Collected all pieces of garbage</log>
+                    <log icon="QUEST">Objectives updated</log>
+                    <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Report to ${CHAR:SAM:NAME}" />
+                </then>
+            </if>
+
+            <obj target="#Player"><message name="SetInputActive"><bool value="true" /></message></obj>
+            <obj target="_parent" destroy="0" />
+            <sfx clip="item" />
+        </n>
+    </nodes>
+</xml-script>

@@ -1,0 +1,334 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+
+        <!--
+            ##############################################################
+            ## root ##########################################
+            ##############################################################
+        -->
+        <n id="root">
+            <fade-to-black keep="true" fill="true" speed="3" />
+            <bgm volume="0" />
+            <bootstrap node="start" />
+        </n>
+        <!--
+            ##############################################################
+            ## start ################################################
+            ##############################################################
+        -->
+        <n id="start">
+            <fade-to-black keep="true" speed="99999" />
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <load-scene-object key="location-diner-restroom-01-stall.prefab" rename="scene">
+            </load-scene-object>
+            <if>
+                <check-flag flag="QUEST:VIC:GLORY" bit-set="8" />
+                <then>
+                    <anim target="scene"><bool name="paper" value="false" /></anim>
+                </then>
+                <else>
+                    <anim target="scene"><bool name="paper" value="true" /></anim>
+                </else>
+            </if>
+            <obj target="scene/interactables" active="false"></obj>
+            
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="QUEST:VIC:GLORY:HEAT_SCORE" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+            </load-scene-object>
+            <proxy name="VIC" target="scene/VIC" />
+
+            <fade-to-black fill="true" speed="-3" />
+
+            <wait />
+
+            <if>
+                <check-flag flag="QUEST:VIC:GLORY" bit-unset="7" />
+                <then>
+                    <flag name="QUEST:VIC:GLORY" bit-on="7"/>
+
+                    <dlg char="VIC">
+                        <m wait="0.5">Okay... I...</m>
+                        <m>I think this is where I...</m>
+                        <m>uuh... The place where I should wait for Mr ${CHAR:JEF:NAME}...</m>
+                    </dlg>
+
+                    <wait time="0.5" />
+                    <dlg char="PLAYER">
+                        <m font-style="Italic" font-color="grey">Cool... What do you see there?</m>
+                    </dlg>
+                    
+                    <wait time="0.5" />
+                    <dlg char="VIC">
+                        <m wait="1">The interior of yet another ordinary but filthy stall...</m>
+                        <m>I'm starting to doubt the existence of ${CHAR:NAT:NAME}'s "business"...</m>
+                    </dlg>
+                    
+                    <wait time="0.5" />
+                    <dlg char="PLAYER">
+                        <m font-style="Italic" font-color="grey">Check around closely...</m>
+                        <m font-style="Italic" font-color="grey">I think the lady who works here is not aware of what happens in her diner's restroom...</m>
+                        <m font-style="Italic" font-color="grey">So there might be concealed... stuff... in there...</m>
+                    </dlg>
+
+                </then>
+            </if>
+
+            <wait time="0.5" />
+
+            <node-output node="interactables" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## interactables ###################################################
+            ##############################################################
+        -->
+        <n id="interactables">
+            <obj target="scene/interactables" active="true">
+                <outcome value="PAPER" node="paper" clear="true" />
+                <outcome value="TOILET" node="toilet" clear="true" />
+                <outcome value="HOLE" node="what-now" clear="true" />
+                <outcome copy-to="TMP:0" clear="true" />
+            </obj>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" fill="true" speed="3" />
+            <bootstrap script="location-diner-restroom-01/location" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## paper ###################################################
+            ##############################################################
+        -->
+        <n id="paper">
+            <flag name="QUEST:VIC:GLORY" bit-on="8"></flag>
+            <obj target="scene/interactables" active="false" />
+            <dlg char="VIC">
+                <m wait="0.5">Weird...</m>
+                <m>This is the only stall where you can find toilet paper on both sides...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey" wait="0.5">Whoa... I think you're onto something!</m>
+                <m font-style="Italic" font-color="grey" wait="0.5">Check it closer...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="close" value="true" /></anim>
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m>Well... It seems there's some... stuff... behind it...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey" wait="0.5">This is it!</m>
+                <m font-style="Italic" font-color="grey" wait="0.5">Try pulling the whole dispenser up!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m>Urgh... I didn't want to to touch it...</m>
+                <m>But I'm already here so...</m>
+                <m>I'll try...</m>
+            </dlg>
+
+            <fade-to-black keep="true" speed="2" />
+            <sfx clip="rummage" />
+            <anim target="scene">
+                <bool name="close" value="false" />
+                <bool name="paper" value="false" />
+            </anim>
+            <fade-to-black speed="-2" />
+            
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m>Oh my God...</m>
+                <m>I think I found... the thing...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey" wait="0.5">Nice!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m>You... you...</m>
+                <m>You'd better keep your mouth shut about...  me... being in this place...</m>
+                <m>I'll make your life hell if you dare talk about this to anyone!</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey" wait="0.5">Relax, ${CHAR:VIC:NAME}...</m>
+                <m font-style="Italic" font-color="grey" wait="0.5">Even if I wanted to tell... Who would ever believe?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m>Whatever... Just don't even think about it...</m>
+            </dlg>
+            
+            <wait time="1" />
+            <node-output node="what-now" />
+        </n>
+        
+        <!--
+            ##############################################################
+            ## toilet ###################################################
+            ##############################################################
+        -->
+        <n id="toilet">
+            <obj target="scene/interactables" active="false" />
+            <dlg char="VIC">
+                <m wait="1">There's obviously a toilet here...</m>
+                <m>Not that I have any intent to use it...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey" wait="0.5">It will be useful for you to...</m>
+                <m font-style="Italic" font-color="grey" wait="0.5">wait... and...</m>
+                <m font-style="Italic" font-color="grey">lean on to-</m>
+            </dlg>
+
+            <dlg char="VIC">
+                <m>Urgh, please... Spare me of your "instructions"...</m>
+            </dlg>
+
+            <node-output node="interactables" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## what-now ###################################################
+            ##############################################################
+        -->
+        <n id="what-now">
+            <obj target="scene/interactables" active="false" />
+            <dlg char="VIC">
+                <m>Now that I found the... thing...</m>
+                <m>What am I supposed to do?</m>
+            </dlg>
+
+            <choice>
+                <c pos="W">
+                    <text>Keep looking around</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m font-style="Italic" font-color="grey" wait="0.5">Keep looking around...</m>
+                            <m font-style="Italic" font-color="grey" wait="0.5">Let's make sure everything is in order before Mr ${CHAR:JEF:NAME} come...</m>
+                        </dlg>
+
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" fill="true" speed="3" />
+                        <bootstrap script="location-diner-restroom-01/location" />
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>Wait for ${CHAR:JEF:NAME}</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m font-style="Italic" font-color="grey" wait="1">Now just sit tight there and wait for Mr ${CHAR:JEF:NAME}...</m>
+                            <m font-style="Italic" font-color="grey" wait="0.5">It's a shame we don't have any means to record this operation...</m>
+                            <m font-style="Italic" font-color="grey" wait="0.5">Just to... you know...</m>
+                            <m font-style="Italic" font-color="grey">Provide you with... even more blackmail material...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="VIC">
+                            <m>Actually... I brought one of those small spy cameras with me...</m>
+                        </dlg>
+                        
+                        <dlg char="PLAYER">
+                            <m font-style="Italic" font-color="grey" wait="1">You got one!? That's awesome!</m>
+                        </dlg>
+                        
+                        <dlg char="VIC">
+                            <m>Yeah... But I can't see a way to frame Mr ${CHAR:JEF:NAME} and me... together...</m>
+                        </dlg>
+
+                        <choice>
+                            <c pos="W">
+                                <text>Put the camera on your toilet</text>
+                                <then>
+                                    <dlg char="PLAYER">
+                                        <m font-style="Italic" font-color="grey" wait="0.5">Put it on the toilet...</m>
+                                        <m font-style="Italic" font-color="grey">It would surely capture your actions in a nice detail level...</m>
+                                    </dlg>
+                                    
+                                    <dlg char="VIC">
+                                        <m wait="0.5">And why would I want that, moron?</m>
+                                        <m>I need to produce evidence against ${CHAR:JEF:NAME}... not me!</m>
+                                    </dlg>
+
+                                    <dlg char="PLAYER">
+                                        <m font-style="Italic" font-color="grey" wait="0.5">Just saying... It would be a nice vid...</m>
+                                    </dlg>
+                                    
+                                    <dlg char="VIC">
+                                        <m wait="0.5">Just shut up, will you?</m>
+                                        <m>I think I can stick this camera on the ceiling above the stall divider...</m>
+                                    </dlg>
+                                </then>
+                            </c>
+                            <c pos="E">
+                                <text>Stick the camera on the ceiling</text>
+                                <then>
+                                    <dlg char="PLAYER">
+                                        <m font-style="Italic" font-color="grey" wait="0.5">Well... You could try to stick the camera on the ceiling above the stall divider!</m>
+                                        <m font-style="Italic" font-color="grey">If it's is small enough, he won't notice...</m>
+                                    </dlg>
+                                    
+                                    <load-scene-object key="vfx-heat.prefab"></load-scene-object>
+                                    <flag name="QUEST:VIC:GLORY:HEAT_SCORE" inc="30" />
+                                    <dlg char="VIC">
+                                        <m>Hey... That's actually a very good idea...</m>
+                                        <m>You're not as stupid as you look...</m>
+                                    </dlg>
+
+                                    <dlg char="PLAYER">
+                                        <m font-style="Italic" font-color="grey" wait="0.5">Uhh... Thank you?</m>
+                                    </dlg>
+                                </then>
+                            </c>
+                        </choice>
+                        
+                        <dlg char="VIC">
+                            <m>It would give me a nice plongée shot with both of us in the frame...</m>
+                            <m>Mr ${CHAR:JEF:NAME} will be so proud of me...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER">
+                            <m font-style="Italic" font-color="grey" wait="1">Uuh... What the hell is a plongée?</m>
+                        </dlg>
+
+                        <dlg char="VIC">
+                            <m>Urgh... You're supposed to be a photography student...</m>
+                            <m>If you didn't sleep so much in class you would know what it is!</m>
+                        </dlg>
+                        
+                        <dlg char="PLAYER">
+                            <m font-style="Italic" font-color="grey" wait="0.5">Yeah.. Whatever...</m>
+                            <m font-style="Italic" font-color="grey" wait="0.5">Just try to position the camera and pay attention to your phone...</m>
+                            <m font-style="Italic" font-color="grey">I'll contact you again when your 'target' approach...</m>
+                        </dlg>
+
+                        <bgm volume="0" />
+                        <fade-to-black keep="true" fill="true" speed="3" />
+                        <bootstrap script="scene-vic-glory" node="vic-waits" />
+                    </then>
+                </c>
+            </choice>
+        </n>
+
+</nodes>
+</xml-script>

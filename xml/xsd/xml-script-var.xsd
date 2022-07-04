@@ -2,6 +2,8 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:simpleType name="flag">
         <xs:restriction base="xs:string">
+            <xs:enumeration value="SYSTEM:VERSION" />
+            <xs:enumeration value="SYSTEM:STATE:PATCH" />
             <xs:enumeration value="DAY:CURRENT" />
             <!-- Current week day -->
             <xs:enumeration value="PLAYER:STAT:PARAGON" />
@@ -30,7 +32,9 @@
                 (3): intro-jef-dialog#root entered "SW" dialog-kate
                 (4): intro-jef-dialog#root entered "E" dialog-talk
                 (10): Gave BRK deep fake base video on girl's restroom
-                (11): Didn't gave BRK deep fake base video on girl's restroom
+                (11): Didn't give BRK deep fake base video on girl's restroom
+                (12): Gave JUL revenge video in the science restroom
+                (13): Didn't give JUL revenge video in the science restroom
             -->
             <xs:enumeration value="CHAR:SAM:INTERACTIONS" />
             <!-- SAM interaction LOG bits
@@ -44,8 +48,8 @@
             
             <xs:enumeration value="CHAR:TAY:INTERACTIONS" />
             <!-- TAY interaction LOG bits
-                (0): choice victoria-loyalty-1: (SW) She made you her lapdog
-                (1): choice victoria-loyalty-1: (NW) She made you her lapdog
+                (0): choice victoria-loyalty-1: (NW) Making friends isn't easy
+                (1): choice victoria-loyalty-1: (SW) She made you her lapdog
             -->
             
             <xs:enumeration value="CHAR:KATE:AFFINITY" />
@@ -82,7 +86,6 @@
                 (23): choice 'choice-kate-diner-01-c' - Used (I should go now...)
                 (24): choice 'choice-kate-diner-01-d' - Used (Sorry if that was too much)
                 (25): choice 'choice-kate-diner-01-d' - Used (I know you liked that)
-                (26): choice 'choice-kate-diner-01-e' - Used (Felt like I care about you?)
                 (26): choice 'choice-kate-diner-01-e' - Used (Felt like I care about you?)
                 (27): choice 'choice-kate-diner-01-e' - Used (Like I'm willing to help...)
                 (28): dinner escalate hand job
@@ -202,16 +205,24 @@
                 (9): Found bracelet
                 (10): Delivered bracelet to TAY 
                 (11): Entered women's room once
-                (12): Collected PIZZA
-                (13): Collected BOTTLE
-                (14): Collected CAN
-                (15): Collected BANANA PEEL
+                (12): Collected restroom PIZZA
+                (13): Collected restroom BOTTLE
+                (14): Collected restroom CAN
+                (15): Collected restroom BANANA PEEL
                 (16): Finished cleaning girls restroom
                 (17): Reported to SAM
-                (18): Slept on bed
-                
+                (18): Slept on bed after cleaning girls restroom 
+                (19): Asked SAM about second assignment
+                (20): First entered girls dorm
+                (21): Collected dorm BOTTLE at location-girls-dorm-01 
+                (22): Collected dorm NAPKIN at location-girls-dorm-01 
+                (23): Collected dorm CAN at location-girls-dorm-01 
+                (24): Collected dorm BANANA PEEL at location-girls-dorm-01 
+                (25): Finished cleaning girls dorm
+                (26): Reported to sam after Finished cleaning girls dorm
             -->
             <xs:enumeration value="QUEST:PRINCIPAL1:GARBAGE_COUNT" />
+            <xs:enumeration value="QUEST:PRINCIPAL1:GARBAGE_COUNT_GIRLS_DORM" />
 
             <xs:enumeration value="QUEST:KATE_LOCKER" />
             <!-- QUEST:KATE_LOCKER bits
@@ -264,6 +275,23 @@
                 (7) Acquired info where NAT will meet ZAC
             -->
 
+            <xs:enumeration value="QUEST:VIC:GLORY:HEAT_SCORE" />
+            <xs:enumeration value="QUEST:VIC:GLORY" />
+            <!-- QUEST:TURF_WAR bits
+                (0) Started
+                (1) Talked to JEF
+                (2) Betrayed VIC
+                (3) Tricked JEF
+                (4) First entered restroom
+                (5) Jammed condom dispenser
+                (6) Used soap dispenser
+                (7) Found stall
+                (8) Found hole
+                (9) Sold her to the crowd
+                (10) Impersonated JEF
+                (11) Made she perform the full service
+            -->
+
             <xs:enumeration value="QUEST:MAX:EVERYDAY_HEROES:HEAT_SCORE" />
             <xs:enumeration value="QUEST:MAX:EVERYDAY_HEROES" />
             <!-- BITWISE:
@@ -282,6 +310,7 @@
                 (12) Took wholesome pic
                 (13) Took sexy pic and brought her to bed
                 (14) Kissed her
+                (15) MAX left
             -->
 
 
@@ -318,6 +347,19 @@
                 (0): Started
             -->
 
+            <xs:enumeration value="QUEST:KATE:FASHION" />
+            <!-- QUEST:INTRO bits
+                (0): Started
+                (1): Blocked KATE's door (girls dorm) when TAY appeared
+                (2): Allowed KATE's to close the door (girls dorm) when TAY appeared
+            -->
+
+            
+            <xs:enumeration value="QUEST:TAY:COU:DATE" />
+            <!-- QUEST:INTRO bits
+                (0): Started
+            -->
+
             <xs:enumeration value="ITEM:LOCKERS_KEY" />
             <xs:enumeration value="ITEM:MONEY" />
             <xs:enumeration value="ITEM:ZAC_PHONE" />
@@ -349,6 +391,10 @@
                 (20): First checked player laptop
                 (21): (laptop) tried duck-duck-go
                 (22): (first used player room cellphone)
+                (23): location-girls-dorm-01 - light-01 is off
+                (24): location-girls-dorm-01 - light-02 is off
+                (25): location-girls-dorm-01 - light-03 is off
+                (26): location-girls-dorm-01 - light-04 is off
             -->
 
             <xs:enumeration value="LOC:NAT:ROOM" />
@@ -363,10 +409,12 @@
             
             <xs:enumeration value="FLG:0" />
             <xs:enumeration value="FLG:1" />
+            <xs:enumeration value="FLG:2" />
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="string">
         <xs:restriction base="xs:string">
+            <xs:enumeration value="SYSTEM:PLAYER:SPAWN" />
             <xs:enumeration value="DAY:NAME" />
             <xs:enumeration value="QUEST:INTRO:OBJECTIVE" />
             <!-- QUEST:INTRO objective -->
@@ -378,9 +426,11 @@
             <xs:enumeration value="QUEST:MEM_CARD:OBJECTIVE" />
             <xs:enumeration value="QUEST:MEM_CARD:RETURN_LOCATION" />
             <!-- QUEST:MEM_CARD objective -->
+            <xs:enumeration value="QUEST:VIC:GLORY:OBJECTIVE" />
             <xs:enumeration value="QUEST:WAR:CUPID:OBJECTIVE" />
             <xs:enumeration value="QUEST:MAX:EVERYDAY_HEROES:OBJECTIVE" />
             <xs:enumeration value="QUEST:JUL:PHONE:OBJECTIVE" />
+            <xs:enumeration value="QUEST:KATE:FASHION:OBJECTIVE" />
             
             <xs:enumeration value="QUEST:TURF_WAR:OBJECTIVE" />
             <xs:enumeration value="QUEST:TURF_WAR:NAT:OBJECTIVE" />

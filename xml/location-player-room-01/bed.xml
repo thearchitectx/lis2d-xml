@@ -80,7 +80,7 @@
             <if>
                 <check-flag flag="QUEST:PRINCIPAL1" bit-unset="18" />
                 <then>
-                    <string name="QUEST:PRINCIPAL1:OBJECTIVE" unset="true" />
+                    <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Ask ${CHAR:SAM:NAME} about your assignment for today" />
                     <flag name="QUEST:PRINCIPAL1" bit-on="18" />
                 </then>
             </if>

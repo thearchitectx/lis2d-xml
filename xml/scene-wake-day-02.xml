@@ -308,7 +308,8 @@
             <wait />
 
             <dlg char="PLAYER">
-                <m>And just like that... my day starts....</m>
+                <m wait="1">And just like that... my day starts....</m>
+                <m>I should ask ${CHAR:SAM:NAME} about today's 'assignment'...</m>
             </dlg>
 
             <fade-to-black speed="0.5" keep="true" />

@@ -75,6 +75,13 @@
                     </check-group>
                     <text>Girl's restroom is clean</text>
                 </c>
+                <c pos="W" out="cleaned-girls-dorm">
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="25" /> <!-- (25): Finished cleaning girls dorm -->
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-unset="26" /><!-- (26): Reported to sam after Finished cleaning girls dorm -->
+                    </check-group>
+                    <text>Girl's dorm is clean</text>
+                </c>
                 <c pos="NW" out="helper">
                     <check-group op="AND">
                         <check-flag flag="CHAR:SAM:INTERACTIONS" bit-set="1" /> <!-- (1): Had dialog after meeting principal -->
@@ -83,15 +90,12 @@
                     </check-group>
                     <text>You have a 'job' for me?</text>
                 </c>
-                <c pos="NW" out="helper">
+                <c pos="NW" out="helper-2">
                     <check-group op="AND">
-                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="18" /> <!-- (18): Slept on bed after finishing quest PRINCIPAL1 -->
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="18" /> <!-- (18): Slept on bed after cleaning girls restroom -->
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-unset="19" /> <!-- (19): Asked SAM about second assignment -->
                     </check-group>
                     <text>Assignment for today?</text>
-                    <then>
-                        <sys>Not implemented yet!</sys>
-                        <node-output node="dialog-root" />
-                    </then>
                 </c>
                 <c pos="SW" out="two-girls">
                     <check-group op="AND">
@@ -606,6 +610,161 @@
             <bgm volume="0" />
             <fade-to-black keep="true" />
             <bootstrap script="location-restroom-men-01/location" spawn="spawn/middle" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## cleaned-girls-dorm ####################################
+            ##############################################################
+        -->
+        <n id="cleaned-girls-dorm">
+            <flag name="QUEST:PRINCIPAL1" bit-on="26" /> <!-- (26): Reported to sam after Finished cleaning girls dorm-->
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Hey, ${CHAR:SAM:NAME}... I finished cleaning the girls dorm...</m>
+            </dlg>
+
+            <anim target="SAM" trigger="say-01" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m wait="0.5">You did? Awesome!</m>
+                <m>The girls dorm is amazing, isn't?</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Yeah... Another life changing experience...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <anim target="SAM" trigger="say-01" face="SIGH" />
+            <dlg char="SAM" track="SAM">
+                <m>Cool... You proving to be a great padawan...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Thanks, but...</m>
+                <m>I don't think I want to reach the 'master' ranking in this career...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="SAM" trigger="giggle" face="CUTE" />
+            <dlg char="SAM" track="SAM">
+                <m wait="0.5">Ha... You complain too much, man...</m>
+                <m>The principal gave you this job as some sort of 'punishment', but you get to visit all the girls lairs and still make some buck...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Sure... Half full glass... yay...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="SAM" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="SAM" track="SAM">
+                <m>Whatever, man... Here's today's payment...</m>
+            </dlg>
+
+            <fade-to-black keep="true" speed="2" />
+            <sfx clip="item" />
+            <fade-to-black speed="-2" />
+            <flag name="ITEM:MONEY" inc="5" icon="MONEY">You won $5</flag>
+            
+            <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Come back to ${CHAR:SAM:NAME} tomorrow for a new task"></string>
+            <log icon="QUEST">Objectives Updated!</log>
+            <anim target="SAM" trigger="say-01" face="NEUTRAL" />
+            <dlg char="SAM" track="SAM">
+                <m>Don't forget to come back tomorrow for yet another awesome task...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Yeah... Sure...</m>
+                <m>See ya...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap script="location-restroom-men-01/location" spawn="spawn/middle" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## helper-2 ####################################################
+            ##############################################################
+        -->
+        <n id="helper-2">
+            <dlg char="PLAYER" track="PLAYER">
+                <m>So... What's the assignment for today?</m>
+            </dlg>
+
+            <anim target="SAM" trigger="say-01" face="CUTE" />
+            <dlg char="SAM">
+                <m wait="0.5">Hey... Good to see you're ready for more work, man...</m>
+                <m>That's the smart move... You don't wanna give the Principal any reasons to harass you...</m>
+            </dlg>
+
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Whatever... I just wanna get it out of the way...</m>
+            </dlg>
+
+            <anim target="SAM" trigger="shrug" face="DISAPPROVE" />
+            <dlg char="SAM">
+                <m wait="0.5">Jeez... Quit being grumpy about it...</m>
+                <m>I have another awesome task waiting...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Yeah... Try me...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <anim target="SAM" trigger="say-01" face="CUTE" />
+            <dlg char="SAM">
+                <m wait="0.5">Just check this out... If getting into the girls' restroom were not cool enough...</m>
+                <m>... now we need to collect more garbage in the girls dorm!!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Sigh... yay...</m>
+            </dlg>
+
+            <anim target="SAM" trigger="surprised" face="SURPRISED" />
+            <dlg char="SAM">
+                <m>Come on... Are you not excited!?!</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="SAM" face="SIGH" />
+            <dlg char="SAM">
+                <m wait="0.5">Oh man... That place is magic... So many scents mixed...</m>
+                <m>I wish I could live there...</m>
+            </dlg>
+            <anim target="SAM" face="NEUTRAL" />
+            <dlg char="SAM">
+                <m>And now you have an official pass to get in the girls lair!</m>
+                <m>I said it would be an awesome job!!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="PLAYER">
+                <m>Well... Can't deny you try better to motivate students than most teachers I had...</m>
+            </dlg>
+
+            <anim target="SAM" trigger="giggle" face="CUTE" />
+            <dlg char="SAM">
+                <m>I know... Right?</m>
+            </dlg>
+            <flag name="QUEST:PRINCIPAL1" bit-on="19" />
+            <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Clean the girls dorm" />
+            <log icon="QUEST">Objectives updated!</log>
+            <anim target="SAM" face="NEUTRAL" />
+            <dlg char="SAM">
+                <m>Now get your ass there and collect all the shit you find lying around on the corridors...</m>
+                <m>The girls dorm right is right next to your dorm...</m>
+                <m>This is the assignment for today... See ya...</m>
+            </dlg>
+            <node-output node="end" />
         </n>
 
         <!--

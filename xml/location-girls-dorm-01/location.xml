@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="n1">
+            <fade-to-black keep="true" speed="99999" />
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <load-scene-object key="location-girls-dorm-01.prefab" rename="location" />
+
+            <if>
+                <!-- (23): location-girls-dorm-01 - light-01 is off -->
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="23" />
+                <then>
+                    <anim target="location" trigger="light-1-instant-off">
+                        <bool name="light-1" value="false" />
+                    </anim>
+                </then>
+            </if>
+            <if>
+                <!-- (24): location-girls-dorm-01 - light-02 is off -->
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="24" />
+                <then>
+                    <anim target="location" trigger="light-2-instant-off">
+                        <bool name="light-2" value="false" />
+                    </anim>
+                </then>
+            </if>
+            <if>
+                <!-- (25): location-girls-dorm-01 - light-03 is off -->
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="25" />
+                <then>
+                    <anim target="location" trigger="light-3-instant-off">
+                        <bool name="light-3" value="false" />
+                    </anim>
+                </then>
+            </if>
+            <if>
+                <!-- (26): location-girls-dorm-01 - light-04 is off -->
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="26" />
+                <then>
+                    <anim target="location" trigger="light-4-instant-off">
+                        <bool name="light-4" value="false" />
+                    </anim>
+                </then>
+            </if>
+
+            <!-- location-girls-dorm-01-bottle -->
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="21" />
+                <then>
+                    <load-scene-object key="location-girls-dorm-01-bottle.prefab" />
+                </then>
+            </if>
+            <!-- location-girls-dorm-01-napkin -->
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="22" />
+                <then>
+                    <load-scene-object key="location-girls-dorm-01-napkin.prefab" />
+                </then>
+            </if>
+            <!-- location-girls-dorm-01-can -->
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="23" />
+                <then>
+                    <load-scene-object key="location-girls-dorm-01-can.prefab" />
+                </then>
+            </if>
+            <!-- location-girls-dorm-01-banana -->
+            <if>
+                <check-flag flag="QUEST:PRINCIPAL1" bit-unset="24" />
+                <then>
+                    <load-scene-object key="location-girls-dorm-01-banana.prefab" />
+                </then>
+            </if>
+
+            <!-- vic scene -->
+            <if>
+                <check-flag flag="QUEST:VIC:GLORY" bit-unset="0" />
+                <then>
+                    <load-scene-object key="location-girls-dorm-01-vic-trigger.prefab" />
+                </then>
+            </if>
+
+            <!-- kate scene -->
+            <if>
+                <check-flag flag="QUEST:KATE:FASHION" bit-unset="0" />
+                <then>
+                    <load-scene-object key="location-girls-dorm-01-kate-trigger-01.prefab" />
+                </then>
+            </if>
+
+            <!-- tay scene -->
+            <if>
+                <check-group op="AND">
+                    <check-flag flag="QUEST:KATE:FASHION" bit-set="0" />
+                    <check-flag flag="QUEST:TAY:COU:DATE" bit-unset="0" />
+                </check-group>
+                <then>
+                    <load-scene-object key="location-girls-dorm-01-tay-01.prefab" />
+                </then>
+            </if>
+
+            <fade-to-black speed="-3" fill="true" />
+
+            <autosave label="Girls Dorm - Exploring" />
+
+            <inject node="lib-post-start" />
+        </n>
+    </nodes>
+</xml-script>

@@ -25,6 +25,8 @@
                 </then>
             </if>
 
+            <bgm volume="0" />
+            <fade-to-black fill="true" speed="3" keep="true" />
             <bootstrap node="dialog-root" />
         </n>
 
@@ -76,7 +78,7 @@
         <n id="choices-loop">
             <choice>
                 <c pos="NW">
-                    <text>[${CHAR:BRK:NAME} on restroom]</text>
+                    <text>[${CHAR:BRK:NAME} in the restroom]</text>
                     <check-group op="AND">
                         <check-flag flag="QUEST:MEM_CARD" bit-set="23" />
                         <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="10" />
@@ -84,6 +86,27 @@
                     </check-group>
                     <then>
                         <node-output node="brk-deep-fake" />
+                    </then>
+                </c>
+                <c pos="NE">
+                    <text>[${CHAR:JUL:NAME} in the Science class]</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:JUL:PHONE" bit-set="21" />
+                        <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="12" />
+                        <check-flag flag="CHAR:JEF:INTERACTIONS" bit-unset="13" />
+                    </check-group>
+                    <then>
+                        <node-output node="jul-phone-gate" />
+                    </then>
+                </c>
+                <c pos="NW">
+                    <text>[${CHAR:VIC:NAME}'s glory hole plan]</text>
+                    <check-group op="AND">
+                        <check-flag flag="QUEST:VIC:GLORY" bit-set="0" />
+                        <check-flag flag="QUEST:VIC:GLORY" bit-unset="1" />
+                    </check-group>
+                    <then>
+                        <node-output node="vic-glory-plan" />
                     </then>
                 </c>
                 <c pos="E">
@@ -155,5 +178,333 @@
             <node-output node="choices-loop" />
         </n>
 
+        <!-- 
+            ######################################################
+            ## jul-phone-gate #####################################
+            ######################################################
+        -->
+        <n id="jul-phone-gate">
+            <dlg char="PLAYER">
+                <m>I had an interesting video recording session with ${CHAR:JUL:NAME} in the Science classroom...</m>
+            </dlg>
+
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF">
+                <m wait="0.5">The one in charge of ${MISC:SCHOOL:NAME}'s newspaper? Excellent...</m>
+                <m>I always watch she walking around the school... trying to portrait the image of a strong independent girl...</m>
+                <m>But these are the kind that completely let themselves go to hormones and instincts...</m>
+            </dlg>
+
+            <choice>
+                <c pos="W">
+                    <text>[Give him the video]</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>I installed a media mirror app in the phone that she used to record the video...</m>
+                            <m>Meaning I gotta a copy of the full unedited material with me...</m>
+                            <m>Sending it to you now...</m>
+                        </dlg>
+                        <sfx clip="beep" />
+                        <wait />
+
+                        <flag name="CHAR:JEF:INTERACTIONS" bit-on="12" icon="BUTTERFLY">This choice may influence future events</flag>
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m>Perfect... Keep up the good work...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>[Don't give him the video]</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>Sorry, but...</m>
+                            <m>She recorded the video herself with another phone...</m>
+                            <m>I never had the opportunity to copy to my device...</m>
+                        </dlg>
+
+                        <flag name="CHAR:JEF:INTERACTIONS" bit-on="13" icon="BUTTERFLY">This choice may influence future events</flag>
+                        <anim target="JEF" trigger="say-01" face="DISAPPROVE" />
+                        <dlg char="JEF">
+                            <m>Urgh... You're disappointing me, ${CHAR:PLAYER:NAME}...</m>
+                            <m>These opportunities are rare... Don't waste them...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <node-output node="choices-loop" />
+        </n>
+
+        <!-- 
+            ######################################################
+            ## vic-glory-plan #####################################
+            ######################################################
+        -->
+        <n id="vic-glory-plan">
+            <flag name="QUEST:VIC:GLORY" bit-on="1"></flag>
+            <dlg char="PLAYER">
+                <m>Hey Mr ${CHAR:JEF:NAME}... There's something I need to talk about with you...</m>
+            </dlg>
+
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF">
+                <m wait="0.5">Oh boy...</m>
+                <m wait="1">When a conversation starts with that line... it's usually trouble...</m>
+                <m>What's the matter?</m>
+            </dlg>
+
+            <wait />
+            <dlg char="PLAYER">
+                <m thought="true">Okay... I can follow ${CHAR:VIC:NAME}'s plan and convince him to visit the Two Wales...</m>
+                <m thought="true">Or... I can betray her, tell him the plan, and trick her into a... surprise...</m>
+            </dlg>
+            
+            <wait />
+            <anim target="JEF" trigger="say-01" />
+            <dlg char="JEF">
+                <m>Come on... Spill the beans...</m>
+            </dlg>
+
+            <choice>
+                <c pos="E">
+                    <text>[Betray ${CHAR:VIC:NAME} and tell him about her plan]</text>
+                    <then>
+                        <flag name="QUEST:VIC:GLORY" bit-on="2"></flag>
+                        <dlg char="PLAYER">
+                            <m wait="1">It's about ${CHAR:VIC:NAME}...</m>
+                            <m>I found out the real reason why she is desperately trying to have a good time with you...</m>
+                        </dlg>
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m wait="0.5">Oh... You mean...</m>
+                            <m>There's more to it beyond the usual power trip?</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Yep...</m>
+                            <m>Let me tell you everything...</m>
+                        </dlg>
+
+                        <fade-to-black speed="0.5" keep="true" async="true" layer="-1" />
+                        <dlg char="PLAYER" ttl="2">
+                            <m>It's all about the picture contest...</m>
+                        </dlg>
+
+                        <wait time="2" />
+                        <fade-to-black speed="-1" layer="1" />
+
+                        <anim target="JEF" trigger="startled" />
+                        <dlg char="JEF">
+                            <m wait="0.5">Whoa...</m>
+                            <m>And ${CHAR:VIC:NAME} actually agreed with your preposterous... glory hole plan!?</m>
+                        </dlg>
+
+                        <dlg char="PLAYER">
+                            <m>It might be a wacky plan... But it would work if you had took the bait...</m>
+                        </dlg>
+                        
+                        <wait />
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m wait="0.5">Deception... DNA... Blackmail...</m>
+                            <m wait="0.5">Jesus Christ... This school is more vicious than I thought...</m>
+                        </dlg>
+                        
+                        <wait />
+                        <dlg char="PLAYER">
+                            <m>Yep... Girls are the most dangerous species in the world...</m>
+                        </dlg>
+
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m wait="0.5">But now that you decided to double cross her...</m>
+                            <m>Are you going to do... what I think you're going to do?</m>
+                        </dlg>
+
+                        <wait />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">You see... The beauty of the glory hole system is that both sides are blind...</m>
+                            <m wait="0.5">She will be waiting for fluid 'samples'... So I gotta provide her some...</m>
+                            <m>She will only discover later that... the material she collected won't match with your DNA...</m>
+                        </dlg>
+                        
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m>Nice... You have some real talent, ${CHAR:PLAYER:NAME}...</m>
+                            <m wait="0.5">Looks like I was right about you...</m>
+                            <m wait="0.5">Just don't forget to find a way to gather visual records of your... 'operation'...</m>
+                            <m>This kind of material would have a valued place in my project...</m>
+                        </dlg>
+
+                        <string name="QUEST:VIC:GLORY:OBJECTIVE" set="Got to your room to call ${CHAR:VIC:NAME} and oversee the glory hole operation"></string>
+                        <log icon="QUEST">Objectives updated</log>
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m>Don't worry... I got it...</m>
+                            <m>I just need to call her to get it started...</m>
+                            <m>So... See you later...</m>
+                        </dlg>
+                        
+                        <wait time="0.5" />
+                        <dlg char="JEF">
+                            <m>Break a leg!</m>
+                        </dlg>
+
+                        <obj target="JEF">
+                            <message name="StartCenter" />
+                            <message name="EndRight" />
+                            <message name="TriggerEnter" />
+                        </obj>
+                    </then>
+                </c>
+                <c pos="W">
+                    <text>[Bait him to follow ${CHAR:VIC:NAME}'s plan]</text>
+                    <then>
+                        <flag name="QUEST:VIC:GLORY" bit-on="3"></flag>
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Nah... It's nothing important...</m>
+                            <m>It's just... You're my only hope to graduate in this school...</m>
+                            <m wait="0.5">And I'm a little worried about your health...</m>
+                        </dlg>
+                        <anim target="JEF" trigger="startled" />
+                        <dlg char="JEF">
+                            <m wait="0.5">My health!?!?</m>
+                            <m>What are you talking about?</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Well... I see how ${CHAR:VIC:NAME} has been teasing you every single day...</m>
+                            <m>And I read this article about the dangers of blue balls in men at your age...</m>
+                            <m>You know... heart attacks and shit...</m>
+                        </dlg>
+
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m>${CHAR:PLAYER:NAME}... I assure you the color of our genitals have no direct association with cardiovascular diseases...</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <anim target="JEF" trigger="shrug" />
+                        <dlg char="JEF">
+                            <m>However... I can't deny... The frequent hormonal spikes ${CHAR:VIC:NAME} causes on me when she approaches...</m>
+                            <m>It's... decreasing my ability to focus and work properly...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m>You see? It's affecting you... one way or another...</m>
+                            <m>So you need a place to discharge all that energy, right?</m>
+                        </dlg>
+                        
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m>Unfortunately I have to keep the appearances in this town...</m>
+                            <m>I don't have time for romance... and worse...</m>
+                            <m>I can't be seen dealing with any kind of 'working girl'...</m>
+                            <m>Meaning I don't have many options now beyond trying to hold myself...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m>Well... What if tell you about a place that has a totally respectable facade...</m>
+                            <m>But secretly offers a discrete 'intimate discharge service'... in a way nobody ever sees what's happening?</m>
+                        </dlg>
+
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m wait="0.5">Wait... You mean...</m>
+                            <m>I never thought a quiet little would offer one of... those...</m>
+                            <m>Also... I'm not the kind of man that makes use of this service... You never know what you can find in these places...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">Well... What if tell you it's a place run by a well known local entrepreneur that studies in this very school...</m>
+                            <m>So it's guaranteed to have nice and clean young girls waiting on the other side of your booth...</m>
+                            <m>Girls that are probably ${MISC:SCHOOL:NAME} students... that will never know they did it to you...</m>
+                        </dlg>
+
+                        <anim target="JEF" trigger="startled" />
+                        <dlg char="JEF">
+                            <m wait="0.5">Wait... I've been eavesdropping students talking about this 'business' run by ${CHAR:NAT:NAME} Prescott...</m>
+                            <m wait="0.5">But I thought it was a local urban legend...</m>
+                            <m>And you... should be careful if you're working for that crook...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m>Don't worry... ${CHAR:NAT:NAME} is my pal...</m>
+                            <m>And I assure you the place is very real...</m>
+                        </dlg>
+
+                        <wait />
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m>Sigh... This whole story sounds utterly suspicious...</m>
+                            <m>But I have to admit... the possibility of being secretly 'served' by some of my own students is tempting...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m>And don't forget it's zero risk...</m>
+                            <m>You'll be simply going for a snack at the Two Wales Diner...</m>
+                            <m>...and taking a break at the restroom while your food is being prepared...</m>
+                        </dlg>
+
+                        <wait />
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m wait="0.5">Two Wales, huh?</m>
+                            <m>I always suspected that place weren't popular with city workers just because of the food...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m>Exactly...</m>
+                        </dlg>
+
+                        <wait />
+                        <anim target="JEF" trigger="say-01" />
+                        <dlg char="JEF">
+                            <m wait="0.5">You know what? I'll take your word for it...</m>
+                            <m wait="0.5">I will go home now, take a shower, then go there...</m>
+                            <m>I need a nice home made meal anyways... </m>
+                            <m>and... if it feels safe... then I might try a trip to the restroom...</m>
+                        </dlg>
+
+                        <dlg char="PLAYER">
+                            <m>There's no better combo, sir...</m>
+                        </dlg>
+
+                        <dlg char="JEF">
+                            <m>See you tomorrow, ${CHAR:PLAYER:NAME}...</m>
+                        </dlg>
+
+                        <obj target="JEF">
+                            <message name="StartCenter" />
+                            <message name="EndRight" />
+                            <message name="TriggerEnter" />
+                        </obj>
+                        <wait time="2" />
+
+                        <string name="QUEST:VIC:GLORY:OBJECTIVE" set="Got to your room to call ${CHAR:VIC:NAME} and oversee the glory hole operation"></string>
+                        <log icon="QUEST">Objectives updated</log>
+                        <dlg char="PLAYER">
+                            <m thought="true">Nice... He took the bait...</m>
+                            <m thought="true">I should go call ${CHAR:VIC:NAME} and prepare the 'operation' before he arrives there...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <obj target="PLAYER">
+                <message name="AnimateWeightToCoroutine"><float value="0" /></message>
+            </obj>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap script="location-classroom-01/location" spawn="spawn/door" />
+        </n>
+        
     </nodes>
 </xml-script>

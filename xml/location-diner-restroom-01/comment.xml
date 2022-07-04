@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <wait />
+
+            <if>
+                <check-text text="ARG:0" eq="STALL_1" />
+                <then>
+                    <sfx clip="thump" />
+                    <sfx clip="thump" />
+                    <wait />
+                    <dlg char="VIC" track="#PlayerTrack">
+                        <m>This stall door is locked...</m>
+                        <m>But there's nobody here...</m>
+                    </dlg>
+
+                    <dlg char="PLAYER">
+                        <m font-style="Italic" font-color="grey" wait="0.5">It's probably out of order...</m>
+                        <m font-style="Italic" font-color="grey">But don't worry... We only need two working booths for your plan...</m>
+                    </dlg>
+
+                    <dlg char="VIC" track="#PlayerTrack">
+                        <m>Yeah... 'My' plan...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <if>
+                <check-text text="ARG:0" eq="STALL_2" />
+                <then>
+                    <dlg char="VIC" track="#PlayerTrack">
+                        <m>The stall at the center is open...</m>
+                        <m>But it seems... just like any other regular restroom stall...</m>
+                    </dlg>
+
+                    <dlg char="PLAYER">
+                        <m font-style="Italic" font-color="grey" wait="0.5">Check the one in the corner...</m>
+                        <m font-style="Italic" font-color="grey">That's probably the spot were looking......</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+
+    </nodes>
+</xml-script>

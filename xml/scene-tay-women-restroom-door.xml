@@ -210,7 +210,7 @@
                     <text>Making friends isn't easy</text>
                     <then>
                         <flag name="PLAYER:STAT:PARAGON" inc="1" icon="PARAGON">Paragon +1</flag>
-                        <flag name="CHAR:TAY:INTERACTIONS" bit-on="1" icon="BUTTERFLY">This choice may influence future events</flag>
+                        <flag name="CHAR:TAY:INTERACTIONS" bit-on="0" icon="BUTTERFLY">This choice may influence future events</flag>
                         
                         <dlg char="PLAYER" track="PLAYER">
                             <m>Hey... I know it's not easy to make friends...</m>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <nodes>
+        <!--
+            ##############################################################
+            ## root ######################################################
+            ##############################################################
+        -->
+        <n id="root">
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="false" /></message>
+            </obj>
+
+            <wait />
+
+            <if>
+                <check-text text="ARG:0" eq="TOILET_PAPER" />
+                <then>
+                    <dlg char="PLAYER" track="#PlayerTrack">
+                        <m wait="0.5">This is not garbage... It's plain vandalism....</m>
+                        <m>And I still have some dignity... This shit stays here...</m>
+                    </dlg>
+                </then>
+            </if>
+
+            <obj target="#Player">
+                <message name="SetInputActive"><bool value="true" /></message>
+            </obj>
+        </n>
+
+    </nodes>
+</xml-script>

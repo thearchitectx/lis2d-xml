@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+
+        <!--
+            ##############################################################
+            ## root ##########################################
+            ##############################################################
+        -->
+        <n id="root">
+            <fade-to-black keep="true" fill="true" speed="3" />
+            <bgm volume="0" />
+            <bootstrap node="washbasins" />
+        </n>
+        <!--
+            ##############################################################
+            ## washbasins ################################################
+            ##############################################################
+        -->
+        <n id="washbasins">
+            <fade-to-black keep="true" speed="99999" />
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <load-scene-object key="location-diner-restroom-01-washbasins.prefab" rename="scene">
+            </load-scene-object>
+            <obj target="scene/interactables" active="false"></obj>
+            
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="QUEST:VIC:GLORY:HEAT_SCORE" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+            </load-scene-object>
+            <proxy name="VIC" target="scene/VIC" />
+
+            <if>
+                <check-flag flag="QUEST:VIC:GLORY" bit-set="6" />
+                <then>
+                    <obj target="scene/vapor" active="true"></obj>
+                </then>
+            </if>
+
+
+            <fade-to-black fill="true" speed="-3" />
+
+            <wait />
+
+            <if>
+                <check-flag flag="QUEST:VIC:GLORY" bit-unset="6" />
+                <then>
+                    <dlg char="VIC">
+                        <m wait="0.5">There's pair of washbasins here...</m>
+                        <m>Like if anyone care about hygiene in this smelly place...</m>
+                    </dlg>
+                    
+                    <wait time="0.5" />
+                    <dlg char="PLAYER">
+                        <m font-style="Italic" font-color="grey">Hum... Let's take a quick look around...</m>
+                    </dlg>
+                </then>
+            </if>
+
+
+            <wait time="0.5" />
+            
+
+            <node-output node="interactables" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## interactables ###################################################
+            ##############################################################
+        -->
+        <n id="interactables">
+            <obj target="scene/interactables" active="true">
+                <outcome value="SOAP" node="soap" clear="true" />
+                <outcome value="MIRROR" node="mirror" clear="true" />
+                <outcome value="PAPER" node="paper" clear="true" />
+                <outcome copy-to="TMP:0" clear="true" />
+            </obj>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" fill="true" speed="3" />
+            <bootstrap script="location-diner-restroom-01/location" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## paper ###################################################
+            ##############################################################
+        -->
+        <n id="paper">
+            <obj target="scene/interactables" active="false" />
+            <dlg char="VIC">
+                <m wait="1">There's a paper towel dispenser here...</m>
+                <m>But... No, thanks...</m>
+                <m>I prefer to use my own personal hygiene material...</m>
+            </dlg>
+            <node-output node="interactables" />
+        </n>
+        
+        <!--
+            ##############################################################
+            ## mirror ###################################################
+            ##############################################################
+        -->
+        <n id="mirror">
+            <obj target="scene/interactables" active="false" />
+            <dlg char="VIC">
+                <m>A couple of mirrors...</m>
+                <m wait="1">But I don't like the idea of looking at an image of myself while in a place like this...</m>
+            </dlg>
+            <node-output node="interactables" />
+        </n>
+
+        <!--
+            ##############################################################
+            ## soap ###################################################
+            ##############################################################
+        -->
+        <n id="soap">
+            <obj target="scene/interactables" active="false" />
+            <if>
+                <check-flag flag="QUEST:VIC:GLORY" bit-set="6" />
+                <then>
+                    <dlg char="VIC" track="#PlayerTrack">
+                        <m>I already took care of the smell here...</m>
+                    </dlg>        
+                    <node-output node="interactables" />
+                </then>
+            </if>
+
+            <dlg char="VIC">
+                <m wait="0.5">At least the soap dispenser is filled...</m>
+                <m>Probably because these gross people never even use it...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey">Hey... That's good!</m>
+                <m font-style="Italic" font-color="grey">You said the smell there is not that pleasant, right?</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m wait="0.5">Yeah... It's disgusting...</m>
+                <m>But you're not expecting me to wash this place using hand soap are you?!?!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey" wait="0.5">Nah... I have a better idea...</m>
+                <m font-style="Italic" font-color="grey" wait="1">Fill the washbasins with warm water and drop a handful of soap...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m wait="0.5">Huh!?! How the hell would that help?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey" wait="0.5">Believe it... It's an old trick that's used in... uuhh... emergencies...</m>
+                <m font-style="Italic" font-color="grey">I mean... Lightning a match is a bit more efficient, but...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m wait="0.5">What the hell are you talking about?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey" wait="0.5">It's simple... Warm water slowly fills the air with soap...</m>
+                <m font-style="Italic" font-color="grey">This will neutralize a bit of the smell...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m wait="1">Oh... I get it...</m>
+                <m>I think I can try...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="scene"><bool name="close" value="true" /></anim>
+            <fade-to-black keep="true" speed="2" />
+            <sfx clip="water-flow" />
+            <obj target="scene/vapor" active="true"></obj>
+            <anim target="scene"><bool name="close" value="false" /></anim>
+            <fade-to-black speed="-1" />
+
+            <wait time="1" />
+            <dlg char="VIC">
+                <m>.........</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>So... Did it work?</m>
+            </dlg>
+
+            <flag name="QUEST:VIC:GLORY:HEAT_SCORE" inc="30"></flag>
+            <flag name="QUEST:VIC:GLORY" bit-on="6"></flag>
+            <load-scene-object key="vfx-heat.prefab"></load-scene-object>
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m>Gotta admit... It smells a little better...</m>
+                <m>It's not perfect, but...</m>
+                <m>At least I feel less grossed out now...</m>
+            </dlg>
+
+            <node-output node="interactables" />
+        </n>
+</nodes>
+</xml-script>

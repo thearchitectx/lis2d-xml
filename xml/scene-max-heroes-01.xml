@@ -559,9 +559,9 @@
                 <m>I should go back to my room now...</m>
             </dlg>
             <wait />
-            <sys>Continues on next version!</sys>
-            <fade-to-black keep="true" speed="0.25" />
-            <bootstrap script="title" />
+            <fade-to-black keep="true" speed="0.5" />
+            <sfx clip="door-transition" />
+            <bootstrap node="end-scene" spawn="spawn/phone"  />
         </n>
 
         <!--################################################
@@ -1261,24 +1261,21 @@
                 <m>I... I must to go back to my room, now...</m>
             </dlg>
 
-            <wait time="2" />
-
-            <sys>Continues on next version!</sys>
-            <fade-to-black keep="true" speed="0.25"/>
-            <bootstrap script="title" />
-
-            <!-- <dlg char="MAX">
-                <m wait="0.5">Jesus Christ... This went too far, I...</m>
-                <m>I... I must to go back to my room, now...</m>
-            </dlg>
-
             <dlg char="PLAYER">
                 <m>Sure... Don't forget your stuff...</m>
             </dlg>
 
-            <dlg char="MAX">
-                <m>Yeah... Thanks... I guess...</m>
-            </dlg> -->
+            <fade-to-black keep="true" speed="1" layer="-1"/>
+            <sfx clip="rummage" />
+            <wait time="1" />
+
+            <dlg char="MAX" track="null">
+                <m wait="0.5">We... can talk later...</m>
+                <m>I guess...</m>
+            </dlg>
+
+            <sfx clip="door-transition" />
+            <bootstrap node="end-scene" spawn="spawn/phone"  />
         </n>
 
         <!--################################################
@@ -1442,15 +1439,21 @@
                         </dlg>
                         <wait time="0.5" />
                         <dlg char="MAX">
-                            <m>Yeah... I... I should go now...</m>
-                            <m wait="1">Thanks again...</m>
+                            <m wait="1">Yeah... Thanks again...</m>
+                            <m>I... I should go now...</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Don't forget your stuff...</m>
+                        </dlg>
+
+                        <fade-to-black keep="true" speed="1" layer="-1" />
+                        <sfx clip="rummage" />
+                        <dlg char="MAX">
                             <m>See you tomorrow...</m>
                         </dlg>
 
-                        <bgm volume="0" />
-                        <fade-to-black keep="true" speed="0.25" />
-                        <sys>Continues next version!</sys>
-                        <bootstrap script="title" />
+                        <sfx clip="door-transition" />
+                        <bootstrap node="end-scene" spawn="spawn/phone"  />
                     </then>
                 </c>
             </choice>
@@ -1799,10 +1802,106 @@
                 <m>What the hell happened?</m>
             </dlg>
             <wait />
-            <sys>Continues next version!</sys>
+            <fade-to-black keep="true" speed="1" />
+            <sfx clip="door-transition" />
+            <bootstrap node="end-scene" spawn="spawn/phone" />
+        </n>
+        
+        <!-- #########################################################
+         #### end-scene #########################################
+        ######################################################### -->
+        <n id="end-scene">
+            <flag name="QUEST:MAX:EVERYDAY_HEROES" bit-on="15" />
+            <string name="QUEST:MAX:EVERYDAY_HEROES:OBJECTIVE" unset="true"></string>
+
+            <fade-to-black keep="true" speed="99999" />
+            <bgm loop="loop-urban" volume="0.25" />
+            <string name="SYSTEM:PLAYER:SPAWN" set="spawn/facing-door" />
+            <load-scene-object key="location-player-room-01.prefab" rename="location" />
+            <obj target="#Player"><message name="SetInputActive"><bool value="false" /></message></obj>
+            <obj target="location/perceptibles" active="false" />
+            <fade-to-black speed="-3" fill="true" />
+            <wait  />
+
+            <if>
+                <check-flag flag="QUEST:MAX:EVERYDAY_HEROES" bit-set="13" />
+                <then>
+                    <dlg char="WAR" track="location/door-dialog-track">
+                        <m wait="0.5">${CHAR:MAX:NAME}!?!</m>
+                    </dlg>
+                    <dlg char="MAX" track="location/door-dialog-track">
+                        <m>${CHAR:WAR:NAME}!?!</m>
+                    </dlg>
+                    <dlg char="WAR" track="location/door-dialog-track">
+                        <m>Oh my God, ${CHAR:MAX:NAME}... What were you doing all this time in ${CHAR:PLAYER:NAME}'s room!?!?</m>
+                    </dlg>
+                    <dlg char="MAX" track="location/door-dialog-track">
+                        <m wait="0.5">I was... uuuhh... just... like... uuhh...</m>
+                        <m>.........</m>
+                    </dlg>
+                    <dlg char="WAR" track="location/door-dialog-track">
+                        <m wait="0.5">Jesus Christ, ${CHAR:MAX:NAME}... Say something...</m>
+                        <m wait="1">I've never seen you blushing like this...</m>
+                        <m>...and you spilled some drink in your shirt right here-</m>
+                    </dlg>
+                    <load-scene-object key="cinemachine-impulse.prefab">
+                        <message name="GenerateImpulse"><float value="20" /></message>
+                    </load-scene-object>
+                    <dlg char="MAX" track="location/door-dialog-track">
+                        <m wait="0.5">OH MY GOD... Don't touch it!!!</m>
+                        <m>I... I mean...</m>
+                        <m>Look... ${CHAR:PLAYER:NAME} was just... helping with my photography project, okay?</m>
+                    </dlg>
+                    <dlg char="WAR" track="location/door-dialog-track">
+                        <m>Oh... of course... Mr ${CHAR:JEF:NAME}'s contest, right?</m>
+                        <m>and... wait! Where are you going?</m>
+                    </dlg>
+                    <dlg char="MAX" track="location/door-dialog-track">
+                        <m wait="0.5">It's late... I have to go back to my room...</m>
+                        <m>See you later...</m>
+                    </dlg>
+                    <wait />
+                    <dlg char="PLAYER">
+                        <m thought="true">Sheesh... That was close, right ${CHAR:MAX:NAME}?</m>
+                    </dlg>
+                </then>
+                <else>
+                    <dlg char="WAR" track="location/door-dialog-track">
+                        <m wait="0.5">Uuhh... Hello again, ${CHAR:MAX:NAME}...</m>
+                    </dlg>
+                    <dlg char="MAX" track="location/door-dialog-track">
+                        <m>${CHAR:WAR:NAME}? Where you... waiting for me here?</m>
+                    </dlg>
+                    <dlg char="WAR" track="location/door-dialog-track">
+                        <m wait="0.5">What? No... I...</m>
+                        <m>I was just passing by when I saw you... leaving ${CHAR:PLAYER:NAME}'s room...</m>
+                    </dlg>
+                    <dlg char="MAX" track="location/door-dialog-track">
+                        <m>${CHAR:PLAYER:NAME} was just... helping with my photography project, okay?</m>
+                    </dlg>
+                    <dlg char="WAR" track="location/door-dialog-track">
+                        <m>Oh... of course... Mr ${CHAR:JEF:NAME}'s contest, right?</m>
+                    </dlg>
+                    <dlg char="MAX" track="location/door-dialog-track">
+                        <m>Look... I gotta go back to my room... I'm exhausted...</m>
+                        <m>We talk later, okay?</m>
+                    </dlg>
+                    <dlg char="WAR" track="location/door-dialog-track">
+                        <m>Oh... Of course...</m>
+                        <m>Take care, okay?</m>
+                    </dlg>
+        
+                    <wait />
+                    <dlg char="PLAYER">
+                        <m thought="true">Jeez... The dude is worryingly obsessed with her...</m>
+                    </dlg>
+                </else>
+            </if>
+            <wait />
             <fade-to-black keep="true" />
-            <bootstrap script="title" />
+            <bootstrap script="location-player-room-01/location"  />
         </n>
     </nodes>
+    
 
 </xml-script>

@@ -33,4 +33,13 @@
     <trophy id="phone-gate-02" label="Phonegate II" icon="char/JUL.png">
         Give her some training experience
     </trophy>
+    <trophy id="paths-of-glory-01" label="Paths of Glory I" icon="char/VIC.png">
+        Impersonate your teacher in the Two Wales restroom
+    </trophy>
+    <trophy id="paths-of-glory-02" label="Paths of Glory II" icon="char/VIC.png">
+        Lure your teacher to her claws in the Two Wales restroom
+    </trophy>
+    <trophy id="paths-of-glory-03" label="Paths of Glory III" icon="char/VIC.png">
+        Pimp her out to the clients of the Two Wales (not implemented yet)
+    </trophy>
 </trophies>

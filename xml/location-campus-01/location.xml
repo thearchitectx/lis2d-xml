@@ -46,6 +46,8 @@
                 <check-group op="AND">
                     <check-flag flag="QUEST:JUL:PHONE" bit-unset="7" />
                     <check-flag flag="QUEST:JUL:PHONE" bit-unset="8" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="9" />
+                    <check-flag flag="QUEST:JUL:PHONE" bit-unset="10" />
                 </check-group>
                 <then>
                     <load-scene-object key="location-campus-01-dan-01.prefab" />

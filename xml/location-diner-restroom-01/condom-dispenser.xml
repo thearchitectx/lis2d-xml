@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+
+        <!--
+            ##############################################################
+            ## root ##########################################
+            ##############################################################
+        -->
+        <n id="root">
+            <if>
+                <check-flag flag="QUEST:VIC:GLORY" bit-set="5" />
+                <then>
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="false" /></message>
+                    </obj>
+                    <dlg char="VIC" track="#PlayerTrack">
+                        <m>I already took care of this thing...</m>
+                    </dlg>        
+                    <obj target="#Player">
+                        <message name="SetInputActive"><bool value="true" /></message>
+                    </obj>
+                </then>
+                <else>
+                    <fade-to-black keep="true" fill="true" speed="3" />
+                    <bgm volume="0" />
+                    <bootstrap node="condom-dispenser" />
+                </else>
+            </if>
+            
+        </n>
+        <!--
+            ##############################################################
+            ## condom-dispenser ##########################################
+            ##############################################################
+        -->
+        <n id="condom-dispenser">
+            <fade-to-black keep="true" speed="99999" />
+            <bgm loop="loop-urban" volume="0.25" />
+
+            <load-scene-object key="location-diner-restroom-01-condom-dispenser.prefab" rename="scene">
+            </load-scene-object>
+            
+            <load-scene-object key="flag-gauge.prefab">
+                <message name="SetFlag"><string value="QUEST:VIC:GLORY:HEAT_SCORE" /></message>
+                <message name="SetLabel"><string value="HEAT" /></message>
+            </load-scene-object>
+            <proxy name="VIC" target="scene/VIC" />
+
+            <fade-to-black fill="true" speed="-3" />
+
+            <wait />
+
+            <dlg char="VIC">
+                <m wait="0.5">Urgh... There's one of those ridiculous condom dispensers here...</m>
+                <m>Even the school restrooms have those things now...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey">Condoms... The best but also the worst invention of human civilization...</m>
+                <m font-style="Italic" font-color="grey">These dispensers are life savers for unprepared dudes...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            
+            <dlg char="VIC">
+                <m wait="0.5">Wait... What if Mr ${CHAR:JEF:NAME} find this and decide to... wear one?</m>
+                <m>That would ruin my... fluid collection plan...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="1" font-style="Italic" font-color="grey">Well... That would suck, huh?</m>
+                <m font-style="Italic" font-color="grey">But I bet this is one of those cheap public dispensers...</m>
+                <m font-style="Italic" font-color="grey">You can easily jam it by inserting something like a paper clip in the small space between the activation buttons...</m>
+                <m font-style="Italic" font-color="grey">That would close the condom store for today...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m wait="0.5">Hum... I don't have a paper clip...</m>
+                <m>Do you think a bobby pin would do the job?</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey">Good idea! Give it a try!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="VIC">
+                <m>Let me see if I can do it...</m>
+            </dlg>
+
+            <anim target="scene"><bool name="close" value="true" /></anim>
+
+            <fade-to-black keep="true" speed="1" />
+            <sfx clip="rummage" />
+            <anim target="scene"><bool name="close" value="false" /></anim>
+            <fade-to-black keep="true" speed="-1" />
+
+
+            <load-scene-object key="vfx-heat.prefab"></load-scene-object>
+            <flag name="QUEST:VIC:GLORY:HEAT_SCORE" inc="30" />
+            <dlg char="VIC">
+                <m wait="0.5">Phew... The buttons are stuck...</m>
+                <m wait="0.5">That makes me feel better... Mr ${CHAR:JEF:NAME} won't be able to use this one...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey">Nice! I didn't know you have a talent for vandalism, ${CHAR:VIC:NAME}...</m>
+            </dlg>
+
+            <dlg char="VIC">
+                <m>I have many talents you don't know about, buddy...</m>
+            </dlg>
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m font-style="Italic" font-color="grey">Yeah... I believe you...</m>
+            </dlg>
+
+            <flag name="QUEST:VIC:GLORY" bit-on="5"></flag>
+            <bgm volume="0" />
+            <fade-to-black keep="true" fill="true" speed="3" />
+            <bootstrap script="location-diner-restroom-01/location" />
+        </n>
+
+</nodes>
+</xml-script>

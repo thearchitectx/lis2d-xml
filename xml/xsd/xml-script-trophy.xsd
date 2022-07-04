@@ -13,6 +13,9 @@
             <xs:enumeration value="polaroid-fever-03" />
             <xs:enumeration value="phone-gate-01" />
             <xs:enumeration value="phone-gate-02" />
+            <xs:enumeration value="paths-of-glory-01" />
+            <xs:enumeration value="paths-of-glory-02" />
+            <xs:enumeration value="paths-of-glory-03" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

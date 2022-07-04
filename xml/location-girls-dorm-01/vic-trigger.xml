@@ -1,0 +1,690 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="root">
+            <obj target="#Player"><message name="SetInputActive"><bool value="false" /></message></obj>
+            
+            <dlg char="VIC" track="dialog-track">
+                <m>${CHAR:TAY:NAME}!!</m>
+                <m>What the hell are you doing!?!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER" track="#PlayerTrack">
+                <m>Oh shit... Here we go again...</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black speed="2" keep="true" />
+            <bootstrap node="scene" />
+        </n>
+
+        <!-- 
+            ###############################################
+            ## scene     ###################################
+            ###############################################
+        -->
+        <n id="scene">
+            <fade-to-black keep="true" speed="9999" />
+
+            <bgm loop="loop-vic" volume="0.25" />
+
+            <load-scene-object key="scene-vic-tay-girls-dorm.prefab" rename="scene" />
+            <proxy name="TAY" target="scene/TAY" />
+            <proxy name="VIC" target="scene/VIC" />
+            <proxy name="PLAYER" target="scene/PLAYER" />
+
+            <fade-to-black speed="-1" />
+
+            <autosave label="${CHAR:VIC:NAME} and ${CHAR:TAY:NAME} argument in the girls dorm" />
+
+            <dlg char="VIC">
+                <m wait="0.5">Quit screwing around, ${CHAR:TAY:NAME}...</m>
+                <m>We need another brainstorm session... Time is ticking out...</m>
+            </dlg>
+
+            <anim target="scene" trigger="tay-1-say"></anim>
+            <dlg char="TAY">
+                <m>Please, give me a minute...</m>
+                <m>I'm waiting for-</m>
+            </dlg>
+
+            <anim target="scene" trigger="vic-1-say"></anim>
+            <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                <message name="GenerateImpulse"><float value="20" /></message>
+            </load-scene-object>
+            <dlg char="VIC">
+                <m wait="0.5">Goddammit!</m>
+                <m wait="0.5">It's that stupid girl Carol again, isn't?</m>
+                <m>That idiot is always late...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="scene" trigger="tay-1-say"></anim>
+            <dlg char="TAY">
+                <m>Her name is ${CHAR:COU:NAME}...</m>
+                <m>And she... she is not stupid...</m>
+            </dlg>
+
+            <anim target="scene" trigger="vic-1-say"></anim>
+            <dlg char="VIC">
+                <m>Whatever... If she can't come now, then fuck her...</m>
+                <m>Let's go...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <anim target="scene" trigger="tay-1-say"></anim>
+            <dlg char="TAY">
+                <m>Please, ${CHAR:VIC:NAME}...</m>
+                <m>She is prepping in the restroom... She won't take long...</m>
+            </dlg>
+
+            <anim target="scene" trigger="vic-1-say"></anim>
+            <dlg char="VIC">
+                <m wait="1">I don't understand your obsession with that girl...</m>
+                <m>Unless...</m>
+            </dlg>
+            <wait />
+            <anim target="scene" trigger="vic-1-say"></anim>
+            <dlg char="VIC">
+                <m>Wait a minute... Are you really trying to-</m>
+            </dlg>
+
+            <if>
+                <check-flag flag="CHAR:TAY:INTERACTIONS" bit-set="1" />
+                <then>
+                    <anim target="scene"><int name="tay" value="2" /></anim>
+                    <anim target="scene" trigger="vic-1-say"></anim>
+                    <load-scene-object key="cinemachine-impulse.prefab" destroy="2">
+                        <message name="GenerateImpulse"><float value="20" /></message>
+                    </load-scene-object>
+                    <dlg char="TAY">
+                        <m>YOU SHUT UP!!</m>
+                    </dlg>
+                    <wait />
+                    <anim target="scene" trigger="vic-1-say"></anim>
+                    <dlg char="VIC">
+                        <m>How... how dare...</m>
+                    </dlg>
+                    <dlg char="TAY">
+                        <m>Listen... I'm not your lapdog, ${CHAR:VIC:NAME}...</m>
+                    </dlg>
+                    <anim target="scene" trigger="vic-1-say"></anim>
+                    <dlg char="VIC">
+                        <m>But I... was just...</m>
+                    </dlg>
+                    <dlg char="TAY">
+                        <m wait="0.5">${CHAR:COU:NAME} is a good friend... And i need to check if there's something wrong with her...</m>
+                        <m>You should stop being such a nasty bitch an go ahead to the meeting location...</m>
+                        <m>We'll be there soon...</m>
+                    </dlg>
+                    <wait />
+                    <anim target="scene" trigger="tay-left"></anim>
+                    <dlg char="VIC">
+                        <m>${CHAR:TAY:NAME}... Wait... I'm going to...</m>
+                        <m>.............</m>
+                    </dlg>
+                    <wait />
+                    <dlg char="PLAYER">
+                        <m>Nicely done, ${CHAR:TAY:NAME}...</m>
+                        <m>I'm glad your remembered my advice...</m>
+                    </dlg>
+                </then>
+                <else>
+                    <anim target="scene" trigger="tay-1-say"></anim>
+                    <dlg char="TAY">
+                        <m>It's nothing!!! I... I swear!!</m>
+                        <m>Please.... I... I'm sorry... I just...</m>
+                        <m>I just think she have good ideas to solve your... problem...</m>
+                    </dlg>
+
+                    <anim target="scene" trigger="vic-1-say"></anim>
+                    <dlg char="VIC">
+                        <m wait="1">Jesus Christ... You're both pathetic...</m>
+                        <m>Sigh... Just try to find her... I'm going to the meeting location...</m>
+                        <m>Don't you dare make me wait there forever!!</m>
+                    </dlg>
+
+                    <anim target="scene" trigger="tay-1-say"></anim>
+                    <dlg char="TAY">
+                        <m>Yes, ${CHAR:VIC:NAME}...</m>
+                        <m wait="0.5">Thanks for being patient...</m>
+                        <m>I'm gonna try to find her now...</m>
+                    </dlg>
+                    <anim target="scene" trigger="tay-left"></anim>
+                    <wait />
+                    <dlg char="PLAYER">
+                        <m>Come on, ${CHAR:TAY:NAME}...</m>
+                        <m>You could do better than that...</m>
+                    </dlg>
+                </else>
+            </if>
+
+            <anim target="scene"><int name="vic" value="2" /></anim>
+            <dlg char="VIC">
+                <m>Huh!?!? Who is there!?!</m>
+            </dlg>
+            <dlg char="PLAYER">
+                <m>Oups... Busted...</m>
+            </dlg>
+            <dlg char="VIC">
+                <m>You!?!</m>
+            </dlg>
+
+            <bgm volume="0" />
+            <fade-to-black keep="true" />
+            <bootstrap node="root-2" />
+        </n>
+
+        <!-- 
+            ###############################################
+            ## root-2   ###################################
+            ###############################################
+        -->
+        <n id="root-2">
+            <fade-to-black speed="9999999" keep="true" />
+            <bgm loop="loop-vic" volume="0.25" />
+            <load-scene-object key="shot-girls-dorm-01.prefab" rename="shot" />
+            <load-scene-object key="shot-char-vic-01.prefab" rename="VIC" />
+            
+            <proxy target="shot/player" name="PLAYER" />
+
+            
+            <obj target="VIC">
+                <message name="StartRight" />
+                <message name="EndCenter" />
+                <message name="TriggerEnter" />
+                <message name="FindReferenceBackground"><string value="shot" /></message>
+            </obj>
+
+            <obj target="shot/player">
+                <message name="AnimateWeightTo"><float value="1" /></message>
+            </obj>
+            <anim target="VIC" face="DISAPPROVE" />
+            <fade-to-black speed="-1" />
+            <autosave label="Chatting with ${CHAR:VIC:NAME}" />
+
+            <dlg char="VIC">
+                <m>You pervert! This is the girls dorm!!</m>
+                <m>What the hell are you doing here!?!</m>
+            </dlg>
+
+            <dlg char="PLAYER">
+                <m>Chill out, ${CHAR:VIC:NAME}...</m>
+                <m>I was just assigned to-</m>
+            </dlg>
+
+            <anim target="VIC" trigger="say-01" />
+            <dlg char="VIC">
+                <m>Yeah... Of course...</m>
+                <m wait="1">They finally decided to send the garbage man here...</m>
+                <m>I was starting to think the school would force me to clean the shit I throw in the floor...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Sigh... Weren't you supposed to be going to some meeting?</m>
+                <m>Why don't you just-</m>
+            </dlg>
+
+            <anim target="VIC" trigger="surprised"  />
+            <dlg char="VIC">
+                <m wait="0.5">Oh my God... You were also eavesdropping me?!</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Well... You were barking orders at the top of your lungs...</m>
+                <m>It would be difficult to not hear...</m>
+            </dlg>
+
+            <anim target="VIC" trigger="say-01"  />
+            <dlg char="VIC">
+                <m>That's what people with power do, moron!</m>
+            </dlg>
+
+            <choice>
+                <c pos="NW">
+                    <text>You should treat your friends better</text>
+                    <then>
+                        <flag name="PLAYER:STAT:PARAGON" inc="2" icon="PARAGON">Paragon +1</flag>
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m>You should treat your friends better...</m>
+                            <m>They are just trying to support you...</m>
+                        </dlg>
+                        <anim target="VIC" trigger="say-01" face="CUTE" />
+                        <dlg char="VIC">
+                            <m>Aww... That was such a wholesome advise....</m>
+                        </dlg>
+                        <wait time="0.5" />
+                        <anim target="VIC" face="DISAPPROVE" />
+                        <dlg char="VIC">
+                            <m wait="1">But I don't remember asking for one....</m>
+                            <m>And actually... My friends are a bunch of incompetents who can't find a solution for my simplest problems even after dozens of meetings...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SW">
+                    <text>${CHAR:TAY:NAME} putted you in your place</text>
+                    <lock-reason>[${CHAR:TAY:NAME} didn't defied ${CHAR:VIC:NAME}]</lock-reason>
+                    <check-flag flag="CHAR:TAY:INTERACTIONS" bit-set="1" />
+                    <then>
+                        <flag name="PLAYER:STAT:RENEGADE" inc="2" icon="RENEGADE">Renegade +1</flag>
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m>Power? Don't be ridiculous...</m>
+                            <m>I've just heard ${CHAR:TAY:NAME} putting you in your place...</m>
+                        </dlg>
+                        
+                        <anim target="VIC" trigger="surprised" face="UPSET" />
+                        <dlg char="VIC">
+                            <m wait="1">huh!?!</m>
+                            <m>no... that was... just...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m wait="0.5">She yelled at you to shut up... and called you a nasty bitch...</m>
+                            <m wait="0.5">So much for 'people with power', huh?</m>
+                            <m>Not even your minions show you any respect...</m>
+                        </dlg>
+
+                        <anim target="VIC" trigger="shrug" face="SIGH" />
+                        <dlg char="VIC">
+                            <m>but she is...</m>
+                            <m>my friend...</m>
+                        </dlg>
+
+                        <wait time="0.5" />
+                        <dlg char="PLAYER">
+                            <m>Yeah... Like you have any true friends...</m>
+                        </dlg>
+
+                        <anim target="VIC" face="UPSET" />
+                        <wait />
+                        <flag name="CHAR:VIC:AFFINITY" icon="MIND" inc="2">That affected ${CHAR:VIC:NAME}</flag>
+                        <dlg char="VIC">
+                            <m>..............</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="E">
+                    <text>Whatever you say, ${CHAR:VIC:NAME}</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>Whatever you say, ${CHAR:VIC:NAME}...</m>
+                        </dlg>
+                        <dlg char="VIC">
+                            <m>Yeah... That's how it should be...</m>
+                            <m>Unfortunately... There are things I'm still not in control...</m>
+                            <m>And even after dozens of meetings my incompetent friends can bring me a solution...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <wait time="1" />
+            <anim target="VIC" face="NEUTRAL" />
+            <dlg char="PLAYER">
+                <m>Look... Why don't you tell me what these meetings are about?</m>
+                <m>I might have an idea or two that could solve your problem...</m>
+            </dlg>
+            
+            <anim target="VIC" trigger="say-01" face="NEUTRAL" />
+            <dlg char="VIC">
+                <m wait="1">You... helping me?</m>
+            </dlg>
+            <anim target="VIC" face="SIGH" />
+            <dlg char="VIC">
+                <m>Sigh... Guess it wouldn't hurt to try...</m>
+                <m>I'm out of options at this point...</m>
+            </dlg>
+            
+            <anim target="VIC" face="NEUTRAL" />
+            <dlg char="PLAYER">
+                <m>Have a little faith...</m>
+                <m>I'm the official ${MISC:SCHOOL:NAME} quest solver...</m>
+            </dlg>
+
+            <anim target="VIC" trigger="say-01" face="DISAPPROVE" />
+            <dlg char="VIC">
+                <m>Then you'd better keep this a secret... because...</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="VIC" look="LEFT" />
+            <dlg char="VIC">
+                <m wait="1">I don't know if you noticed yet, but...</m>
+                <m>I'm trying to seduce Mr ${CHAR:JEF:NAME}...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>You were not exactly trying to be... discrete... about that...</m>
+                <m>I mean... Last time I saw you were almost dry humping him...</m>
+            </dlg>
+
+            <anim target="VIC" face="DISAPPROVE" look="NEUTRAL" trigger="shrug" />
+            <dlg char="VIC">
+                <m wait="0.5">That's because he was not corresponding, dumbass...</m>
+                <m>I don't understand... Despite all my efforts...</m>
+                <m>I just can't make him open his guard...</m>
+            </dlg>
+            <wait time="0.5" />
+            <anim target="VIC" face="SIGH" trigger="shrug" />
+            <dlg char="VIC">
+                <m>I don't know... Maybe he is gay or something....</m>
+                <m>Isn't that usual with successful middle age artists?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Jeez... Easy with the bigotry, ${CHAR:VIC:NAME}...</m>
+                <m>I think the reason is much simpler...</m>
+            </dlg>
+
+            <anim target="VIC" face="NEUTRAL" />
+            <dlg char="VIC">
+                <m>You do?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>The thing is... He's a smart man...</m>
+                <m>He knows you will spread the word about you two as soon as it happens...</m>
+                <m>And that would put him in trouble...</m>
+            </dlg>
+
+            <anim target="VIC" face="DISAPPROVE" trigger="surprised" />
+            <dlg char="VIC">
+                <m wait="1">Such nonsense bullshit...</m>
+                <m>Why would I make an effort to catch a big fish just to throw it away the next moment?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>You wouldn't?</m>
+            </dlg>
+
+            <anim target="VIC" face="DISAPPROVE" trigger="say-01" />
+            <dlg char="VIC">
+                <m wait="0.5">Of course not...</m>
+                <m>I would just use our newly intimacy status to 'convince' him to choose my picture as winner of the contest...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Oh... It makes sense now...</m>
+                <m>Good ol' blackmail fits more your style, right?</m>
+            </dlg>
+
+            <anim target="VIC" trigger="say-01" look="LEFT" />
+            <dlg char="VIC">
+                <m wait="0.5">Call it whatever the fuck you want...</m>
+                <m>I just need to make sure I'll win the contest...</m>
+                <m>It's essential to boost my career, and I can't lose this opportunity...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Uhm... So you don't need to simply score Mr ${CHAR:JEF:NAME}...</m>
+                <m>You also need to gather solid evidence that it happened...</m>
+            </dlg>
+
+            <anim target="VIC" trigger="say-01" look="NEUTRAL" />
+            <dlg char="VIC">
+                <m>Yeah... video... pictures... or maybe...</m>
+            </dlg>
+            <anim target="VIC" face="EMBARRASSED" look="LEFT"/>
+            <dlg char="VIC">
+                <m>you know...</m>
+                <m>some... DNA... fluid samples...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Of course... You'll try to pull a Monica Lewinsky on him, right?</m>
+            </dlg>
+
+            <anim target="VIC" face="DISAPPROVE" trigger="say-01" look="NEUTRAL"/>
+            <dlg char="VIC">
+                <m wait="1">Just shut the fuck up, will you?</m>
+                <m>I'll never have any evidence if I can't make it happen...</m>
+            </dlg>
+            <anim target="VIC" face="UPSET" trigger="shrug"/>
+            <dlg char="VIC">
+                <m>And it seems Mr ${CHAR:JEF:NAME} will never do it me...</m>
+            </dlg>
+
+            <wait time="1" />
+            <dlg char="PLAYER">
+                <m wait="1">Hum...</m>
+                <m wait="0.5">What if...</m>
+                <m>What if he had sex with you... without knowing it's you?</m>
+            </dlg>
+
+            <anim target="VIC" trigger="shrug" face="UPSET"/>
+            <dlg char="VIC">
+                <m>Huh!? What do you mean...</m>
+            </dlg>
+
+            <choice>
+                <c pos="SW">
+                    <text>A glory hole!</text>
+                </c>
+                <c pos="NW">
+                    <text>A quarian suit!</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>You could wear a quarian suit! He won't recognize you with the breathing mask!</m>
+                            <m>Everybody in the galaxy is curious about what is under that suit!</m>
+                        </dlg>
+                        <anim target="VIC" trigger="surprised" face="DISAPPROVE"/>
+                        <dlg char="VIC">
+                            <m>What the fuck are you talking about?</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Oh... Sorry...</m>
+                            <m>My mind still drifts away sometimes...</m>
+                            <m>What I mean is...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="NE">
+                    <text>A furry cosplay!</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>Use a furry cosplay!</m>
+                            <m>He won't see your face, and the footage will be hilarious!!!</m>
+                        </dlg>
+
+                        <anim target="VIC" trigger="surprised" face="DISAPPROVE"/>
+                        <dlg char="VIC">
+                            <m>What the fuck are you talking about?</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Sorry... Just kidding...</m>
+                            <m>What I mean is...</m>
+                        </dlg>
+                    </then>
+                </c>
+                <c pos="SE">
+                    <text>A date on VRChat!</text>
+                    <then>
+                        <dlg char="PLAYER">
+                            <m>Set up a date on VRChat!</m>
+                            <m>He won't see your face, and people are having sex there... somehow...</m>
+                        </dlg>
+
+                        <anim target="VIC" trigger="surprised" face="DISAPPROVE"/>
+                        <dlg char="VIC">
+                            <m>What the fuck are you talking about?</m>
+                        </dlg>
+                        <dlg char="PLAYER">
+                            <m>Sorry... Just kidding...</m>
+                            <m>What I mean is...</m>
+                        </dlg>
+                    </then>
+                </c>
+            </choice>
+
+            <dlg char="PLAYER">
+                <m>Are you familiar with the expression "glory hole"?</m>
+            </dlg>
+
+            <anim target="VIC" look="LEFT" face="DISAPPROVE" />
+            <dlg char="VIC">
+                <m>Urgh... Why did I even ask?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>I'll assume that was a 'yes'...</m>
+            </dlg>
+
+            <anim target="VIC" look="LEFT" face="DISAPPROVE" />
+            <dlg char="VIC">
+                <m wait="0.5">This is the age of the internet, buddy...</m>
+                <m wait="0.5">You simply can't go online without being exposed to all sorts of perverted shit...</m>
+            </dlg>
+            <anim target="VIC" look="NEUTRAL" face="UPSET" />
+            <dlg char="VIC">
+                <m>Also... I've heard once ${CHAR:NAT:NAME} commenting about one of those... 'holes'... active in the Two Wales restroom...</m>
+                <m>It's one of his side business... He sends addicted sluts there to earn any money they owe him...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>That's it!</m>
+                <m>Don't you get it?</m>
+            </dlg>
+
+            <anim target="VIC" face="DISAPPROVE" trigger="say-01" />
+            <dlg char="VIC">
+                <m>Definitely not!</m>
+                <m>Enlighten me, please...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Look... Mr ${CHAR:JEF:NAME} is a discrete man... But he still has his urges...</m>
+                <m>And I think I can convince him the diner's secret entertainment service would be the perfect place for him to 'relieve some stress' without anyone knowing...</m>
+            </dlg>
+
+            <anim target="VIC" face="EMBARRASSED" look="LEFT" />
+            <dlg char="VIC">
+                <m>Wait... Are you suggesting that I...</m>
+            </dlg>
+            
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Yep... If you were the one at the other side of the booth at the exact moment Mr ${CHAR:JEF:NAME} goes there to use the glory hole...</m>
+                <m wait="0.5">Then you can collect all the 'DNA' you want from him...</m>
+                <m>He'll only know what happened the next day... When you go to him again 'asking' to win the contest... or else...</m>
+            </dlg>
+
+            <wait />
+            <anim target="VIC" face="SIGH" />
+            <dlg char="VIC">
+                <m>..............</m>
+            </dlg>
+            <wait />
+            <anim target="VIC" face="DISAPPROVE" trigger="say-01" look="NEUTRAL" />
+            <dlg char="VIC">
+                <m>Such a perverted plan... could only be thought by the likes of you...</m>
+            </dlg>
+            <wait />
+            <anim target="VIC" look="LEFT" />
+            <dlg char="VIC">
+                <m>However... I can't deny....</m>
+                <m>It somehow... makes sense...</m>
+            </dlg>
+            <anim target="VIC" look="NEUTRAL" />
+            <dlg char="VIC">
+                <m>But do you really think I'll subject myself to go into that... dirty place?</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m wait="0.5">Well... It's the only chance for you to guarantee that your picture will be the winner of the contest...</m>
+                <m wait="0.5">And I gotta say... Other students are submitting some amazing pics to Mr ${CHAR:JEF:NAME}...</m>
+                <m>Just imagine you being beat in the contest by ${CHAR:MAX:NAME}...</m>
+            </dlg>
+
+            <anim target="VIC" trigger="surprised" face="DISAPPROVE" />
+            <dlg char="VIC">
+                <m>There's no way I'll let that happen...</m>
+            </dlg>
+            <wait time="1" />
+            <anim target="VIC" face="SIGH" />
+            <dlg char="VIC">
+                <m>Sigh... Okay...</m>
+            </dlg>
+            <anim target="VIC" face="DISAPPROVE" />
+            <dlg char="VIC">
+                <m wait="0.5">First... You try to convince Mr ${CHAR:JEF:NAME} to go to the... Two Wales...</m>
+                <m wait="0.5">I'll make up some bullshit excuse for ${CHAR:NAT:NAME} not to send any girls there for the time being...</m>
+                <m>When Mr ${CHAR:JEF:NAME} finally decide to do it, call me immediately...</m>
+            </dlg>
+            <anim target="VIC" face="EMBARRASSED" />
+            <dlg char="VIC">
+                <m wait="0.5">Then I... I will... take place...</m>
+                <m>And wait...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Sounds like a solid plan to me...</m>
+            </dlg>
+
+            <anim target="VIC" trigger="say-01" face="NEUTRAL" />
+            <dlg char="VIC">
+                <m wait="0.5">Do this right... and the Vortex will be in your debt...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Consider it done...</m>
+            </dlg>
+
+            <anim target="VIC" trigger="say-01" face="NEUTRAL" />
+            <dlg char="VIC">
+                <m>I should go meet the girls anyways...</m>
+                <m>But I don't think they will come up with any other better plan...</m>
+            </dlg>
+
+            <wait time="0.5" />
+            <dlg char="PLAYER">
+                <m>Call you later, then...</m>
+            </dlg>
+
+            <obj target="VIC">
+                <message name="StartCenter" />
+                <message name="EndRight" />
+                <message name="TriggerEnter" />
+            </obj>
+            <bgm volume="0" />
+
+            <dlg char="VIC">
+                <m>Yeah... Whatever...</m>
+            </dlg>
+
+            <flag name="QUEST:VIC:GLORY" bit-on="0" />
+            <string name="QUEST:VIC:GLORY:OBJECTIVE" set="Talk to Mr ${CHAR:JEF:NAME} about ${CHAR:VIC:NAME}'s glory hole plan"></string>
+            <log icon="QUEST">Objectives updated!</log>
+
+            <wait time="1.5" />
+            <dlg char="PLAYER">
+                <m thought="true" wait="1">Man... I can think of several different outcomes for this plan...</m>
+                <m thought="true">But everything starts with talking with Mr ${CHAR:JEF:NAME}...</m>
+            </dlg>
+
+            <fade-to-black keep="true" />
+            <bootstrap script="location-girls-dorm-01/location" spawn="spawn/door-campus" />
+        </n>
+
+    </nodes>
+</xml-script>

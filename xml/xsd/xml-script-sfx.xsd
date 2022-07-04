@@ -21,10 +21,16 @@
             <xs:enumeration value="switch" />
             <xs:enumeration value="metal-click" />
             <xs:enumeration value="mmm" />
+            <xs:enumeration value="moan-1" />
+            <xs:enumeration value="radio" />
             <xs:enumeration value="snap" />
+            <xs:enumeration value="thump" />
+            <xs:enumeration value="water-flow" />
             <xs:enumeration value="phone-message" />
             <xs:enumeration value="phone-call-tone" />
+            <xs:enumeration value="phone-vibrate" />
             <xs:enumeration value="phone-pickup" />
+            <xs:enumeration value="phone-type-message" />
             <xs:enumeration value="voice-gasp-a" />
             <xs:enumeration value="voice-hem-a" />
             <xs:enumeration value="voice-hem-b" />
@@ -35,12 +41,14 @@
             <xs:enumeration value="voice-orgasm-a" />
             <xs:enumeration value="rummage" />
             <xs:enumeration value="unlock" />
+            <xs:enumeration value="unzip" />
             <xs:enumeration value="whistle-song" />
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="loop">
         <xs:restriction base="xs:string">
             <xs:enumeration value="loop-brk" />
+            <xs:enumeration value="loop-breath-1" />
             <xs:enumeration value="loop-chl" />
             <xs:enumeration value="loop-jul" />
             <xs:enumeration value="loop-jus" />

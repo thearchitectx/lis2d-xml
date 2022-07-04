@@ -14,6 +14,23 @@
                     <load-scene-object key="item-detector.prefab" parent="#Player" />
                 </then>
             </if>
+
+            <!-- Apply save patch 1 -->
+            <if>
+                <check-flag flag="SYSTEM:STATE:PATCH" lte="0" />
+                <then>
+                    <flag name="SYSTEM:STATE:PATCH" set="1" />
+                    <if>
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-set="18" />
+                        <check-flag flag="QUEST:PRINCIPAL1" bit-unset="19" />
+                        <check-text text="QUEST:PRINCIPAL1:OBJECTIVE" eq="#EMPTY" />
+                        <then>
+                            <log icon="QUEST">Objectives updated!</log>
+                            <string name="QUEST:PRINCIPAL1:OBJECTIVE" set="Ask ${CHAR:SAM:NAME} about your assignment for today" />
+                        </then>
+                    </if>
+                </then>
+            </if>
         </n>
     </nodes>
 </xml-script>

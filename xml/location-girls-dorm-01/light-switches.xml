@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<xml-script
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../xsd/xml-script.xsd">
+    <include node-prefix="lib-">../_lib/location-lib.xml</include>
+    <nodes>
+        <n id="switch-1">
+            <if>
+                <!-- (23): location-girls-dorm-01 - light-01 is off -->
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="23" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-off="23"></flag>
+                    <anim target="location"><bool name="light-1" value="true" /></anim>
+                    <sfx clip="switch" />
+                </then>
+                <else>
+                    <flag name="MISC:ENVIRONMENT" bit-on="23"></flag>
+                    <anim target="location"><bool name="light-1" value="false" /></anim>
+                    <sfx clip="switch" />
+                </else>
+            </if>
+        </n>
+        <n id="switch-2">
+            <if>
+                <!-- (24): location-girls-dorm-01 - light-02 is off -->
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="24" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-off="24"></flag>
+                    <anim target="location"><bool name="light-2" value="true" /></anim>
+                    <sfx clip="switch" />
+                </then>
+                <else>
+                    <flag name="MISC:ENVIRONMENT" bit-on="24"></flag>
+                    <anim target="location"><bool name="light-2" value="false" /></anim>
+                    <sfx clip="switch" />
+                </else>
+            </if>
+        </n>
+        <n id="switch-3">
+            <if>
+                <!-- (25): location-girls-dorm-01 - light-03 is off -->
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="25" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-off="25"></flag>
+                    <anim target="location"><bool name="light-3" value="true" /></anim>
+                    <sfx clip="switch" />
+                </then>
+                <else>
+                    <flag name="MISC:ENVIRONMENT" bit-on="25"></flag>
+                    <anim target="location"><bool name="light-3" value="false" /></anim>
+                    <sfx clip="switch" />
+                </else>
+            </if>
+        </n>
+        <n id="switch-4">
+            <if>
+                <!-- (26): location-girls-dorm-01 - light-04 is off -->
+                <check-flag flag="MISC:ENVIRONMENT" bit-set="26" />
+                <then>
+                    <flag name="MISC:ENVIRONMENT" bit-off="26"></flag>
+                    <anim target="location"><bool name="light-4" value="true" /></anim>
+                    <sfx clip="switch" />
+                </then>
+                <else>
+                    <flag name="MISC:ENVIRONMENT" bit-on="26"></flag>
+                    <anim target="location"><bool name="light-4" value="false" /></anim>
+                    <sfx clip="switch" />
+                </else>
+            </if>
+        </n>
+    </nodes>
+</xml-script>
